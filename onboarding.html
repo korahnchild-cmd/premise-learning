@@ -102,7 +102,7 @@
     <section class="step text-center" id="s2">
       <div class="kozy st-idle mx-auto mb-6" style="width:84px;height:84px" id="k2"></div>
       <h2 class="text-[1.6rem] md:text-[2rem] font-extrabold">탐정 이름을 정해줘</h2>
-      <p class="mt-3 text-[15px] text-body">탐정 노트에 이 이름으로 기록될 거야.</p>
+      <p class="mt-3 text-[15px] text-body" id="nameSub">탐정 노트에 이 이름으로 기록될 거야.</p>
       <input id="nameInput" type="text" maxlength="12" placeholder="예: 지호" class="w-full mt-8 rounded-2xl border border-line bg-white px-5 py-4 text-[16px] text-center outline-none focus:border-point transition" />
       <div class="flex gap-3 mt-8"><button class="btn btn-ghost flex-1 py-3.5 text-[14px] font-semibold" onclick="go(1)">← 뒤로</button><button class="btn btn-primary flex-1 py-3.5 text-[14px] font-semibold" onclick="go(3)">다음</button></div>
     </section>
@@ -111,7 +111,7 @@
     <section class="step text-center" id="s3">
       <div class="kozy st-idle mx-auto mb-6" style="width:84px;height:84px" id="k3"></div>
       <h2 class="text-[1.6rem] md:text-[2rem] font-extrabold">어떤 이야기로 시작해볼까?</h2>
-      <p class="mt-3 text-[15px] text-body">전제는 모든 곳에 숨어 있어. 네 취향에 맞는 사건부터 꺼내줄게 — 과목이 아니라 '소재'야.</p>
+      <p class="mt-3 text-[15px] text-body" id="subSub">전제는 모든 곳에 숨어 있어. 네 취향에 맞는 사건부터 꺼내줄게 — 과목이 아니라 '소재'야.</p>
       <div class="grid grid-cols-2 gap-3 mt-8" id="subjects"></div>
       <div class="flex gap-3 mt-8"><button class="btn btn-ghost flex-1 py-3.5 text-[14px] font-semibold" onclick="go(2)">← 뒤로</button><button id="n3" class="btn btn-primary flex-1 py-3.5 text-[14px] font-semibold" onclick="go(4)" disabled>다음</button></div>
     </section>
@@ -120,7 +120,7 @@
     <section class="step text-center" id="s4">
       <div class="kozy st-idle mx-auto mb-6" style="width:96px;height:96px" id="k4"></div>
       <h2 class="text-[1.6rem] md:text-[2rem] font-extrabold">전제가 뭐냐고?</h2>
-      <p class="mt-3 text-[15px] text-body">한 번만 같이 풀어보면 바로 감이 와.</p>
+      <p class="mt-3 text-[15px] text-body" id="demoIntroSub">한 번만 같이 풀어보면 바로 감이 와.</p>
 
       <div class="flex justify-center gap-1.5 mt-7" id="demoDots"></div>
       <div id="demoCard" class="bg-white border border-line rounded-4xl px-6 py-9 mt-4 relative">
@@ -138,7 +138,7 @@
     <section class="step text-center" id="s5">
       <div class="kozy st-praise mx-auto mb-8" style="width:132px;height:132px" id="k5"></div>
       <h2 class="text-[2rem] md:text-[2.5rem] font-extrabold leading-tight">준비 끝, <span class="text-point" id="doneName">파트너</span> 탐정!</h2>
-      <p class="mt-5 text-[16px] text-body leading-relaxed max-w-md mx-auto">방금 넌 첫 전제를 폭파했어. 진짜 사건은 지금부터야. 오늘의 사건이 널 기다리고 있어.</p>
+      <p class="mt-5 text-[16px] text-body leading-relaxed max-w-md mx-auto" id="doneSub">방금 넌 첫 전제를 폭파했어. 진짜 사건은 지금부터야. 오늘의 사건이 널 기다리고 있어.</p>
       <div class="mt-9 flex flex-col items-center gap-3">
         <a href="daily.html" class="btn btn-primary text-[15px] font-semibold px-10 py-4">첫 사건 시작하기 →</a>
         <a href="course.html" class="text-[14px] text-body hover:text-ink transition font-medium">먼저 코스 둘러보기</a>
@@ -173,6 +173,54 @@
   const total = 6;
   const $ = id => document.getElementById(id);
 
+  // 학년군별 코지 톤 분화 — 초등(입문)=친구 톤, 중등(핵심)=선배 톤, 고등(심화)=조교 톤
+  const TONE = {
+    "입문": {
+      nameSub: "탐정 노트에 이 이름으로 기록될 거야. 멋진 이름으로 골라봐!",
+      subSub: "전제는 어디에나 숨어있어! 네가 좋아하는 이야기부터 같이 찾아보자.",
+      demoIntroSub: "한 번만 같이 풀어보면 바로 감이 올 거야!",
+      demoLines: [
+        "친구들이 다 당연하게 믿는 말이 있어. 이 문장이 몰래 숨기고 있는 믿음이 뭘까?",
+        "짜잔, 이게 바로 숨은 전제야! 반짝이는 단어 보이지?",
+        "이 전제, 우리 같이 팡 터뜨려볼까? 눌러봐!",
+        "짠! 방향이 확 바뀌었지? 이게 바로 PBS 학습법이야."
+      ],
+      doneSub: "방금 첫 번째 전제를 팡 터뜨렸어! 진짜 재밌는 사건은 지금부터야. 오늘의 사건이 기다리고 있어."
+    },
+    "핵심": {
+      nameSub: "탐정 노트에 계속 남을 이름이야. 마음에 드는 걸로 정해봐.",
+      subSub: "전제는 과목을 가리지 않아. 관심 있는 소재부터 시작해서 감을 잡아보자.",
+      demoIntroSub: "말로 설명하는 것보다, 한 번 직접 풀어보는 게 빨라.",
+      demoLines: [
+        "다들 당연하게 넘기는 말이 있어. 이 문장이 슬쩍 깔고 있는 전제, 찾아볼래?",
+        "바로 이거야. 다들 놓치는 지점이 여기 있었네.",
+        "이제 이 전제를 깰 차례야. 눌러봐.",
+        "봐, 관점이 완전히 달라졌지? 이게 PBS 학습법이 하는 일이야."
+      ],
+      doneSub: "방금 전제 하나를 제대로 깼어. 앞으로 만날 사건들은 더 흥미로울 거야. 오늘의 사건부터 가보자."
+    },
+    "심화": {
+      nameSub: "탐정 노트에 기록될 이름이야. 원하는 대로 정해도 좋아.",
+      subSub: "전제는 분야를 가리지 않고 숨어 있어. 익숙한 소재부터 분석을 시작해보자.",
+      demoIntroSub: "직접 하나 분석해보면 빠르게 이해될 거야.",
+      demoLines: [
+        "다들 당연하게 받아들이는 문장이야. 이 문장이 전제로 깔고 있는 게 뭘까?",
+        "이게 그 전제야. 표시된 부분이 근거 없이 깔려 있던 가정이지.",
+        "이 전제를 검증해서 깨볼까. 눌러봐.",
+        "관점이 재구성된 게 보이지? 이게 PBS 학습법의 사고 과정이야."
+      ],
+      doneSub: "방금 전제 하나를 분석하고 재구성했어. 앞으로의 사건들도 같은 방식으로 다루게 될 거야. 오늘의 사건부터 시작하자."
+    }
+  };
+
+  function applyTone(tier){
+    const t = TONE[tier]; if(!t) return;
+    $("nameSub").textContent = t.nameSub;
+    $("subSub").textContent = t.subSub;
+    $("demoIntroSub").textContent = t.demoIntroSub;
+    $("doneSub").textContent = t.doneSub;
+  }
+
   function go(n){
     $("s"+step).classList.remove("show");
     step = n;
@@ -192,7 +240,7 @@
     const el=document.createElement("div");
     el.className="choice bg-white border border-line rounded-2xl px-5 py-4 flex items-center justify-between";
     el.innerHTML=`<div><p class="text-[15px] font-bold text-ink">${x.g}</p><p class="text-[13px] text-body mt-0.5">${x.d}</p></div><span class="text-[11px] font-bold text-point bg-point/10 rounded-full px-2.5 py-1">${x.t}</span>`;
-    el.onclick=()=>{ document.querySelectorAll("#grades .choice").forEach(c=>c.classList.remove("sel")); el.classList.add("sel"); profile.grade=x.g; profile.tier=x.t; $("n1").disabled=false; };
+    el.onclick=()=>{ document.querySelectorAll("#grades .choice").forEach(c=>c.classList.remove("sel")); el.classList.add("sel"); profile.grade=x.g; profile.tier=x.t; $("n1").disabled=false; applyTone(x.t); };
     $("grades").appendChild(el);
   });
 
@@ -231,7 +279,8 @@
   function demoDots(){ $("demoDots").innerHTML = DEMO.map((_,k)=>`<span class="inline-block w-2 h-2 rounded-full ${k<=di?'bg-point':'bg-line'}"></span>`).join(""); }
   function renderDemo(){
     const S = DEMO[di]; demoDots();
-    $("demoKozy").textContent = S.kozy || "";
+    const tonedLines = TONE[profile.tier] && TONE[profile.tier].demoLines;
+    $("demoKozy").textContent = (tonedLines && tonedLines[di]) || S.kozy || "";
     const area = $("demoStep"), btn = $("demoBtn");
     btn.style.display = "block"; btn.disabled = false; btn.textContent = "계속";
     let html = "";
