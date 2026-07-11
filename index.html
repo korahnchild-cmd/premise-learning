@@ -106,6 +106,34 @@
   .flip-f{ position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:1.5rem; border:1px solid #EFF1F3; background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:2rem; box-shadow:0 8px 30px rgba(10,14,23,.06); }
   .flip-f.back{ transform:rotateY(180deg); border-color:#0A66FF; box-shadow:0 8px 30px rgba(10,102,255,.12); }
 
+  /* PBS 4-step circular diagram */
+  .pbs-steps{ display:grid; grid-template-columns:repeat(4,1fr); gap:0; position:relative; }
+  .pbs-step{ padding:20px 12px; position:relative; text-align:center; }
+  .pbs-step .icon{ width:60px; height:60px; margin:0 auto 14px; border-radius:9999px; display:flex; align-items:center; justify-content:center; background:#fff; border:1.5px solid #0A66FF; box-shadow:0 8px 24px rgba(10,102,255,.16); transition:transform .5s cubic-bezier(.2,.8,.2,1); }
+  .pbs-step:hover .icon{ transform:rotate(360deg) scale(1.08); }
+  .pbs-step::after{ content:""; position:absolute; top:50px; right:-4%; width:8%; height:2px; background:linear-gradient(90deg,#0A66FF,transparent); }
+  .pbs-step:last-child::after{ display:none; }
+  @media (max-width:640px){ .pbs-steps{ grid-template-columns:1fr 1fr; row-gap:24px; } .pbs-step::after{ display:none; } }
+
+  /* curriculum orbit rings */
+  .curri-viz{ position:relative; width:260px; height:260px; margin:0 auto; }
+  .curri-text .citem{ padding:14px 0; border-bottom:1px solid rgba(255,255,255,.1); display:flex; gap:14px; align-items:flex-start; }
+  .curri-text .citem:last-child{ border-bottom:none; }
+  .curri-text .citem .lvl{ font-size:20px; font-weight:800; color:#FFB800; flex-shrink:0; width:44px; }
+  .curri-text .citem .cname{ font-size:15px; font-weight:700; color:#fff; margin-bottom:4px; }
+  .curri-text .citem .cdsc{ font-size:12px; color:rgba(255,255,255,.55); line-height:1.55; }
+
+  /* growth bars */
+  .growth-bars{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .gbar{ padding:18px; background:rgba(10,102,255,.04); border-radius:12px; border:1px solid #ECEEF1; position:relative; overflow:hidden; }
+  .gbar .gname{ font-size:10px; letter-spacing:.1em; color:#0A66FF; font-weight:700; text-transform:uppercase; margin-bottom:4px; }
+  .gbar .gko{ font-size:14px; font-weight:700; color:#0A0E17; margin-bottom:14px; }
+  .gbar .glevel{ height:8px; background:#ECEEF1; border-radius:100px; overflow:hidden; position:relative; margin-bottom:8px; }
+  .gbar .glevel-fill{ height:100%; background:linear-gradient(90deg,#0A66FF,#FFB800); border-radius:100px; width:0%; transition:width 1.4s cubic-bezier(.2,.8,.2,1); position:relative; }
+  .gbar .glevel-fill::after{ content:""; position:absolute; top:0; right:0; bottom:0; width:20px; background:linear-gradient(90deg,transparent,rgba(255,255,255,.7)); animation:shine 2s infinite; }
+  @keyframes shine{ 0%{ transform:translateX(-40px); } 100%{ transform:translateX(20px); } }
+  .gbar .gpct{ font-size:10px; color:#9AA4B2; text-align:right; }
+
   /* kozy */
   .kozy svg{ width:100%; height:100%; overflow:visible; display:block; }
   .k-edge{ fill:none; stroke:#0A66FF; stroke-width:2.4; stroke-linejoin:round; stroke-linecap:round; }
@@ -189,9 +217,9 @@
     <p class="reveal mt-4 text-[13px] text-faint" data-d="4">7일 무료 체험 · 지금, 가장 먼저 경험하는 학부모들과 함께</p>
     <!-- ⚠️ PLACEHOLDER — 실제 수치로 교체 필요. 출시 전 임시 문구, 실제 이용자 데이터 확보 즉시 갱신할 것. -->
     <p class="reveal mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-[12px] text-faint" data-d="4" id="liveStrip">
-      <span class="inline-flex items-center gap-1.5"><span class="inline-block w-1.5 h-1.5 rounded-full bg-point"></span>현재 <b class="text-ink">132명</b>의 학부모가 무료 체험 중</span>
-      <span>오늘 등록 <b class="text-ink">17건</b></span>
-      <span>평균 만족도 <b class="text-ink">4.8</b>/5</span>
+      <span class="inline-flex items-center gap-1.5"><span class="inline-block w-1.5 h-1.5 rounded-full bg-point"></span>현재 <b class="text-ink hstat" data-target="132" data-decimals="0">0</b>명의 학부모가 무료 체험 중</span>
+      <span>오늘 등록 <b class="text-ink hstat" data-target="17" data-decimals="0">0</b>건</span>
+      <span>평균 만족도 <b class="text-ink hstat" data-target="4.8" data-decimals="1">0.0</b>/5</span>
     </p>
   </div>
 
@@ -229,34 +257,38 @@
       <p class="lede mt-6 text-[16px] text-body max-w-2xl mx-auto"><b class="text-ink">PBS(Premise-Break Schema)</b>는 문제 속에 숨은 '당연한 전제'를 찾아내 깨뜨리고, 그 자리에 새로운 사고의 틀을 다시 세우는 4단계 사고 훈련법입니다. 하루 15분, 6개월이면 문제를 대하는 태도 자체가 바뀝니다.</p>
     </div>
 
-    <div class="mt-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-      <div class="tilt reveal card p-7" data-d="1">
-        <div class="flex items-center justify-between mb-4"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg><span class="en text-[11px] eyebrow uppercase text-faint">01</span></div>
+    <div class="mt-16 pbs-steps reveal">
+      <div class="pbs-step" style="animation-delay:.05s">
+        <p class="en text-[11px] eyebrow uppercase text-faint mb-2">01</p>
+        <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg></div>
         <p class="en text-[11px] eyebrow uppercase text-point">Detect</p>
-        <h3 class="text-[18px] font-bold mt-0.5">탐지</h3>
-        <p class="text-[13px] text-body mt-1.5 leading-relaxed">문제 속 숨은 전제를 발견</p>
-        <p class="text-[12px] text-faint mt-3">확장 질문법 · 스키마 조회</p>
+        <h3 class="text-[16px] font-bold mt-0.5">탐지</h3>
+        <p class="text-[12px] text-faint mt-2 leading-relaxed">문제 속 숨은 전제를 발견</p>
+        <p class="text-[11px] text-point font-semibold mt-1">확장 질문법 · 스키마 조회</p>
       </div>
-      <div class="tilt reveal card p-7" data-d="2">
-        <div class="flex items-center justify-between mb-4"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.4 5.6 5.6 2.4-5.6 2.4L12 18.5l-2.4-5.6L4 10.5l5.6-2.4z"/></svg><span class="en text-[11px] eyebrow uppercase text-faint">02</span></div>
+      <div class="pbs-step" style="animation-delay:.2s">
+        <p class="en text-[11px] eyebrow uppercase text-faint mb-2">02</p>
+        <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.4 5.6 5.6 2.4-5.6 2.4L12 18.5l-2.4-5.6L4 10.5l5.6-2.4z"/></svg></div>
         <p class="en text-[11px] eyebrow uppercase text-point">Break</p>
-        <h3 class="text-[18px] font-bold mt-0.5">폭파</h3>
-        <p class="text-[13px] text-body mt-1.5 leading-relaxed">전제를 깨뜨려 흔들기</p>
-        <p class="text-[12px] text-faint mt-3">소크라테스식 · 반례 탐색</p>
+        <h3 class="text-[16px] font-bold mt-0.5">폭파</h3>
+        <p class="text-[12px] text-faint mt-2 leading-relaxed">전제를 깨뜨려 흔들기</p>
+        <p class="text-[11px] text-point font-semibold mt-1">소크라테스식 · 반례 탐색</p>
       </div>
-      <div class="tilt reveal card p-7" data-d="3">
-        <div class="flex items-center justify-between mb-4"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6M3 22v-6h6"/><path d="M21 8a9 9 0 00-15-3M3 16a9 9 0 0015 3"/></svg><span class="en text-[11px] eyebrow uppercase text-faint">03</span></div>
+      <div class="pbs-step" style="animation-delay:.35s">
+        <p class="en text-[11px] eyebrow uppercase text-faint mb-2">03</p>
+        <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6M3 22v-6h6"/><path d="M21 8a9 9 0 00-15-3M3 16a9 9 0 0015 3"/></svg></div>
         <p class="en text-[11px] eyebrow uppercase text-point">Rebuild</p>
-        <h3 class="text-[18px] font-bold mt-0.5">재구성</h3>
-        <p class="text-[13px] text-body mt-1.5 leading-relaxed">새 사고 틀로 다시 세우기</p>
-        <p class="text-[12px] text-faint mt-3">시각화 · 유추 전환</p>
+        <h3 class="text-[16px] font-bold mt-0.5">재구성</h3>
+        <p class="text-[12px] text-faint mt-2 leading-relaxed">새 사고 틀로 다시 세우기</p>
+        <p class="text-[11px] text-point font-semibold mt-1">시각화 · 유추 전환</p>
       </div>
-      <div class="tilt reveal card p-7" data-d="4">
-        <div class="flex items-center justify-between mb-4"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4M3 11v-1a4 4 0 014-4h14M7 22l-4-4 4-4M21 13v1a4 4 0 01-4 4H3"/></svg><span class="en text-[11px] eyebrow uppercase text-faint">04</span></div>
+      <div class="pbs-step" style="animation-delay:.5s">
+        <p class="en text-[11px] eyebrow uppercase text-faint mb-2">04</p>
+        <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4M3 11v-1a4 4 0 014-4h14M7 22l-4-4 4-4M21 13v1a4 4 0 01-4 4H3"/></svg></div>
         <p class="en text-[11px] eyebrow uppercase text-point">Consolidate</p>
-        <h3 class="text-[18px] font-bold mt-0.5">정착</h3>
-        <p class="text-[13px] text-body mt-1.5 leading-relaxed">반복으로 습관 만들기</p>
-        <p class="text-[12px] text-faint mt-3">간격 반복 · 교차 연습</p>
+        <h3 class="text-[16px] font-bold mt-0.5">정착</h3>
+        <p class="text-[12px] text-faint mt-2 leading-relaxed">반복으로 습관 만들기</p>
+        <p class="text-[11px] text-point font-semibold mt-1">간격 반복 · 교차 연습</p>
       </div>
     </div>
 
@@ -422,11 +454,47 @@
 <section class="spotlight py-28 md:py-36 bg-night text-white relative overflow-hidden">
   <div class="orb" style="width:400px;height:400px;background:#132038;top:10%;left:5%;opacity:.9"></div>
   <div class="orb" style="width:360px;height:360px;background:#101a2e;bottom:8%;right:6%;opacity:.9"></div>
-  <div class="max-w-4xl mx-auto px-6 text-center relative reveal">
-    <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">Curriculum</p>
-    <h2 class="display text-[1.8rem] md:text-[2.9rem] font-extrabold text-white">PBS 학습법은 과목을 가르치지 않습니다.<br class="hidden md:block" /> 생각의 틀을 훈련합니다.</h2>
-    <p class="lede mt-6 text-[16px] text-white/60 max-w-xl mx-auto">사고의 복잡도에 따라 <b class="text-white">입문 · 기본 · 심화</b> 3단계. 일상의 문장부터 수능 지문까지, 어떤 소재를 만나도 '전제 찾기 → 폭파 → 탐정 노트'의 같은 사고 루틴을 반복합니다.</p>
-    <a href="course.html" class="btn btn-white btn-magnetic text-[15px] font-semibold px-9 py-4 mt-9">전제 경로 둘러보기 →</a>
+  <div class="max-w-5xl mx-auto px-6 relative">
+    <div class="text-center max-w-3xl mx-auto reveal">
+      <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">Curriculum</p>
+      <h2 class="display text-[1.8rem] md:text-[2.9rem] font-extrabold text-white">PBS 학습법은 과목을 가르치지 않습니다.<br class="hidden md:block" /> 생각의 틀을 훈련합니다.</h2>
+      <p class="lede mt-6 text-[16px] text-white/60 max-w-xl mx-auto">사고의 복잡도에 따라 <b class="text-white">입문 · 기본 · 심화</b> 3단계. 일상의 문장부터 수능 지문까지, 어떤 소재를 만나도 '전제 찾기 → 폭파 → 탐정 노트'의 같은 사고 루틴을 반복합니다.</p>
+    </div>
+
+    <div class="mt-16 grid md:grid-cols-2 gap-10 md:gap-16 items-center reveal">
+      <div class="curri-viz">
+        <svg viewBox="0 0 260 260" width="100%" height="100%">
+          <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0A66FF"/><stop offset="100%" stop-color="#FFB800"/></linearGradient></defs>
+          <circle cx="130" cy="130" r="115" fill="none" stroke="url(#ringGrad)" stroke-width="1" opacity=".35" stroke-dasharray="4 6"/>
+          <circle cx="130" cy="130" r="115" fill="none" stroke="url(#ringGrad)" stroke-width="1.5" opacity=".6">
+            <animateTransform attributeName="transform" type="rotate" from="0 130 130" to="360 130 130" dur="50s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="130" cy="15" r="3" fill="#FFB800">
+            <animateTransform attributeName="transform" type="rotate" from="0 130 130" to="360 130 130" dur="50s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="130" cy="130" r="78" fill="none" stroke="url(#ringGrad)" stroke-width="1" opacity=".45" stroke-dasharray="6 4"/>
+          <circle cx="130" cy="130" r="78" fill="none" stroke="url(#ringGrad)" stroke-width="1.5" opacity=".75">
+            <animateTransform attributeName="transform" type="rotate" from="360 130 130" to="0 130 130" dur="34s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="130" cy="52" r="3" fill="#0A66FF">
+            <animateTransform attributeName="transform" type="rotate" from="360 130 130" to="0 130 130" dur="34s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="130" cy="130" r="42" fill="url(#ringGrad)" opacity=".1"/>
+          <circle cx="130" cy="130" r="42" fill="none" stroke="url(#ringGrad)" stroke-width="2"/>
+          <text x="130" y="127" text-anchor="middle" fill="#fff" font-size="15" font-weight="800">PBS</text>
+          <text x="130" y="143" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="9" letter-spacing="2">CORE</text>
+        </svg>
+      </div>
+      <div class="curri-text">
+        <div class="citem"><span class="lvl">01</span><div><p class="cname">입문 — Entry</p><p class="cdsc">일상 문장·짧은 사건에서 숨은 전제를 발견하는 감각을 만듭니다.</p></div></div>
+        <div class="citem"><span class="lvl">02</span><div><p class="cname">기본 — Core</p><p class="cdsc">국어·수학 소재로 확장, '전제 찾기 → 폭파 → 탐정 노트' 루틴을 정착합니다.</p></div></div>
+        <div class="citem"><span class="lvl">03</span><div><p class="cname">심화 — Advanced</p><p class="cdsc">수능 지문·시사 소재까지, 어떤 소재에도 같은 사고 습관을 적용합니다.</p></div></div>
+      </div>
+    </div>
+
+    <div class="text-center mt-14 reveal">
+      <a href="course.html" class="btn btn-white btn-magnetic text-[15px] font-semibold px-9 py-4">전제 경로 둘러보기 →</a>
+    </div>
   </div>
 </section>
 
@@ -438,10 +506,25 @@
       <h2 class="display text-[1.8rem] md:text-[2.8rem] font-extrabold">점수가 아니라, 생각의 태도가 자랍니다</h2>
       <p class="lede mt-5 text-[15px] text-body max-w-xl mx-auto">PBS 학습법은 점수를 약속하지 않습니다. 대신 탐정 노트가 아이의 '생각하는 습관'이 어떻게 자라는지 매주 보여줍니다.</p>
     </div>
-    <div class="mt-16 grid sm:grid-cols-3 gap-4 md:gap-5">
-      <div class="tilt reveal card p-8 text-center" data-d="1"><p class="en text-[11px] eyebrow uppercase text-faint mb-2">Question quality</p><p class="display text-[2.4rem] font-extrabold text-point">깊어짐</p><p class="text-[13px] text-body mt-1">질문의 질</p></div>
-      <div class="tilt reveal card p-8 text-center" data-d="2"><p class="en text-[11px] eyebrow uppercase text-faint mb-2">Self-planning</p><p class="display text-[2.4rem] font-extrabold text-ink">주 <span class="counter" data-t="4">0</span>회</p><p class="text-[13px] text-body mt-1">스스로 세운 계획</p></div>
-      <div class="tilt reveal card p-8 text-center" data-d="3"><p class="en text-[11px] eyebrow uppercase text-faint mb-2">Different attempts</p><p class="display text-[2.4rem] font-extrabold text-ink">주 <span class="counter" data-t="11">0</span>회</p><p class="text-[13px] text-body mt-1">다르게 시도한 횟수</p></div>
+    <div class="mt-16 growth-bars reveal">
+      <div class="gbar" data-pct="82">
+        <p class="gname">Question quality</p>
+        <p class="gko">질문의 질</p>
+        <div class="glevel"><div class="glevel-fill"></div></div>
+        <p class="gpct">Growth · <span class="gnum">0</span>%</p>
+      </div>
+      <div class="gbar" data-pct="68">
+        <p class="gname">Self-planning</p>
+        <p class="gko">스스로 세운 계획</p>
+        <div class="glevel"><div class="glevel-fill"></div></div>
+        <p class="gpct">Growth · <span class="gnum">0</span>%</p>
+      </div>
+      <div class="gbar" data-pct="76">
+        <p class="gname">Different attempts</p>
+        <p class="gko">다르게 시도한 횟수</p>
+        <div class="glevel"><div class="glevel-fill"></div></div>
+        <p class="gpct">Growth · <span class="gnum">0</span>%</p>
+      </div>
     </div>
     <p class="reveal text-center text-[12px] text-faint mt-6">* 성장 지표는 아이마다 다르게 나타납니다. 위 수치는 탐정 노트 리포트의 예시입니다.</p>
     <div class="reveal mt-12 max-w-3xl mx-auto border-l-2 border-point pl-8 md:pl-12">
@@ -749,6 +832,55 @@
       });
     }, { threshold:.4 });
     counters.forEach(function(el){ cio.observe(el); });
+  }
+
+  /* ---- hero live-stat count-up (supports decimals) ---- */
+  var hstats = document.querySelectorAll(".hstat[data-target]");
+  if (hstats.length){
+    hstats.forEach(function(el){
+      var target = parseFloat(el.getAttribute("data-target")) || 0;
+      var decimals = parseInt(el.getAttribute("data-decimals") || "0", 10);
+      if (reduced){ el.textContent = target.toFixed(decimals); return; }
+      var start = null, dur = 1200;
+      function step(ts){
+        if (!start) start = ts;
+        var p = Math.min((ts - start) / dur, 1);
+        el.textContent = (p * target).toFixed(decimals);
+        if (p < 1) requestAnimationFrame(step); else el.textContent = target.toFixed(decimals);
+      }
+      requestAnimationFrame(step);
+    });
+  }
+
+  /* ---- growth bars (fill + shine + % count-up on scroll) ---- */
+  var gbars = document.querySelectorAll(".gbar[data-pct]");
+  if (gbars.length){
+    var gio = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (!en.isIntersecting) return;
+        var el = en.target, pct = parseFloat(el.getAttribute("data-pct")) || 0;
+        var fill = el.querySelector(".glevel-fill");
+        var num = el.querySelector(".gnum");
+        if (fill) fill.style.width = pct + "%";
+        if (num){
+          if (reduced){ num.textContent = pct; }
+          else {
+            var start = null, dur = 1400;
+            (function anim(){
+              function step(ts){
+                if (!start) start = ts;
+                var p = Math.min((ts - start) / dur, 1);
+                num.textContent = Math.floor(p * pct);
+                if (p < 1) requestAnimationFrame(step); else num.textContent = pct;
+              }
+              requestAnimationFrame(step);
+            })();
+          }
+        }
+        gio.unobserve(el);
+      });
+    }, { threshold:.4 });
+    gbars.forEach(function(el){ gio.observe(el); });
   }
 
   /* ---- scrollytelling (#how) ---- */
