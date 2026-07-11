@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>전제학습 · 탐정 노트</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1" },
+    fontFamily: { sans:["Pretendard","Inter","sans-serif"] },
+    borderRadius: { "4xl":"2rem", "5xl":"2.5rem" },
+  }}};
+</script>
+<style>
+  body { font-family:"Pretendard","Inter",sans-serif; -webkit-font-smoothing:antialiased; letter-spacing:-.012em; background:#F5F6F4; color:#0A0E17; }
+  h1,h2,h3 { letter-spacing:-.03em; }
+  ::selection { background:rgba(10,102,255,.14); }
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:.5rem; border-radius:9999px; transition:transform .35s cubic-bezier(.16,1,.3,1), background .3s, border-color .3s, color .3s; }
+  .btn-primary { background:#0A66FF; color:#fff; box-shadow:0 4px 14px rgba(10,102,255,.28); }
+  .btn-primary:hover { background:#0857db; transform:translateY(-2px); }
+  .btn-ghost { background:#fff; color:#0A0E17; border:1px solid #DfE3E8; }
+  .btn-ghost:hover { border-color:#0A66FF; color:#0A66FF; }
+  .card { background:#fff; border:1px solid #ECEEF1; border-radius:1.5rem; }
+
+  /* kozy idle */
+  .kozy svg{ width:100%; height:100%; overflow:visible; }
+  .k-edge{ fill:none; stroke:#0A66FF; stroke-width:2.4; stroke-linejoin:round; stroke-linecap:round; }
+  .k-face{ fill:rgba(10,102,255,.10); } .k-face.top{ fill:rgba(10,102,255,.16); }
+  .k-core{ fill:#0A66FF; filter:drop-shadow(0 0 4px rgba(10,102,255,.85)); }
+  .kozy .kw{ transform-origin:50% 55%; animation:kfloat 4s ease-in-out infinite; }
+  @keyframes kfloat{ 0%,100%{transform:translateY(0) rotate(-6deg)} 50%{transform:translateY(-6px) rotate(6deg)} }
+
+  /* heatmap */
+  .hm-cell{ width:100%; aspect-ratio:1; border-radius:4px; background:#EAEEF3; transition:transform .15s; cursor:default; }
+  .hm-cell:hover{ transform:scale(1.25); outline:2px solid rgba(10,102,255,.4); }
+  .lv1{ background:#CFE0FB; } .lv2{ background:#9DBFF7; } .lv3{ background:#5B93F1; } .lv4{ background:#0A66FF; }
+
+  .badge-chip{ transition:transform .3s; }
+  .badge-chip:hover{ transform:translateY(-3px); }
+  .badge-chip.locked{ filter:grayscale(1); opacity:.4; }
+
+  .fadein{ animation:fadein .6s ease both; } @keyframes fadein{ from{opacity:0; transform:translateY(12px)} }
+  .grow{ animation:grow 1s cubic-bezier(.16,1,.3,1) both; } @keyframes grow{ from{transform:scaleX(0)} }
+
+  #tip{ position:fixed; z-index:80; background:#0A0E17; color:#fff; font-size:12px; padding:5px 9px; border-radius:8px; pointer-events:none; opacity:0; transition:opacity .15s; white-space:nowrap; }
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important} }
+</style>
+</head>
+<body>
+
+<!-- NAV (공통) -->
+<div id="topnav"></div>
+<script src="common.js"></script>
+
+<main class="max-w-4xl mx-auto px-5 py-8">
+
+  <!-- profile -->
+  <div class="flex items-center justify-between flex-wrap gap-4">
+    <div>
+      <p class="text-[11px] font-semibold tracking-widest uppercase text-point">탐정 노트</p>
+      <h1 class="text-[1.8rem] md:text-[2.2rem] font-extrabold mt-1"><span id="detName">지호</span> 탐정의 성장 기록</h1>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="card px-4 py-3 text-center"><p class="text-[20px] font-extrabold text-ink">🔥 <span id="streak">15</span></p><p class="text-[11px] text-body">연속일</p></div>
+      <div class="card px-4 py-3 text-center"><p class="text-[20px] font-extrabold text-ink">Lv.<span id="level">3</span></p><p class="text-[11px] text-body">전제탐정</p></div>
+      <div class="card px-4 py-3 text-center"><p class="text-[20px] font-extrabold text-point" id="totalPremise">0</p><p class="text-[11px] text-body">발견한 전제</p></div>
+    </div>
+  </div>
+
+  <!-- kozy report -->
+  <div class="card p-6 md:p-7 mt-6 fadein">
+    <div class="flex gap-4 items-start">
+      <div class="kozy shrink-0" style="width:56px;height:56px">
+        <svg viewBox="0 0 100 100" aria-label="코지"><g class="kw">
+          <polygon class="k-face top" points="50,15 82,33 50,50 18,33"/>
+          <polygon class="k-face right" points="82,33 82,67 50,85 50,50"/>
+          <polygon class="k-face left" points="18,33 50,50 50,85 18,67"/>
+          <polygon class="k-edge" points="50,15 82,33 82,67 50,85 18,67 18,33"/>
+          <path class="k-edge" d="M50,50 L82,33 M50,50 L18,33 M50,50 L50,85"/>
+          <circle class="k-core" cx="50" cy="50" r="4.5"/>
+        </g></svg>
+      </div>
+      <div>
+        <p class="text-[12px] font-semibold text-point mb-1">코지의 주간 리포트</p>
+        <p class="text-[15px] md:text-[16px] text-ink leading-relaxed">
+          지호 탐정님, 이번 주 정말 멋졌어요! <b>‘틀리면 안 된다’</b>는 전제를 시원하게 깨부순 덕분에 오답 노트가 훨씬 풍성해졌어요.
+          특히 <b>‘질문의 전제를 되묻는’</b> 습관이 부쩍 자랐네요. 다음 주엔 비문학의 전제도 함께 폭파해 볼까요?
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid lg:grid-cols-5 gap-4 mt-4">
+    <!-- heatmap -->
+    <div class="card p-6 lg:col-span-3 fadein">
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <p class="text-[15px] font-bold text-ink">발견한 전제 히트맵</p>
+          <p class="text-[12px] text-body mt-0.5">최근 12주 · 매일의 전제 폭파 기록</p>
+        </div>
+        <div class="flex items-center gap-1.5 text-[11px] text-faint">
+          적음 <span class="w-3 h-3 rounded-[3px] bg-[#EAEEF3]"></span><span class="w-3 h-3 rounded-[3px] lv1"></span><span class="w-3 h-3 rounded-[3px] lv2"></span><span class="w-3 h-3 rounded-[3px] lv3"></span><span class="w-3 h-3 rounded-[3px] lv4"></span> 많음
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <div class="flex flex-col justify-around text-[10px] text-faint py-0.5 shrink-0">
+          <span>월</span><span>수</span><span>금</span>
+        </div>
+        <div class="grid grid-flow-col gap-[5px] flex-1" style="grid-template-rows:repeat(7,1fr)" id="heatmap"></div>
+      </div>
+    </div>
+
+    <!-- attitude metrics -->
+    <div class="lg:col-span-2 space-y-4">
+      <div class="card p-5 fadein" id="metric1"></div>
+      <div class="card p-5 fadein" id="metric2"></div>
+      <div class="card p-5 fadein" id="metric3"></div>
+    </div>
+  </div>
+
+  <!-- badges -->
+  <div class="card p-6 mt-4 fadein">
+    <div class="flex items-center justify-between mb-5">
+      <p class="text-[15px] font-bold text-ink">획득한 탐정 배지</p>
+      <p class="text-[12px] text-body"><span id="badgeDone" class="text-point font-bold">0</span> / <span id="badgeTotal">0</span></p>
+    </div>
+    <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4" id="badges"></div>
+  </div>
+
+  <!-- timeline -->
+  <div class="card p-6 mt-4 fadein">
+    <p class="text-[15px] font-bold text-ink mb-5">최근 발견한 전제</p>
+    <div class="space-y-3" id="timeline"></div>
+  </div>
+
+  <p class="text-center text-[12px] text-faint mt-8 pb-6">태도 지표는 점수가 아니라 <b>생각의 습관</b>을 봅니다 — 6개월의 변화를 기록해요.</p>
+</main>
+
+<div id="tip"></div>
+
+<script>
+  const $ = id => document.getElementById(id);
+
+  /* ---- P5 통합: 공유 저장소에서 실제 데이터 ---- */
+  const S = PremiseStore.get();
+  $("streak").textContent = S.streak;
+  $("level").textContent = Math.max(1, Math.floor(S.badges.length / 2));
+  try { const p = JSON.parse(localStorage.getItem("premise_profile")||"null"); if(p && p.name) $("detName").textContent = p.name; } catch(e){}
+
+  /* ---- heatmap data (deterministic ramp over 12 weeks) ---- */
+  const weeks = 12, tip = $("tip");
+  let total = 0;
+  const hm = $("heatmap");
+  // build column by column (each column = a week, 7 rows)
+  for(let w=0; w<weeks; w++){
+    for(let d=0; d<7; d++){
+      // ramp: later weeks + weekdays more active; weekend lighter
+      const base = (w/weeks)*3.2;
+      const weekend = (d===0||d===6) ? -1.2 : 0;
+      const noise = ((w*7+d)*13 % 7)/7 * 1.6 - 0.6;
+      let v = Math.round(Math.max(0, Math.min(4, base + weekend + noise)));
+      const count = v===0?0:v*1; // premises that day
+      total += count;
+      const cell = document.createElement("div");
+      cell.className = "hm-cell" + (v>0?" lv"+v:"");
+      const dayName = ["일","월","화","수","목","금","토"][d];
+      cell.addEventListener("mousemove", e=>{
+        tip.textContent = count>0 ? `${weeks-w}주 전 ${dayName} · 전제 ${count}개 폭파` : `${weeks-w}주 전 ${dayName} · 기록 없음`;
+        tip.style.left = (e.clientX+12)+"px"; tip.style.top = (e.clientY-8)+"px"; tip.style.opacity=1;
+      });
+      cell.addEventListener("mouseleave", ()=> tip.style.opacity=0);
+      hm.appendChild(cell);
+    }
+  }
+  // count-up total
+  (function(){ let n=0; const target=total; const t=setInterval(()=>{ n+=Math.ceil(target/40); if(n>=target){n=target; clearInterval(t);} $("totalPremise").textContent=n; },25); })();
+
+  /* ---- attitude metrics (태도 중심, 점수 아님) ---- */
+  const metrics = [
+    { key:"질문의 질", now:"깊어지는 중", sub:"지난주 대비 ↑", series:[1,1,2,2,2,3,3,4], unit:"단계" },
+    { key:"스스로 세운 계획", now:"4개", sub:"지난주 2개", series:[0,1,1,2,2,3,2,4], unit:"" },
+    { key:"다르게 시도한 횟수", now:"11회", sub:"지난주 7회", series:[3,4,5,6,7,8,7,11], unit:"" },
+  ];
+  function spark(series){
+    const w=120,h=34,max=Math.max(...series),min=Math.min(...series);
+    const pts=series.map((v,i)=>{ const x=i/(series.length-1)*w; const y=h-((v-min)/(max-min||1))*(h-6)-3; return `${x.toFixed(1)},${y.toFixed(1)}`; }).join(" ");
+    const last=pts.split(" ").pop().split(",");
+    return `<svg viewBox="0 0 ${w} ${h}" class="w-full h-9"><polyline points="${pts}" fill="none" stroke="#0A66FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${last[0]}" cy="${last[1]}" r="3" fill="#0A66FF"/></svg>`;
+  }
+  metrics.forEach((m,i)=>{
+    $("metric"+(i+1)).innerHTML = `
+      <p class="text-[12px] text-body">${m.key}</p>
+      <div class="flex items-end justify-between mt-1 mb-2">
+        <p class="text-[22px] font-extrabold text-ink">${m.now}</p>
+        <p class="text-[11px] text-point font-semibold">${m.sub}</p>
+      </div>${spark(m.series)}`;
+  });
+
+  /* ---- badges ---- */
+  const badges = [
+    {e:"🔍",n:"구조탐정",got:1},{e:"🧩",n:"행간탐정",got:1},{e:"⚖️",n:"분별탐정",got:1},{e:"🕵️",n:"문장탐정",got:1},
+    {e:"🎯",n:"되물음탐정",got:1},{e:"🐢",n:"깊이탐정",got:1},{e:"🛠️",n:"유도탐정",got:1},{e:"🧭",n:"근거탐정",got:1},
+    {e:"🗺️",n:"구조도탐정",got:0},{e:"🔭",n:"관점탐정",got:0},{e:"💥",n:"오답폭파탐정",got:0},{e:"🏗️",n:"논리건축탐정",got:0},
+    {e:"🔎",n:"조건탐정",got:0},{e:"🔄",n:"재정의탐정",got:0},{e:"🧠",n:"패턴탐정",got:0},{e:"🎲",n:"반례탐정",got:0},
+  ];
+  const bWrap=$("badges"); let bDone=0;
+  badges.forEach(b=>{ const got = S.badges.includes(b.e); if(got) bDone++;
+    const el=document.createElement("div");
+    el.className="badge-chip flex flex-col items-center text-center"+(got?"":" locked");
+    el.innerHTML=`<div class="w-14 h-14 rounded-2xl ${got?'bg-point/10':'bg-soft'} border ${got?'border-point/25':'border-line'} flex items-center justify-center text-[26px]">${b.e}</div><p class="text-[11px] mt-1.5 ${got?'text-ink font-semibold':'text-faint'}">${b.n}</p>`;
+    bWrap.appendChild(el);
+  });
+  $("badgeDone").textContent=bDone; $("badgeTotal").textContent=badges.length;
+
+  /* ---- timeline ---- */
+  const notes = S.premises.slice(0, 8).map(p => ({ tag:p.subject, t:p.note, d:p.date }));
+  $("timeline").innerHTML = notes.map(n=>`
+    <div class="flex items-center gap-3 rounded-2xl bg-soft border border-line px-4 py-3">
+      <span class="text-[11px] font-bold text-point bg-point/10 rounded-full px-2.5 py-1">${n.tag}</span>
+      <p class="text-[14px] font-semibold text-ink flex-1">${n.t}</p>
+      <span class="text-[12px] text-faint">${n.d}</span>
+    </div>`).join("");
+  PremiseNav.render("note");
+
+  // animate progress bar of heatmap total done later if needed
+</script>
+</body>
+</html>

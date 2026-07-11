@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>전제학습 · 코스 — 사고의 전제 경로</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1" },
+    fontFamily: { sans:["Pretendard","Inter","sans-serif"] }, borderRadius:{ "4xl":"2rem","5xl":"2.5rem" },
+  }}};
+</script>
+<style>
+  body { font-family:"Pretendard","Inter",sans-serif; -webkit-font-smoothing:antialiased; letter-spacing:-.012em; background:#F5F6F4; color:#0A0E17; }
+  h1,h2,h3 { letter-spacing:-.03em; }
+  ::selection { background:rgba(10,102,255,.14); }
+  .en{ font-family:"Inter","Pretendard",sans-serif; } .eyebrow{ letter-spacing:.2em; }
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:.5rem; border-radius:9999px; white-space:nowrap; transition:transform .35s cubic-bezier(.16,1,.3,1), background .3s, color .3s, border-color .3s, box-shadow .3s; }
+  .btn-primary { background:#0A66FF; color:#fff; box-shadow:0 4px 14px rgba(10,102,255,.28); } .btn-primary:hover { background:#0857db; transform:translateY(-2px); }
+  .btn-ghost { background:#fff; color:#0A0E17; border:1px solid #DfE3E8; } .btn-ghost:hover { border-color:#0A66FF; color:#0A66FF; }
+
+  .spine { position:absolute; left:30px; top:8px; bottom:8px; width:2px; background:linear-gradient(#0A66FF, #DfE3E8); z-index:0; }
+  .node { width:62px; height:62px; border-radius:9999px; display:flex; align-items:center; justify-content:center; font-size:24px; position:relative; z-index:10; transition:transform .3s, box-shadow .3s; }
+  .node.done { background:#0A66FF; color:#fff; box-shadow:0 6px 18px rgba(10,102,255,.35); }
+  .node.current { background:#fff; border:2.5px solid #0A66FF; box-shadow:0 0 0 6px rgba(10,102,255,.12); animation:nodepulse 2.2s ease-in-out infinite; }
+  @keyframes nodepulse { 0%,100%{box-shadow:0 0 0 6px rgba(10,102,255,.12)} 50%{box-shadow:0 0 0 12px rgba(10,102,255,.05)} }
+  .node.locked { background:#EDEFF2; color:#B6BEC9; }
+  .row.clickable .node:hover { transform:scale(1.08); }
+  .row.clickable .mcard:hover { border-color:#0A66FF; transform:translateY(-2px); }
+  .mcard { transition:transform .3s, border-color .3s; }
+  .row.locked { opacity:.62; } .row.locked .mcard { cursor:not-allowed; }
+  .shake { animation:shake .45s ease; } @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 50%{transform:translateX(5px)} 75%{transform:translateX(-3px)} }
+
+  .kozy svg{ width:100%; height:100%; overflow:visible; }
+  .k-edge{ fill:none; stroke:#0A66FF; stroke-width:2.4; stroke-linejoin:round; stroke-linecap:round; }
+  .k-face{ fill:rgba(10,102,255,.10); } .k-face.top{ fill:rgba(10,102,255,.16); }
+  .k-core{ fill:#0A66FF; filter:drop-shadow(0 0 4px rgba(10,102,255,.85)); }
+  .kozy .kw{ transform-origin:50% 55%; animation:kfloat 4s ease-in-out infinite; }
+  @keyframes kfloat{ 0%,100%{transform:translateY(0) rotate(-6deg)} 50%{transform:translateY(-6px) rotate(6deg)} }
+
+  .modal { position:fixed; inset:0; z-index:60; display:none; } .modal.open { display:block; }
+  .modal-bg { position:absolute; inset:0; background:rgba(10,14,23,.45); backdrop-filter:blur(2px); animation:fade .3s ease; }
+  .modal-panel { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:min(92vw,520px); max-height:88vh; overflow:auto; animation:pop .35s cubic-bezier(.3,1.3,.5,1); }
+  @keyframes fade{ from{opacity:0} } @keyframes pop{ from{opacity:0; transform:translate(-50%,-46%) scale(.96)} }
+  .fadein { animation:fadein .5s ease both; } @keyframes fadein{ from{opacity:0; transform:translateY(10px)} }
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important} }
+</style>
+</head>
+<body>
+
+<!-- NAV (공통) -->
+<div id="topnav"></div>
+<script src="common.js"></script>
+
+<main class="max-w-3xl mx-auto px-5 py-8">
+
+  <!-- header -->
+  <div class="flex items-start gap-4">
+    <div class="kozy shrink-0" style="width:56px;height:56px">
+      <svg viewBox="0 0 100 100" aria-label="코지"><g class="kw">
+        <polygon class="k-face top" points="50,15 82,33 50,50 18,33"/><polygon class="k-face right" points="82,33 82,67 50,85 50,50"/><polygon class="k-face left" points="18,33 50,50 50,85 18,67"/>
+        <polygon class="k-edge" points="50,15 82,33 82,67 50,85 18,67 18,33"/><path class="k-edge" d="M50,50 L82,33 M50,50 L18,33 M50,50 L50,85"/><circle class="k-core" cx="50" cy="50" r="4.5"/>
+      </g></svg>
+    </div>
+    <div>
+      <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-1">The Premise Path</p>
+      <h1 class="text-[1.7rem] md:text-[2.1rem] font-extrabold">사고의 전제 경로</h1>
+      <p class="text-[14px] text-body mt-1">과목을 가르치지 않습니다. 어떤 지식이든 관통하는 '전제를 의심하는 힘'을 <b class="text-ink">입문 → 기본 → 심화</b> 3단계로 훈련합니다.</p>
+    </div>
+  </div>
+
+  <!-- progress -->
+  <div class="mt-6 bg-white border border-line rounded-2xl p-5">
+    <div class="flex items-center justify-between mb-2">
+      <p class="text-[13px] font-semibold text-ink">전제 폭파 진행도</p>
+      <p class="text-[13px] text-body"><span id="doneNum" class="text-point font-bold">0</span> / <span id="totalNum">0</span> 미션</p>
+    </div>
+    <div class="h-2.5 rounded-full bg-soft overflow-hidden"><div id="progressBar" class="h-full bg-point rounded-full transition-all duration-700" style="width:0%"></div></div>
+  </div>
+
+  <!-- PATH -->
+  <div class="relative mt-10" id="path">
+    <div class="spine"></div>
+    <div id="pathInner"></div>
+  </div>
+
+  <p class="text-center text-[12px] text-faint mt-10 pb-6">각 미션의 소재(일상·수학·과학 등)는 사고 훈련을 위한 예시일 뿐, 배우는 것은 '전제를 의심하는 법'입니다.</p>
+</main>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-bg" onclick="closeModal()"></div>
+  <div class="modal-panel bg-white border border-line rounded-4xl p-7 md:p-9">
+    <div class="flex items-start justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-14 h-14 rounded-2xl bg-point/10 flex items-center justify-center text-point"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg></div>
+        <div>
+          <p class="text-[11px] font-semibold tracking-widest uppercase text-point" id="mUnit"></p>
+          <h3 class="text-[18px] font-bold text-ink" id="mTitle"></h3>
+        </div>
+      </div>
+      <button onclick="closeModal()" class="text-faint hover:text-ink text-[22px] leading-none">×</button>
+    </div>
+    <div class="mt-6 space-y-3">
+      <div class="rounded-2xl bg-soft border border-line p-4"><p class="text-[11px] font-semibold tracking-widest uppercase text-faint mb-1">당연하게 여기는 것</p><p class="text-[15px] text-body" id="mMyth"></p></div>
+      <div class="rounded-2xl bg-soft border border-line p-4"><p class="text-[11px] font-semibold tracking-widest uppercase text-faint mb-1">숨은 전제</p><p class="text-[15px] font-semibold text-ink" id="mPremise"></p></div>
+      <div class="rounded-2xl bg-point/5 border border-point/25 p-4"><p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-1">전제 폭파</p><p class="text-[15px] font-semibold text-ink" id="mReframe"></p></div>
+    </div>
+    <div class="mt-5 flex items-center gap-3 text-[13px] text-body"><span class="inline-flex items-center gap-1.5"><span id="mBadge" class="text-[18px]"></span> <span id="mBadgeName" class="font-semibold text-ink"></span></span></div>
+    <a href="daily.html" class="btn btn-primary w-full mt-6 py-3.5 text-[15px] font-semibold">오늘의 사건에서 체험하기 →</a>
+  </div>
+</div>
+
+<script>
+  // 사고 복잡도 3단계 경로 (과목 아님 · 소재는 예시)
+  const STAGES = [
+    { stage:"입문 · 전제 알아차리기", en:"Level 1", missions:[
+      { id:"in-1", icon:"🎯", src:"일상", title:"공부는 열심히 해야 한다", myth:"노력의 양이 성과를 만든다", premise:"'열심히'만 하면 된다는 전제", reframe:"방향 없는 노력은 헛돈다 — '어떻게'를 먼저 물어야 한다", badge:"🎯", badgeName:"알아차림탐정" },
+      { id:"in-2", icon:"🔍", src:"상식", title:"지구는 둥글다", myth:"배운 지식은 의심할 필요 없다", premise:"'배웠으니 안다'는 전제", reframe:"'어떻게 아는가'를 물으면 지식이 비로소 내 것이 된다", badge:"🔍", badgeName:"구조탐정" },
+      { id:"in-3", icon:"🕵️", src:"언어", title:"\"너조차 그걸 몰랐어\"", myth:"말은 말한 것만 뜻한다", premise:"다들 알고, 너도 당연히 알 거라는 전제", reframe:"말이 몰래 심은 전제를 걷어내면, 그 말은 나를 깎지 못한다", badge:"🕵️", badgeName:"문장탐정" },
+      { id:"in-4", icon:"🧩", src:"일상", title:"친구가 많아야 행복하다", myth:"많을수록 좋다", premise:"'수 = 행복'이라는 전제", reframe:"행복은 관계의 수가 아니라 깊이에서 온다", badge:"🧩", badgeName:"행간탐정" },
+    ]},
+    { stage:"기본 · 전제를 흔들어 생각 확장", en:"Level 2", missions:[
+      { id:"ba-1", icon:"🐢", src:"수학", title:"수학은 빨리 푸는 과목이다", myth:"속도 = 실력", premise:"'빠름 = 잘함'이라는 전제", reframe:"깊이 이해하는 과목 — 느리게 판 한 문제가 열 문제를 연다", badge:"🐢", badgeName:"깊이탐정" },
+      { id:"ba-2", icon:"🔭", src:"사회", title:"역사는 승자의 기록이다", myth:"기록된 것이 사실의 전부", premise:"'기록 = 진실'이라는 전제", reframe:"기록되지 않은 관점을 상상하면 역사가 입체가 된다", badge:"🔭", badgeName:"관점탐정" },
+      { id:"ba-3", icon:"💥", src:"학습", title:"틀리면 안 된다", myth:"오답은 실패다", premise:"'틀림 = 실패'라는 전제", reframe:"오답은 사고의 재료 — 틀린 이유를 알면 자산이 된다", badge:"💥", badgeName:"오답폭파탐정" },
+      { id:"ba-4", icon:"🧭", src:"논리", title:"규칙은 원래 그런 것이다", myth:"약속은 의심하지 않는다", premise:"'원래 그래'라는 전제", reframe:"규칙에도 이유가 있다 — 왜 그런지 캐면 원리가 보인다", badge:"🧭", badgeName:"근거탐정" },
+    ]},
+    { stage:"심화 · 다층적 전제 분석·재구성", en:"Level 3", missions:[
+      { id:"sim-1", icon:"🗺️", src:"독해", title:"비문학 지문에는 하나의 정답이 있다", myth:"글은 한 방향으로 읽힌다", premise:"'필자 = 객관'이라는 전제", reframe:"지문에 깔린 다층적 전제를 추출하면 숨은 논리가 드러난다", badge:"🗺️", badgeName:"구조도탐정" },
+      { id:"sim-2", icon:"🔎", src:"과학", title:"과학 이론은 확정된 사실이다", myth:"이론은 흔들리지 않는다", premise:"'이론 = 불변'이라는 전제", reframe:"이론이 딛고 선 가정을 검증하면, 그 한계와 적용 범위가 보인다", badge:"🔎", badgeName:"조건탐정" },
+      { id:"sim-3", icon:"🔄", src:"시사", title:"경제 기사는 사실을 전한다", myth:"보도는 중립적이다", premise:"'기사 = 사실'이라는 전제", reframe:"기사의 프레임을 걷어내고 대안적 전제로 재구성한다", badge:"🔄", badgeName:"재정의탐정" },
+    ]},
+  ];
+
+  const $ = id => document.getElementById(id);
+
+  function render(){
+    const inner = $("pathInner"); inner.innerHTML = "";
+    const doneSet = new Set(PremiseStore.get().completed);
+    let firstCurrent = false, done = 0, total = 0;
+
+    STAGES.forEach(st=>{
+      const uh = document.createElement("div");
+      uh.className = "relative pl-20 mb-4 mt-2 fadein";
+      const detail = st.stage.startsWith("입문") ? "level-intro.html"
+        : st.stage.startsWith("기본") ? "level-basic.html"
+        : st.stage.startsWith("심화") ? "level-advanced.html" : null;
+      uh.innerHTML = `<div class="absolute left-[19px] top-1 w-6 h-6 rounded-md bg-point/15 border border-point/30 rotate-45"></div>
+        <p class="en text-[10px] eyebrow uppercase text-faint">${st.en}</p>
+        <div class="flex items-center justify-between gap-3">
+          <p class="text-[13px] font-bold text-point">${st.stage}</p>
+          ${detail?`<a href="${detail}" class="text-[12px] font-semibold text-point/80 hover:text-point transition shrink-0">단계 상세 →</a>`:""}
+        </div>`;
+      inner.appendChild(uh);
+
+      st.missions.forEach(m=>{
+        total++;
+        let state;
+        if(doneSet.has(m.id)) state = "done";
+        else if(!firstCurrent){ state = "current"; firstCurrent = true; }
+        else state = "locked";
+        m._state = m._stage = st.stage;
+        if(state==="done") done++;
+        const clickable = state!=="locked";
+        const nodeInner = state==="done" ? '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4.5 4.5L19 7"/></svg>'
+          : state==="locked" ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>'
+          : String(total).padStart(2,"0");
+        const row = document.createElement("div");
+        row.className = `row relative pl-20 pb-5 ${clickable?"clickable":"locked"}`;
+        row.innerHTML = `
+          <div class="node ${state} absolute left-0 top-0">${nodeInner}</div>
+          <div class="mcard bg-white border border-line rounded-2xl px-5 py-4 ${state==="current"?"border-point":""}">
+            ${state==="current"?'<span class="inline-block text-[10px] font-bold text-white bg-point rounded-full px-2 py-0.5 mb-1.5">지금 여기</span>':""}
+            <div class="flex items-center gap-2 mb-1"><span class="text-[10px] font-semibold text-faint bg-soft border border-line rounded-full px-2 py-0.5">소재 · ${m.src}</span></div>
+            <p class="text-[15px] font-bold text-ink leading-snug">${m.title}</p>
+            <p class="text-[13px] text-body mt-1">${state==="locked"?"이전 미션을 완료하면 열려요":m.reframe}</p>
+          </div>`;
+        const open = ()=>{ if(!clickable){ row.classList.add("shake"); setTimeout(()=>row.classList.remove("shake"),450); return; } openModal(m, st.stage); };
+        row.querySelector(".mcard").addEventListener("click", open);
+        row.querySelector(".node").addEventListener("click", open);
+        inner.appendChild(row);
+      });
+    });
+    $("doneNum").textContent = done; $("totalNum").textContent = total;
+    setTimeout(()=>{ $("progressBar").style.width = Math.round(done/total*100)+"%"; }, 100);
+  }
+
+  function openModal(m, stage){
+    $("mUnit").textContent = `${stage.split(" · ")[0]} · 소재 ${m.src}`;
+    $("mTitle").textContent = m.title;
+    $("mMyth").textContent = m.myth;
+    $("mPremise").textContent = m.premise;
+    $("mReframe").textContent = m.reframe;
+    $("mBadge").textContent = m.badge;
+    $("mBadgeName").textContent = m.badgeName;
+    $("modal").classList.add("open");
+  }
+  function closeModal(){ $("modal").classList.remove("open"); }
+  window.closeModal = closeModal;
+  document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeModal(); });
+
+  render();
+  if(window.PremiseNav) PremiseNav.render("coz");
+</script>
+</body>
+</html>

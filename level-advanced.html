@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>전제학습 · 심화 — 다층적 전제 분석·재구성</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1" },
+    fontFamily: { sans:["Pretendard","Inter","sans-serif"] }, borderRadius:{ "4xl":"2rem","5xl":"2.5rem" },
+  }}};
+</script>
+<style>
+  body { font-family:"Pretendard","Inter",sans-serif; -webkit-font-smoothing:antialiased; letter-spacing:-.012em; background:#F5F6F4; color:#0A0E17; }
+  h1,h2,h3 { letter-spacing:-.03em; } .display{ line-height:1.08; }
+  .en{ font-family:"Inter","Pretendard",sans-serif; } .eyebrow{ letter-spacing:.2em; }
+  ::selection { background:rgba(10,102,255,.14); }
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:.5rem; border-radius:9999px; white-space:nowrap; transition:transform .35s cubic-bezier(.16,1,.3,1), background .3s, color .3s, border-color .3s, box-shadow .3s; }
+  .btn-primary { background:#0A66FF; color:#fff; box-shadow:0 4px 14px rgba(10,102,255,.28); } .btn-primary:hover { background:#0857db; transform:translateY(-2px); }
+  .btn-ghost { background:#fff; color:#0A0E17; border:1px solid #DfE3E8; } .btn-ghost:hover { border-color:#0A66FF; color:#0A66FF; }
+  .card { background:#fff; border:1px solid #EFF1F3; border-radius:1.5rem; box-shadow:0 2px 10px rgba(10,14,23,.04); }
+  .reveal{ opacity:0; transform:translateY(18px); transition:opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1); } .reveal.in{ opacity:1; transform:none; }
+  .reveal[data-d="1"]{transition-delay:.07s}.reveal[data-d="2"]{transition-delay:.14s}.reveal[data-d="3"]{transition-delay:.21s}.reveal[data-d="4"]{transition-delay:.28s}
+  .kozy svg{ width:100%; height:100%; overflow:visible; }
+  .k-edge{ fill:none; stroke:#0A66FF; stroke-width:2.4; stroke-linejoin:round; stroke-linecap:round; }
+  .k-face{ fill:rgba(10,102,255,.10); } .k-face.top{ fill:rgba(10,102,255,.16); }
+  .k-core{ fill:#0A66FF; filter:drop-shadow(0 0 4px rgba(10,102,255,.85)); }
+  .kozy .kw{ transform-origin:50% 55%; animation:kfloat 4s ease-in-out infinite; }
+  @keyframes kfloat{ 0%,100%{transform:translateY(0) rotate(-6deg)} 50%{transform:translateY(-6px) rotate(6deg)} }
+  .mnode { width:44px; height:44px; border-radius:9999px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; transition:transform .3s; }
+  .mnode.done { background:#0A66FF; color:#fff; } .mnode.current { background:#fff; border:2.5px solid #0A66FF; color:#0A66FF; box-shadow:0 0 0 5px rgba(10,102,255,.12); } .mnode.locked { background:#EDEFF2; color:#B6BEC9; }
+  .mrow.clickable:hover .mcard { border-color:#0A66FF; transform:translateY(-2px); } .mrow.clickable:hover .mnode { transform:scale(1.06); }
+  .mcard { transition:transform .3s, border-color .3s; } .mrow.locked { opacity:.6; } .mrow.locked .mcard{ cursor:not-allowed; }
+  .shake{ animation:shake .45s ease } @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
+  .modal{ position:fixed; inset:0; z-index:60; display:none } .modal.open{ display:block }
+  .modal-bg{ position:absolute; inset:0; background:rgba(10,14,23,.45); backdrop-filter:blur(2px) }
+  .modal-panel{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:min(92vw,520px); max-height:88vh; overflow:auto; animation:pop .35s cubic-bezier(.3,1.3,.5,1) }
+  @keyframes pop{ from{opacity:0; transform:translate(-50%,-46%) scale(.96)} }
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important} .reveal{opacity:1!important;transform:none!important} }
+</style>
+</head>
+<body>
+
+<div id="topnav"></div>
+<script src="common.js"></script>
+
+<main class="max-w-4xl mx-auto px-5 py-8">
+  <nav class="flex items-center gap-1.5 text-[12px] text-faint mb-6">
+    <a href="index.html" class="hover:text-ink transition">전제학습</a><span>›</span>
+    <a href="course.html" class="hover:text-ink transition">코스</a><span>›</span>
+    <span class="text-ink font-medium">심화</span>
+  </nav>
+
+  <div class="card p-8 md:p-12 grid md:grid-cols-[1.4fr_1fr] gap-8 items-center reveal in">
+    <div>
+      <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-3">Level 3 · 심화</p>
+      <h1 class="display text-[1.9rem] md:text-[2.5rem] font-extrabold">여러 전제를<br />해부하고 재구성하다</h1>
+      <p class="mt-5 text-[15px] md:text-[16px] text-body leading-relaxed max-w-md">복잡한 지문과 이론 속에 겹겹이 깔린 여러 전제를 동시에 추출하고, 대안적 전제로 다시 세웁니다. 수능 비문학·과학·시사가 훈련의 무대가 됩니다.</p>
+      <div class="flex items-center gap-5 mt-6 text-[13px] text-body">
+        <span class="inline-flex items-center gap-1.5"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg> <b class="text-ink">3</b>개 전제 미션</span>
+        <span class="inline-flex items-center gap-1.5"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 하루 5분</span>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-3 mt-8">
+        <a class="btn btn-primary text-[15px] font-semibold px-8 py-3.5" id="startBtn" href="daily.html">이어서 시작하기</a>
+        <a href="course.html" class="btn btn-ghost text-[15px] font-semibold px-8 py-3.5">코스 전체 보기</a>
+      </div>
+      <div class="mt-6 max-w-xs">
+        <div class="flex items-center justify-between text-[12px] mb-1.5"><span class="text-body">이 단계 진행도</span><span class="text-body"><b class="text-point" id="doneN">0</b> / 3</span></div>
+        <div class="h-2 rounded-full bg-soft overflow-hidden"><div id="pbar" class="h-full bg-point rounded-full transition-all duration-700" style="width:0%"></div></div>
+      </div>
+    </div>
+    <div class="hidden md:flex justify-center">
+      <div class="kozy" style="width:150px;height:150px">
+        <svg viewBox="0 0 100 100" aria-label="코지"><g class="kw">
+          <polygon class="k-face top" points="50,15 82,33 50,50 18,33"/><polygon class="k-face right" points="82,33 82,67 50,85 50,50"/><polygon class="k-face left" points="18,33 50,50 50,85 18,67"/>
+          <polygon class="k-edge" points="50,15 82,33 82,67 50,85 18,67 18,33"/><path class="k-edge" d="M50,50 L82,33 M50,50 L18,33 M50,50 L50,85"/><circle class="k-core" cx="50" cy="50" r="4.5"/>
+        </g></svg>
+      </div>
+    </div>
+  </div>
+
+  <section class="mt-14">
+    <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5 reveal">What you'll build</p>
+    <h2 class="text-[1.4rem] md:text-[1.9rem] font-extrabold reveal">이 단계에서 기르는 힘</h2>
+    <div class="grid sm:grid-cols-2 gap-4 mt-8">
+      <div class="reveal card p-6 flex gap-4" data-d="1"><svg class="shrink-0 mt-0.5" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M6 8.5v3a2 2 0 002 2h8a2 2 0 002-2v-3M12 13.5v2"/></svg><div><p class="font-bold text-[15px]">다중 전제 동시 추출</p><p class="text-[13px] text-body mt-1 leading-relaxed">한 편의 글에 겹겹이 깔린 여러 전제를 한꺼번에 짚어냅니다.</p></div></div>
+      <div class="reveal card p-6 flex gap-4" data-d="2"><svg class="shrink-0 mt-0.5" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4l10 16M17 4L7 20"/></svg><div><p class="font-bold text-[15px]">전제끼리 충돌시키기</p><p class="text-[13px] text-body mt-1 leading-relaxed">서로 모순되는 전제를 부딪쳐 어느 것이 약한지 검증합니다.</p></div></div>
+      <div class="reveal card p-6 flex gap-4" data-d="3"><svg class="shrink-0 mt-0.5" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6M3 22v-6h6"/><path d="M21 8a9 9 0 00-15-3M3 16a9 9 0 0015 3"/></svg><div><p class="font-bold text-[15px]">대안적 전제로 재구성</p><p class="text-[13px] text-body mt-1 leading-relaxed">전제를 갈아끼워 같은 사실을 전혀 다르게 해석해 봅니다.</p></div></div>
+      <div class="reveal card p-6 flex gap-4" data-d="4"><svg class="shrink-0 mt-0.5" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"/><circle cx="12" cy="12" r="3.5"/></svg><div><p class="font-bold text-[15px]">이론의 가정 해부</p><p class="text-[13px] text-body mt-1 leading-relaxed">과학 이론·기사가 딛고 선 가정과 그 한계를 드러냅니다.</p></div></div>
+    </div>
+  </section>
+
+  <section class="mt-14">
+    <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5 reveal">Preview</p>
+    <div class="reveal card p-8 md:p-10 text-center">
+      <p class="text-[11px] font-semibold tracking-widest uppercase text-faint mb-5">이 단계는 이렇게 생각합니다</p>
+      <p class="text-[20px] md:text-[24px] font-bold leading-relaxed">"과학 이론은 <span id="pvTrig" class="transition-colors duration-500">확정된 사실</span>이다"</p>
+      <div id="pvReveal" class="mt-6 hidden">
+        <div class="rounded-2xl bg-point/5 border border-point/25 p-5 max-w-md mx-auto"><p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-1.5">가정을 해부하면</p><p class="text-[15px] font-semibold text-ink">이론이 딛고 선 가정을 검증하는 순간, 그 이론의 한계와 적용 범위가 보인다.</p></div>
+      </div>
+      <button id="pvBtn" class="btn btn-primary mt-7 px-8 py-3 text-[14px] font-semibold">가정을 해부해 보기</button>
+    </div>
+  </section>
+
+  <section class="mt-14">
+    <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5 reveal">Missions</p>
+    <h2 class="text-[1.4rem] md:text-[1.9rem] font-extrabold reveal mb-8">전제 미션 3</h2>
+    <div class="space-y-3" id="missions"></div>
+  </section>
+
+  <section class="mt-14 grid sm:grid-cols-2 gap-4">
+    <div class="card p-6"><p class="en text-[11px] eyebrow uppercase text-faint mb-1.5">Previous</p><p class="font-bold text-[15px] text-ink">기본 · 전제를 흔들어 생각 확장</p><p class="text-[13px] text-body mt-1">반례로 당연함을 시험하기</p><a href="level-basic.html" class="text-[13px] text-point font-semibold mt-3 inline-block">← 돌아보기</a></div>
+    <div class="card p-6" style="border-color:#0A66FF"><p class="en text-[11px] eyebrow uppercase text-point mb-1.5">Beyond</p><p class="font-bold text-[15px] text-ink">그 이후 · 평생 지속되는 사고 습관</p><p class="text-[13px] text-body mt-1">탐정 노트로 성장을 기록하세요</p><a href="notebook.html" class="text-[13px] text-point font-semibold mt-3 inline-block">성장 기록 보기 →</a></div>
+  </section>
+
+  <p class="text-center text-[12px] text-faint mt-12 pb-4">소재(독해·과학·시사)는 사고 훈련을 위한 예시일 뿐, 배우는 것은 '전제를 해부하고 재구성하는 법'입니다.</p>
+</main>
+
+<div class="modal" id="modal">
+  <div class="modal-bg" onclick="closeModal()"></div>
+  <div class="modal-panel card p-7 md:p-9">
+    <div class="flex items-start justify-between">
+      <div><p class="text-[11px] font-semibold tracking-widest uppercase text-point" id="mUnit"></p><h3 class="text-[18px] font-bold text-ink mt-0.5" id="mTitle"></h3></div>
+      <button onclick="closeModal()" class="text-faint hover:text-ink text-[22px] leading-none">×</button>
+    </div>
+    <div class="mt-6 space-y-3">
+      <div class="rounded-2xl bg-soft border border-line p-4"><p class="text-[11px] font-semibold tracking-widest uppercase text-faint mb-1">당연하게 여기는 것</p><p class="text-[15px] text-body" id="mMyth"></p></div>
+      <div class="rounded-2xl bg-soft border border-line p-4"><p class="text-[11px] font-semibold tracking-widest uppercase text-faint mb-1">숨은 전제</p><p class="text-[15px] font-semibold text-ink" id="mPremise"></p></div>
+      <div class="rounded-2xl bg-point/5 border border-point/25 p-4"><p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-1">전제 폭파</p><p class="text-[15px] font-semibold text-ink" id="mReframe"></p></div>
+    </div>
+    <a href="daily.html" class="btn btn-primary w-full mt-6 py-3.5 text-[15px] font-semibold">오늘의 사건에서 체험하기 →</a>
+  </div>
+</div>
+
+<script>
+  const ORDER = ["in-1","in-2","in-3","in-4","ba-1","ba-2","ba-3","ba-4","sim-1","sim-2","sim-3"];
+  const MISSIONS = [
+    { id:"sim-1", src:"독해", title:"비문학 지문에는 하나의 정답이 있다", myth:"글은 한 방향으로 읽힌다", premise:"'필자 = 객관'이라는 전제", reframe:"지문에 깔린 다층적 전제를 추출하면 숨은 논리가 드러난다" },
+    { id:"sim-2", src:"과학", title:"과학 이론은 확정된 사실이다", myth:"이론은 흔들리지 않는다", premise:"'이론 = 불변'이라는 전제", reframe:"이론이 딛고 선 가정을 검증하면, 그 한계와 적용 범위가 보인다" },
+    { id:"sim-3", src:"시사", title:"경제 기사는 사실을 전한다", myth:"보도는 중립적이다", premise:"'기사 = 사실'이라는 전제", reframe:"기사의 프레임을 걷어내고 대안적 전제로 재구성한다" },
+  ];
+  const $ = id => document.getElementById(id);
+
+  function render(){
+    const done = new Set(PremiseStore.get().completed);
+    const gc = ORDER.find(id=>!done.has(id)) || null;
+    const wrap = $("missions"); wrap.innerHTML = "";
+    let dcount = 0;
+    MISSIONS.forEach((m, i)=>{
+      let state = done.has(m.id) ? "done" : (m.id===gc ? "current" : "locked");
+      if(state==="done") dcount++;
+      const clickable = state!=="locked";
+      const inner = state==="done" ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4.5 4.5L19 7"/></svg>'
+        : state==="locked" ? '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>'
+        : String(i+1).padStart(2,"0");
+      const row = document.createElement("div");
+      row.className = `mrow flex items-center gap-4 ${clickable?"clickable":"locked"}`;
+      row.innerHTML = `
+        <div class="mnode ${state}">${inner}</div>
+        <div class="mcard card flex-1 px-5 py-4 ${state==="current"?"border-point":""}">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-[10px] font-semibold text-faint bg-soft border border-line rounded-full px-2 py-0.5">소재 · ${m.src}</span>
+            ${state==="current"?'<span class="text-[10px] font-bold text-white bg-point rounded-full px-2 py-0.5">지금 여기</span>':""}
+            ${state==="done"?'<span class="text-[10px] font-semibold text-point">완료</span>':""}
+          </div>
+          <p class="text-[15px] font-bold text-ink leading-snug">${m.title}</p>
+          <p class="text-[13px] text-body mt-1">${state==="locked"?"이전 단계를 완료하면 열려요":m.reframe}</p>
+        </div>`;
+      const open = ()=>{ if(!clickable){ row.classList.add("shake"); setTimeout(()=>row.classList.remove("shake"),450); return; } openModal(m,i); };
+      row.querySelector(".mcard").addEventListener("click", open);
+      row.querySelector(".mnode").addEventListener("click", open);
+      wrap.appendChild(row);
+    });
+    $("doneN").textContent = dcount;
+    setTimeout(()=>{ $("pbar").style.width = Math.round(dcount/MISSIONS.length*100)+"%"; }, 100);
+    // CTA — 단계 도달 여부
+    const reached = MISSIONS.some(m=>done.has(m.id)) || MISSIONS.some(m=>m.id===gc);
+    const allDone = dcount === MISSIONS.length;
+    const b = $("startBtn");
+    if(allDone){ b.textContent = "성장 기록 보기 →"; b.href = "notebook.html"; }
+    else if(!reached){ b.textContent = "기본 단계 먼저 완료 →"; b.href = "level-basic.html"; }
+    else { b.textContent = "이어서 시작하기"; b.href = "daily.html"; }
+  }
+  function openModal(m,i){ $("mUnit").textContent = `미션 ${String(i+1).padStart(2,"0")} · 소재 ${m.src}`; $("mTitle").textContent=m.title; $("mMyth").textContent=m.myth; $("mPremise").textContent=m.premise; $("mReframe").textContent=m.reframe; $("modal").classList.add("open"); }
+  function closeModal(){ $("modal").classList.remove("open"); } window.closeModal=closeModal;
+  document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeModal(); });
+
+  $("pvBtn").addEventListener("click", ()=>{ const t=$("pvTrig"); t.style.color="#0A66FF"; t.style.fontWeight="800"; $("pvReveal").classList.remove("hidden"); $("pvBtn").textContent="이게 '전제 해부'입니다"; $("pvBtn").disabled=true; $("pvBtn").style.opacity=".55"; });
+
+  const rObs = new IntersectionObserver((es)=>{ es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); rObs.unobserve(e.target); } }); }, {threshold:.14});
+  document.querySelectorAll(".reveal").forEach(el=>rObs.observe(el));
+
+  render();
+  if(window.PremiseNav) PremiseNav.render("coz");
+</script>
+</body>
+</html>

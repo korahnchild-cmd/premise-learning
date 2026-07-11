@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>코지 · 상태별 아이콘 시스템</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style>
+  :root{ --point:#0A66FF; --point-soft:#C7D2FE; }
+  body{ font-family:"Pretendard",sans-serif; -webkit-font-smoothing:antialiased; letter-spacing:-.012em; background:#F5F6F4; color:#0A0E17; }
+  h1,h2{ letter-spacing:-.03em; }
+  .card{ background:#fff; border:1px solid #ECEEF1; border-radius:1.25rem; }
+
+  /* ===== KOZY BASE ===== */
+  .kozy{ width:120px; height:120px; }
+  .kozy svg{ width:100%; height:100%; overflow:visible; }
+  .k-face{ fill:rgba(10,102,255,.08); stroke:none; transition:fill .3s; }
+  .k-face.top{ fill:rgba(10,102,255,.14); }
+  .k-face.right{ fill:rgba(10,102,255,.05); }
+  .k-edge{ fill:none; stroke:var(--point); stroke-width:2.2; stroke-linejoin:round; stroke-linecap:round; }
+  .k-core{ fill:var(--point); filter:drop-shadow(0 0 4px rgba(10,102,255,.85)); }
+  .octa{ opacity:0; }
+  .ring{ fill:none; stroke:var(--point); stroke-width:2; opacity:0; }
+
+  /* wrapper animates float/bounce; inner g animates turn */
+  .k-wrap{ transform-origin:50% 55%; }
+  .k-turn{ transform-origin:50% 50%; }
+
+  /* ---- IDLE: float + slow turn + core pulse ---- */
+  .st-idle .k-wrap{ animation:float 4s ease-in-out infinite; }
+  .st-idle .k-turn{ animation:turn 6s ease-in-out infinite; }
+  .st-idle .k-core{ animation:pulse 2.4s ease-in-out infinite; }
+  @keyframes float{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+  @keyframes turn{ 0%,100%{transform:rotate(-7deg)} 50%{transform:rotate(7deg)} }
+  @keyframes pulse{ 0%,100%{opacity:.75; transform:scale(1); transform-origin:50% 50%} 50%{opacity:1; transform:scale(1.35)} }
+
+  /* ---- SCAN: faces light in sequence, core sweeps ---- */
+  .st-scan .k-turn{ animation:turnSlow 3s linear infinite; }
+  @keyframes turnSlow{ 0%{transform:rotate(-4deg)} 100%{transform:rotate(4deg)} }
+  .st-scan .face-top{ animation:flick 1.5s ease-in-out infinite; }
+  .st-scan .face-left{ animation:flick 1.5s ease-in-out infinite .5s; }
+  .st-scan .face-right{ animation:flick 1.5s ease-in-out infinite 1s; }
+  @keyframes flick{ 0%,100%{fill:rgba(10,102,255,.05)} 50%{fill:rgba(10,102,255,.28)} }
+  .st-scan .k-core{ animation:coreScan 1.5s ease-in-out infinite; }
+  @keyframes coreScan{ 0%,100%{transform:translateX(-8px); opacity:.6} 50%{transform:translateX(8px); opacity:1} }
+
+  /* ---- DISCOVER: cube -> octahedron transform ---- */
+  .st-discover .cube{ animation:cubeOut 1.8s ease-in-out infinite; transform-origin:50% 50%; }
+  .st-discover .octa{ animation:octaIn 1.8s ease-in-out infinite; transform-origin:50% 50%; }
+  .st-discover .ring{ animation:ringFlash 1.8s ease-out infinite; transform-origin:50% 50%; }
+  @keyframes cubeOut{ 0%,100%{opacity:1; transform:scale(1) rotate(0)} 45%{opacity:0; transform:scale(.5) rotate(60deg)} 55%{opacity:0} }
+  @keyframes octaIn{ 0%,40%{opacity:0; transform:scale(.5) rotate(-60deg)} 60%{opacity:1; transform:scale(1.12) rotate(0)} 80%,100%{opacity:1; transform:scale(1) rotate(0)} }
+  @keyframes ringFlash{ 0%,40%{opacity:0; transform:scale(.4)} 55%{opacity:.7; transform:scale(1)} 100%{opacity:0; transform:scale(1.6)} }
+
+  /* static-discovered (hold octahedron) */
+  .st-octa .cube{ opacity:0; }
+  .st-octa .octa{ opacity:1; }
+  .st-octa .k-core{ animation:pulse 2s ease-in-out infinite; }
+
+  /* ---- PRAISE: bounce + core sparkle ---- */
+  .st-praise .k-wrap{ animation:bouncey .8s cubic-bezier(.3,1.5,.5,1) infinite; }
+  @keyframes bouncey{ 0%{transform:translateY(0) scale(1)} 30%{transform:translateY(-14px) scale(1.08)} 55%{transform:translateY(0) scale(.96)} 70%{transform:translateY(-5px)} 100%{transform:translateY(0) scale(1)} }
+  .st-praise .k-core{ animation:sparkle .8s ease-in-out infinite; }
+  @keyframes sparkle{ 0%,100%{filter:drop-shadow(0 0 3px rgba(10,102,255,.6))} 50%{filter:drop-shadow(0 0 12px rgba(10,102,255,1))} }
+
+  /* ---- BLAST: shake + burst ---- */
+  .st-blast .cube{ animation:blastPulse 1.6s ease-in-out infinite; transform-origin:50% 50%; }
+  @keyframes blastPulse{ 0%{transform:scale(1)} 15%{transform:translateX(-4px) rotate(-4deg)} 30%{transform:translateX(4px) rotate(4deg)} 45%{transform:scale(1.25); opacity:.4} 60%{transform:scale(.9); opacity:1} 100%{transform:scale(1)} }
+  .st-blast .ring{ animation:ringFlash2 1.6s ease-out infinite; transform-origin:50% 50%; }
+  @keyframes ringFlash2{ 0%,35%{opacity:0; transform:scale(.5)} 48%{opacity:.8; transform:scale(1.1)} 100%{opacity:0; transform:scale(1.8)} }
+
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important} }
+</style>
+</head>
+<body>
+
+<div class="max-w-4xl mx-auto px-5 py-12">
+  <p class="text-[11px] font-semibold tracking-[.22em] uppercase text-[color:var(--point)] mb-3">P4 · Brand Character Asset</p>
+  <h1 class="text-[2rem] md:text-[2.6rem] font-extrabold">전제탐정 코지 — 상태별 아이콘</h1>
+  <p class="mt-4 text-[15px] text-[#525A69] leading-relaxed max-w-xl">얼굴 없는 기하학적 캐릭터. 감정은 표정이 아니라 <b>형태 변형과 빛의 진동</b>으로 표현한다. 기본형 정육면체 와이어프레임, 발견의 순간엔 정팔면체로 상위 차원 변환. 상징색 #0A66FF.</p>
+
+  <!-- state grid -->
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-10" id="grid"></div>
+
+  <!-- interactive -->
+  <div class="card p-8 mt-10 text-center">
+    <p class="text-[11px] font-semibold tracking-[.2em] uppercase text-[#9AA4B2] mb-6">라이브 데모 — 버튼으로 상태 전환</p>
+    <div class="kozy mx-auto" id="live" style="width:170px;height:170px"></div>
+    <p class="mt-4 text-[14px] font-semibold" id="liveLabel">대기 (idle)</p>
+    <div class="flex flex-wrap justify-center gap-2.5 mt-6" id="ctrls"></div>
+  </div>
+
+  <p class="mt-8 text-[13px] text-[#9AA4B2] leading-relaxed">사용 매핑 — 대기: 평상시 · 스캔: 전제 찾기 중 · 폭파: 전제 폭파 순간 · 변환: 재구성(깨달음) · 격려: 배지·칭찬. 데일리 미션에 이 상태들이 그대로 연결됩니다.</p>
+</div>
+
+<script>
+  function kozySVG(){
+    return `<svg viewBox="0 0 100 100" role="img" aria-label="코지">
+      <g class="k-wrap"><g class="k-turn">
+        <g class="cube">
+          <polygon class="k-face top face-top" points="50,15 82,33 50,50 18,33"/>
+          <polygon class="k-face right face-right" points="82,33 82,67 50,85 50,50"/>
+          <polygon class="k-face left face-left" points="18,33 50,50 50,85 18,67"/>
+          <polygon class="k-edge" points="50,15 82,33 82,67 50,85 18,67 18,33"/>
+          <path class="k-edge" d="M50,50 L82,33 M50,50 L18,33 M50,50 L50,85"/>
+        </g>
+        <g class="octa">
+          <polygon class="k-face top" points="50,10 86,50 50,50 14,50"/>
+          <polygon class="k-face right" points="50,50 86,50 50,90"/>
+          <polygon class="k-face left" points="50,50 50,90 14,50"/>
+          <polygon class="k-edge" points="50,10 86,50 50,90 14,50"/>
+          <path class="k-edge" d="M50,10 L50,90 M14,50 L86,50"/>
+        </g>
+        <circle class="ring" cx="50" cy="50" r="30"/>
+        <circle class="k-core" cx="50" cy="50" r="4.5"/>
+      </g></g>
+    </svg>`;
+  }
+
+  const states = [
+    {cls:"st-idle",    name:"대기 (idle)",       desc:"느린 부유 + 자전, 코어 맥동"},
+    {cls:"st-scan",    name:"스캔 (전제 찾기)",  desc:"면이 순차 점등, 코어 좌우 스캔"},
+    {cls:"st-blast",   name:"폭파 (전제 폭파)",  desc:"흔들림 + 팽창, 파동 링"},
+    {cls:"st-discover",name:"변환 (재구성)",     desc:"정육면체 → 정팔면체"},
+    {cls:"st-praise",  name:"격려 (칭찬)",       desc:"바운스 + 코어 반짝임"},
+    {cls:"st-octa",    name:"각성 (정팔면체)",   desc:"상위 차원 유지 상태"},
+  ];
+
+  const grid = document.getElementById("grid");
+  states.forEach(s=>{
+    const el = document.createElement("div");
+    el.className = "card p-6 flex flex-col items-center text-center";
+    el.innerHTML = `<div class="kozy ${s.cls}">${kozySVG()}</div>
+      <p class="mt-3 text-[14px] font-bold">${s.name}</p>
+      <p class="mt-1 text-[12px] text-[#9AA4B2] leading-snug">${s.desc}</p>`;
+    grid.appendChild(el);
+  });
+
+  // interactive
+  const live = document.getElementById("live");
+  live.innerHTML = kozySVG();
+  live.classList.add("st-idle");
+  const label = document.getElementById("liveLabel");
+  const ctrls = document.getElementById("ctrls");
+  [["st-idle","대기"],["st-scan","스캔"],["st-blast","폭파"],["st-discover","변환"],["st-praise","격려"]].forEach(([cls,txt])=>{
+    const b = document.createElement("button");
+    b.className = "px-4 py-2 rounded-full border border-[#DfE3E8] text-[13px] font-semibold hover:border-[color:var(--point)] hover:text-[color:var(--point)] transition";
+    b.textContent = txt;
+    b.onclick = ()=>{ live.className = "kozy mx-auto "+cls; live.style.width="170px"; live.style.height="170px"; label.textContent = txt; };
+    ctrls.appendChild(b);
+  });
+</script>
+</body>
+</html>
