@@ -12,12 +12,21 @@
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <script>
   tailwind.config = { theme: { extend: {
-    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", night:"#0A0E17" },
-    fontFamily: { sans:["Pretendard","Inter","sans-serif"], en:["Inter","Pretendard","sans-serif"] },
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", pointdeep:"#0B3ACC", accent:"#FFB800", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", night:"#0A0E17" },
+    fontFamily: { sans:["Pretendard","Inter","sans-serif"], en:["Inter","Pretendard","sans-serif"], serif:["Noto Serif KR","serif"] },
     borderRadius:{ "4xl":"2rem","5xl":"2.5rem" },
   }}};
 </script>
 <style>
+  /* ===== Design tokens v2 ===== */
+  :root{
+    --brand-primary:#0A66FF; --brand-primary-deep:#0B3ACC; --brand-accent:#FFB800;
+    --ink-900:#0A0E27; --ink-700:#2A3151; --ink-500:#6B7290; --ink-300:#C8CEE0;
+    --paper-50:#FBFCFE; --paper-100:#F4F6FC;
+    --motion-fast:150ms; --motion-base:240ms; --motion-slow:420ms;
+    --ease-out:cubic-bezier(.16,1,.3,1); --ease-elastic:cubic-bezier(.68,-.55,.27,1.55);
+    --hero-glow:0 0 40px rgba(10,102,255,.18);
+  }
   html{ scroll-behavior:smooth; }
   body{ font-family:"Pretendard","Inter",sans-serif; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; letter-spacing:-.014em; background:#fff; color:#0A0E17; overflow-x:hidden; }
   h1,h2,h3{ letter-spacing:-.04em; }
@@ -26,6 +35,22 @@
   .display{ line-height:1.05; }
   .lede{ line-height:1.75; }
   ::selection{ background:rgba(10,102,255,.15); }
+
+  /* thin custom scrollbar */
+  ::-webkit-scrollbar{ width:10px; height:10px; }
+  ::-webkit-scrollbar-track{ background:transparent; }
+  ::-webkit-scrollbar-thumb{ background:#D6DCE6; border-radius:9999px; border:2.5px solid #fff; }
+  ::-webkit-scrollbar-thumb:hover{ background:#B9C2D1; }
+
+  /* magnetic button */
+  .btn-magnetic{ transition:transform var(--motion-base) var(--ease-out); }
+
+  /* split-text hero word */
+  .split-char{ display:inline-block; opacity:0; transform:translateY(.5em) rotate(6deg); animation:splitIn .7s var(--ease-out) forwards; }
+  @keyframes splitIn{ to{ opacity:1; transform:translateY(0) rotate(0); } }
+
+  /* card tilt */
+  .tilt{ transform-style:preserve-3d; will-change:transform; }
 
   /* scroll progress bar */
   #bar{ position:fixed; top:0; left:0; height:2.5px; background:linear-gradient(90deg,#0A66FF,#5B93F1); width:0%; z-index:60; transition:width .1s linear; }
@@ -115,7 +140,8 @@
 
 <!-- HERO -->
 <section id="hero" class="relative min-h-[100svh] flex items-center justify-center overflow-hidden pt-24 pb-16">
-  <div class="grid-bg absolute inset-0 -z-10 opacity-70"></div>
+  <canvas id="nodeNet" class="absolute inset-0 -z-10 w-full h-full"></canvas>
+  <div class="grid-bg absolute inset-0 -z-10 opacity-40"></div>
   <div class="orb" data-par=".22" style="width:520px;height:520px;background:#BAD2FB;top:-8%;left:-6%"></div>
   <div class="orb" data-par="-.16" style="width:460px;height:460px;background:#D7E0FA;bottom:-10%;right:-6%"></div>
 
@@ -124,17 +150,23 @@
     <p class="reveal en eyebrow uppercase text-[11px] font-semibold text-point mb-6" data-d="1">PBS 학습법 · Premise-Break Schema</p>
     <h1 class="reveal display text-[2.1rem] sm:text-5xl md:text-[3.7rem] font-extrabold" data-d="1">
       상위권 아이들은 문제를 풀기 전에,<br />
-      문제의 <span class="kw" id="kw">전제<svg viewBox="0 0 200 24" preserveAspectRatio="none"><path d="M4 15 C 55 6, 145 6, 196 13"/></svg></span>부터 의심합니다.
+      문제의 <span class="kw" id="kw"><span id="splitPremise">전제</span><svg viewBox="0 0 200 24" preserveAspectRatio="none"><path d="M4 15 C 55 6, 145 6, 196 13"/></svg></span>부터 의심합니다.
     </h1>
     <p class="reveal lede mt-8 text-[17px] md:text-[19px] text-body max-w-xl mx-auto" data-d="2">
       <b class="text-ink">PBS 학습법</b> — 문제 속 숨은 <b class="text-ink">전제(Premise)</b>를 찾아 <b class="text-ink">깨고(Break)</b>, 새로운 사고의 틀(<b class="text-ink">Schema</b>)로 다시 짜는 훈련.
     </p>
     <div class="reveal mt-10 flex flex-col sm:flex-row justify-center gap-3" data-d="3">
-      <a href="onboarding.html" class="btn btn-primary text-[15px] font-semibold px-9 py-4">무료 체험 시작하기</a>
+      <a href="onboarding.html" id="heroCta" class="btn btn-primary btn-magnetic text-[15px] font-semibold px-9 py-4">무료 체험 시작하기</a>
       <a href="#how" class="btn btn-ghost text-[15px] font-semibold px-9 py-4">PBS 학습법이 뭔가요?</a>
     </div>
     <p class="reveal mt-5" data-d="4"><a href="demo.html" class="text-[14px] font-semibold text-point hover:underline">가입 없이 전제 3개 먼저 풀어보기 →</a></p>
     <p class="reveal mt-4 text-[13px] text-faint" data-d="4">7일 무료 체험 · 지금, 가장 먼저 경험하는 학부모들과 함께</p>
+    <!-- ⚠️ PLACEHOLDER — 실제 수치로 교체 필요. 출시 전 임시 문구, 실제 이용자 데이터 확보 즉시 갱신할 것. -->
+    <p class="reveal mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-[12px] text-faint" data-d="4" id="liveStrip">
+      <span class="inline-flex items-center gap-1.5"><span class="inline-block w-1.5 h-1.5 rounded-full bg-point"></span>현재 <b class="text-ink">132명</b>의 학부모가 무료 체험 중</span>
+      <span>오늘 등록 <b class="text-ink">17건</b></span>
+      <span>평균 만족도 <b class="text-ink">4.8</b>/5</span>
+    </p>
   </div>
 
   <a href="#stats" class="absolute bottom-8 left-1/2 -translate-x-1/2 text-faint" style="animation:kfloat 2s ease-in-out infinite">
@@ -192,6 +224,49 @@
     </div>
 
     <p class="reveal text-center text-[14px] md:text-[15px] text-body mt-10 max-w-2xl mx-auto lede">암기 전략도, 문제 풀이도, 열린 탐구도 아닙니다. PBS는 지식을 대하는 <b class="text-ink">'전제' 자체를 발굴하고 재구성</b>하는 데 초점을 둔 사고 훈련입니다.</p>
+
+    <!-- PBS vs 학원 vs 인강 -->
+    <div class="reveal mt-16 max-w-4xl mx-auto">
+      <p class="text-center text-[13px] font-semibold text-faint uppercase tracking-wide mb-5">학원 · 인강과는 무엇이 다를까요</p>
+      <div class="overflow-x-auto rounded-3xl border border-line">
+        <table class="w-full text-[13px] md:text-[14px] border-collapse bg-white">
+          <thead>
+            <tr class="bg-soft text-left">
+              <th class="p-4 font-semibold text-faint w-1/4">비교 축</th>
+              <th class="p-4 font-semibold text-body">학원</th>
+              <th class="p-4 font-semibold text-body">인강</th>
+              <th class="p-4 font-bold text-point">PBS 학습법</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-t border-line">
+              <td class="p-4 font-semibold text-ink">채우는 것</td>
+              <td class="p-4 text-body">교과 지식·문제풀이 스킬</td>
+              <td class="p-4 text-body">강의로 압축한 지식</td>
+              <td class="p-4 text-ink">지식을 대하는 사고 습관</td>
+            </tr>
+            <tr class="border-t border-line bg-soft/40">
+              <td class="p-4 font-semibold text-ink">학습 방식</td>
+              <td class="p-4 text-body">진도·숙제 중심 반복</td>
+              <td class="p-4 text-body">일방향 시청</td>
+              <td class="p-4 text-ink">매일 사건 1개, 전제 찾기→폭파→기록</td>
+            </tr>
+            <tr class="border-t border-line">
+              <td class="p-4 font-semibold text-ink">평가 기준</td>
+              <td class="p-4 text-body">정오·점수</td>
+              <td class="p-4 text-body">진도율</td>
+              <td class="p-4 text-ink">질문의 질, 다르게 시도한 횟수</td>
+            </tr>
+            <tr class="border-t border-line bg-soft/40">
+              <td class="p-4 font-semibold text-ink">병행 가능성</td>
+              <td class="p-4 text-body" colspan="2">지식 습득 축 — PBS와 겹치지 않음</td>
+              <td class="p-4 text-ink">사고 태도 축 — 학원·인강과 함께 써도 부딪히지 않음</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-center text-[12px] text-faint mt-4">학원·인강을 대체하는 서비스가 아니라, 그 위에서 '어떻게 생각하는가'를 훈련하는 별도의 축입니다.</p>
+    </div>
   </div>
 </section>
 
@@ -437,72 +512,4 @@
         <a href="pricing.html" class="btn btn-ghost mt-9 py-3.5 text-[14px] font-semibold">7일 무료로 시작</a>
       </div>
       <div class="reveal card p-9 md:p-11 flex flex-col relative" style="border-color:#0A66FF" data-d="2">
-        <span class="absolute -top-3 left-9 bg-point text-white text-[11px] font-semibold px-3 py-1 rounded-full">추천</span>
-        <p class="en text-[11px] eyebrow uppercase text-point">Premium</p>
-        <div class="mt-4 mb-8"><span class="display text-[2.8rem] font-extrabold">59,000</span><span class="text-body text-[15px]">원 / 월</span></div>
-        <ul class="space-y-3.5 text-[14px] flex-1"><li class="flex gap-3"><span class="text-point">✓</span> <b>무제한</b> 전제 미션</li><li class="flex gap-3"><span class="text-point">✓</span> <b>심화까지 전 단계</b> (전 영역 소재)</li><li class="flex gap-3"><span class="text-point">✓</span> 주 1회 리포트 + 코지 피드백</li><li class="flex gap-3"><span class="text-point">✓</span> 형제 프로필 지원</li></ul>
-        <a href="pricing.html" class="btn btn-primary mt-9 py-3.5 text-[14px] font-semibold">7일 무료로 시작</a>
-      </div>
-    </div>
-    <p class="reveal text-center text-[13px] text-faint mt-8">7일 무료 체험 · 약정 없이 월 단위 시작 · 언제든 해지</p>
-  </div>
-</section>
-
-<!-- TRUST -->
-<section class="py-28 md:py-36">
-  <div class="max-w-5xl mx-auto px-6">
-    <div class="text-center max-w-2xl mx-auto reveal">
-      <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">Why trust us</p>
-      <h2 class="display text-[1.7rem] md:text-[2.4rem] font-extrabold">점수를 약속하지 않습니다.<br /> 대신, 믿을 이유를 드립니다.</h2>
-    </div>
-    <div class="mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="reveal card p-7 text-center" data-d="1"><svg class="mx-auto mb-3" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v12a1 1 0 01-1 1H7a1 1 0 01-1-1V4a1 1 0 011-1z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 16.5h4"/></svg><p class="text-[14px] font-bold">특허 출원</p><p class="text-[12px] text-body mt-1.5 leading-relaxed">‘전제 폭파’ 적응형 학습 시스템</p></div>
-      <div class="reveal card p-7 text-center" data-d="2"><svg class="mx-auto mb-3" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9.5" r="6"/><path d="M8.5 15l-1 6 4.5-2.5L16.5 21l-1-6"/></svg><p class="text-[14px] font-bold">상표 · 저작권</p><p class="text-[12px] text-body mt-1.5 leading-relaxed">PBS 학습법·코지 상표(™) 및 콘텐츠 보호</p></div>
-      <div class="reveal card p-7 text-center" data-d="3"><svg class="mx-auto mb-3" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4.5"/></svg><p class="text-[14px] font-bold">전문가 감수</p><p class="text-[12px] text-body mt-1.5 leading-relaxed">현직 교사가 감수하고 검증한 콘텐츠</p></div>
-      <div class="reveal card p-7 text-center" data-d="4"><svg class="mx-auto mb-3" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 017-2.6"/></svg><p class="text-[14px] font-bold">약정에 가두지 않음</p><p class="text-[12px] text-body mt-1.5 leading-relaxed">월 단위 시작 · 언제든 1분 해지</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- FINAL CTA -->
-<section class="px-5 pb-8">
-  <div class="relative max-w-6xl mx-auto bg-night rounded-5xl py-24 md:py-36 text-center overflow-hidden">
-    <div class="orb" data-par=".08" style="width:360px;height:360px;background:#12203a;top:12%;left:8%;opacity:.9"></div>
-    <div class="orb" data-par="-.08" style="width:320px;height:320px;background:#0f1830;bottom:12%;right:9%;opacity:.9"></div>
-    <div class="max-w-2xl mx-auto px-6 relative reveal">
-      <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">Start today</p>
-      <h2 class="display text-[2rem] md:text-[3.1rem] font-extrabold text-white">6개월 후, 아이가 스스로<br /> 답을 찾는 모습을 상상해보세요.</h2>
-      <p class="mt-6 text-[16px] text-white/55">무료 체험으로 'PBS 학습법'을 먼저 경험해보세요.</p>
-      <div class="mt-11 flex flex-col items-center gap-4">
-        <a href="onboarding.html" class="btn btn-white text-[15px] font-semibold px-11 py-4">무료 체험 시작하기</a>
-        <p class="text-[13px] text-white/40">7일 무료 체험 · 언제든 해지 가능</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="bg-night text-white/70 pt-16 pb-10">
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-6">
-      <div class="col-span-2 md:col-span-1">
-        <div class="flex items-center gap-2.5 font-bold text-white text-[15px] mb-4"><span class="inline-flex items-center justify-center w-8 h-8 rounded-[11px] bg-point rotate-45"><svg class="-rotate-45" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.5 15.5L20 20"/></svg></span> PBS 학습법</div>
-        <p class="en text-[12px] text-white/40 lede">Think before you solve.<br />Question the premise.</p>
-      </div>
-      <div><p class="en text-[12px] eyebrow uppercase text-white/40 mb-4">Product</p><ul class="space-y-3 text-[14px]"><li><a href="course.html" class="hover:text-white transition">코스</a></li><li><a href="daily.html" class="hover:text-white transition">오늘의 사건</a></li><li><a href="notebook.html" class="hover:text-white transition">탐정 노트</a></li></ul></div>
-      <div><p class="en text-[12px] eyebrow uppercase text-white/40 mb-4">Start</p><ul class="space-y-3 text-[14px]"><li><a href="onboarding.html" class="hover:text-white transition">무료 체험</a></li><li><a href="#pricing" class="hover:text-white transition">요금 안내</a></li></ul></div>
-      <div><p class="en text-[12px] eyebrow uppercase text-white/40 mb-4">Support</p><ul class="space-y-3 text-[14px]"><li><a href="faq.html" class="hover:text-white transition">자주 묻는 질문</a></li><li><a href="faq.html" class="hover:text-white transition">문의하기</a></li></ul></div>
-      <div><p class="en text-[12px] eyebrow uppercase text-white/40 mb-4">Company</p><ul class="space-y-3 text-[14px]"><li><a href="#" class="hover:text-white transition">소개</a></li><li><a href="#" class="hover:text-white transition">블로그</a></li></ul></div>
-    </div>
-    <div class="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-5 text-[13px] text-white/50"><a href="#" class="hover:text-white transition">이용약관</a><a href="#" class="hover:text-white transition">개인정보처리방침</a></div>
-      <p class="text-[13px] text-white/40">© 2025 PBS 학습법 · ™ Trademark & Patent Pending</p>
-    </div>
-  </div>
-</footer>
-
-<style>
-  /* flip (scoped) */
-  .flip{ perspective:1500px; } .flip-in{ position:relative; width:100%; height:100%; transition:transform .85s cubic-bezier(.65,0,.35,1); transform-style:preserve-3d; }
-  .flip:hover .flip-in, .flip.flipped .flip-in{ transform:rotateY(180deg); }
-  .flip-f{ position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; display:flex; flex-direction:column; align-items:center; justify-content:center; border:1px solid #ECEEF1; border-radius:1.5rem; background:#fff; 
+        <span class="absolute -top-3 left-9 bg-point text-white text-[11px] font-semibold px-3 p

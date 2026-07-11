@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PBS 학습법 · 페이지를 찾을 수 없어요</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style>
+  body{ font-family:"Pretendard","Inter",sans-serif; background:#F5F6F4; color:#0A0E17; }
+  .kozy svg{ width:100%; height:100%; overflow:visible; }
+  .k-edge{ fill:none; stroke:#0A66FF; stroke-width:2.4; stroke-linejoin:round; stroke-linecap:round; }
+  .k-face{ fill:rgba(10,102,255,.10); } .k-face.top{ fill:rgba(10,102,255,.16); }
+  .k-core{ fill:#0A66FF; filter:drop-shadow(0 0 4px rgba(10,102,255,.85)); }
+  .kozy .kw{ transform-origin:50% 55%; animation:kfloat 4s ease-in-out infinite; }
+  @keyframes kfloat{ 0%,100%{transform:translateY(0) rotate(-6deg)} 50%{transform:translateY(-6px) rotate(6deg)} }
+  .btn{ display:inline-flex; align-items:center; justify-content:center; border-radius:9999px; background:#0A66FF; color:#fff; padding:.85rem 2rem; font-weight:600; font-size:15px; transition:transform .3s; }
+  .btn:hover{ transform:translateY(-2px); }
+</style>
+</head>
+<body class="min-h-screen flex items-center justify-center px-5">
+  <div class="text-center max-w-md">
+    <div class="kozy mx-auto mb-8" style="width:96px;height:96px">
+      <svg viewBox="0 0 100 100" aria-label="루카"><g class="kw">
+        <polygon class="k-face top" points="50,15 82,33 50,50 18,33"/><polygon class="k-face right" points="82,33 82,67 50,85 50,50"/><polygon class="k-face left" points="18,33 50,50 50,85 18,67"/>
+        <polygon class="k-edge" points="50,15 82,33 82,67 50,85 18,67 18,33"/><path class="k-edge" d="M50,50 L82,33 M50,50 L18,33 M50,50 L50,85"/><circle class="k-core" cx="50" cy="50" r="4.5"/>
+      </g></svg>
+    </div>
+    <h1 class="text-[1.6rem] font-extrabold mb-3">이 페이지의 전제를 의심해보셨나요?</h1>
+    <p class="text-[15px] text-[#525A69] leading-relaxed mb-9">"이 주소가 맞을 것이다"라는 전제, 한번 깨볼 시간이에요. 링크가 바뀌었거나 페이지가 사라졌을 수 있어요.</p>
+    <a href="/" class="btn">랜딩으로 돌아가기</a>
+  </div>
+</body>
+</html>

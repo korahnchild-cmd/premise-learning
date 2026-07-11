@@ -6,14 +6,14 @@
 | 파일 | 화면 |
 |---|---|
 | `index.html` | 랜딩 |
-| `onboarding.html` | 온보딩 (코지와 첫 만남) |
+| `onboarding.html` | 온보딩 (루카와 첫 만남) |
 | `course.html` | 코스 — 사고의 전제 경로 (입문·기본·심화) |
 | `level-intro.html` / `level-basic.html` / `level-advanced.html` | 단계 상세 |
 | `daily.html` | 오늘의 사건 (다단계 레슨) |
 | `notebook.html` | 탐정 노트 (대시보드) |
 | `pricing.html` | 요금 |
 | `faq.html` | 고객센터 |
-| `kozy-icons.html` | 코지 상태 아이콘 시스템 (내부 참고) |
+| `kozy-icons.html` | 루카 상태 아이콘 시스템 (내부 참고) |
 | `common.js` | 공통 네비 + 진도 저장소(localStorage) |
 
 ## 특징
