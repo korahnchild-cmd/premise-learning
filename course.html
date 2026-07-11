@@ -215,4 +215,139 @@
     Object.keys(TRACKS).forEach(key=>{
       const t = TRACKS[key];
       const b = document.createElement("button");
-      b.c
+      b.className = "px-4 py-2 rounded-full text-[13px] font-semibold whitespace-nowrap transition border "
+        + (key === activeTrack ? "bg-ink text-white border-ink" : "bg-white text-body border-line hover:border-point hover:text-point");
+      b.textContent = t.label + (t.built ? "" : " · 준비중");
+      b.onclick = () => { activeTrack = key; renderTabs(); renderTrack(); };
+      wrap.appendChild(b);
+    });
+  }
+
+  function renderTrack(){
+    const t = TRACKS[activeTrack];
+    $("trackFlavor").textContent = t.flavor;
+    if (t.built){
+      $("builtView").classList.remove("hidden");
+      $("previewView").classList.add("hidden");
+      render();
+    } else {
+      $("builtView").classList.add("hidden");
+      $("previewView").classList.remove("hidden");
+      renderPreview(t);
+    }
+  }
+
+  // ===== 중등(정식) 트랙 렌더 =====
+  function allMissions(){ return STAGES.flatMap(s => s.missions); }
+
+  function firstIncompleteId(){
+    const done = PremiseStore.get().completed;
+    const all = allMissions();
+    const next = all.find(m => !done.includes(m.id));
+    return next ? next.id : null;
+  }
+
+  function render(){
+    const store = PremiseStore.get();
+    const all = allMissions();
+    const doneCount = all.filter(m => store.completed.includes(m.id)).length;
+    $("doneNum").textContent = doneCount;
+    $("totalNum").textContent = all.length;
+    $("progressBar").style.width = Math.round((doneCount / all.length) * 100) + "%";
+
+    const currentId = firstIncompleteId();
+    const inner = $("pathInner");
+    inner.innerHTML = "";
+
+    STAGES.forEach(stage => {
+      const stageWrap = document.createElement("div");
+      stageWrap.className = "mb-10";
+      stageWrap.innerHTML = `<p class="en text-[11px] eyebrow uppercase text-point font-semibold mb-1 ml-[76px]">${stage.en}</p>
+        <h2 class="text-[16px] font-bold text-ink mb-5 ml-[76px]">${stage.stage}</h2>`;
+
+      stage.missions.forEach(m => {
+        const isDone = store.completed.includes(m.id);
+        const isCurrent = m.id === currentId;
+        const isLocked = !isDone && !isCurrent;
+
+        const row = document.createElement("div");
+        row.className = "row relative flex items-center gap-4 mb-4 " + (isLocked ? "locked" : "clickable");
+
+        const nodeState = isDone ? "done" : (isCurrent ? "current" : "locked");
+        const nodeContent = isDone ? "✓" : (isLocked ? "🔒" : m.icon);
+
+        row.innerHTML = `
+          <div class="node ${nodeState}">${nodeContent}</div>
+          <div class="mcard flex-1 bg-white border border-line rounded-2xl p-4 ${isLocked ? "" : "cursor-pointer"}">
+            <p class="text-[11px] text-faint font-semibold uppercase tracking-wide">${m.src}</p>
+            <p class="text-[15px] font-bold text-ink mt-0.5">${m.title}</p>
+          </div>`;
+
+        row.querySelector(".mcard").addEventListener("click", () => {
+          if (isLocked){
+            const node = row.querySelector(".node");
+            node.classList.add("shake");
+            setTimeout(() => node.classList.remove("shake"), 450);
+            return;
+          }
+          openModal(m);
+        });
+
+        stageWrap.appendChild(row);
+      });
+      inner.appendChild(stageWrap);
+    });
+  }
+
+  function openModal(m){
+    $("mUnit").textContent = m.src;
+    $("mTitle").textContent = m.title;
+    $("mMyth").textContent = m.myth;
+    $("mPremise").textContent = m.premise;
+    $("mReframe").textContent = m.reframe;
+    $("mBadge").textContent = m.badge;
+    $("mBadgeName").textContent = m.badgeName;
+    $("modal").classList.add("open");
+  }
+  function closeModal(){ $("modal").classList.remove("open"); }
+
+  // ===== 초등/고등(준비중) 트랙 미리보기 =====
+  function renderPreview(t){
+    const wrap = $("previewView");
+    wrap.innerHTML = "";
+    Object.keys(t.previews).forEach(stageName => {
+      const stageWrap = document.createElement("div");
+      stageWrap.className = "mb-10";
+      stageWrap.innerHTML = `<h2 class="text-[15px] font-bold text-ink mb-4">${stageName}</h2>`;
+      const grid = document.createElement("div");
+      grid.className = "grid gap-3";
+      t.previews[stageName].forEach(item => {
+        const card = document.createElement("div");
+        card.className = "bg-white border border-line rounded-2xl p-4 cursor-pointer hover:border-point transition fadein";
+        card.innerHTML = `<p class="text-[14px] font-bold text-ink">${item.title}</p><p class="text-[12px] text-faint mt-1">숨은 전제 보기 →</p>`;
+        card.onclick = () => openPreviewModal(item);
+        grid.appendChild(card);
+      });
+      stageWrap.appendChild(grid);
+      wrap.appendChild(stageWrap);
+    });
+  }
+
+  function openPreviewModal(item){
+    $("mUnit").textContent = "준비 중인 트랙";
+    $("mTitle").textContent = item.title;
+    $("mMyth").textContent = item.myth;
+    $("mPremise").textContent = "이 트랙은 현재 준비 중입니다.";
+    $("mReframe").textContent = "정식 오픈 시 전제 폭파·탐정 노트 기록까지 체험할 수 있어요.";
+    $("mBadge").textContent = "🔔";
+    $("mBadgeName").textContent = "Coming soon";
+    $("modal").classList.add("open");
+  }
+
+  // ===== init =====
+  PremiseNav.render("coz");
+  renderTabs();
+  renderTrack();
+</script>
+</body>
+</html>

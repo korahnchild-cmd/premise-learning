@@ -227,6 +227,7 @@
     $("s"+step).classList.add("show");
     $("prog").style.width = Math.round((step+1)/total*100)+"%";
     window.scrollTo({top:0,behavior:"smooth"});
+    if(step===4){ resetDemo(); }
     if(step===5){ $("doneName").textContent = profile.name || "파트너"; saveProfile(); }
   }
 
@@ -273,4 +274,115 @@
       ] },
     { t:"reveal", kozy:"바로 이게 숨은 전제야. 트리거 단어가 보이지?", premise:"‘빠름 = 잘함’ — 속도를 실력의 증거로 삼는 전제" },
     { t:"blast", kozy:"이 전제를 폭파해볼까? 눌러봐!" },
-    { t:"insight", kozy:"방향이 바뀌었지? 이게 바로 PBS 학습법이야.", reframe:"
+    { t:"insight", kozy:"방향이 바뀌었지? 이게 바로 PBS 학습법이야.", reframe:"수학은 깊이 이해하는 과목이다" },
+  ];
+
+  let di = 0;
+  let demoAnswered = false;
+
+  function demoLine(i){
+    const t = profile.tier && TONE[profile.tier];
+    return (t && t.demoLines && t.demoLines[i]) ? t.demoLines[i] : DEMO[i].kozy;
+  }
+
+  function renderDots(){
+    const wrap = $("demoDots"); wrap.innerHTML = "";
+    DEMO.forEach((_,i)=>{
+      const dot = document.createElement("span");
+      dot.className = "w-2 h-2 rounded-full " + (i <= di ? "bg-point" : "bg-line");
+      wrap.appendChild(dot);
+    });
+  }
+
+  function renderDemo(){
+    renderDots();
+    const d = DEMO[di];
+    $("demoKozy").textContent = demoLine(di);
+    const stepWrap = $("demoStep");
+    stepWrap.innerHTML = "";
+
+    if (d.t === "choice"){
+      setK4("st-scan");
+      $("demoTrig").textContent = "빨리 푸는";
+      $("demoTrig").className = "trigger";
+      $("demoBtn").textContent = "계속";
+      $("demoBtn").disabled = true;
+      const p = document.createElement("p");
+      p.className = "text-[12px] font-semibold text-faint uppercase tracking-wide mb-3";
+      p.textContent = d.q;
+      stepWrap.appendChild(p);
+      d.opts.forEach(o=>{
+        const b = document.createElement("button");
+        b.className = "opt block w-full mb-2.5";
+        b.textContent = o.label;
+        b.onclick = ()=>{
+          if (demoAnswered) return;
+          demoAnswered = true;
+          stepWrap.querySelectorAll(".opt").forEach(x=>x.disabled = true);
+          b.classList.add(o.ok ? "ok" : "no");
+          if (!o.ok) stepWrap.querySelectorAll(".opt").forEach(x=>{ if(x!==b) x.classList.add("dim"); });
+          const fb = document.createElement("p");
+          fb.className = "text-[13px] mt-3 font-semibold " + (o.ok ? "text-point" : "text-body");
+          fb.textContent = o.fb;
+          stepWrap.appendChild(fb);
+          $("demoBtn").disabled = false;
+        };
+        stepWrap.appendChild(b);
+      });
+    } else if (d.t === "reveal"){
+      setK4("st-discover");
+      $("demoTrig").textContent = "빨리 푸는";
+      $("demoTrig").className = "trigger glow";
+      const p = document.createElement("p");
+      p.className = "text-[14px] font-semibold text-point bg-point/5 border border-point/20 rounded-2xl px-4 py-3";
+      p.textContent = "발견한 전제 — " + d.premise;
+      stepWrap.appendChild(p);
+      $("demoBtn").textContent = "이 전제, 폭파하러 가기";
+      $("demoBtn").disabled = false;
+    } else if (d.t === "blast"){
+      setK4("st-discover");
+      const p = document.createElement("p");
+      p.className = "text-[13px] text-faint";
+      p.textContent = "위 문장의 트리거 단어를 눌러서 전제를 터뜨려봐.";
+      stepWrap.appendChild(p);
+      $("demoTrig").className = "trigger glow";
+      $("demoTrig").onclick = ()=>{
+        if ($("demoTrig").classList.contains("blast")) return;
+        $("demoTrig").classList.add("blast");
+        setTimeout(()=>{ $("demoBtn").disabled = false; }, 700);
+      };
+      $("demoBtn").textContent = "다음";
+      $("demoBtn").disabled = true;
+    } else if (d.t === "insight"){
+      setK4("st-praise");
+      $("demoTrig").onclick = null;
+      $("demoTrig").textContent = d.reframe;
+      $("demoTrig").className = "trigger glow";
+      const p = document.createElement("p");
+      p.className = "text-[13px] text-faint";
+      p.textContent = "짧은 순간이지만, 방금 전제 하나를 의심하고 재구성했어.";
+      stepWrap.appendChild(p);
+      $("demoBtn").textContent = "다음";
+      $("demoBtn").disabled = false;
+    }
+  }
+
+  function resetDemo(){ di = 0; demoAnswered = false; renderDemo(); }
+
+  $("demoBtn").addEventListener("click", ()=>{
+    if ($("demoBtn").disabled) return;
+    if (di < DEMO.length - 1){
+      di += 1;
+      demoAnswered = false;
+      renderDemo();
+    } else {
+      go(5);
+    }
+  });
+
+  function saveProfile(){
+    try{ localStorage.setItem("premise_profile", JSON.stringify(profile)); }catch(e){}
+  }
+</script>
+</body>
+</html>
