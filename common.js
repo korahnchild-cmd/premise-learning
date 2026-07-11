@@ -1,4 +1,4 @@
-/* ===== 전제학습 공통 모듈 (P5 통합) =====
+/* ===== PBS 학습법 공통 모듈 (P5 통합) =====
    - PremiseStore: 화면 간 공유 상태 (localStorage 기반, 로컬 파일에서 유지됨)
    - PremiseNav: 공통 상단 네비게이션 주입
    미션 id 규칙: 국어 k-m1..k-m9 (순서대로), 수학 m-ma1..m-ma8 (순서대로)
@@ -78,7 +78,7 @@
         <header class="pn-bar"><div class="pn-in">
           <a class="pn-logo" href="index.html">
             <span class="pn-mark"><svg style="transform:rotate(-45deg)" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.5 15.5L20 20"/></svg></span>
-            전제학습
+            PBS 학습법
           </a>
           <nav class="pn-nav">${links}<button class="pn-reset" title="데모 초기화" onclick="PremiseStore.reset();location.reload()">↻</button></nav>
         </div></header>`;
