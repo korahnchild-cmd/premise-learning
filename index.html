@@ -79,11 +79,32 @@
   .btn-white{ background:#fff; color:#0A0E17; } .btn-white:hover{ transform:translateY(-2px); box-shadow:0 12px 34px rgba(0,0,0,.24); }
 
   /* orbs / parallax */
-  .orb{ position:absolute; border-radius:9999px; filter:blur(60px); opacity:.5; pointer-events:none; }
+  .orb{ position:absolute; border-radius:9999px; filter:blur(60px); opacity:.5; pointer-events:none; animation:orbFloat 16s ease-in-out infinite alternate; }
+  .orb:nth-of-type(2n){ animation-duration:20s; animation-delay:-4s; }
+  .orb:nth-of-type(3n){ animation-duration:13s; animation-delay:-8s; }
+  @keyframes orbFloat{ 0%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(18px,-22px) scale(1.08); } 100%{ transform:translate(-14px,14px) scale(.96); } }
   .grid-bg{ background-image:radial-gradient(circle,#E4E9F0 1px,transparent 1px); background-size:30px 30px; -webkit-mask-image:radial-gradient(ellipse 60% 55% at 50% 40%,#000 20%,transparent 72%); mask-image:radial-gradient(ellipse 60% 55% at 50% 40%,#000 20%,transparent 72%); }
+
+  /* cursor spotlight (dark sections) */
+  .spotlight{ position:relative; }
+  .spotlight::before{ content:""; position:absolute; inset:0; z-index:0; pointer-events:none; opacity:0; transition:opacity .5s;
+    background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%), rgba(10,102,255,.16), transparent 70%); }
+  .spotlight:hover::before{ opacity:1; }
+  .spotlight > *{ position:relative; z-index:1; }
+
+  /* icon float (problem cards) */
+  .icon-float{ animation:iconFloat 3.6s ease-in-out infinite; }
+  @keyframes iconFloat{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-5px); } }
 
   .card{ background:#fff; border:1px solid #EFF1F3; border-radius:1.5rem; box-shadow:0 2px 10px rgba(10,14,23,.04); transition:transform .5s cubic-bezier(.16,1,.3,1), box-shadow .5s, border-color .5s; will-change:transform; }
   .card:hover{ box-shadow:0 18px 50px rgba(10,14,23,.10); border-color:#DCE3EC; }
+
+  /* flip card (Before/After) */
+  .flip{ position:relative; perspective:1200px; }
+  .flip-in{ position:relative; width:100%; height:100%; transition:transform .7s cubic-bezier(.4,.2,.2,1); transform-style:preserve-3d; }
+  .flip.flipped .flip-in{ transform:rotateY(180deg); }
+  .flip-f{ position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:1.5rem; border:1px solid #EFF1F3; background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:2rem; box-shadow:0 8px 30px rgba(10,14,23,.06); }
+  .flip-f.back{ transform:rotateY(180deg); border-color:#0A66FF; box-shadow:0 8px 30px rgba(10,102,255,.12); }
 
   /* kozy */
   .kozy svg{ width:100%; height:100%; overflow:visible; display:block; }
@@ -126,7 +147,11 @@
 <header id="nav" class="nav fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur border-b border-transparent h-16 md:h-20 flex items-center">
   <div class="max-w-6xl mx-auto w-full px-5 flex items-center justify-between">
     <a href="#hero" class="flex items-center gap-2.5 font-bold text-[16px]">
-      <span class="inline-flex items-center justify-center w-8 h-8 rounded-[11px] bg-point rotate-45"><svg class="-rotate-45" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.5 15.5L20 20"/></svg></span>
+      <svg width="32" height="32" viewBox="0 0 40 40" aria-label="PBS 학습법 로고">
+        <defs><clipPath id="logoClipNav"><circle cx="20" cy="20" r="18"/></clipPath></defs>
+        <circle cx="20" cy="20" r="18" fill="#0A66FF"/>
+        <rect x="-8" y="17" width="56" height="6.5" fill="#fff" transform="rotate(-34 20 20)" clip-path="url(#logoClipNav)"/>
+      </svg>
       PBS 학습법
     </a>
     <nav class="hidden md:flex items-center gap-8 text-[13px] text-body font-medium">
@@ -205,28 +230,28 @@
     </div>
 
     <div class="mt-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-      <div class="reveal card p-7" data-d="1">
+      <div class="tilt reveal card p-7" data-d="1">
         <div class="flex items-center justify-between mb-4"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg><span class="en text-[11px] eyebrow uppercase text-faint">01</span></div>
         <p class="en text-[11px] eyebrow uppercase text-point">Detect</p>
         <h3 class="text-[18px] font-bold mt-0.5">탐지</h3>
         <p class="text-[13px] text-body mt-1.5 leading-relaxed">문제 속 숨은 전제를 발견</p>
         <p class="text-[12px] text-faint mt-3">확장 질문법 · 스키마 조회</p>
       </div>
-      <div class="reveal card p-7" data-d="2">
+      <div class="tilt reveal card p-7" data-d="2">
         <div class="flex items-center justify-between mb-4"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.4 5.6 5.6 2.4-5.6 2.4L12 18.5l-2.4-5.6L4 10.5l5.6-2.4z"/></svg><span class="en text-[11px] eyebrow uppercase text-faint">02</span></div>
         <p class="en text-[11px] eyebrow uppercase text-point">Break</p>
         <h3 class="text-[18px] font-bold mt-0.5">폭파</h3>
         <p class="text-[13px] text-body mt-1.5 leading-relaxed">전제를 깨뜨려 흔들기</p>
         <p class="text-[12px] text-faint mt-3">소크라테스식 · 반례 탐색</p>
       </div>
-      <div class="reveal card p-7" data-d="3">
+      <div class="tilt reveal card p-7" data-d="3">
         <div class="flex items-center justify-between mb-4"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6M3 22v-6h6"/><path d="M21 8a9 9 0 00-15-3M3 16a9 9 0 0015 3"/></svg><span class="en text-[11px] eyebrow uppercase text-faint">03</span></div>
         <p class="en text-[11px] eyebrow uppercase text-point">Rebuild</p>
         <h3 class="text-[18px] font-bold mt-0.5">재구성</h3>
         <p class="text-[13px] text-body mt-1.5 leading-relaxed">새 사고 틀로 다시 세우기</p>
         <p class="text-[12px] text-faint mt-3">시각화 · 유추 전환</p>
       </div>
-      <div class="reveal card p-7" data-d="4">
+      <div class="tilt reveal card p-7" data-d="4">
         <div class="flex items-center justify-between mb-4"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4M3 11v-1a4 4 0 014-4h14M7 22l-4-4 4-4M21 13v1a4 4 0 01-4 4H3"/></svg><span class="en text-[11px] eyebrow uppercase text-faint">04</span></div>
         <p class="en text-[11px] eyebrow uppercase text-point">Consolidate</p>
         <h3 class="text-[18px] font-bold mt-0.5">정착</h3>
@@ -291,10 +316,10 @@
       <h2 class="display text-[1.8rem] md:text-[2.8rem] font-extrabold">사교육을 늘려도 성적이 오르지 않는,<br class="hidden md:block" /> 바로 그 고민을 하고 계신가요?</h2>
     </div>
     <div class="mt-16 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
-      <div class="tilt reveal card p-8 md:p-10" data-d="1"><svg class="mb-6" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9AA4B2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16M6 21V8l6-4 6 4v13M10 21v-5h4v5"/></svg><p class="text-[17px] font-bold">"학원을 여러 개 다녀도"</p><p class="mt-3 text-body lede text-[15px]">중위권에서 좀처럼 벗어나지 못합니다.</p></div>
-      <div class="tilt reveal card p-8 md:p-10" data-d="2"><svg class="mb-6" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9AA4B2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><p class="text-[17px] font-bold">"공부 시간을 늘려도"</p><p class="mt-3 text-body lede text-[15px]">시험만 보면 낯선 문제에서 실수합니다.</p></div>
-      <div class="tilt reveal card p-8 md:p-10" data-d="3"><svg class="mb-6" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9AA4B2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="11" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 10v4M18 10v4"/></svg><p class="text-[17px] font-bold">"투자를 아끼지 않아도"</p><p class="mt-3 text-body lede text-[15px]">스스로 공부 계획을 세우지 못합니다.</p></div>
-      <div class="tilt reveal card p-8 md:p-10" data-d="4"><svg class="mb-6" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9AA4B2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="4.5"/><path d="M4.5 21c1.4-4.2 4.2-6.3 7.5-6.3s6.1 2.1 7.5 6.3"/></svg><p class="text-[17px] font-bold">"머리가 좋은 것 같아도"</p><p class="mt-3 text-body lede text-[15px]">문제 속 숨은 전제를 읽어내지 못합니다.</p></div>
+      <div class="tilt reveal card p-8 md:p-10" data-d="1"><svg class="mb-6 icon-float" style="animation-delay:0s" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9AA4B2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16M6 21V8l6-4 6 4v13M10 21v-5h4v5"/></svg><p class="text-[17px] font-bold">"학원을 여러 개 다녀도"</p><p class="mt-3 text-body lede text-[15px]">중위권에서 좀처럼 벗어나지 못합니다.</p></div>
+      <div class="tilt reveal card p-8 md:p-10" data-d="2"><svg class="mb-6 icon-float" style="animation-delay:.3s" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9AA4B2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><p class="text-[17px] font-bold">"공부 시간을 늘려도"</p><p class="mt-3 text-body lede text-[15px]">시험만 보면 낯선 문제에서 실수합니다.</p></div>
+      <div class="tilt reveal card p-8 md:p-10" data-d="3"><svg class="mb-6 icon-float" style="animation-delay:.6s" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9AA4B2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="11" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 10v4M18 10v4"/></svg><p class="text-[17px] font-bold">"투자를 아끼지 않아도"</p><p class="mt-3 text-body lede text-[15px]">스스로 공부 계획을 세우지 못합니다.</p></div>
+      <div class="tilt reveal card p-8 md:p-10" data-d="4"><svg class="mb-6 icon-float" style="animation-delay:.9s" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9AA4B2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="4.5"/><path d="M4.5 21c1.4-4.2 4.2-6.3 7.5-6.3s6.1 2.1 7.5 6.3"/></svg><p class="text-[17px] font-bold">"머리가 좋은 것 같아도"</p><p class="mt-3 text-body lede text-[15px]">문제 속 숨은 전제를 읽어내지 못합니다.</p></div>
     </div>
     <div class="reveal mt-16 max-w-2xl mx-auto text-center">
       <p class="display text-[1.5rem] md:text-[2.2rem] font-bold leading-[1.3]">원인은 <span class="text-faint">'머리'</span>도 <span class="text-faint">'시간'</span>도 아닙니다.<br /> 공부의 <span class="text-point">전제</span>를 바꾸지 않았기 때문입니다.</p>
@@ -394,14 +419,14 @@
 </section>
 
 <!-- CURRICULUM teaser -->
-<section class="py-28 md:py-36 bg-night text-white relative overflow-hidden">
+<section class="spotlight py-28 md:py-36 bg-night text-white relative overflow-hidden">
   <div class="orb" style="width:400px;height:400px;background:#132038;top:10%;left:5%;opacity:.9"></div>
   <div class="orb" style="width:360px;height:360px;background:#101a2e;bottom:8%;right:6%;opacity:.9"></div>
   <div class="max-w-4xl mx-auto px-6 text-center relative reveal">
     <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">Curriculum</p>
     <h2 class="display text-[1.8rem] md:text-[2.9rem] font-extrabold text-white">PBS 학습법은 과목을 가르치지 않습니다.<br class="hidden md:block" /> 생각의 틀을 훈련합니다.</h2>
     <p class="lede mt-6 text-[16px] text-white/60 max-w-xl mx-auto">사고의 복잡도에 따라 <b class="text-white">입문 · 기본 · 심화</b> 3단계. 일상의 문장부터 수능 지문까지, 어떤 소재를 만나도 '전제 찾기 → 폭파 → 탐정 노트'의 같은 사고 루틴을 반복합니다.</p>
-    <a href="course.html" class="btn btn-white text-[15px] font-semibold px-9 py-4 mt-9">전제 경로 둘러보기 →</a>
+    <a href="course.html" class="btn btn-white btn-magnetic text-[15px] font-semibold px-9 py-4 mt-9">전제 경로 둘러보기 →</a>
   </div>
 </section>
 
@@ -414,9 +439,9 @@
       <p class="lede mt-5 text-[15px] text-body max-w-xl mx-auto">PBS 학습법은 점수를 약속하지 않습니다. 대신 탐정 노트가 아이의 '생각하는 습관'이 어떻게 자라는지 매주 보여줍니다.</p>
     </div>
     <div class="mt-16 grid sm:grid-cols-3 gap-4 md:gap-5">
-      <div class="reveal card p-8 text-center" data-d="1"><p class="en text-[11px] eyebrow uppercase text-faint mb-2">Question quality</p><p class="display text-[2.4rem] font-extrabold text-point">깊어짐</p><p class="text-[13px] text-body mt-1">질문의 질</p></div>
-      <div class="reveal card p-8 text-center" data-d="2"><p class="en text-[11px] eyebrow uppercase text-faint mb-2">Self-planning</p><p class="display text-[2.4rem] font-extrabold text-ink">주 <span class="counter" data-t="4">0</span>회</p><p class="text-[13px] text-body mt-1">스스로 세운 계획</p></div>
-      <div class="reveal card p-8 text-center" data-d="3"><p class="en text-[11px] eyebrow uppercase text-faint mb-2">Different attempts</p><p class="display text-[2.4rem] font-extrabold text-ink">주 <span class="counter" data-t="11">0</span>회</p><p class="text-[13px] text-body mt-1">다르게 시도한 횟수</p></div>
+      <div class="tilt reveal card p-8 text-center" data-d="1"><p class="en text-[11px] eyebrow uppercase text-faint mb-2">Question quality</p><p class="display text-[2.4rem] font-extrabold text-point">깊어짐</p><p class="text-[13px] text-body mt-1">질문의 질</p></div>
+      <div class="tilt reveal card p-8 text-center" data-d="2"><p class="en text-[11px] eyebrow uppercase text-faint mb-2">Self-planning</p><p class="display text-[2.4rem] font-extrabold text-ink">주 <span class="counter" data-t="4">0</span>회</p><p class="text-[13px] text-body mt-1">스스로 세운 계획</p></div>
+      <div class="tilt reveal card p-8 text-center" data-d="3"><p class="en text-[11px] eyebrow uppercase text-faint mb-2">Different attempts</p><p class="display text-[2.4rem] font-extrabold text-ink">주 <span class="counter" data-t="11">0</span>회</p><p class="text-[13px] text-body mt-1">다르게 시도한 횟수</p></div>
     </div>
     <p class="reveal text-center text-[12px] text-faint mt-6">* 성장 지표는 아이마다 다르게 나타납니다. 위 수치는 탐정 노트 리포트의 예시입니다.</p>
     <div class="reveal mt-12 max-w-3xl mx-auto border-l-2 border-point pl-8 md:pl-12">
@@ -468,7 +493,7 @@
 
 <!-- HIGH SCHOOL MESSAGE (dark) -->
 <section class="px-5 py-6">
-  <div class="relative max-w-6xl mx-auto bg-night rounded-5xl py-24 md:py-32 overflow-hidden">
+  <div class="spotlight relative max-w-6xl mx-auto bg-night rounded-5xl py-24 md:py-32 overflow-hidden">
     <div class="orb" style="width:380px;height:380px;background:#12203a;top:10%;left:6%;opacity:.9"></div>
     <div class="orb" style="width:340px;height:340px;background:#0f1830;bottom:8%;right:7%;opacity:.9"></div>
     <div class="relative max-w-4xl mx-auto px-6 md:px-10">
@@ -502,7 +527,7 @@
 
       <div class="text-center mt-12 reveal">
         <p class="text-[15px] text-white/70 mb-5">아이의 사고 습관이 지금 어디에 있는지부터 확인해 보세요.</p>
-        <a href="onboarding.html" class="btn btn-white text-[15px] font-semibold px-10 py-4">무료 진단으로 시작하기 →</a>
+        <a href="onboarding.html" class="btn btn-white btn-magnetic text-[15px] font-semibold px-10 py-4">무료 진단으로 시작하기 →</a>
       </div>
     </div>
   </div>
@@ -588,14 +613,14 @@
 </section>
 
 <!-- FINAL CTA -->
-<section class="py-28 md:py-36 bg-night text-white text-center relative overflow-hidden">
+<section class="spotlight py-28 md:py-36 bg-night text-white text-center relative overflow-hidden">
   <div class="orb" style="width:420px;height:420px;background:#132038;top:-10%;left:10%;opacity:.9"></div>
   <div class="max-w-2xl mx-auto px-6 relative reveal">
     <h2 class="display text-[1.9rem] md:text-[2.7rem] font-extrabold text-white">지금, 전제를 의심하는 첫걸음을 떼어보세요</h2>
     <p class="lede mt-6 text-[15px] text-white/60">가입 없이 3개 사건을 먼저 풀어보거나, 7일 무료 체험으로 바로 시작할 수 있습니다.</p>
     <div class="mt-10 flex flex-col sm:flex-row justify-center gap-3">
-      <a href="onboarding.html" class="btn btn-white text-[15px] font-semibold px-9 py-4">7일 무료 체험 시작하기</a>
-      <a href="demo.html" class="btn text-[15px] font-semibold px-9 py-4 border border-white/25 text-white hover:bg-white/10">가입 없이 먼저 풀어보기 →</a>
+      <a href="onboarding.html" class="btn btn-white btn-magnetic text-[15px] font-semibold px-9 py-4">7일 무료 체험 시작하기</a>
+      <a href="demo.html" class="btn btn-magnetic text-[15px] font-semibold px-9 py-4 border border-white/25 text-white hover:bg-white/10">가입 없이 먼저 풀어보기 →</a>
     </div>
   </div>
 </section>
@@ -604,7 +629,11 @@
 <footer class="py-14 bg-night text-white/50 border-t border-white/10">
   <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
     <div class="flex items-center gap-2.5 font-bold text-[15px] text-white">
-      <span class="inline-flex items-center justify-center w-7 h-7 rounded-[10px] bg-point rotate-45"><svg class="-rotate-45" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.5 15.5L20 20"/></svg></span>
+      <svg width="28" height="28" viewBox="0 0 40 40" aria-label="PBS 학습법 로고">
+        <defs><clipPath id="logoClipFooter"><circle cx="20" cy="20" r="18"/></clipPath></defs>
+        <circle cx="20" cy="20" r="18" fill="#0A66FF"/>
+        <rect x="-8" y="17" width="56" height="6.5" fill="#0A0E17" transform="rotate(-34 20 20)" clip-path="url(#logoClipFooter)"/>
+      </svg>
       PBS 학습법<span class="text-[10px] align-top ml-0.5">™</span>
     </div>
     <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[13px]">
@@ -756,16 +785,28 @@
     updateScrolly();
   }
 
-  /* ---- magnetic CTA ---- */
-  var heroCta = document.getElementById("heroCta");
-  if (heroCta && !reduced && window.matchMedia("(pointer:fine)").matches){
-    heroCta.addEventListener("mousemove", function(e){
-      var r = heroCta.getBoundingClientRect();
-      var x = (e.clientX - r.left - r.width/2) * 0.25;
-      var y = (e.clientY - r.top - r.height/2) * 0.35;
-      heroCta.style.transform = "translate(" + x + "px," + y + "px)";
+  /* ---- magnetic buttons (hero + teaser CTAs) ---- */
+  if (!reduced && window.matchMedia("(pointer:fine)").matches){
+    document.querySelectorAll(".btn-magnetic").forEach(function(btn){
+      btn.addEventListener("mousemove", function(e){
+        var r = btn.getBoundingClientRect();
+        var x = (e.clientX - r.left - r.width/2) * 0.25;
+        var y = (e.clientY - r.top - r.height/2) * 0.35;
+        btn.style.transform = "translate(" + x + "px," + y + "px)";
+      });
+      btn.addEventListener("mouseleave", function(){ btn.style.transform = "translate(0,0)"; });
     });
-    heroCta.addEventListener("mouseleave", function(){ heroCta.style.transform = "translate(0,0)"; });
+  }
+
+  /* ---- cursor spotlight (dark sections) ---- */
+  if (!reduced && window.matchMedia("(pointer:fine)").matches){
+    document.querySelectorAll(".spotlight").forEach(function(el){
+      el.addEventListener("mousemove", function(e){
+        var r = el.getBoundingClientRect();
+        el.style.setProperty("--mx", (e.clientX - r.left) + "px");
+        el.style.setProperty("--my", (e.clientY - r.top) + "px");
+      });
+    });
   }
 
   /* ---- card tilt ---- */
