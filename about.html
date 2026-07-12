@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PBS 학습법 · 회사 소개</title>
+<meta name="description" content="정답을 맞히는 능력과 정답을 의심하는 능력은 다릅니다. PBS 학습법이 만들어진 이유." />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#7A8499", point:"#0A66FF", pointdeep:"#0B3ACC", accent:"#FFB800", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", night:"#0A0E17" },
+    fontFamily: { sans:["Pretendard","Inter","sans-serif"] }, borderRadius:{ "4xl":"2rem","5xl":"2.5rem" },
+  }}};
+</script>
+<style>
+  body{ font-family:"Pretendard","Inter",sans-serif; -webkit-font-smoothing:antialiased; letter-spacing:-.012em; background:#fff; color:#0A0E17; }
+  h1,h2{ letter-spacing:-.03em; }
+  ::selection{ background:rgba(10,102,255,.14); }
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:.5rem; border-radius:9999px; white-space:nowrap; transition:transform .35s cubic-bezier(.16,1,.3,1), background .3s, border-color .3s, color .3s; }
+  .btn-primary{ background:#0A66FF; color:#fff; box-shadow:0 4px 14px rgba(10,102,255,.28); } .btn-primary:hover{ background:#0857db; transform:translateY(-2px); }
+  .btn-ghost{ background:#fff; color:#0A0E17; border:1px solid #DfE3E8; } .btn-ghost:hover{ border-color:#0A66FF; color:#0A66FF; }
+  .card{ background:#fff; border:1px solid #ECEEF1; border-radius:1.25rem; }
+  .kozy svg{ width:100%; height:100%; overflow:visible; }
+  .k-edge{ fill:none; stroke:#0A66FF; stroke-width:2.4; stroke-linejoin:round; stroke-linecap:round; }
+  .k-face{ fill:rgba(10,102,255,.10); } .k-face.top{ fill:rgba(10,102,255,.16); }
+  .k-core{ fill:#0A66FF; filter:drop-shadow(0 0 4px rgba(10,102,255,.85)); }
+  .kozy .kw{ transform-origin:50% 55%; animation:kfloat 4s ease-in-out infinite; }
+  @keyframes kfloat{ 0%,100%{transform:translateY(0) rotate(-6deg)} 50%{transform:translateY(-6px) rotate(6deg)} }
+  .eyebrow{ letter-spacing:.22em; }
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important} }
+</style>
+</head>
+<body>
+
+<!-- NAV (공통) -->
+<div id="topnav"></div>
+<script src="common.js"></script>
+
+<main class="max-w-3xl mx-auto px-5 py-14">
+
+  <div class="text-center">
+    <div class="kozy mx-auto mb-6" style="width:72px;height:72px">
+      <svg viewBox="0 0 100 100" aria-label="루카"><g class="kw">
+        <polygon class="k-face top" points="50,15 82,33 50,50 18,33"/><polygon class="k-face right" points="82,33 82,67 50,85 50,50"/><polygon class="k-face left" points="18,33 50,50 50,85 18,67"/>
+        <polygon class="k-edge" points="50,15 82,33 82,67 50,85 18,67 18,33"/><path class="k-edge" d="M50,50 L82,33 M50,50 L18,33 M50,50 L50,85"/><circle class="k-core" cx="50" cy="50" r="4.5"/>
+      </g></svg>
+    </div>
+    <p class="eyebrow uppercase text-[11px] font-semibold text-point mb-4">회사 소개</p>
+    <h1 class="text-[2rem] md:text-[2.7rem] font-extrabold leading-tight">정답을 맞히는 능력과<br class="hidden sm:block" />정답을 의심하는 능력은 다릅니다</h1>
+    <p class="mt-5 text-[15px] md:text-[16px] text-body max-w-xl mx-auto leading-relaxed">PBS 학습법(Premise-Break Schema)은 이 단순한 관찰에서 시작됐습니다.</p>
+  </div>
+
+  <div class="mt-14 space-y-6">
+    <div class="card p-8">
+      <p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-3">문제의식</p>
+      <h2 class="text-[1.3rem] font-extrabold mb-3">빨리 맞히는 훈련은 많지만, 의심하는 훈련은 없었습니다</h2>
+      <p class="text-[14.5px] text-body leading-relaxed">학원도, 인강도, 문제집도 대부분 '더 많이, 더 빨리 정답에 도달하는 법'을 가르칩니다. 그런데 정작 상위권 학생들을 관찰하면, 이들은 문제를 풀기 전에 문제가 깔고 있는 전제부터 의심합니다. "이 문장이 당연하게 여기는 게 뭐지?", "이 선택지가 그럴듯해 보이는 이유가 뭐지?" — 이 습관은 지식의 양이 아니라 사고의 방향에서 나옵니다. 하지만 이 방향을 바꿔주는 정규 훈련은 어디에도 없었습니다.</p>
+    </div>
+
+    <div class="card p-8">
+      <p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-3">만든 이유</p>
+      <h2 class="text-[1.3rem] font-extrabold mb-3">전제를 찾고 깨는 과정을, 매일의 루틴으로 만들다</h2>
+      <p class="text-[14.5px] text-body leading-relaxed">PBS 학습법은 '전제 찾기 → 전제 폭파 → 탐정 노트 기록'이라는 세 단계를 매일 반복 가능한 짧은 사건으로 설계했습니다. 커리큘럼은 인지과학 연구를 기반으로 설계하고 현직 교사들이 감수했으며, 아이마다 다른 사고의 빈틈을 찾아주는 적응형 전제탐지 시스템은 현재 특허 출원 중입니다. 유행하는 학습법이 아니라, 검증 가능한 사고 훈련의 원리를 담으려 했습니다.</p>
+    </div>
+
+    <div class="card p-8" style="border-left:3px solid #0A66FF">
+      <p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-3">우리가 지키는 원칙</p>
+      <h2 class="text-[1.3rem] font-extrabold mb-3">점수를 약속하지 않습니다</h2>
+      <p class="text-[14.5px] text-body leading-relaxed">사고 습관은 6개월에 걸쳐 천천히 자랍니다. 그래서 저희는 단기 점수 상승이나 결과를 약속하지 않습니다. 대신 7일 무료 체험으로 먼저 충분히 경험하시고, 약정 없이 월 단위로 시작해 언제든 멈출 수 있는 자유를 드립니다. 다니는 학원은 그대로 두고, 그 위에 사고 습관 하나를 더하는 것 — 그것이 PBS 학습법이 할 수 있는 약속입니다.</p>
+    </div>
+  </div>
+
+  <div class="card p-8 mt-10 text-center">
+    <h2 class="text-[1.3rem] font-extrabold">우리가 왜 이 일을 하는지, 조금 더 들어보시겠어요?</h2>
+    <p class="mt-2 text-[14px] text-body">PBS 학습법의 미션과 우리가 믿는 것들을 정리했습니다.</p>
+    <div class="flex flex-col sm:flex-row justify-center gap-3 mt-6">
+      <a href="mission.html" class="btn btn-primary px-7 py-3.5 text-[14px] font-semibold">우리의 미션 보기</a>
+      <a href="tech.html" class="btn btn-ghost px-7 py-3.5 text-[14px] font-semibold">적응형 전제탐지 시스템 보기</a>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="pt-16 pb-10 bg-night text-white/65 border-t border-white/10 mt-16">
+  <div class="max-w-6xl mx-auto px-5 md:px-8">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-x-6 gap-y-10 md:gap-8 pb-12 border-b border-white/10">
+      <div class="col-span-2 md:col-span-2 pr-4">
+        <a href="index.html" class="flex items-center gap-2.5 font-bold text-[15px] text-white mb-4">
+          <svg width="28" height="28" viewBox="0 0 40 40" aria-label="PBS 학습법 로고">
+            <defs><clipPath id="logoClipFooter"><circle cx="20" cy="20" r="18"/></clipPath></defs>
+            <circle cx="20" cy="20" r="18" fill="#0A66FF"/>
+            <rect x="-8" y="17" width="56" height="6.5" fill="#0A0E17" transform="rotate(-34 20 20)" clip-path="url(#logoClipFooter)"/>
+          </svg>
+          PBS 학습법<span class="text-[10px] align-top ml-0.5">™</span>
+        </a>
+        <p class="text-[13px] leading-relaxed text-white/45 max-w-[220px]">숨은 전제를 찾아 깨고 다시 짜는, 10~17세를 위한 6개월 사고 훈련.</p>
+      </div>
+      <div>
+        <p class="text-[11px] font-semibold tracking-widest uppercase text-white/35 mb-4">제품</p>
+        <nav class="flex flex-col gap-3 text-[13px]">
+          <a href="course.html" class="hover:text-white transition">코스 소개</a>
+          <a href="pricing.html" class="hover:text-white transition">요금 안내</a>
+          <a href="demo.html" class="hover:text-white transition">무료로 풀어보기</a>
+          <a href="onboarding.html" class="hover:text-white transition">7일 무료 체험</a>
+          <a href="faq.html" class="hover:text-white transition">자주 묻는 질문</a>
+        </nav>
+      </div>
+      <div>
+        <p class="text-[11px] font-semibold tracking-widest uppercase text-white/35 mb-4">회사</p>
+        <nav class="flex flex-col gap-3 text-[13px]">
+          <a href="about.html" class="hover:text-white transition">회사 소개</a>
+          <a href="mission.html" class="hover:text-white transition">우리의 미션</a>
+          <a href="academy-guide.html" class="hover:text-white transition">학원 병행 가이드</a>
+        </nav>
+      </div>
+      <div>
+        <p class="text-[11px] font-semibold tracking-widest uppercase text-white/35 mb-4">비하인드</p>
+        <nav class="flex flex-col gap-3 text-[13px]">
+          <a href="tech.html" class="hover:text-white transition">적응형 전제탐지 시스템</a>
+          <a href="evals.html" class="hover:text-white transition">문항은 어떻게 검증되나요</a>
+        </nav>
+      </div>
+    </div>
+    <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+      <p class="text-[12px] text-white/35">© 2026 PBS 학습법. All rights reserved.</p>
+      <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[12px] text-white/45">
+        <a href="#" class="hover:text-white transition">이용약관</a>
+        <a href="#" class="hover:text-white transition">개인정보처리방침</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script>
+  if(window.PremiseNav) PremiseNav.render("about");
+</script>
+</body>
+</html>

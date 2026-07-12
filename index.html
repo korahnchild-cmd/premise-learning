@@ -12,7 +12,7 @@
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <script>
   tailwind.config = { theme: { extend: {
-    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", pointdeep:"#0B3ACC", accent:"#FFB800", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", night:"#0A0E17" },
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#7A8499", point:"#0A66FF", pointdeep:"#0B3ACC", accent:"#FFB800", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", night:"#0A0E17" },
     fontFamily: { sans:["Pretendard","Inter","sans-serif"], en:["Inter","Pretendard","sans-serif"], serif:["Noto Serif KR","serif"] },
     borderRadius:{ "4xl":"2rem","5xl":"2.5rem" },
   }}};
@@ -26,6 +26,9 @@
     --motion-fast:150ms; --motion-base:240ms; --motion-slow:420ms;
     --ease-out:cubic-bezier(.16,1,.3,1); --ease-elastic:cubic-bezier(.68,-.55,.27,1.55);
     --hero-glow:0 0 40px rgba(10,102,255,.18);
+    --shadow-sm:0 2px 10px rgba(10,14,23,.04);
+    --shadow-md:0 8px 24px rgba(10,102,255,.14);
+    --shadow-lg:0 18px 50px rgba(10,14,23,.10);
   }
   html{ scroll-behavior:smooth; }
   body{ font-family:"Pretendard","Inter",sans-serif; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; letter-spacing:-.014em; background:#fff; color:#0A0E17; overflow-x:hidden; }
@@ -36,87 +39,96 @@
   .lede{ line-height:1.75; }
   ::selection{ background:rgba(10,102,255,.15); }
 
-  /* thin custom scrollbar */
   ::-webkit-scrollbar{ width:10px; height:10px; }
   ::-webkit-scrollbar-track{ background:transparent; }
   ::-webkit-scrollbar-thumb{ background:#D6DCE6; border-radius:9999px; border:2.5px solid #fff; }
   ::-webkit-scrollbar-thumb:hover{ background:#B9C2D1; }
 
-  /* magnetic button */
   .btn-magnetic{ transition:transform var(--motion-base) var(--ease-out); }
 
-  /* split-text hero word */
   .split-char{ display:inline-block; opacity:0; transform:translateY(.5em) rotate(6deg); animation:splitIn .7s var(--ease-out) forwards; }
   @keyframes splitIn{ to{ opacity:1; transform:translateY(0) rotate(0); } }
 
-  /* card tilt */
   .tilt{ transform-style:preserve-3d; will-change:transform; }
 
-  /* scroll progress bar */
   #bar{ position:fixed; top:0; left:0; height:2.5px; background:linear-gradient(90deg,#0A66FF,#5B93F1); width:0%; z-index:60; transition:width .1s linear; }
 
-  /* nav */
   .nav{ transition:background .4s, box-shadow .4s, height .4s, border-color .4s; }
   section[id]{ scroll-margin-top:88px; }
 
-  /* reveal */
   .reveal{ opacity:0; transform:translateY(26px); transition:opacity 1.1s cubic-bezier(.16,1,.3,1), transform 1.1s cubic-bezier(.16,1,.3,1); will-change:opacity,transform; }
   .reveal.in{ opacity:1; transform:none; }
   .reveal[data-d="1"]{transition-delay:.08s}.reveal[data-d="2"]{transition-delay:.16s}.reveal[data-d="3"]{transition-delay:.24s}.reveal[data-d="4"]{transition-delay:.32s}
 
-  /* hero word underline */
   .kw{ position:relative; display:inline-block; color:#0A66FF; }
   .kw svg{ position:absolute; left:-2%; bottom:-.12em; width:104%; height:.5em; overflow:visible; }
   .kw path{ fill:none; stroke:#0A66FF; stroke-width:5; stroke-linecap:round; stroke-dasharray:520; stroke-dashoffset:520; transition:stroke-dashoffset 1.2s cubic-bezier(.65,0,.35,1); }
   .kw.draw path{ stroke-dashoffset:0; }
 
-  /* buttons */
   .btn{ display:inline-flex; align-items:center; justify-content:center; gap:.5rem; border-radius:9999px; white-space:nowrap; transition:transform .4s cubic-bezier(.16,1,.3,1), background .3s, color .3s, border-color .3s, box-shadow .3s; }
-  .btn-primary{ background:#0A66FF; color:#fff; box-shadow:0 6px 20px rgba(10,102,255,.32); }
+  .btn-primary{ background:#0A66FF; color:#fff; box-shadow:var(--shadow-md); }
   .btn-primary:hover{ background:#0857db; transform:translateY(-2px); box-shadow:0 12px 30px rgba(10,102,255,.4); }
   .btn-ghost{ background:#fff; color:#0A0E17; border:1px solid #DfE3E8; }
   .btn-ghost:hover{ border-color:#0A66FF; color:#0A66FF; transform:translateY(-1px); }
-  .btn-white{ background:#fff; color:#0A0E17; } .btn-white:hover{ transform:translateY(-2px); box-shadow:0 12px 34px rgba(0,0,0,.24); }
+  .btn-white{ background:#fff; color:#0A0E17; box-shadow:var(--shadow-sm); } .btn-white:hover{ transform:translateY(-2px); box-shadow:0 12px 34px rgba(0,0,0,.24); }
 
-  /* orbs / parallax */
-  .orb{ position:absolute; border-radius:9999px; filter:blur(60px); opacity:.5; pointer-events:none; animation:orbFloat 16s ease-in-out infinite alternate; }
+  .orb{ position:absolute !important; border-radius:9999px; filter:blur(60px); opacity:.5; pointer-events:none; animation:orbFloat 16s ease-in-out infinite alternate; }
   .orb:nth-of-type(2n){ animation-duration:20s; animation-delay:-4s; }
   .orb:nth-of-type(3n){ animation-duration:13s; animation-delay:-8s; }
   @keyframes orbFloat{ 0%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(18px,-22px) scale(1.08); } 100%{ transform:translate(-14px,14px) scale(.96); } }
   .grid-bg{ background-image:radial-gradient(circle,#E4E9F0 1px,transparent 1px); background-size:30px 30px; -webkit-mask-image:radial-gradient(ellipse 60% 55% at 50% 40%,#000 20%,transparent 72%); mask-image:radial-gradient(ellipse 60% 55% at 50% 40%,#000 20%,transparent 72%); }
 
-  /* cursor spotlight (dark sections) */
   .spotlight{ position:relative; }
   .spotlight::before{ content:""; position:absolute; inset:0; z-index:0; pointer-events:none; opacity:0; transition:opacity .5s;
     background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%), rgba(10,102,255,.16), transparent 70%); }
   .spotlight:hover::before{ opacity:1; }
   .spotlight > *{ position:relative; z-index:1; }
 
-  /* icon float (problem cards) */
   .icon-float{ animation:iconFloat 3.6s ease-in-out infinite; }
   @keyframes iconFloat{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-5px); } }
 
-  .card{ background:#fff; border:1px solid #EFF1F3; border-radius:1.5rem; box-shadow:0 2px 10px rgba(10,14,23,.04); transition:transform .5s cubic-bezier(.16,1,.3,1), box-shadow .5s, border-color .5s; will-change:transform; }
-  .card:hover{ box-shadow:0 18px 50px rgba(10,14,23,.10); border-color:#DCE3EC; }
+  .card{ background:#fff; border:1px solid #DCE3EC; border-radius:1.5rem; box-shadow:var(--shadow-sm); transition:transform .5s cubic-bezier(.16,1,.3,1), box-shadow .5s, border-color .5s; will-change:transform; }
+  .card:hover{ box-shadow:var(--shadow-lg); border-color:#DCE3EC; }
 
-  /* flip card (Before/After) */
+  /* flip card (Before/After) — hero centerpiece */
   .flip{ position:relative; perspective:1200px; }
   .flip-in{ position:relative; width:100%; height:100%; transition:transform .7s cubic-bezier(.4,.2,.2,1); transform-style:preserve-3d; }
   .flip.flipped .flip-in{ transform:rotateY(180deg); }
-  .flip-f{ position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:1.5rem; border:1px solid #EFF1F3; background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:2rem; box-shadow:0 8px 30px rgba(10,14,23,.06); }
-  .flip-f.back{ transform:rotateY(180deg); border-color:#0A66FF; box-shadow:0 8px 30px rgba(10,102,255,.12); }
+  .flip-f{ position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:1.5rem; border:1px solid #EFF1F3; background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:1.75rem; box-shadow:var(--shadow-lg); }
+  .flip-f.back{ transform:rotateY(180deg); border-color:#0A66FF; box-shadow:0 12px 34px rgba(10,102,255,.18); }
+  .flip-hint{ animation:hintPulse 1.8s ease-in-out infinite; }
+  @keyframes hintPulse{ 0%,100%{ opacity:.5; } 50%{ opacity:1; } }
 
-  /* PBS 4-step circular diagram */
+  /* stage head (Pain / Solution / Result dividers) */
+  .stage-head{ text-align:center; max-width:42rem; margin:0 auto; }
+  .stage-badge{ display:inline-flex; align-items:center; gap:.5rem; padding:.4rem .9rem; border-radius:9999px; background:rgba(10,102,255,.08); color:#0A66FF; font-size:11px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; }
+  .stage-badge .num{ display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:9999px; background:#0A66FF; color:#fff; font-size:10px; font-weight:800; }
+
+  /* PBS 4-step diagram v2 */
   .pbs-steps{ display:grid; grid-template-columns:repeat(4,1fr); gap:0; position:relative; }
-  .pbs-step{ padding:20px 12px; position:relative; text-align:center; }
-  .pbs-step .icon{ width:60px; height:60px; margin:0 auto 14px; border-radius:9999px; display:flex; align-items:center; justify-content:center; background:#fff; border:1.5px solid #0A66FF; box-shadow:0 8px 24px rgba(10,102,255,.16); transition:transform .5s cubic-bezier(.2,.8,.2,1); }
+  .pbs-step{ padding:20px 14px; position:relative; text-align:center; }
+  .pbs-step .icon{ width:76px; height:76px; margin:0 auto 16px; border-radius:9999px; position:relative; display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-md); transition:transform .5s cubic-bezier(.2,.8,.2,1); }
   .pbs-step:hover .icon{ transform:rotate(360deg) scale(1.08); }
-  .pbs-step::after{ content:""; position:absolute; top:50px; right:-4%; width:8%; height:2px; background:linear-gradient(90deg,#0A66FF,transparent); }
+  .pbs-step .badge{ position:absolute; top:-4px; right:calc(50% - 44px); width:26px; height:26px; border-radius:9999px; background:#0A0E17; color:#fff; font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center; border:2.5px solid #fff; box-shadow:var(--shadow-sm); }
+  .pbs-step .tag{ display:inline-block; margin-top:.6rem; padding:4px 11px; border-radius:9999px; background:rgba(10,102,255,.08); }
+  .pbs-step::after{ content:"→"; position:absolute; top:22px; right:-6%; font-size:22px; font-weight:800; color:#C7D2E3; }
   .pbs-step:last-child::after{ display:none; }
-  @media (max-width:640px){ .pbs-steps{ grid-template-columns:1fr 1fr; row-gap:24px; } .pbs-step::after{ display:none; } }
+  @media (max-width:640px){ .pbs-steps{ grid-template-columns:1fr 1fr; row-gap:32px; } .pbs-step::after{ display:none; } }
+
+  /* comparison cards v2 */
+  .vs-card{ background:#fff; border:1.5px solid #DCE3EC; border-radius:1.5rem; padding:1.75rem; transition:transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s; }
+  .vs-card.win{ border-color:#0A66FF; box-shadow:0 20px 46px rgba(10,102,255,.22); background:linear-gradient(180deg,#fff,#F7FAFF); position:relative; }
+  .vs-card.win::before{ content:"이 축이 다릅니다"; position:absolute; top:-13px; left:50%; transform:translateX(-50%); background:#0A66FF; color:#fff; font-size:11px; font-weight:800; padding:5px 14px; border-radius:9999px; box-shadow:var(--shadow-sm); white-space:nowrap; }
+  .vs-card:hover{ transform:translateY(-4px); }
+  .vs-row-item{ display:flex; align-items:flex-start; gap:.6rem; padding:.65rem 0; border-top:1px solid #EEF1F5; }
+  .vs-row-item:first-of-type{ border-top:none; }
+  .vs-row-item .vlbl{ font-size:11px; font-weight:700; color:#9AA4B2; text-transform:uppercase; letter-spacing:.03em; min-width:64px; padding-top:1px; }
+  .vs-row-item .vval{ font-size:13px; line-height:1.5; color:#525A69; }
+  .vs-card.win .vs-row-item .vval{ color:#0A0E17; font-weight:600; }
+  .vs-card.win .vs-row-item .vlbl{ color:#0A66FF; }
 
   /* curriculum orbit rings */
-  .curri-viz{ position:relative; width:260px; height:260px; margin:0 auto; }
+  .curri-viz{ position:relative; width:240px; height:240px; margin:0 auto; }
   .curri-text .citem{ padding:14px 0; border-bottom:1px solid rgba(255,255,255,.1); display:flex; gap:14px; align-items:flex-start; }
   .curri-text .citem:last-child{ border-bottom:none; }
   .curri-text .citem .lvl{ font-size:20px; font-weight:800; color:#FFB800; flex-shrink:0; width:44px; }
@@ -132,7 +144,7 @@
   .gbar .glevel-fill{ height:100%; background:linear-gradient(90deg,#0A66FF,#FFB800); border-radius:100px; width:0%; transition:width 1.4s cubic-bezier(.2,.8,.2,1); position:relative; }
   .gbar .glevel-fill::after{ content:""; position:absolute; top:0; right:0; bottom:0; width:20px; background:linear-gradient(90deg,transparent,rgba(255,255,255,.7)); animation:shine 2s infinite; }
   @keyframes shine{ 0%{ transform:translateX(-40px); } 100%{ transform:translateX(20px); } }
-  .gbar .gpct{ font-size:10px; color:#9AA4B2; text-align:right; }
+  .gbar .gpct{ font-size:10px; color:#7A8499; text-align:right; }
 
   /* kozy */
   .kozy svg{ width:100%; height:100%; overflow:visible; display:block; }
@@ -153,15 +165,20 @@
   .st-octa .cube{opacity:0} .st-octa .octa{opacity:1} .st-octa .k-core{animation:kpulse 2s infinite}
   .st-praise .k-wrap{animation:kbounce .8s cubic-bezier(.3,1.5,.5,1) infinite} @keyframes kbounce{0%{transform:translateY(0) scale(1)}30%{transform:translateY(-13px) scale(1.08)}55%{transform:translateY(0) scale(.96)}100%{transform:translateY(0) scale(1)}}
 
-  /* marquee */
   .marquee{ display:flex; gap:3rem; animation:scrollx 26s linear infinite; white-space:nowrap; }
   @keyframes scrollx{ from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
-  /* scrollytelling */
+  /* summary card news */
+  .cn-card{ position:relative; overflow:hidden; box-shadow:var(--shadow-lg); transition:transform .5s cubic-bezier(.16,1,.3,1), box-shadow .5s; }
+  .cn-card:hover{ transform:translateY(-6px); box-shadow:0 22px 50px rgba(10,14,23,.28); }
+  .cn-num{ position:absolute; top:10px; right:18px; font-size:52px; font-weight:800; color:rgba(255,255,255,.16); line-height:1; font-family:"Inter",sans-serif; }
+  .cn-dot{ width:7px; height:7px; border-radius:9999px; background:#DCE3EC; transition:background .3s, transform .3s; cursor:pointer; display:inline-block; }
+  .cn-dot.on{ background:#0A66FF; transform:scale(1.3); }
+
   .trig{ position:relative; padding:0 4px; border-radius:5px; transition:color .5s, background .5s; }
   .trig.on{ color:#0A66FF; background:rgba(10,102,255,.08); font-weight:800; }
   .trig.blast{ animation:blast .8s ease forwards } @keyframes blast{0%{transform:scale(1)}40%{transform:scale(1.3);color:#0A66FF}100%{transform:scale(0);opacity:0}}
-  .stepcard{ opacity:.25; transform:translateY(6px); transition:opacity .5s, transform .5s; }
+  .stepcard{ opacity:.5; transform:translateY(6px); transition:opacity .5s, transform .5s; }
   .stepcard.act{ opacity:1; transform:none; }
 
   @media (prefers-reduced-motion:reduce){ *{animation:none!important} .reveal{opacity:1!important;transform:none!important} }
@@ -173,7 +190,7 @@
 
 <!-- NAV -->
 <header id="nav" class="nav fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur border-b border-transparent h-16 md:h-20 flex items-center">
-  <div class="max-w-6xl mx-auto w-full px-5 flex items-center justify-between">
+  <div class="max-w-6xl mx-auto w-full px-5 md:px-8 flex items-center justify-between">
     <a href="#hero" class="flex items-center gap-2.5 font-bold text-[16px]">
       <svg width="32" height="32" viewBox="0 0 40 40" aria-label="PBS 학습법 로고">
         <defs><clipPath id="logoClipNav"><circle cx="20" cy="20" r="18"/></clipPath></defs>
@@ -183,8 +200,8 @@
       PBS 학습법
     </a>
     <nav class="hidden md:flex items-center gap-8 text-[13px] text-body font-medium">
+      <a href="#problem" class="hover:text-ink transition">문제</a>
       <a href="#how" class="hover:text-ink transition">원리</a>
-      <a href="course.html" class="hover:text-ink transition">코스</a>
       <a href="#pricing" class="hover:text-ink transition">요금</a>
       <a href="faq.html" class="hover:text-ink transition">FAQ</a>
     </nav>
@@ -192,29 +209,44 @@
   </div>
 </header>
 
-<!-- HERO -->
-<section id="hero" class="relative min-h-[100svh] flex items-center justify-center overflow-hidden pt-24 pb-16">
+<!-- ============ HERO — 3초 안에 꽂히는 한 방 ============ -->
+<section id="hero" class="relative flex items-center justify-center overflow-hidden pt-28 pb-16 md:pt-32 md:pb-20">
   <canvas id="nodeNet" class="absolute inset-0 -z-10 w-full h-full"></canvas>
   <div class="grid-bg absolute inset-0 -z-10 opacity-40"></div>
-  <div class="orb" data-par=".22" style="width:520px;height:520px;background:#BAD2FB;top:-8%;left:-6%"></div>
-  <div class="orb" data-par="-.16" style="width:460px;height:460px;background:#D7E0FA;bottom:-10%;right:-6%"></div>
+  <div class="orb absolute pointer-events-none" data-par=".22" style="width:520px;height:520px;background:#BAD2FB;top:-8%;left:-6%"></div>
+  <div class="orb absolute pointer-events-none" data-par="-.16" style="width:460px;height:460px;background:#D7E0FA;bottom:-10%;right:-6%"></div>
 
-  <div class="max-w-4xl mx-auto px-6 text-center relative">
-    <div class="kozy st-idle mx-auto mb-8 reveal" style="width:96px;height:96px" id="heroKozy"></div>
-    <p class="reveal en eyebrow uppercase text-[11px] font-semibold text-point mb-6" data-d="1">PBS 학습법 · Premise-Break Schema</p>
-    <h1 class="reveal display text-[2.1rem] sm:text-5xl md:text-[3.7rem] font-extrabold" data-d="1">
+  <div class="max-w-3xl mx-auto px-5 md:px-8 text-center relative">
+    <p class="reveal en eyebrow uppercase text-[11px] font-semibold text-point mb-5" data-d="1">PBS 학습법 · Premise-Break Schema</p>
+    <h1 class="reveal display text-[2.1rem] sm:text-5xl md:text-[3.5rem] font-extrabold" data-d="1">
       상위권 아이들은 문제를 풀기 전에,<br />
       문제의 <span class="kw" id="kw"><span id="splitPremise">전제</span><svg viewBox="0 0 200 24" preserveAspectRatio="none"><path d="M4 15 C 55 6, 145 6, 196 13"/></svg></span>부터 의심합니다.
     </h1>
-    <p class="reveal lede mt-8 text-[17px] md:text-[19px] text-body max-w-xl mx-auto" data-d="2">
-      <b class="text-ink">PBS 학습법</b> — 문제 속 숨은 <b class="text-ink">전제(Premise)</b>를 찾아 <b class="text-ink">깨고(Break)</b>, 새로운 사고의 틀(<b class="text-ink">Schema</b>)로 다시 짜는 훈련.
+    <p class="reveal lede mt-6 text-[16px] md:text-[18px] text-body max-w-lg mx-auto" data-d="2" style="word-break:keep-all">
+      <b class="text-ink">PBS 학습법</b> — 다니는 학원은 그대로 두고,<br class="hidden sm:block" /> 점수로 이어지는 사고 습관만 <b class="text-point whitespace-nowrap">6개월간</b> 더합니다.
     </p>
-    <div class="reveal mt-10 flex flex-col sm:flex-row justify-center gap-3" data-d="3">
-      <a href="onboarding.html" id="heroCta" class="btn btn-primary btn-magnetic text-[15px] font-semibold px-9 py-4">무료 체험 시작하기</a>
-      <a href="#how" class="btn btn-ghost text-[15px] font-semibold px-9 py-4">PBS 학습법이 뭔가요?</a>
+
+    <!-- 히어로 핵심 비주얼: 직접 눌러보는 전제 폭파 데모 -->
+    <div class="reveal mt-9 flex flex-col items-center" data-d="2">
+      <div class="flip w-full max-w-sm h-40 sm:h-44 cursor-pointer select-none" tabindex="0" onclick="this.classList.toggle('flipped')" role="button" aria-label="카드를 눌러 전제가 깨지는 걸 확인해보세요">
+        <div class="flip-in">
+          <div class="flip-f front">
+            <span class="en text-[10px] eyebrow uppercase text-faint mb-3">Before · 흔한 전제</span>
+            <p class="text-[18px] sm:text-[20px] font-bold text-body">"정답은 가장 그럴듯해 보인다"</p>
+          </div>
+          <div class="flip-f back">
+            <span class="en text-[10px] eyebrow uppercase text-point mb-3">After · 전제 폭파</span>
+            <p class="text-[18px] sm:text-[20px] font-extrabold text-ink">"가장 그럴듯한 '오답'이 진짜 함정이다"</p>
+          </div>
+        </div>
+      </div>
+      <p class="flip-hint mt-3 text-[12px] text-faint">👆 카드를 눌러 전제가 깨지는 걸 직접 확인해보세요</p>
     </div>
-    <p class="reveal mt-5" data-d="4"><a href="demo.html" class="text-[14px] font-semibold text-point hover:underline">가입 없이 전제 3개 먼저 풀어보기 →</a></p>
-    <p class="reveal mt-4 text-[13px] text-faint" data-d="4">7일 무료 체험 · 지금, 가장 먼저 경험하는 학부모들과 함께</p>
+
+    <div class="reveal mt-8" data-d="3">
+      <a href="onboarding.html" id="heroCta" class="btn btn-primary btn-magnetic text-[15px] font-semibold px-9 py-4">7일 무료 체험 시작하기</a>
+    </div>
+    <p class="reveal mt-4" data-d="4"><a href="demo.html" class="text-[14px] font-semibold text-point hover:underline">가입 없이 전제 3개 먼저 풀어보기 →</a></p>
     <!-- ⚠️ PLACEHOLDER — 실제 수치로 교체 필요. 출시 전 임시 문구, 실제 이용자 데이터 확보 즉시 갱신할 것. -->
     <p class="reveal mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-[12px] text-faint" data-d="4" id="liveStrip">
       <span class="inline-flex items-center gap-1.5"><span class="inline-block w-1.5 h-1.5 rounded-full bg-point"></span>현재 <b class="text-ink hstat" data-target="132" data-decimals="0">0</b>명의 학부모가 무료 체험 중</span>
@@ -223,220 +255,177 @@
     </p>
   </div>
 
-  <a href="#stats" class="absolute bottom-8 left-1/2 -translate-x-1/2 text-faint" style="animation:kfloat 2s ease-in-out infinite">
+  <a href="#problem" class="absolute bottom-8 left-1/2 -translate-x-1/2 text-faint" style="animation:kfloat 2s ease-in-out infinite">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
   </a>
 </section>
 
-<!-- HERO VIDEO — PLACEHOLDER (영상 준비되면 iframe/video로 교체) -->
-<section class="py-16 md:py-24 bg-white">
-  <div class="max-w-4xl mx-auto px-6 reveal">
-    <div id="heroVideoSlot" class="relative w-full aspect-video rounded-3xl border-2 border-dashed border-line bg-soft flex flex-col items-center justify-center text-center gap-3">
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9AA4B2" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z"/></svg>
-      <p class="text-[14px] font-semibold text-faint">소개 영상 준비 중 — 완성되면 이 자리에 삽입됩니다</p>
-      <p class="text-[12px] text-faint/80">Placeholder: 창업자 인터뷰 또는 제품 데모 영상 예정</p>
+<!-- ============ STAGE 1 · 고통 (PAIN) ============ -->
+<section id="problem" class="py-16 md:py-24 relative overflow-hidden bg-white">
+  <div class="orb absolute pointer-events-none" data-par=".1" style="width:400px;height:400px;background:#E9EEFA;top:20%;right:-10%"></div>
+  <div class="max-w-6xl mx-auto px-5 md:px-8 relative">
+    <div class="stage-head reveal">
+      <span class="stage-badge"><span class="num">1</span>The Problem · 고통</span>
+      <h2 class="display text-[1.8rem] md:text-[2.8rem] font-extrabold mt-6">사교육을 늘려도 성적이 오르지 않는,<br class="hidden md:block" /> 바로 그 고민을 하고 계신가요?</h2>
     </div>
-  </div>
-</section>
-
-<!-- STATS -->
-<section id="stats" class="py-16 md:py-20 border-y border-line bg-soft">
-  <div class="max-w-5xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
-    <div class="reveal" data-d="1"><p class="en text-[11px] eyebrow uppercase text-faint mb-2">Daily</p><p class="display text-[2.6rem] md:text-[3.2rem] font-extrabold text-ink">매일</p><p class="text-[13px] text-body mt-1">새로운 전제 사건 한 편</p></div>
-    <div class="reveal" data-d="2"><p class="en text-[11px] eyebrow uppercase text-faint mb-2">Thinking levels</p><p class="display text-[2.6rem] md:text-[3.2rem] font-extrabold text-ink"><span class="counter" data-t="3">0</span>단계</p><p class="text-[13px] text-body mt-1">입문 · 기본 · 심화 사고 경로</p></div>
-    <div class="reveal" data-d="3"><p class="en text-[11px] eyebrow uppercase text-faint mb-2">Deep change</p><p class="display text-[2.6rem] md:text-[3.2rem] font-extrabold text-ink"><span class="counter" data-t="6">0</span><span class="text-point">개월</span></p><p class="text-[13px] text-body mt-1">생각의 체질을 바꾸는 트랙</p></div>
-  </div>
-</section>
-
-<!-- WHAT IS PBS -->
-<section id="what-pbs" class="py-28 md:py-36 bg-white">
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="text-center max-w-3xl mx-auto reveal">
-      <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">What is PBS · PBS 학습법이란?</p>
-      <h2 class="display text-[1.8rem] md:text-[2.7rem] font-extrabold">전제를 깨고,<br class="hidden md:block" /> 사고의 틀을 다시 짭니다</h2>
-      <p class="lede mt-6 text-[16px] text-body max-w-2xl mx-auto"><b class="text-ink">PBS(Premise-Break Schema)</b>는 문제 속에 숨은 '당연한 전제'를 찾아내 깨뜨리고, 그 자리에 새로운 사고의 틀을 다시 세우는 4단계 사고 훈련법입니다. 하루 15분, 6개월이면 문제를 대하는 태도 자체가 바뀝니다.</p>
-    </div>
-
-    <div class="mt-16 pbs-steps reveal">
-      <div class="pbs-step" style="animation-delay:.05s">
-        <p class="en text-[11px] eyebrow uppercase text-faint mb-2">01</p>
-        <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg></div>
-        <p class="en text-[11px] eyebrow uppercase text-point">Detect</p>
-        <h3 class="text-[16px] font-bold mt-0.5">탐지</h3>
-        <p class="text-[12px] text-faint mt-2 leading-relaxed">문제 속 숨은 전제를 발견</p>
-        <p class="text-[11px] text-point font-semibold mt-1">확장 질문법 · 스키마 조회</p>
+    <div class="mt-14 grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6">
+      <div class="tilt reveal card p-8 md:p-10" style="border-top:3px solid #E4574A" data-d="1">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 icon-float" style="animation-delay:0s; background:#FDEDEC"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D6432F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16M6 21V8l6-4 6 4v13M10 21v-5h4v5"/></svg></div>
+        <p class="text-[19px] font-extrabold text-ink">"학원을 여러 개 다녀도"</p>
+        <p class="mt-3 text-body lede text-[15px]">중위권에서 좀처럼 벗어나지 못합니다.</p>
       </div>
-      <div class="pbs-step" style="animation-delay:.2s">
-        <p class="en text-[11px] eyebrow uppercase text-faint mb-2">02</p>
-        <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.4 5.6 5.6 2.4-5.6 2.4L12 18.5l-2.4-5.6L4 10.5l5.6-2.4z"/></svg></div>
-        <p class="en text-[11px] eyebrow uppercase text-point">Break</p>
-        <h3 class="text-[16px] font-bold mt-0.5">폭파</h3>
-        <p class="text-[12px] text-faint mt-2 leading-relaxed">전제를 깨뜨려 흔들기</p>
-        <p class="text-[11px] text-point font-semibold mt-1">소크라테스식 · 반례 탐색</p>
+      <div class="tilt reveal card p-8 md:p-10" style="border-top:3px solid #E4574A" data-d="2">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 icon-float" style="animation-delay:.3s; background:#FDEDEC"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D6432F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></div>
+        <p class="text-[19px] font-extrabold text-ink">"공부 시간을 늘려도"</p>
+        <p class="mt-3 text-body lede text-[15px]">시험만 보면 낯선 문제에서 실수합니다.</p>
       </div>
-      <div class="pbs-step" style="animation-delay:.35s">
-        <p class="en text-[11px] eyebrow uppercase text-faint mb-2">03</p>
-        <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6M3 22v-6h6"/><path d="M21 8a9 9 0 00-15-3M3 16a9 9 0 0015 3"/></svg></div>
-        <p class="en text-[11px] eyebrow uppercase text-point">Rebuild</p>
-        <h3 class="text-[16px] font-bold mt-0.5">재구성</h3>
-        <p class="text-[12px] text-faint mt-2 leading-relaxed">새 사고 틀로 다시 세우기</p>
-        <p class="text-[11px] text-point font-semibold mt-1">시각화 · 유추 전환</p>
+      <div class="tilt reveal card p-8 md:p-10" style="border-top:3px solid #E4574A" data-d="3">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 icon-float" style="animation-delay:.6s; background:#FDEDEC"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D6432F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="11" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 10v4M18 10v4"/></svg></div>
+        <p class="text-[19px] font-extrabold text-ink">"투자를 아끼지 않아도"</p>
+        <p class="mt-3 text-body lede text-[15px]">스스로 공부 계획을 세우지 못합니다.</p>
       </div>
-      <div class="pbs-step" style="animation-delay:.5s">
-        <p class="en text-[11px] eyebrow uppercase text-faint mb-2">04</p>
-        <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4M3 11v-1a4 4 0 014-4h14M7 22l-4-4 4-4M21 13v1a4 4 0 01-4 4H3"/></svg></div>
-        <p class="en text-[11px] eyebrow uppercase text-point">Consolidate</p>
-        <h3 class="text-[16px] font-bold mt-0.5">정착</h3>
-        <p class="text-[12px] text-faint mt-2 leading-relaxed">반복으로 습관 만들기</p>
-        <p class="text-[11px] text-point font-semibold mt-1">간격 반복 · 교차 연습</p>
+      <div class="tilt reveal card p-8 md:p-10" style="border-top:3px solid #E4574A" data-d="4">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 icon-float" style="animation-delay:.9s; background:#FDEDEC"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D6432F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="4.5"/><path d="M4.5 21c1.4-4.2 4.2-6.3 7.5-6.3s6.1 2.1 7.5 6.3"/></svg></div>
+        <p class="text-[19px] font-extrabold text-ink">"머리가 좋은 것 같아도"</p>
+        <p class="mt-3 text-body lede text-[15px]">문제 속 숨은 전제를 읽어내지 못합니다.</p>
       </div>
-    </div>
-
-    <p class="reveal text-center text-[14px] md:text-[15px] text-body mt-10 max-w-2xl mx-auto lede">암기 전략도, 문제 풀이도, 열린 탐구도 아닙니다. PBS는 지식을 대하는 <b class="text-ink">'전제' 자체를 발굴하고 재구성</b>하는 데 초점을 둔 사고 훈련입니다.</p>
-
-    <!-- PBS vs 학원 vs 인강 -->
-    <div class="reveal mt-16 max-w-4xl mx-auto">
-      <p class="text-center text-[13px] font-semibold text-faint uppercase tracking-wide mb-5">학원 · 인강과는 무엇이 다를까요</p>
-      <div class="overflow-x-auto rounded-3xl border border-line">
-        <table class="w-full text-[13px] md:text-[14px] border-collapse bg-white">
-          <thead>
-            <tr class="bg-soft text-left">
-              <th class="p-4 font-semibold text-faint w-1/4">비교 축</th>
-              <th class="p-4 font-semibold text-body">학원</th>
-              <th class="p-4 font-semibold text-body">인강</th>
-              <th class="p-4 font-bold text-point">PBS 학습법</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="border-t border-line">
-              <td class="p-4 font-semibold text-ink">채우는 것</td>
-              <td class="p-4 text-body">교과 지식·문제풀이 스킬</td>
-              <td class="p-4 text-body">강의로 압축한 지식</td>
-              <td class="p-4 text-ink">지식을 대하는 사고 습관</td>
-            </tr>
-            <tr class="border-t border-line bg-soft/40">
-              <td class="p-4 font-semibold text-ink">학습 방식</td>
-              <td class="p-4 text-body">진도·숙제 중심 반복</td>
-              <td class="p-4 text-body">일방향 시청</td>
-              <td class="p-4 text-ink">매일 사건 1개, 전제 찾기→폭파→기록</td>
-            </tr>
-            <tr class="border-t border-line">
-              <td class="p-4 font-semibold text-ink">평가 기준</td>
-              <td class="p-4 text-body">정오·점수</td>
-              <td class="p-4 text-body">진도율</td>
-              <td class="p-4 text-ink">질문의 질, 다르게 시도한 횟수</td>
-            </tr>
-            <tr class="border-t border-line bg-soft/40">
-              <td class="p-4 font-semibold text-ink">병행 가능성</td>
-              <td class="p-4 text-body" colspan="2">지식 습득 축 — PBS와 겹치지 않음</td>
-              <td class="p-4 text-ink">사고 태도 축 — 학원·인강과 함께 써도 부딪히지 않음</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="text-center text-[12px] text-faint mt-4">학원·인강을 대체하는 서비스가 아니라, 그 위에서 '어떻게 생각하는가'를 훈련하는 별도의 축입니다.</p>
-    </div>
-  </div>
-</section>
-
-<!-- PROBLEM -->
-<section id="problem" class="py-28 md:py-36 relative overflow-hidden">
-  <div class="orb" data-par=".1" style="width:400px;height:400px;background:#E9EEFA;top:20%;right:-10%"></div>
-  <div class="max-w-6xl mx-auto px-6 relative">
-    <div class="text-center max-w-3xl mx-auto reveal">
-      <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">The Problem</p>
-      <h2 class="display text-[1.8rem] md:text-[2.8rem] font-extrabold">사교육을 늘려도 성적이 오르지 않는,<br class="hidden md:block" /> 바로 그 고민을 하고 계신가요?</h2>
-    </div>
-    <div class="mt-16 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
-      <div class="tilt reveal card p-8 md:p-10" data-d="1"><svg class="mb-6 icon-float" style="animation-delay:0s" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9AA4B2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16M6 21V8l6-4 6 4v13M10 21v-5h4v5"/></svg><p class="text-[17px] font-bold">"학원을 여러 개 다녀도"</p><p class="mt-3 text-body lede text-[15px]">중위권에서 좀처럼 벗어나지 못합니다.</p></div>
-      <div class="tilt reveal card p-8 md:p-10" data-d="2"><svg class="mb-6 icon-float" style="animation-delay:.3s" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9AA4B2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><p class="text-[17px] font-bold">"공부 시간을 늘려도"</p><p class="mt-3 text-body lede text-[15px]">시험만 보면 낯선 문제에서 실수합니다.</p></div>
-      <div class="tilt reveal card p-8 md:p-10" data-d="3"><svg class="mb-6 icon-float" style="animation-delay:.6s" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9AA4B2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="11" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 10v4M18 10v4"/></svg><p class="text-[17px] font-bold">"투자를 아끼지 않아도"</p><p class="mt-3 text-body lede text-[15px]">스스로 공부 계획을 세우지 못합니다.</p></div>
-      <div class="tilt reveal card p-8 md:p-10" data-d="4"><svg class="mb-6 icon-float" style="animation-delay:.9s" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#9AA4B2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="4.5"/><path d="M4.5 21c1.4-4.2 4.2-6.3 7.5-6.3s6.1 2.1 7.5 6.3"/></svg><p class="text-[17px] font-bold">"머리가 좋은 것 같아도"</p><p class="mt-3 text-body lede text-[15px]">문제 속 숨은 전제를 읽어내지 못합니다.</p></div>
     </div>
     <div class="reveal mt-16 max-w-2xl mx-auto text-center">
-      <p class="display text-[1.5rem] md:text-[2.2rem] font-bold leading-[1.3]">원인은 <span class="text-faint">'머리'</span>도 <span class="text-faint">'시간'</span>도 아닙니다.<br /> 공부의 <span class="text-point">전제</span>를 바꾸지 않았기 때문입니다.</p>
+      <p class="display text-[1.5rem] md:text-[2.2rem] font-bold leading-[1.3]">원인은 '머리'도 '시간'도 아닙니다.<br /> 공부의 <span class="text-point">전제</span>를 바꾸지 않았기 때문입니다.</p>
     </div>
   </div>
 </section>
 
-<!-- FOUNDER STORY -->
-<section id="founder" class="py-28 md:py-36 bg-white">
-  <div class="max-w-5xl mx-auto px-6">
-    <div class="text-center max-w-3xl mx-auto reveal mb-14">
-      <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">Our Story · 창업자의 편지</p>
-      <h2 class="display text-[1.8rem] md:text-[2.6rem] font-extrabold">시작은 한 아빠의 고민이었습니다.<br class="hidden md:block" /> 완성은 검증의 몫이었습니다.</h2>
-    </div>
+<!-- ============ STAGE 2 · 해결 (SOLUTION) ============ -->
+<section id="solution-head" class="pt-16 md:pt-24 pb-4 bg-panel">
+  <div class="max-w-3xl mx-auto px-5 md:px-8 stage-head reveal">
+    <span class="stage-badge"><span class="num">2</span>The Solution · 해결</span>
+    <h2 class="display text-[1.8rem] md:text-[2.8rem] font-extrabold mt-6">PBS 학습법은 전제를 깨는<br class="hidden md:block" /> 4단계 사고 훈련입니다</h2>
+    <p class="lede mt-5 text-[15px] text-body">문제 속에 숨은 '당연한 전제'를 찾아내 깨뜨리고, 새로운 사고의 틀을 세우는 <b class="text-ink">4단계</b>. 하루 15분, 6개월이면 태도 자체가 바뀝니다.</p>
+  </div>
+</section>
 
-    <div class="reveal card p-8 md:p-14 rounded-4xl bg-soft">
-      <div class="grid md:grid-cols-2 gap-10 md:gap-14">
-        <div>
-          <p class="en text-[11px] eyebrow uppercase text-faint mb-4">The confession</p>
-          <p class="lede text-[15px] md:text-[16px] text-body">
-            솔직히 말씀드리면, 저도 여느 학부모와 똑같았습니다. 아이 성적이 흔들릴 때마다 학원을 하나씩 늘렸어요.
-            고2가 된 아들에게 이미 세 곳을 보내고 있었죠. 그런데 이상했습니다. 시간도 돈도 더 들이는데 아이는 여전히 제자리였어요.
-            어느 날 아들의 문제집을 넘겨보다 알았습니다. 아이는 문제를 <b class="text-ink">'푸는' 법</b>은 배웠지만,
-            문제를 <b class="text-ink">'의심하는' 법</b>은 한 번도 배운 적이 없다는 걸요.
-          </p>
+<!-- WHAT IS PBS — 4-step diagram -->
+<section id="what-pbs" class="pb-16 md:pb-24 bg-panel">
+  <div class="max-w-6xl mx-auto px-5 md:px-8">
+    <div class="reveal bg-white rounded-[2rem] shadow-[var(--shadow-lg)] border border-line p-6 sm:p-10 md:p-14 mt-10">
+      <div class="pbs-steps">
+        <div class="pbs-step" style="animation-delay:.05s">
+          <div class="icon" style="background:linear-gradient(160deg,#EAF1FF,#D3E2FF); border:1.5px solid #0A66FF"><span class="badge">01</span><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg></div>
+          <p class="en text-[10.5px] eyebrow uppercase text-point font-bold">Detect</p>
+          <h3 class="text-[18px] font-extrabold mt-0.5">탐지</h3>
+          <p class="text-[12.5px] text-body mt-2 leading-relaxed">문제 속 숨은 전제를 발견</p>
+          <p class="tag text-[11px] text-point font-semibold">확장 질문법 · 스키마 조회</p>
         </div>
-        <div>
-          <p class="en text-[11px] eyebrow uppercase text-point mb-4">The promise</p>
-          <p class="lede text-[15px] md:text-[16px] text-body">
-            상위권 아이들과 우리 아이의 차이는 지식의 양이 아니었습니다. 문제를 대하는 태도, 그 밑에 깔린 <b class="text-ink">'전제'</b>였어요.
-            지식은 학원이 채워주지만, 스스로 전제를 의심하는 힘은 아무도 가르쳐주지 않았습니다.
-            그래서 직접 만들었습니다. 하루아침에 점수를 올리는 도구가 아니라, 6개월에 걸쳐 아이가 스스로 생각하는 습관을 되찾는 훈련을요.
-            저는 이걸 '빠른 해결책'이라 부르지 않습니다. 다만, <b class="text-ink">방향이 바뀐 아이는 더 이상 쫓기지 않습니다.</b>
-            그리고 혼자 만들지 않았습니다. 현직 교사들의 검증을 거쳐 다듬었습니다.
-          </p>
+        <div class="pbs-step" style="animation-delay:.2s">
+          <div class="icon" style="background:linear-gradient(160deg,#FFF4D6,#FFE7A8); border:1.5px solid #E0A600"><span class="badge" style="background:#8a6200">02</span><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#8a6200" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.4 5.6 5.6 2.4-5.6 2.4L12 18.5l-2.4-5.6L4 10.5l5.6-2.4z"/></svg></div>
+          <p class="en text-[10.5px] eyebrow uppercase font-bold" style="color:#8a6200">Break</p>
+          <h3 class="text-[18px] font-extrabold mt-0.5">폭파</h3>
+          <p class="text-[12.5px] text-body mt-2 leading-relaxed">전제를 깨뜨려 흔들기</p>
+          <p class="tag text-[11px] font-semibold" style="background:rgba(255,184,0,.14); color:#8a6200">소크라테스식 · 반례 탐색</p>
+        </div>
+        <div class="pbs-step" style="animation-delay:.35s">
+          <div class="icon" style="background:linear-gradient(160deg,#EAF1FF,#D3E2FF); border:1.5px solid #0A66FF"><span class="badge">03</span><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6M3 22v-6h6"/><path d="M21 8a9 9 0 00-15-3M3 16a9 9 0 0015 3"/></svg></div>
+          <p class="en text-[10.5px] eyebrow uppercase text-point font-bold">Rebuild</p>
+          <h3 class="text-[18px] font-extrabold mt-0.5">재구성</h3>
+          <p class="text-[12.5px] text-body mt-2 leading-relaxed">새 사고 틀로 다시 세우기</p>
+          <p class="tag text-[11px] text-point font-semibold">시각화 · 유추 전환</p>
+        </div>
+        <div class="pbs-step" style="animation-delay:.5s">
+          <div class="icon" style="background:linear-gradient(160deg,#0A0E17,#1B2740); border:1.5px solid #0A0E17"><span class="badge" style="background:#FFB800; color:#0A0E17">04</span><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4M3 11v-1a4 4 0 014-4h14M7 22l-4-4 4-4M21 13v1a4 4 0 01-4 4H3"/></svg></div>
+          <p class="en text-[10.5px] eyebrow uppercase text-point font-bold">Consolidate</p>
+          <h3 class="text-[18px] font-extrabold mt-0.5">정착</h3>
+          <p class="text-[12.5px] text-body mt-2 leading-relaxed">반복으로 습관 만들기</p>
+          <p class="tag text-[11px] text-point font-semibold">간격 반복 · 교차 연습</p>
         </div>
       </div>
 
-      <div class="mt-10 md:mt-12 pt-8 border-t border-line flex items-center gap-4">
-        <div class="w-12 h-12 rounded-full bg-point/10 border border-point/20 flex items-center justify-center text-point font-bold text-[15px] shrink-0">전</div>
-        <div>
-          <p class="text-[18px] md:text-[20px] font-bold text-ink leading-snug">"이건, 제 아들을 위해 만든 것입니다."</p>
-          <p class="text-[13px] text-faint mt-1">— PBS 학습법을 만든, 고2 아들의 아빠</p>
+      <p class="text-center text-[14px] md:text-[15px] text-body mt-12 max-w-2xl mx-auto lede">암기 전략도, 문제 풀이도, 열린 탐구도 아닙니다. PBS는 <b class="text-ink">'전제' 자체를 발굴하고 재구성</b>하는 사고 훈련입니다.</p>
+
+      <!-- 빠른 요약 -->
+      <div class="mt-10 max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-5 md:gap-6">
+        <div class="tilt rounded-3xl p-7 text-center text-white" style="background:linear-gradient(160deg,#2E7CFF,#0B3ACC); box-shadow:var(--shadow-lg)" data-d="1">
+          <p class="en text-[10px] eyebrow uppercase text-white/70 mb-2">Daily</p>
+          <p class="display text-[2.2rem] font-extrabold text-white">매일</p>
+          <p class="text-[13px] text-white/80 mt-1">새로운 전제 사건 한 편</p>
         </div>
+        <div class="tilt rounded-3xl p-7 text-center text-white" style="background:linear-gradient(160deg,#0B3ACC,#071F73); box-shadow:var(--shadow-lg)" data-d="2">
+          <p class="en text-[10px] eyebrow uppercase text-white/70 mb-2">Thinking levels</p>
+          <p class="display text-[2.2rem] font-extrabold text-white"><span class="counter" data-t="3">0</span>단계</p>
+          <p class="text-[13px] text-white/80 mt-1">입문 · 기본 · 심화 사고 경로</p>
+        </div>
+        <div class="tilt rounded-3xl p-7 text-center" style="background:linear-gradient(160deg,#0A0E17,#1B2740); box-shadow:var(--shadow-lg)" data-d="3">
+          <p class="en text-[10px] eyebrow uppercase mb-2" style="color:#FFB800">Deep change</p>
+          <p class="display text-[2.2rem] font-extrabold text-white"><span class="counter" data-t="6">0</span><span style="color:#FFB800">개월</span></p>
+          <p class="text-[13px] text-white/80 mt-1">생각의 체질을 바꾸는 트랙</p>
+        </div>
+      </div>
+
+      <!-- PBS vs 학원 vs 인강 -->
+      <div class="mt-14 max-w-5xl mx-auto">
+        <p class="text-center text-[13px] font-semibold text-faint uppercase tracking-wide mb-8">학원 · 인강과는 무엇이 다를까요</p>
+        <div class="grid md:grid-cols-3 gap-5 md:gap-6 items-start">
+          <div class="vs-card">
+            <p class="text-[15px] font-extrabold text-ink mb-1">학원</p>
+            <p class="text-[12px] text-faint mb-2">지식 습득 축</p>
+            <div class="vs-row-item"><span class="vlbl">채우는 것</span><span class="vval">교과 지식·문제풀이 스킬</span></div>
+            <div class="vs-row-item"><span class="vlbl">방식</span><span class="vval">진도·숙제 중심 반복</span></div>
+            <div class="vs-row-item"><span class="vlbl">평가</span><span class="vval">정오·점수</span></div>
+            <div class="vs-row-item"><span class="vlbl">병행</span><span class="vval">PBS와 겹치지 않음</span></div>
+          </div>
+          <div class="vs-card win md:-translate-y-2">
+            <p class="text-[15px] font-extrabold text-point mb-1">PBS 학습법</p>
+            <p class="text-[12px] text-faint mb-2">사고 태도 축</p>
+            <div class="vs-row-item"><span class="vlbl">채우는 것</span><span class="vval">지식을 대하는 사고 습관</span></div>
+            <div class="vs-row-item"><span class="vlbl">방식</span><span class="vval">매일 사건 1개, 전제 찾기→폭파→기록</span></div>
+            <div class="vs-row-item"><span class="vlbl">평가</span><span class="vval">질문의 질, 다르게 시도한 횟수</span></div>
+            <div class="vs-row-item"><span class="vlbl">병행</span><span class="vval">학원·인강과 함께 써도 부딪히지 않음</span></div>
+          </div>
+          <div class="vs-card">
+            <p class="text-[15px] font-extrabold text-ink mb-1">인강</p>
+            <p class="text-[12px] text-faint mb-2">지식 습득 축</p>
+            <div class="vs-row-item"><span class="vlbl">채우는 것</span><span class="vval">강의로 압축한 지식</span></div>
+            <div class="vs-row-item"><span class="vlbl">방식</span><span class="vval">일방향 시청</span></div>
+            <div class="vs-row-item"><span class="vlbl">평가</span><span class="vval">진도율</span></div>
+            <div class="vs-row-item"><span class="vlbl">병행</span><span class="vval">PBS와 겹치지 않음</span></div>
+          </div>
+        </div>
+        <p class="text-center text-[12px] text-faint mt-6">학원·인강을 대체하는 서비스가 아니라, 그 위에서 '어떻게 생각하는가'를 훈련하는 별도의 축입니다.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- SHIFT -->
-<section id="shift" class="py-28 md:py-36 bg-soft border-y border-line">
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="text-center max-w-3xl mx-auto reveal">
-      <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">The Shift</p>
-      <h2 class="display text-[1.8rem] md:text-[2.8rem] font-extrabold">상위권 아이들이 이미 하고 있는 것,<br class="hidden md:block" /> 공부의 <span class="text-point">전제</span> 바꾸기</h2>
+<!-- HERO VIDEO — PLACEHOLDER (영상 준비되면 iframe/video로 교체, 16:9 유지) -->
+<section class="py-10 md:py-14 bg-white">
+  <div class="max-w-xl mx-auto px-5 md:px-8 reveal text-center">
+    <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-2">Product Intro</p>
+    <h3 class="text-[16px] md:text-[18px] font-bold text-ink mb-5">1분 만에 보는 PBS 학습법</h3>
+    <div id="heroVideoSlot" class="relative w-full aspect-video rounded-2xl border-2 border-dashed border-line bg-soft flex flex-col items-center justify-center text-center gap-2">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7A8499" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z"/></svg>
+      <p class="text-[13px] font-semibold text-faint">소개 영상 준비 중</p>
+      <p class="text-[11px] text-faint/80">완성되면 이 자리에 삽입됩니다</p>
     </div>
-    <div class="mt-16 flex flex-col items-center reveal">
-      <p class="text-[13px] text-faint mb-6">카드를 눌러 뒤집어 보세요</p>
-      <div class="flip w-full max-w-md h-56 cursor-pointer select-none" tabindex="0" onclick="this.classList.toggle('flipped')">
-        <div class="flip-in">
-          <div class="flip-f front"><span class="en text-[11px] eyebrow uppercase text-faint mb-4">Before</span><p class="text-[21px] md:text-[23px] font-medium text-body">"수학은 빨리 푸는 과목이다"</p></div>
-          <div class="flip-f back"><span class="en text-[11px] eyebrow uppercase text-point mb-4">After</span><p class="text-[21px] md:text-[23px] font-extrabold text-ink">"수학은 깊이 이해하는 과목이다"</p></div>
-        </div>
-      </div>
-    </div>
-    <p class="reveal mt-14 text-center display text-[1.5rem] md:text-[2.1rem] font-bold leading-[1.3] max-w-2xl mx-auto">PBS 학습법은 이 <span class="text-point">생각의 전환</span>을<br /> 6개월의 커리큘럼으로 설계합니다.</p>
   </div>
 </section>
 
 <!-- HOW — scrollytelling -->
-<section id="how" class="relative">
-  <div class="text-center max-w-3xl mx-auto px-6 pt-28 md:pt-36 reveal">
+<section id="how" class="relative bg-white">
+  <div class="text-center max-w-3xl mx-auto px-5 md:px-8 pt-16 md:pt-24 reveal">
     <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">How it works</p>
     <h2 class="display text-[1.8rem] md:text-[2.8rem] font-extrabold">아이가 직접 '전제'를 찾는 순간,<br class="hidden md:block" /> 공부의 태도가 바뀝니다.</h2>
+    <p class="lede mt-5 text-[15px] text-body">전제탐정 <b class="text-ink">루카</b>가 매 사건마다 함께합니다 — 표정 없는 정육면체 캐릭터가, 전제를 발견할 때마다 정팔면체로 형태를 바꾸며 반응해요.</p>
   </div>
 
-  <div class="relative" id="scrolly" style="height:300vh">
-    <div class="sticky top-0 h-[100svh] flex items-center">
-      <div class="max-w-5xl mx-auto w-full px-6 grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+  <div class="relative" id="scrolly" style="height:220vh">
+    <div class="sticky top-16 md:top-20 h-[64svh] md:h-[68svh] flex items-center">
+      <div class="max-w-5xl mx-auto w-full px-5 md:px-8 grid md:grid-cols-2 gap-10 md:gap-16 items-center">
         <!-- pinned visual -->
         <div class="order-2 md:order-1">
           <div class="card p-8 md:p-12 text-center relative overflow-hidden" id="scVisual">
             <div class="kozy st-idle mx-auto mb-8" style="width:88px;height:88px" id="scKozy"></div>
-            <p class="text-[22px] md:text-[27px] font-bold leading-relaxed">"수학은 <span class="trig" id="scTrig">빨리 푸는</span> 과목이다"</p>
-            <p class="mt-7 text-point font-semibold text-[15px] opacity-0 transition-opacity duration-500" id="scLabel">발견한 전제 — "빠름 = 잘함"</p>
+            <p class="text-[22px] md:text-[27px] font-bold leading-relaxed">"1등급은 <span class="trig" id="scTrig">실력이 확실하다는</span> 증거다"</p>
+            <p class="mt-7 text-point font-semibold text-[15px] opacity-0 transition-opacity duration-500" id="scLabel">발견한 전제 — "등급 = 실력"</p>
           </div>
         </div>
         <!-- steps -->
@@ -451,14 +440,14 @@
 </section>
 
 <!-- CURRICULUM teaser -->
-<section class="spotlight py-28 md:py-36 bg-night text-white relative overflow-hidden">
-  <div class="orb" style="width:400px;height:400px;background:#132038;top:10%;left:5%;opacity:.9"></div>
-  <div class="orb" style="width:360px;height:360px;background:#101a2e;bottom:8%;right:6%;opacity:.9"></div>
-  <div class="max-w-5xl mx-auto px-6 relative">
+<section class="spotlight py-16 md:py-24 bg-night text-white relative overflow-hidden">
+  <div class="orb absolute pointer-events-none" style="width:400px;height:400px;background:#132038;top:10%;left:5%;opacity:.9"></div>
+  <div class="orb absolute pointer-events-none" style="width:360px;height:360px;background:#101a2e;bottom:8%;right:6%;opacity:.9"></div>
+  <div class="max-w-5xl mx-auto px-5 md:px-8 relative">
     <div class="text-center max-w-3xl mx-auto reveal">
       <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">Curriculum</p>
       <h2 class="display text-[1.8rem] md:text-[2.9rem] font-extrabold text-white">PBS 학습법은 과목을 가르치지 않습니다.<br class="hidden md:block" /> 생각의 틀을 훈련합니다.</h2>
-      <p class="lede mt-6 text-[16px] text-white/60 max-w-xl mx-auto">사고의 복잡도에 따라 <b class="text-white">입문 · 기본 · 심화</b> 3단계. 일상의 문장부터 수능 지문까지, 어떤 소재를 만나도 '전제 찾기 → 폭파 → 탐정 노트'의 같은 사고 루틴을 반복합니다.</p>
+      <p class="lede mt-6 text-[16px] text-white/75 max-w-xl mx-auto">사고의 복잡도에 따라 <b class="text-white">입문 · 기본 · 심화</b> 3단계로 나뉩니다.</p>
     </div>
 
     <div class="mt-16 grid md:grid-cols-2 gap-10 md:gap-16 items-center reveal">
@@ -498,14 +487,136 @@
   </div>
 </section>
 
-<!-- GROWTH -->
-<section class="py-28 md:py-36">
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="text-center max-w-3xl mx-auto reveal">
-      <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">Real growth</p>
-      <h2 class="display text-[1.8rem] md:text-[2.8rem] font-extrabold">점수가 아니라, 생각의 태도가 자랍니다</h2>
-      <p class="lede mt-5 text-[15px] text-body max-w-xl mx-auto">PBS 학습법은 점수를 약속하지 않습니다. 대신 탐정 노트가 아이의 '생각하는 습관'이 어떻게 자라는지 매주 보여줍니다.</p>
+<!-- COMPARISON vs other learning methods -->
+<section class="py-16 md:py-24 bg-white" id="compare">
+  <div class="max-w-5xl mx-auto px-5 md:px-8">
+    <div class="text-center max-w-2xl mx-auto reveal">
+      <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">Where PBS fits</p>
+      <h2 class="display text-[1.8rem] md:text-[2.7rem] font-extrabold">다른 학습법과는, 어떻게 다를까요?</h2>
+      <p class="lede mt-5 text-[15px] text-body max-w-xl mx-auto">PBS는 기존 학습법을 대체하지 않습니다. 어떻게 공부하든, 그 밑바탕에 깔린 <b class="text-ink">'전제'를 의심하는 습관</b>을 더하는 훈련입니다.</p>
     </div>
+
+    <div class="mt-14 grid md:grid-cols-2 gap-5 md:gap-6 reveal">
+      <div class="card p-0 overflow-hidden flex flex-col">
+        <div class="p-6 pb-4 flex items-start gap-3">
+          <div class="shrink-0 w-10 h-10 rounded-xl bg-body/10 flex items-center justify-center"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#525A69" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+          <div><p class="text-[15px] font-bold text-ink">암기 전략</p><p class="text-[12px] text-faint mt-0.5">반복 암기 · 요약노트 · 회독</p></div>
+        </div>
+        <div class="px-6 py-4 bg-soft border-t border-line">
+          <p class="text-[10px] font-bold text-faint uppercase tracking-wider mb-1.5">강점</p>
+          <p class="text-[13px] text-body leading-relaxed">시험 범위가 명확할 때, 정보를 빠르고 정확하게 저장하는 데 효율적입니다.</p>
+        </div>
+        <div class="px-6 py-4 bg-point/5 border-t border-point/15 border-l-4 border-l-point flex-1">
+          <p class="text-[10px] font-bold text-point uppercase tracking-wider mb-1.5">PBS와 다른 점</p>
+          <p class="text-[13px] text-ink leading-relaxed">PBS는 외운 지식을 <b class="text-point">대체하지 않고</b>, 그 지식이 맞는가를 검증하는 습관을 더합니다.</p>
+        </div>
+      </div>
+      <div class="card p-0 overflow-hidden flex flex-col">
+        <div class="p-6 pb-4 flex items-start gap-3">
+          <div class="shrink-0 w-10 h-10 rounded-xl bg-body/10 flex items-center justify-center"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#525A69" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.5-3.5a5 5 0 01-6.8 6.8L4.7 22.3l-3-3L12.3 8.6a5 5 0 016.8-6.8l-3.5 3.5z"/></svg></div>
+          <div><p class="text-[15px] font-bold text-ink">PBL · 프로젝트 기반 학습</p><p class="text-[12px] text-faint mt-0.5">실제 문제를 만들고 해결하기</p></div>
+        </div>
+        <div class="px-6 py-4 bg-soft border-t border-line">
+          <p class="text-[10px] font-bold text-faint uppercase tracking-wider mb-1.5">강점</p>
+          <p class="text-[13px] text-body leading-relaxed">협업과 실행력, 배운 것을 실제로 응용하는 힘을 키웁니다.</p>
+        </div>
+        <div class="px-6 py-4 bg-point/5 border-t border-point/15 border-l-4 border-l-point flex-1">
+          <p class="text-[10px] font-bold text-point uppercase tracking-wider mb-1.5">PBS와 다른 점</p>
+          <p class="text-[13px] text-ink leading-relaxed">PBL이 '무엇을 만드는가'에 집중한다면, PBS는 그 설계의 <b class="text-point">바탕이 되는 사고 전제</b>를 다룹니다.</p>
+        </div>
+      </div>
+      <div class="card p-0 overflow-hidden flex flex-col">
+        <div class="p-6 pb-4 flex items-start gap-3">
+          <div class="shrink-0 w-10 h-10 rounded-xl bg-body/10 flex items-center justify-center"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#525A69" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+          <div><p class="text-[15px] font-bold text-ink">IBL · 탐구 기반 학습</p><p class="text-[12px] text-faint mt-0.5">스스로 질문을 세우고 탐구하기</p></div>
+        </div>
+        <div class="px-6 py-4 bg-soft border-t border-line">
+          <p class="text-[10px] font-bold text-faint uppercase tracking-wider mb-1.5">강점</p>
+          <p class="text-[13px] text-body leading-relaxed">호기심과 주도적인 학습 태도를 키우는 데 강합니다.</p>
+        </div>
+        <div class="px-6 py-4 bg-point/5 border-t border-point/15 border-l-4 border-l-point flex-1">
+          <p class="text-[10px] font-bold text-point uppercase tracking-wider mb-1.5">PBS와 다른 점</p>
+          <p class="text-[13px] text-ink leading-relaxed">IBL의 폭넓은 질문 만들기 중에서, PBS는 전제를 발견하고 깨는 <b class="text-point">한 지점을 좁고 깊게</b> 훈련합니다.</p>
+        </div>
+      </div>
+      <div class="card p-0 overflow-hidden flex flex-col">
+        <div class="p-6 pb-4 flex items-start gap-3">
+          <div class="shrink-0 w-10 h-10 rounded-xl bg-body/10 flex items-center justify-center"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#525A69" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 015 5c0 1.5-.7 2.4-1.5 3.3-.6.7-1.2 1.4-1.5 2.4v1.3H10v-1.3c-.3-1-.9-1.7-1.5-2.4C7.7 9.4 7 8.5 7 7a5 5 0 015-5z"/><path d="M9.5 18h5M10 21h4"/></svg></div>
+          <div><p class="text-[15px] font-bold text-ink">메타인지 훈련</p><p class="text-[12px] text-faint mt-0.5">자신의 사고 과정을 점검하기</p></div>
+        </div>
+        <div class="px-6 py-4 bg-soft border-t border-line">
+          <p class="text-[10px] font-bold text-faint uppercase tracking-wider mb-1.5">강점</p>
+          <p class="text-[13px] text-body leading-relaxed">스스로 학습 전략을 돌아보고 조절하는 힘을 기릅니다.</p>
+        </div>
+        <div class="px-6 py-4 bg-point/5 border-t border-point/15 border-l-4 border-l-point flex-1">
+          <p class="text-[10px] font-bold text-point uppercase tracking-wider mb-1.5">PBS와 다른 점</p>
+          <p class="text-[13px] text-ink leading-relaxed">메타인지가 '어떻게 생각하는가' 전반을 본다면, PBS는 <b class="text-point">어떤 전제를 깔고 있는가</b> 한 가지를 정조준합니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY PARENTS CHOOSE PBS -->
+<section class="py-16 md:py-24 bg-panel relative overflow-hidden" id="why-it-works">
+  <div class="orb absolute pointer-events-none" data-par=".08" style="width:380px;height:380px;background:#E9EEFA;top:-6%;left:-8%"></div>
+  <div class="max-w-6xl mx-auto px-5 md:px-8 relative">
+    <div class="text-center max-w-2xl mx-auto reveal">
+      <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">Why parents choose PBS</p>
+      <h2 class="display text-[1.8rem] md:text-[2.7rem] font-extrabold">학원비를 더 쓰는 게 아니라,<br class="hidden md:block" /> 다르게 씁니다</h2>
+      <p class="lede mt-5 text-[15px] text-body max-w-xl mx-auto">이미 하고 계신 학원·문제집·인강은 그대로 두셔도 됩니다. PBS는 그 시간의 <b class="text-ink">흡수력</b>을 바꾸는 훈련입니다.</p>
+    </div>
+
+    <div class="mt-14 grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6">
+      <div class="tilt reveal card p-8" data-d="1">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 icon-float" style="animation-delay:0s; background:rgba(10,102,255,.08)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>
+        </div>
+        <p class="text-[17px] font-extrabold text-ink">같은 학원 시간, 다른 흡수력</p>
+        <p class="mt-3 text-body lede text-[14.5px]">공식을 외우는 도구로만 배우면 강의를 들어도 그때뿐입니다. 왜 그렇게 성립하는지 전제부터 이해하고 있으면, 같은 강의에서 흡수되는 것 자체가 달라집니다.</p>
+      </div>
+      <div class="tilt reveal card p-8" data-d="2">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 icon-float" style="animation-delay:.3s; background:rgba(10,102,255,.08)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 6v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V6l-8-4z"/></svg>
+        </div>
+        <p class="text-[17px] font-extrabold text-ink">암기가 한계에 부딪히기 전에</p>
+        <p class="mt-3 text-body lede text-[14.5px]">학년이 올라갈수록 암기만으로 버티기 어려워지는 시점이 옵니다. PBS는 그 전에, 새로운 유형을 만나도 스스로 질문을 던지는 사고 회로를 미리 만들어 둡니다.</p>
+      </div>
+      <div class="tilt reveal card p-8" data-d="3">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 icon-float" style="animation-delay:.6s; background:rgba(255,184,0,.14)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8a6200" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/><path d="M9 11h4"/></svg>
+        </div>
+        <p class="text-[17px] font-extrabold text-ink">"안 풀린다"가 아니라 "다르게 볼 줄 몰랐다"</p>
+        <p class="mt-3 text-body lede text-[14.5px]">정답을 못 찾는 게 아니라, "이렇게 풀어야 한다"는 전제에 갇혀 있는 것일 수 있습니다. 그 전제를 흔들면, 처음 보는 유형 앞에서도 스스로 질문을 만들어냅니다.</p>
+      </div>
+      <div class="tilt reveal card p-8" data-d="4">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 icon-float" style="animation-delay:.9s; background:rgba(10,102,255,.08)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+        </div>
+        <p class="text-[17px] font-extrabold text-ink">하루 10분, 지금 문제집 그대로</p>
+        <p class="mt-3 text-body lede text-[14.5px]">새로 시간을 내야 하는 게 아닙니다. 지금 풀고 있는 문제 하나를 다르게 바라보는 연습, 하루 10분이면 충분합니다.</p>
+      </div>
+    </div>
+
+    <div class="reveal mt-14 max-w-2xl mx-auto text-center">
+      <p class="display text-[1.4rem] md:text-[1.9rem] font-bold leading-[1.35]">학원은 <span class="text-point">'어떻게(How)'</span>를 가르치고,<br class="hidden sm:block" /> PBS는 <span class="text-point">'왜(Why)'</span>를 묻게 합니다.</p>
+      <p class="mt-6"><a href="academy-guide.html" class="btn btn-ghost px-7 py-3.5 text-[14px] font-semibold">학원 병행 가이드 자세히 보기 →</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STAGE 3 · 효과 (RESULT) ============ -->
+<section class="pt-16 md:pt-24 pb-4 bg-soft">
+  <div class="max-w-3xl mx-auto px-5 md:px-8 stage-head reveal">
+    <span class="stage-badge"><span class="num">3</span>The Result · 효과</span>
+    <h2 class="display text-[1.8rem] md:text-[2.8rem] font-extrabold mt-6">점수가 아니라,<br class="hidden md:block" /> 생각의 태도가 자랍니다</h2>
+    <p class="lede mt-5 text-[15px] text-body">PBS 학습법은 점수를 약속하지 않습니다. 대신 탐정 노트가 아이의 <b class="text-ink">생각하는 습관</b>이 어떻게 자라는지 매주 보여줍니다.</p>
+  </div>
+</section>
+
+<!-- GROWTH -->
+<section class="pb-16 md:pb-24 bg-soft">
+  <div class="max-w-6xl mx-auto px-5 md:px-8">
     <div class="mt-16 growth-bars reveal">
       <div class="gbar" data-pct="82">
         <p class="gname">Question quality</p>
@@ -534,59 +645,18 @@
   </div>
 </section>
 
-<!-- COMPARISON -->
-<section class="py-28 md:py-36 bg-white" id="compare">
-  <div class="max-w-5xl mx-auto px-6">
-    <div class="text-center max-w-2xl mx-auto reveal">
-      <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">Where PBS fits</p>
-      <h2 class="display text-[1.8rem] md:text-[2.7rem] font-extrabold">다른 학습법과는, 어떻게 다를까요?</h2>
-      <p class="lede mt-5 text-[15px] text-body max-w-xl mx-auto">PBS는 기존 학습법을 대체하지 않습니다. 어떤 방식으로 공부하든, 그 밑바탕에 깔린 '전제'를 의심하는 습관을 더하는 훈련입니다.</p>
-    </div>
-
-    <div class="mt-14 grid md:grid-cols-2 gap-4 md:gap-5 reveal">
-      <div class="card p-7">
-        <p class="text-[15px] font-bold text-ink">암기 전략</p>
-        <p class="text-[12px] text-faint mt-1 mb-3">반복 암기 · 요약노트 · 회독</p>
-        <p class="text-[13px] text-body leading-relaxed"><b class="text-ink">강점 —</b> 시험 범위가 명확할 때, 정보를 빠르고 정확하게 저장하는 데 효율적입니다.</p>
-        <p class="text-[13px] text-body leading-relaxed mt-2"><b class="text-ink">PBS와 다른 점 —</b> PBS는 외운 지식을 대체하지 않고, '그 지식이 맞는가'를 검증하는 습관을 더합니다.</p>
-      </div>
-      <div class="card p-7">
-        <p class="text-[15px] font-bold text-ink">PBL · 프로젝트 기반 학습</p>
-        <p class="text-[12px] text-faint mt-1 mb-3">실제 문제를 만들고 해결하기</p>
-        <p class="text-[13px] text-body leading-relaxed"><b class="text-ink">강점 —</b> 협업과 실행력, 배운 것을 실제로 응용하는 힘을 키웁니다.</p>
-        <p class="text-[13px] text-body leading-relaxed mt-2"><b class="text-ink">PBS와 다른 점 —</b> PBL이 '무엇을 만드는가'에 집중한다면, PBS는 그 설계의 바탕이 되는 '어떤 전제로 생각하는가'를 다룹니다.</p>
-      </div>
-      <div class="card p-7">
-        <p class="text-[15px] font-bold text-ink">IBL · 탐구 기반 학습</p>
-        <p class="text-[12px] text-faint mt-1 mb-3">스스로 질문을 세우고 탐구하기</p>
-        <p class="text-[13px] text-body leading-relaxed"><b class="text-ink">강점 —</b> 호기심과 주도적인 학습 태도를 키우는 데 강합니다.</p>
-        <p class="text-[13px] text-body leading-relaxed mt-2"><b class="text-ink">PBS와 다른 점 —</b> IBL의 질문 만들기 전반 중에서, PBS는 '전제를 발견하고 깨는' 한 지점을 좁고 깊게 훈련합니다.</p>
-      </div>
-      <div class="card p-7">
-        <p class="text-[15px] font-bold text-ink">메타인지 훈련</p>
-        <p class="text-[12px] text-faint mt-1 mb-3">자신의 사고 과정을 점검하기</p>
-        <p class="text-[13px] text-body leading-relaxed"><b class="text-ink">강점 —</b> 스스로 학습 전략을 돌아보고 조절하는 힘을 기릅니다.</p>
-        <p class="text-[13px] text-body leading-relaxed mt-2"><b class="text-ink">PBS와 다른 점 —</b> 메타인지가 '어떻게 생각하는가' 전반을 본다면, PBS는 그중 '어떤 전제를 깔고 있는가' 한 가지를 정조준합니다.</p>
-      </div>
-    </div>
-
-    <p class="reveal text-center text-[13px] text-body mt-10 max-w-2xl mx-auto">그래서 PBS는 학원이나 인강, 다른 학습법과 부딪히지 않습니다. 무엇을 배우든 그 앞에서 "이게 정말 그런가?"를 먼저 묻는 습관 — 그 한 가지를 더합니다.</p>
-  </div>
-</section>
-
 <!-- HIGH SCHOOL MESSAGE (dark) -->
-<section class="px-5 py-6">
-  <div class="spotlight relative max-w-6xl mx-auto bg-night rounded-5xl py-24 md:py-32 overflow-hidden">
-    <div class="orb" style="width:380px;height:380px;background:#12203a;top:10%;left:6%;opacity:.9"></div>
-    <div class="orb" style="width:340px;height:340px;background:#0f1830;bottom:8%;right:7%;opacity:.9"></div>
+<section class="px-5 md:px-8 py-6">
+  <div class="spotlight relative max-w-6xl mx-auto bg-night rounded-5xl py-16 md:py-24 overflow-hidden">
+    <div class="orb absolute pointer-events-none" style="width:380px;height:380px;background:#12203a;top:10%;left:6%;opacity:.9"></div>
+    <div class="orb absolute pointer-events-none" style="width:340px;height:340px;background:#0f1830;bottom:8%;right:7%;opacity:.9"></div>
     <div class="relative max-w-4xl mx-auto px-6 md:px-10">
       <div class="text-center max-w-3xl mx-auto reveal">
         <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">For high schoolers · 고1·고2 학부모께</p>
         <h2 class="display text-[1.8rem] md:text-[2.7rem] font-extrabold text-white">고등학생이라 늦었다고요?<br class="hidden md:block" /> 오히려 지금이 적기입니다.</h2>
-        <p class="lede mt-6 text-[15px] md:text-[16px] text-white/60 max-w-2xl mx-auto">
+        <p class="lede mt-6 text-[15px] md:text-[16px] text-white/75 max-w-2xl mx-auto">
           중학교까지는 암기와 반복만으로도 버틸 수 있습니다. 하지만 고등학교는 스스로 사고를 조직해야 하는 구간이라,
-          '푸는 법'만 익힌 아이가 유독 이때 무너집니다. 전제를 의심하는 훈련이 가장 큰 차이를 만드는 지점이 바로 지금이에요.
-          사고의 습관은 나이가 아니라 <b class="text-white">방향</b>의 문제입니다.
+          '푸는 법'만 익힌 아이가 유독 이때 무너집니다. 사고의 습관은 나이가 아니라 <b class="text-white">방향</b>의 문제입니다.
         </p>
       </div>
 
@@ -594,17 +664,17 @@
         <div class="rounded-2xl bg-white/5 border border-white/10 p-7">
           <svg class="mb-4" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg>
           <p class="text-[15px] font-bold text-white">재미있게, 하지만 유치하지 않게</p>
-          <p class="text-[13px] text-white/55 mt-2 leading-relaxed">고등학생 눈높이의 사건으로. 가볍게 몰입하되, 다루는 사고는 진지합니다.</p>
+          <p class="text-[13px] text-white/70 mt-2 leading-relaxed">고등학생 눈높이의 사건으로. 가볍게 몰입하되, 다루는 사고는 진지합니다.</p>
         </div>
         <div class="rounded-2xl bg-white/5 border border-white/10 p-7">
           <svg class="mb-4" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/><circle cx="8" cy="7" r="1.6" fill="#0A66FF" stroke="none"/><circle cx="16" cy="17" r="1.6" fill="#0A66FF" stroke="none"/></svg>
           <p class="text-[15px] font-bold text-white">학원과 부딪히지 않습니다</p>
-          <p class="text-[13px] text-white/55 mt-2 leading-relaxed">학원이 채우는 '지식'과 PBS 학습법이 세우는 '사고 태도'는 다른 축이라, 병행해도 서로를 받쳐줍니다.</p>
+          <p class="text-[13px] text-white/70 mt-2 leading-relaxed">학원이 채우는 '지식'과 PBS 학습법이 세우는 '사고 태도'는 다른 축이라, 병행해도 서로를 받쳐줍니다.</p>
         </div>
         <div class="rounded-2xl bg-white/5 border border-white/10 p-7">
           <svg class="mb-4" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
           <p class="text-[15px] font-bold text-white">6개월, 방향을 바꾸기에 충분한 시간</p>
-          <p class="text-[13px] text-white/55 mt-2 leading-relaxed">단기 점수를 약속하진 않습니다. 다만 6개월은 아이의 생각하는 방향을 다시 세우기에 충분합니다.</p>
+          <p class="text-[13px] text-white/70 mt-2 leading-relaxed">단기 점수를 약속하진 않습니다. 다만 6개월은 아이의 생각하는 방향을 다시 세우기에 충분합니다.</p>
         </div>
       </div>
 
@@ -616,9 +686,41 @@
   </div>
 </section>
 
+<!-- TRUST -->
+<section class="py-16 md:py-24 bg-white border-b border-line">
+  <div class="max-w-5xl mx-auto px-5 md:px-8">
+    <div class="text-center max-w-2xl mx-auto reveal">
+      <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">Trust</p>
+      <h2 class="display text-[1.6rem] md:text-[2.3rem] font-extrabold">확인할 수 있는 것만, 정직하게 말씀드립니다</h2>
+    </div>
+    <div class="mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+      <div class="reveal card p-7 text-center" data-d="1">
+        <svg class="mx-auto mb-4" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+        <p class="text-[14px] font-bold text-ink">현직 교사 감수</p>
+        <p class="text-[12px] text-faint mt-1.5 leading-relaxed">커리큘럼 검수 참여</p>
+      </div>
+      <div class="reveal card p-7 text-center" data-d="2">
+        <svg class="mx-auto mb-4" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+        <p class="text-[14px] font-bold text-ink">상표 · 특허 출원 중</p>
+        <p class="text-[12px] text-faint mt-1.5 leading-relaxed">™ 표기, 등록 완료 시 갱신 예정</p>
+      </div>
+      <div class="reveal card p-7 text-center" data-d="3">
+        <svg class="mx-auto mb-4" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
+        <p class="text-[14px] font-bold text-ink">개인정보 안전 취급</p>
+        <p class="text-[12px] text-faint mt-1.5 leading-relaxed">최소 정보만 수집·보관</p>
+      </div>
+      <div class="reveal card p-7 text-center" data-d="4">
+        <svg class="mx-auto mb-4" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg>
+        <p class="text-[14px] font-bold text-ink">위약금 없는 해지</p>
+        <p class="text-[12px] text-faint mt-1.5 leading-relaxed">언제든 월 단위로 정리 가능</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- PRICING -->
-<section id="pricing" class="py-28 md:py-36 bg-soft border-y border-line">
-  <div class="max-w-6xl mx-auto px-6">
+<section id="pricing" class="py-16 md:py-24 bg-soft border-y border-line">
+  <div class="max-w-6xl mx-auto px-5 md:px-8">
     <div class="text-center max-w-3xl mx-auto reveal">
       <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">Pricing</p>
       <h2 class="display text-[1.8rem] md:text-[2.8rem] font-extrabold">학원 하나 줄이는 값으로,<br class="hidden md:block" /> 공부의 근본을 바꾸세요</h2>
@@ -649,45 +751,13 @@
   </div>
 </section>
 
-<!-- TRUST -->
-<section class="py-24 md:py-32 bg-white border-b border-line">
-  <div class="max-w-5xl mx-auto px-6">
-    <div class="text-center max-w-2xl mx-auto reveal">
-      <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">Trust</p>
-      <h2 class="display text-[1.6rem] md:text-[2.3rem] font-extrabold">확인할 수 있는 것만, 정직하게 말씀드립니다</h2>
-    </div>
-    <div class="mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-      <div class="reveal card p-7 text-center" data-d="1">
-        <svg class="mx-auto mb-4" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-        <p class="text-[14px] font-bold text-ink">현직 교사 감수</p>
-        <p class="text-[12px] text-faint mt-1.5 leading-relaxed">커리큘럼 검수 참여</p>
-      </div>
-      <div class="reveal card p-7 text-center" data-d="2">
-        <svg class="mx-auto mb-4" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
-        <p class="text-[14px] font-bold text-ink">상표 · 특허 출원 중</p>
-        <p class="text-[12px] text-faint mt-1.5 leading-relaxed">™ 표기, 등록 완료 시 갱신 예정</p>
-      </div>
-      <div class="reveal card p-7 text-center" data-d="3">
-        <svg class="mx-auto mb-4" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
-        <p class="text-[14px] font-bold text-ink">개인정보 안전 취급</p>
-        <p class="text-[12px] text-faint mt-1.5 leading-relaxed">최소 정보만 수집·보관</p>
-      </div>
-      <div class="reveal card p-7 text-center" data-d="4">
-        <svg class="mx-auto mb-4" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg>
-        <p class="text-[14px] font-bold text-ink">위약금 없는 해지</p>
-        <p class="text-[12px] text-faint mt-1.5 leading-relaxed">언제든 월 단위로 정리 가능</p>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- FAQ teaser -->
-<section id="faq-teaser" class="py-24 md:py-32 bg-soft">
-  <div class="max-w-3xl mx-auto px-6 text-center reveal">
+<section id="faq-teaser" class="py-16 md:py-24 bg-white">
+  <div class="max-w-3xl mx-auto px-5 md:px-8 text-center reveal">
     <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">FAQ</p>
     <h2 class="display text-[1.6rem] md:text-[2.3rem] font-extrabold mb-10">자주 묻는 질문</h2>
     <div class="text-left space-y-4">
-      <div class="card p-6"><p class="font-bold text-[15px] text-ink">아이가 지루해하지 않을까요?</p><p class="text-[13px] text-body mt-2 leading-relaxed">매일 1개의 짧은 사건(5~10분)으로 구성되어 있고, 정답을 맞히는 게 아니라 전제를 흔드는 인터랙션 중심이라 부담이 적습니다.</p></div>
+      <div class="card p-6"><p class="font-bold text-[15px] text-ink">아이가 지루해하지 않을까요?</p><p class="text-[13px] text-body mt-2 leading-relaxed">매일 1개의 짧은 사건(10분)으로 구성되어 있고, 정답을 맞히는 게 아니라 전제를 흔드는 인터랙션 중심이라 부담이 적습니다.</p></div>
       <div class="card p-6"><p class="font-bold text-[15px] text-ink">학원·인강과 같이 해도 되나요?</p><p class="text-[13px] text-body mt-2 leading-relaxed">네. PBS는 지식을 채우는 학습이 아니라 사고 습관을 훈련하는 축이라 병행해도 부딪히지 않습니다.</p></div>
       <div class="card p-6"><p class="font-bold text-[15px] text-ink">환불이 가능한가요?</p><p class="text-[13px] text-body mt-2 leading-relaxed">첫 7일은 전액 무료이며, 이후에는 월 단위 해지만 가능하고 별도 환불은 제공하지 않습니다.</p></div>
     </div>
@@ -695,12 +765,122 @@
   </div>
 </section>
 
+<!-- SUMMARY CARD NEWS -->
+<section class="py-16 md:py-24 bg-panel relative overflow-hidden" id="summary-cards">
+  <div class="max-w-6xl mx-auto px-5 md:px-8 relative">
+    <div class="text-center max-w-2xl mx-auto reveal">
+      <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">In short</p>
+      <h2 class="display text-[1.8rem] md:text-[2.7rem] font-extrabold">한눈에 보는 PBS 학습법</h2>
+      <p class="lede mt-5 text-[15px] text-body max-w-xl mx-auto">지금까지 살펴본 내용을 5장으로 정리했습니다. 옆으로 넘겨보세요.</p>
+    </div>
+
+    <div class="mt-12 reveal">
+      <div id="cardNewsTrack" class="flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory" style="scrollbar-width:none;-ms-overflow-style:none;scroll-padding-left:1.25rem">
+        <div class="cn-card snap-center shrink-0 w-[78%] sm:w-[46%] md:w-[29%] rounded-[1.75rem] p-8" style="background:linear-gradient(160deg,#2E7CFF,#0B3ACC)">
+          <span class="cn-num">01</span>
+          <p class="relative text-[11px] font-bold tracking-widest uppercase text-white/70 mb-4">Difference</p>
+          <h3 class="relative text-[19px] font-extrabold text-white leading-snug">전제를 의심하는<br/>습관이 남습니다</h3>
+          <p class="relative mt-3 text-[13.5px] text-white/80 leading-relaxed">암기든 PBL이든 IBL이든, 어떤 방식으로 공부하든 상관없습니다. PBS는 그 위에 "왜 그런가"를 검증하는 습관 하나를 더합니다.</p>
+        </div>
+        <div class="cn-card snap-center shrink-0 w-[78%] sm:w-[46%] md:w-[29%] rounded-[1.75rem] p-8" style="background:linear-gradient(160deg,#0B3ACC,#071F73)">
+          <span class="cn-num">02</span>
+          <p class="relative text-[11px] font-bold tracking-widest uppercase text-white/70 mb-4">Fits your routine</p>
+          <h3 class="relative text-[19px] font-extrabold text-white leading-snug">학원은 그대로,<br/>사고 습관만 더합니다</h3>
+          <p class="relative mt-3 text-[13.5px] text-white/80 leading-relaxed">다니는 학원·문제집·인강을 바꿀 필요 없습니다. 같은 시간에 더 깊이 흡수하도록, 하루 10분만 더합니다.</p>
+        </div>
+        <div class="cn-card snap-center shrink-0 w-[78%] sm:w-[46%] md:w-[29%] rounded-[1.75rem] p-8" style="background:linear-gradient(160deg,#0A0E17,#1B2740)">
+          <span class="cn-num" style="color:rgba(255,184,0,.16)">03</span>
+          <p class="relative text-[11px] font-bold tracking-widest uppercase mb-4" style="color:#FFB800">Adaptive</p>
+          <h3 class="relative text-[19px] font-extrabold text-white leading-snug">아이마다 다르게,<br/>적응형으로</h3>
+          <p class="relative mt-3 text-[13.5px] text-white/80 leading-relaxed">같은 학년이라도 막히는 지점은 다릅니다. 특허 출원 중인 적응형 전제탐지 시스템이 아이의 반응을 보고 다음 사건을 조정합니다.</p>
+        </div>
+        <div class="cn-card snap-center shrink-0 w-[78%] sm:w-[46%] md:w-[29%] rounded-[1.75rem] p-8" style="background:linear-gradient(160deg,#0B3ACC,#0A66FF)">
+          <span class="cn-num">04</span>
+          <p class="relative text-[11px] font-bold tracking-widest uppercase text-white/70 mb-4">How we measure</p>
+          <h3 class="relative text-[19px] font-extrabold text-white leading-snug">점수가 아니라<br/>태도로 확인합니다</h3>
+          <p class="relative mt-3 text-[13.5px] text-white/80 leading-relaxed">PBS는 점수를 약속하지 않습니다. 대신 탐정 노트가 "질문의 질", "스스로 세운 계획"이 어떻게 자라는지 매주 보여줍니다.</p>
+        </div>
+        <div class="cn-card snap-center shrink-0 w-[78%] sm:w-[46%] md:w-[29%] rounded-[1.75rem] p-8" style="background:linear-gradient(160deg,#0A0E17,#0B3ACC)">
+          <span class="cn-num">05</span>
+          <p class="relative text-[11px] font-bold tracking-widest uppercase text-white/70 mb-4">For high schoolers</p>
+          <h3 class="relative text-[19px] font-extrabold text-white leading-snug">고등학생도,<br/>지금이 적기입니다</h3>
+          <p class="relative mt-3 text-[13.5px] text-white/80 leading-relaxed">사고의 습관은 나이가 아니라 방향의 문제입니다. 암기만으로 버티기 어려워지는 지금이, 방향을 바꾸기 가장 좋은 시점입니다.</p>
+        </div>
+      </div>
+      <div class="flex justify-center gap-2 mt-7" id="cnDots"></div>
+    </div>
+  </div>
+</section>
+<script>
+(function(){
+  "use strict";
+  var track = document.getElementById('cardNewsTrack');
+  var dotsWrap = document.getElementById('cnDots');
+  if(!track || !dotsWrap) return;
+  var style = document.createElement('style');
+  style.textContent = '#cardNewsTrack::-webkit-scrollbar{display:none}';
+  document.head.appendChild(style);
+  var cards = Array.prototype.filter.call(track.children, function(el){ return el.classList.contains('cn-card'); });
+  var current = 0;
+  function goTo(i){
+    current = (i + cards.length) % cards.length;
+    var card = cards[current];
+    var target = card.offsetLeft - (track.clientWidth - card.offsetWidth) / 2;
+    if(track.scrollTo){ track.scrollTo({ left: Math.max(0, target), behavior: 'smooth' }); }
+    else { track.scrollLeft = Math.max(0, target); }
+  }
+  cards.forEach(function(_, i){
+    var d = document.createElement('span');
+    d.className = 'cn-dot' + (i===0 ? ' on':'');
+    d.setAttribute('role','button');
+    d.setAttribute('aria-label', '카드 ' + (i+1) + '로 이동');
+    d.addEventListener('click', function(){ goTo(i); restartAuto(); });
+    dotsWrap.appendChild(d);
+  });
+  var dots = Array.prototype.slice.call(dotsWrap.children);
+  var ticking = false;
+  track.addEventListener('scroll', function(){
+    if(ticking) return; ticking = true;
+    requestAnimationFrame(function(){
+      var center = track.scrollLeft + track.clientWidth/2;
+      var closest = 0, min = Infinity;
+      cards.forEach(function(c,i){
+        var mid = c.offsetLeft + c.offsetWidth/2;
+        var dist = Math.abs(mid - center);
+        if(dist < min){ min = dist; closest = i; }
+      });
+      current = closest;
+      dots.forEach(function(d,i){ d.classList.toggle('on', i===closest); });
+      ticking = false;
+    });
+  }, { passive:true });
+
+  /* ---- 자동 넘김 (호버/터치 시 정지) ---- */
+  var AUTO_MS = 3500;
+  var autoTimer = null;
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function startAuto(){
+    if(reduced) return;
+    stopAuto();
+    autoTimer = setInterval(function(){ goTo(current + 1); }, AUTO_MS);
+  }
+  function stopAuto(){ if(autoTimer){ clearInterval(autoTimer); autoTimer = null; } }
+  function restartAuto(){ startAuto(); }
+  track.addEventListener('mouseenter', stopAuto);
+  track.addEventListener('mouseleave', startAuto);
+  track.addEventListener('touchstart', stopAuto, { passive:true });
+  track.addEventListener('touchend', function(){ setTimeout(startAuto, 2500); });
+  document.addEventListener('visibilitychange', function(){ if(document.hidden) stopAuto(); else startAuto(); });
+  setTimeout(startAuto, 300);
+})();
+</script>
+
 <!-- FINAL CTA -->
-<section class="spotlight py-28 md:py-36 bg-night text-white text-center relative overflow-hidden">
-  <div class="orb" style="width:420px;height:420px;background:#132038;top:-10%;left:10%;opacity:.9"></div>
-  <div class="max-w-2xl mx-auto px-6 relative reveal">
+<section id="final-cta" class="spotlight py-16 md:py-24 bg-night text-white text-center relative overflow-hidden">
+  <div class="orb absolute pointer-events-none" style="width:420px;height:420px;background:#132038;top:-10%;left:10%;opacity:.9"></div>
+  <div class="max-w-2xl mx-auto px-5 md:px-8 relative reveal">
     <h2 class="display text-[1.9rem] md:text-[2.7rem] font-extrabold text-white">지금, 전제를 의심하는 첫걸음을 떼어보세요</h2>
-    <p class="lede mt-6 text-[15px] text-white/60">가입 없이 3개 사건을 먼저 풀어보거나, 7일 무료 체험으로 바로 시작할 수 있습니다.</p>
+    <p class="lede mt-6 text-[15px] text-white/75">가입 없이 3개 사건을 먼저 풀어보거나, 7일 무료 체험으로 바로 시작할 수 있습니다.</p>
     <div class="mt-10 flex flex-col sm:flex-row justify-center gap-3">
       <a href="onboarding.html" class="btn btn-white btn-magnetic text-[15px] font-semibold px-9 py-4">7일 무료 체험 시작하기</a>
       <a href="demo.html" class="btn btn-magnetic text-[15px] font-semibold px-9 py-4 border border-white/25 text-white hover:bg-white/10">가입 없이 먼저 풀어보기 →</a>
@@ -709,25 +889,53 @@
 </section>
 
 <!-- FOOTER -->
-<footer class="py-14 bg-night text-white/50 border-t border-white/10">
-  <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
-    <div class="flex items-center gap-2.5 font-bold text-[15px] text-white">
-      <svg width="28" height="28" viewBox="0 0 40 40" aria-label="PBS 학습법 로고">
-        <defs><clipPath id="logoClipFooter"><circle cx="20" cy="20" r="18"/></clipPath></defs>
-        <circle cx="20" cy="20" r="18" fill="#0A66FF"/>
-        <rect x="-8" y="17" width="56" height="6.5" fill="#0A0E17" transform="rotate(-34 20 20)" clip-path="url(#logoClipFooter)"/>
-      </svg>
-      PBS 학습법<span class="text-[10px] align-top ml-0.5">™</span>
+<footer class="pt-16 pb-10 bg-night text-white/65 border-t border-white/10">
+  <div class="max-w-6xl mx-auto px-5 md:px-8">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-x-6 gap-y-10 md:gap-8 pb-12 border-b border-white/10">
+      <div class="col-span-2 md:col-span-2 pr-4">
+        <a href="index.html" class="flex items-center gap-2.5 font-bold text-[15px] text-white mb-4">
+          <svg width="28" height="28" viewBox="0 0 40 40" aria-label="PBS 학습법 로고">
+            <defs><clipPath id="logoClipFooter"><circle cx="20" cy="20" r="18"/></clipPath></defs>
+            <circle cx="20" cy="20" r="18" fill="#0A66FF"/>
+            <rect x="-8" y="17" width="56" height="6.5" fill="#0A0E17" transform="rotate(-34 20 20)" clip-path="url(#logoClipFooter)"/>
+          </svg>
+          PBS 학습법<span class="text-[10px] align-top ml-0.5">™</span>
+        </a>
+        <p class="text-[13px] leading-relaxed text-white/45 max-w-[220px]">숨은 전제를 찾아 깨고 다시 짜는, 10~17세를 위한 6개월 사고 훈련.</p>
+      </div>
+      <div>
+        <p class="text-[11px] font-semibold tracking-widest uppercase text-white/35 mb-4">제품</p>
+        <nav class="flex flex-col gap-3 text-[13px]">
+          <a href="course.html" class="hover:text-white transition">코스 소개</a>
+          <a href="pricing.html" class="hover:text-white transition">요금 안내</a>
+          <a href="demo.html" class="hover:text-white transition">무료로 풀어보기</a>
+          <a href="onboarding.html" class="hover:text-white transition">7일 무료 체험</a>
+          <a href="faq.html" class="hover:text-white transition">자주 묻는 질문</a>
+        </nav>
+      </div>
+      <div>
+        <p class="text-[11px] font-semibold tracking-widest uppercase text-white/35 mb-4">회사</p>
+        <nav class="flex flex-col gap-3 text-[13px]">
+          <a href="about.html" class="hover:text-white transition">회사 소개</a>
+          <a href="mission.html" class="hover:text-white transition">우리의 미션</a>
+          <a href="academy-guide.html" class="hover:text-white transition">학원 병행 가이드</a>
+        </nav>
+      </div>
+      <div>
+        <p class="text-[11px] font-semibold tracking-widest uppercase text-white/35 mb-4">비하인드</p>
+        <nav class="flex flex-col gap-3 text-[13px]">
+          <a href="tech.html" class="hover:text-white transition">적응형 전제탐지 시스템</a>
+          <a href="evals.html" class="hover:text-white transition">문항은 어떻게 검증되나요</a>
+        </nav>
+      </div>
     </div>
-    <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[13px]">
-      <a href="#how" class="hover:text-white transition">원리</a>
-      <a href="course.html" class="hover:text-white transition">코스</a>
-      <a href="pricing.html" class="hover:text-white transition">요금</a>
-      <a href="faq.html" class="hover:text-white transition">FAQ</a>
-      <a href="#" class="hover:text-white transition">이용약관</a>
-      <a href="#" class="hover:text-white transition">개인정보처리방침</a>
-    </nav>
-    <p class="text-[12px] text-white/35">© 2026 PBS 학습법. All rights reserved.</p>
+    <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+      <p class="text-[12px] text-white/35">© 2026 PBS 학습법. All rights reserved.</p>
+      <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[12px] text-white/45">
+        <a href="#" class="hover:text-white transition">이용약관</a>
+        <a href="#" class="hover:text-white transition">개인정보처리방침</a>
+      </nav>
+    </div>
   </div>
 </footer>
 
@@ -901,11 +1109,11 @@
       last = idx;
       steps.forEach(function(s, i){ s.classList.toggle("act", i === idx); });
       if (idx === 0){
-        if (trig) trig.textContent = "빨리 푸는";
+        if (trig) trig.textContent = "실력이 확실하다는";
         if (label) label.style.opacity = "0";
         if (scKozy) scKozy.className = "kozy st-idle mx-auto mb-8";
       } else if (idx === 1){
-        if (trig){ trig.classList.add("blast"); setTimeout(function(){ if(trig){ trig.textContent = "깊이 이해하는"; trig.classList.remove("blast"); } }, 700); }
+        if (trig){ trig.classList.add("blast"); setTimeout(function(){ if(trig){ trig.textContent = "이 유형에 훈련됐다는"; trig.classList.remove("blast"); } }, 700); }
         if (label) label.style.opacity = "1";
         if (scKozy) scKozy.className = "kozy st-discover mx-auto mb-8";
       } else {

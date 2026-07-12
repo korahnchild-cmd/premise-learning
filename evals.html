@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PBS 학습법 · 문항은 어떻게 검증되나요</title>
+<meta name="description" content="PBS 학습법의 사건(문항)이 설계되고 검증되는 과정." />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#7A8499", point:"#0A66FF", pointdeep:"#0B3ACC", accent:"#FFB800", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", night:"#0A0E17" },
+    fontFamily: { sans:["Pretendard","Inter","sans-serif"] }, borderRadius:{ "4xl":"2rem","5xl":"2.5rem" },
+  }}};
+</script>
+<style>
+  body{ font-family:"Pretendard","Inter",sans-serif; -webkit-font-smoothing:antialiased; letter-spacing:-.012em; background:#fff; color:#0A0E17; }
+  h1,h2{ letter-spacing:-.03em; }
+  ::selection{ background:rgba(10,102,255,.14); }
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:.5rem; border-radius:9999px; white-space:nowrap; transition:transform .35s cubic-bezier(.16,1,.3,1), background .3s, border-color .3s, color .3s; }
+  .btn-primary{ background:#0A66FF; color:#fff; box-shadow:0 4px 14px rgba(10,102,255,.28); } .btn-primary:hover{ background:#0857db; transform:translateY(-2px); }
+  .btn-ghost{ background:#fff; color:#0A0E17; border:1px solid #DfE3E8; } .btn-ghost:hover{ border-color:#0A66FF; color:#0A66FF; }
+  .card{ background:#fff; border:1px solid #ECEEF1; border-radius:1.25rem; }
+  .kozy svg{ width:100%; height:100%; overflow:visible; }
+  .k-edge{ fill:none; stroke:#0A66FF; stroke-width:2.4; stroke-linejoin:round; stroke-linecap:round; }
+  .k-face{ fill:rgba(10,102,255,.10); } .k-face.top{ fill:rgba(10,102,255,.16); }
+  .k-core{ fill:#0A66FF; filter:drop-shadow(0 0 4px rgba(10,102,255,.85)); }
+  .kozy .kw{ transform-origin:50% 55%; animation:kfloat 4s ease-in-out infinite; }
+  @keyframes kfloat{ 0%,100%{transform:translateY(0) rotate(-6deg)} 50%{transform:translateY(-6px) rotate(6deg)} }
+  .eyebrow{ letter-spacing:.22em; }
+  .stepnum{ width:32px; height:32px; border-radius:9999px; background:#0A66FF; color:#fff; font-size:14px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important} }
+</style>
+</head>
+<body>
+
+<!-- NAV (공통) -->
+<div id="topnav"></div>
+<script src="common.js"></script>
+
+<main class="max-w-3xl mx-auto px-5 py-14">
+
+  <div class="text-center">
+    <div class="kozy mx-auto mb-6" style="width:72px;height:72px">
+      <svg viewBox="0 0 100 100" aria-label="루카"><g class="kw">
+        <polygon class="k-face top" points="50,15 82,33 50,50 18,33"/><polygon class="k-face right" points="82,33 82,67 50,85 50,50"/><polygon class="k-face left" points="18,33 50,50 50,85 18,67"/>
+        <polygon class="k-edge" points="50,15 82,33 82,67 50,85 18,67 18,33"/><path class="k-edge" d="M50,50 L82,33 M50,50 L18,33 M50,50 L50,85"/><circle class="k-core" cx="50" cy="50" r="4.5"/>
+      </g></svg>
+    </div>
+    <p class="eyebrow uppercase text-[11px] font-semibold text-point mb-4">비하인드 · 검증</p>
+    <h1 class="text-[2rem] md:text-[2.7rem] font-extrabold leading-tight">사건(문항)은 어떻게<br class="hidden sm:block" />만들어지고 검증되나요</h1>
+    <p class="mt-5 text-[15px] md:text-[16px] text-body max-w-xl mx-auto leading-relaxed">전제 하나를 잘못 설계하면, 아이는 엉뚱한 지점을 의심하게 됩니다. 그래서 사건 하나가 나오기까지 거치는 과정을 공개합니다.</p>
+  </div>
+
+  <div class="mt-14 space-y-5">
+    <div class="card p-7 flex gap-5">
+      <div class="stepnum">1</div>
+      <div>
+        <h2 class="text-[1.15rem] font-extrabold mb-2">인지과학 기반 설계 원칙</h2>
+        <p class="text-[14.5px] text-body leading-relaxed">모든 사건은 "어떤 전제를 당연하게 여기게 만드는가"를 먼저 정의한 뒤 역으로 설계합니다. 임의로 만든 함정이 아니라, 아이들이 실제로 자주 빠지는 사고의 패턴을 기반으로 문항의 구조를 잡습니다.</p>
+      </div>
+    </div>
+
+    <div class="card p-7 flex gap-5">
+      <div class="stepnum">2</div>
+      <div>
+        <h2 class="text-[1.15rem] font-extrabold mb-2">현직 교사 감수</h2>
+        <p class="text-[14.5px] text-body leading-relaxed">설계된 사건은 현직 교사들의 검토를 거칩니다. 학년 수준에 맞는 난이도인지, 실제 교과 맥락과 동떨어지지 않았는지, 답이 여러 갈래로 갈릴 여지는 없는지를 확인합니다.</p>
+      </div>
+    </div>
+
+    <div class="card p-7 flex gap-5">
+      <div class="stepnum">3</div>
+      <div>
+        <h2 class="text-[1.15rem] font-extrabold mb-2">아이들의 실제 반응으로 개정</h2>
+        <p class="text-[14.5px] text-body leading-relaxed">사건이 공개된 뒤에도 끝이 아닙니다. 아이들이 어떤 지점에서 막히는지, 의도한 전제를 실제로 알아차리는지를 살펴보고, 의도와 다르게 작동하는 문항은 다시 손봅니다.</p>
+      </div>
+    </div>
+
+    <div class="card p-7 flex gap-5" style="border-left:3px solid #0A66FF">
+      <div class="stepnum" style="background:#FFB800;color:#0A0E17">4</div>
+      <div>
+        <h2 class="text-[1.15rem] font-extrabold mb-2">지속적인 업데이트</h2>
+        <p class="text-[14.5px] text-body leading-relaxed">커리큘럼은 한 번 만들고 끝나는 완제품이 아닙니다. 새로운 트랙과 사건이 계속 추가되고, 기존 문항도 계속 다듬어집니다. '검증'은 한 시점의 이벤트가 아니라 지속되는 과정이라고 생각합니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card p-8 mt-10 text-center">
+    <h2 class="text-[1.3rem] font-extrabold">이 과정을 거친 사건, 직접 확인해 보세요</h2>
+    <p class="mt-2 text-[14px] text-body">가입 없이 몇 개 사건을 먼저 풀어볼 수 있습니다.</p>
+    <div class="flex flex-col sm:flex-row justify-center gap-3 mt-6">
+      <a href="demo.html" class="btn btn-primary px-7 py-3.5 text-[14px] font-semibold">가입 없이 먼저 풀어보기 →</a>
+      <a href="tech.html" class="btn btn-ghost px-7 py-3.5 text-[14px] font-semibold">적응형 전제탐지 시스템 보기</a>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="pt-16 pb-10 bg-night text-white/65 border-t border-white/10 mt-16">
+  <div class="max-w-6xl mx-auto px-5 md:px-8">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-x-6 gap-y-10 md:gap-8 pb-12 border-b border-white/10">
+      <div class="col-span-2 md:col-span-2 pr-4">
+        <a href="index.html" class="flex items-center gap-2.5 font-bold text-[15px] text-white mb-4">
+          <svg width="28" height="28" viewBox="0 0 40 40" aria-label="PBS 학습법 로고">
+            <defs><clipPath id="logoClipFooter"><circle cx="20" cy="20" r="18"/></clipPath></defs>
+            <circle cx="20" cy="20" r="18" fill="#0A66FF"/>
+            <rect x="-8" y="17" width="56" height="6.5" fill="#0A0E17" transform="rotate(-34 20 20)" clip-path="url(#logoClipFooter)"/>
+          </svg>
+          PBS 학습법<span class="text-[10px] align-top ml-0.5">™</span>
+        </a>
+        <p class="text-[13px] leading-relaxed text-white/45 max-w-[220px]">숨은 전제를 찾아 깨고 다시 짜는, 10~17세를 위한 6개월 사고 훈련.</p>
+      </div>
+      <div>
+        <p class="text-[11px] font-semibold tracking-widest uppercase text-white/35 mb-4">제품</p>
+        <nav class="flex flex-col gap-3 text-[13px]">
+          <a href="course.html" class="hover:text-white transition">코스 소개</a>
+          <a href="pricing.html" class="hover:text-white transition">요금 안내</a>
+          <a href="demo.html" class="hover:text-white transition">무료로 풀어보기</a>
+          <a href="onboarding.html" class="hover:text-white transition">7일 무료 체험</a>
+          <a href="faq.html" class="hover:text-white transition">자주 묻는 질문</a>
+        </nav>
+      </div>
+      <div>
+        <p class="text-[11px] font-semibold tracking-widest uppercase text-white/35 mb-4">회사</p>
+        <nav class="flex flex-col gap-3 text-[13px]">
+          <a href="about.html" class="hover:text-white transition">회사 소개</a>
+          <a href="mission.html" class="hover:text-white transition">우리의 미션</a>
+          <a href="academy-guide.html" class="hover:text-white transition">학원 병행 가이드</a>
+        </nav>
+      </div>
+      <div>
+        <p class="text-[11px] font-semibold tracking-widest uppercase text-white/35 mb-4">비하인드</p>
+        <nav class="flex flex-col gap-3 text-[13px]">
+          <a href="tech.html" class="hover:text-white transition">적응형 전제탐지 시스템</a>
+          <a href="evals.html" class="hover:text-white transition">문항은 어떻게 검증되나요</a>
+        </nav>
+      </div>
+    </div>
+    <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+      <p class="text-[12px] text-white/35">© 2026 PBS 학습법. All rights reserved.</p>
+      <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[12px] text-white/45">
+        <a href="#" class="hover:text-white transition">이용약관</a>
+        <a href="#" class="hover:text-white transition">개인정보처리방침</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script>
+  if(window.PremiseNav) PremiseNav.render("evals");
+</script>
+</body>
+</html>
