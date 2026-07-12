@@ -15,11 +15,11 @@
       completed: ["in-1", "in-2", "in-3", "in-4", "ba-1"],
       badges: ["🎯", "🔍", "🕵️", "🧩", "🐢"],
       premises: [
-        { subject: "수학", note: "속도 대신 깊이로 전환", badge: "🐢", badgeName: "깊이탐정", date: "오늘" },
-        { subject: "일상", note: "'수 = 행복' 전제를 흔듦", badge: "🧩", badgeName: "행간탐정", date: "어제" },
-        { subject: "언어", note: "'조차'가 심은 전제를 포착", badge: "🕵️", badgeName: "문장탐정", date: "2일 전" },
-        { subject: "상식", note: "'배웠으니 안다'는 전제를 의심", badge: "🔍", badgeName: "구조탐정", date: "3일 전" },
-        { subject: "일상", note: "'열심히=성과' 전제를 알아차림", badge: "🎯", badgeName: "알아차림탐정", date: "4일 전" }
+        { subject: "수학", note: "속도 대신 깊이로 전환", badge: "🐢", badgeName: "깊이파트너", date: "오늘" },
+        { subject: "일상", note: "'수 = 행복' 전제를 흔듦", badge: "🧩", badgeName: "행간파트너", date: "어제" },
+        { subject: "언어", note: "'조차'가 심은 전제를 포착", badge: "🕵️", badgeName: "문장파트너", date: "2일 전" },
+        { subject: "상식", note: "'배웠으니 안다'는 전제를 의심", badge: "🔍", badgeName: "구조파트너", date: "3일 전" },
+        { subject: "일상", note: "'열심히=성과' 전제를 알아차림", badge: "🎯", badgeName: "알아차림파트너", date: "4일 전" }
       ]
     };
   }
@@ -55,7 +55,7 @@
       const items = [
         ["coz", "course.html", "코스"],
         ["daily", "daily.html", "오늘의 사건"],
-        ["note", "notebook.html", "탐정 노트"]
+        ["note", "notebook.html", "파트너 노트"]
       ];
       const links = items.map(([k, href, label]) =>
         `<a href="${href}" class="pn-link${active === k ? " pn-active" : ""}">${label}</a>`

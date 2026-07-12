@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>PBS 학습법 · 탐정 노트</title>
+<title>PBS 학습법 · 파트너 노트</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -62,12 +62,12 @@
   <!-- profile -->
   <div class="flex items-center justify-between flex-wrap gap-4">
     <div>
-      <p class="text-[11px] font-semibold tracking-widest uppercase text-point">탐정 노트</p>
-      <h1 class="text-[1.8rem] md:text-[2.2rem] font-extrabold mt-1"><span id="detName">지호</span> 탐정의 성장 기록</h1>
+      <p class="text-[11px] font-semibold tracking-widest uppercase text-point">파트너 노트</p>
+      <h1 class="text-[1.8rem] md:text-[2.2rem] font-extrabold mt-1"><span id="detName">지호</span> 파트너의 성장 기록</h1>
     </div>
     <div class="flex items-center gap-3">
       <div class="card px-4 py-3 text-center"><p class="text-[20px] font-extrabold text-ink">🔥 <span id="streak">15</span></p><p class="text-[11px] text-body">연속일</p></div>
-      <div class="card px-4 py-3 text-center"><p class="text-[20px] font-extrabold text-ink">Lv.<span id="level">3</span></p><p class="text-[11px] text-body">전제탐정</p></div>
+      <div class="card px-4 py-3 text-center"><p class="text-[20px] font-extrabold text-ink">Lv.<span id="level">3</span></p><p class="text-[11px] text-body">사고분석관</p></div>
       <div class="card px-4 py-3 text-center"><p class="text-[20px] font-extrabold text-point" id="totalPremise">0</p><p class="text-[11px] text-body">발견한 전제</p></div>
     </div>
   </div>
@@ -88,7 +88,7 @@
       <div>
         <p class="text-[12px] font-semibold text-point mb-1">루카의 주간 리포트</p>
         <p class="text-[15px] md:text-[16px] text-ink leading-relaxed">
-          지호 탐정님, 이번 주 정말 멋졌어요! <b>‘틀리면 안 된다’</b>는 전제를 시원하게 깨부순 덕분에 오답 노트가 훨씬 풍성해졌어요.
+          지호 파트너님, 이번 주 정말 멋졌어요! <b>‘틀리면 안 된다’</b>는 전제를 시원하게 깨부순 덕분에 오답 노트가 훨씬 풍성해졌어요.
           특히 <b>‘질문의 전제를 되묻는’</b> 습관이 부쩍 자랐네요. 다음 주엔 비문학의 전제도 함께 폭파해 볼까요?
         </p>
       </div>
@@ -126,7 +126,7 @@
   <!-- badges -->
   <div class="card p-6 mt-4 fadein">
     <div class="flex items-center justify-between mb-5">
-      <p class="text-[15px] font-bold text-ink">획득한 탐정 배지</p>
+      <p class="text-[15px] font-bold text-ink">획득한 파트너 배지</p>
       <p class="text-[12px] text-body"><span id="badgeDone" class="text-point font-bold">0</span> / <span id="badgeTotal">0</span></p>
     </div>
     <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4" id="badges"></div>
@@ -203,10 +203,10 @@
 
   /* ---- badges ---- */
   const badges = [
-    {e:"🔍",n:"구조탐정",got:1},{e:"🧩",n:"행간탐정",got:1},{e:"⚖️",n:"분별탐정",got:1},{e:"🕵️",n:"문장탐정",got:1},
-    {e:"🎯",n:"되물음탐정",got:1},{e:"🐢",n:"깊이탐정",got:1},{e:"🛠️",n:"유도탐정",got:1},{e:"🧭",n:"근거탐정",got:1},
-    {e:"🗺️",n:"구조도탐정",got:0},{e:"🔭",n:"관점탐정",got:0},{e:"💥",n:"오답폭파탐정",got:0},{e:"🏗️",n:"논리건축탐정",got:0},
-    {e:"🔎",n:"조건탐정",got:0},{e:"🔄",n:"재정의탐정",got:0},{e:"🧠",n:"패턴탐정",got:0},{e:"🎲",n:"반례탐정",got:0},
+    {e:"🔍",n:"구조파트너",got:1},{e:"🧩",n:"행간파트너",got:1},{e:"⚖️",n:"분별파트너",got:1},{e:"🕵️",n:"문장파트너",got:1},
+    {e:"🎯",n:"되물음파트너",got:1},{e:"🐢",n:"깊이파트너",got:1},{e:"🛠️",n:"유도파트너",got:1},{e:"🧭",n:"근거파트너",got:1},
+    {e:"🗺️",n:"구조도파트너",got:0},{e:"🔭",n:"관점파트너",got:0},{e:"💥",n:"오답폭파파트너",got:0},{e:"🏗️",n:"논리건축파트너",got:0},
+    {e:"🔎",n:"조건파트너",got:0},{e:"🔄",n:"재정의파트너",got:0},{e:"🧠",n:"패턴파트너",got:0},{e:"🎲",n:"반례파트너",got:0},
   ];
   const bWrap=$("badges"); let bDone=0;
   badges.forEach(b=>{ const got = S.badges.includes(b.e); if(got) bDone++;

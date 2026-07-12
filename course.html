@@ -11,7 +11,7 @@
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <script>
   tailwind.config = { theme: { extend: {
-    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1" },
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", night:"#0A0E17" },
     fontFamily: { sans:["Pretendard","Inter","sans-serif"] }, borderRadius:{ "4xl":"2rem","5xl":"2.5rem" },
   }}};
 </script>
@@ -42,6 +42,10 @@
   .k-core{ fill:#0A66FF; filter:drop-shadow(0 0 4px rgba(10,102,255,.85)); }
   .kozy .kw{ transform-origin:50% 55%; animation:kfloat 4s ease-in-out infinite; }
   @keyframes kfloat{ 0%,100%{transform:translateY(0) rotate(-6deg)} 50%{transform:translateY(-6px) rotate(6deg)} }
+
+  .conste-path{ transition:stroke-dashoffset 1.1s ease; }
+  .conste-svg.drawn .conste-path{ stroke-dashoffset:0; }
+  .conste-pulse{ animation:constePulse 2s ease-in-out infinite; } @keyframes constePulse{0%,100%{opacity:1}50%{opacity:.55}}
 
   .modal { position:fixed; inset:0; z-index:60; display:none; } .modal.open { display:block; }
   .modal-bg { position:absolute; inset:0; background:rgba(10,14,23,.45); backdrop-filter:blur(2px); animation:fade .3s ease; }
@@ -129,22 +133,22 @@
 <script>
   // 사고 복잡도 3단계 경로 (과목 아님 · 소재는 예시)
   const STAGES = [
-    { stage:"입문 · 전제 알아차리기", en:"Level 1", missions:[
-      { id:"in-1", icon:"🎯", src:"일상", title:"공부는 열심히 해야 한다", myth:"노력의 양이 성과를 만든다", premise:"'열심히'만 하면 된다는 전제", reframe:"방향 없는 노력은 헛돈다 — '어떻게'를 먼저 물어야 한다", badge:"🎯", badgeName:"알아차림탐정" },
-      { id:"in-2", icon:"🔍", src:"상식", title:"지구는 둥글다", myth:"배운 지식은 의심할 필요 없다", premise:"'배웠으니 안다'는 전제", reframe:"'어떻게 아는가'를 물으면 지식이 비로소 내 것이 된다", badge:"🔍", badgeName:"구조탐정" },
-      { id:"in-3", icon:"🕵️", src:"언어", title:"\"너조차 그걸 몰랐어\"", myth:"말은 말한 것만 뜻한다", premise:"다들 알고, 너도 당연히 알 거라는 전제", reframe:"말이 몰래 심은 전제를 걷어내면, 그 말은 나를 깎지 못한다", badge:"🕵️", badgeName:"문장탐정" },
-      { id:"in-4", icon:"🧩", src:"일상", title:"친구가 많아야 행복하다", myth:"많을수록 좋다", premise:"'수 = 행복'이라는 전제", reframe:"행복은 관계의 수가 아니라 깊이에서 온다", badge:"🧩", badgeName:"행간탐정" },
+    { stage:"입문 · 전제 알아차리기", en:"Level 1", impact:"완료하면 — 일상 속 '당연한 말'에 자동으로 물음표가 붙기 시작해요", missions:[
+      { id:"in-1", icon:"🎯", src:"일상", title:"공부는 열심히 해야 한다", myth:"노력의 양이 성과를 만든다", premise:"'열심히'만 하면 된다는 전제", reframe:"방향 없는 노력은 헛돈다 — '어떻게'를 먼저 물어야 한다", badge:"🎯", badgeName:"알아차림파트너" },
+      { id:"in-2", icon:"🔍", src:"상식", title:"지구는 둥글다", myth:"배운 지식은 의심할 필요 없다", premise:"'배웠으니 안다'는 전제", reframe:"'어떻게 아는가'를 물으면 지식이 비로소 내 것이 된다", badge:"🔍", badgeName:"구조파트너" },
+      { id:"in-3", icon:"🕵️", src:"언어", title:"\"너조차 그걸 몰랐어\"", myth:"말은 말한 것만 뜻한다", premise:"다들 알고, 너도 당연히 알 거라는 전제", reframe:"말이 몰래 심은 전제를 걷어내면, 그 말은 나를 깎지 못한다", badge:"🕵️", badgeName:"문장파트너" },
+      { id:"in-4", icon:"🧩", src:"일상", title:"친구가 많아야 행복하다", myth:"많을수록 좋다", premise:"'수 = 행복'이라는 전제", reframe:"행복은 관계의 수가 아니라 깊이에서 온다", badge:"🧩", badgeName:"행간파트너" },
     ]},
-    { stage:"기본 · 전제를 흔들어 생각 확장", en:"Level 2", missions:[
-      { id:"ba-1", icon:"🐢", src:"수학", title:"수학은 빨리 푸는 과목이다", myth:"속도 = 실력", premise:"'빠름 = 잘함'이라는 전제", reframe:"깊이 이해하는 과목 — 느리게 판 한 문제가 열 문제를 연다", badge:"🐢", badgeName:"깊이탐정" },
-      { id:"ba-2", icon:"🔭", src:"사회", title:"역사는 승자의 기록이다", myth:"기록된 것이 사실의 전부", premise:"'기록 = 진실'이라는 전제", reframe:"기록되지 않은 관점을 상상하면 역사가 입체가 된다", badge:"🔭", badgeName:"관점탐정" },
-      { id:"ba-3", icon:"💥", src:"학습", title:"틀리면 안 된다", myth:"오답은 실패다", premise:"'틀림 = 실패'라는 전제", reframe:"오답은 사고의 재료 — 틀린 이유를 알면 자산이 된다", badge:"💥", badgeName:"오답폭파탐정" },
-      { id:"ba-4", icon:"🧭", src:"논리", title:"규칙은 원래 그런 것이다", myth:"약속은 의심하지 않는다", premise:"'원래 그래'라는 전제", reframe:"규칙에도 이유가 있다 — 왜 그런지 캐면 원리가 보인다", badge:"🧭", badgeName:"근거탐정" },
+    { stage:"기본 · 전제를 흔들어 생각 확장", en:"Level 2", impact:"완료하면 — 교과 문제를 풀 때 '왜 맞는지'부터 스스로 묻는 습관이 붙어요", missions:[
+      { id:"ba-1", icon:"🐢", src:"수학", title:"수학은 빨리 푸는 과목이다", myth:"속도 = 실력", premise:"'빠름 = 잘함'이라는 전제", reframe:"깊이 이해하는 과목 — 느리게 판 한 문제가 열 문제를 연다", badge:"🐢", badgeName:"깊이파트너" },
+      { id:"ba-2", icon:"🔭", src:"사회", title:"역사는 승자의 기록이다", myth:"기록된 것이 사실의 전부", premise:"'기록 = 진실'이라는 전제", reframe:"기록되지 않은 관점을 상상하면 역사가 입체가 된다", badge:"🔭", badgeName:"관점파트너" },
+      { id:"ba-3", icon:"💥", src:"학습", title:"틀리면 안 된다", myth:"오답은 실패다", premise:"'틀림 = 실패'라는 전제", reframe:"오답은 사고의 재료 — 틀린 이유를 알면 자산이 된다", badge:"💥", badgeName:"오답폭파파트너" },
+      { id:"ba-4", icon:"🧭", src:"논리", title:"규칙은 원래 그런 것이다", myth:"약속은 의심하지 않는다", premise:"'원래 그래'라는 전제", reframe:"규칙에도 이유가 있다 — 왜 그런지 캐면 원리가 보인다", badge:"🧭", badgeName:"근거파트너" },
     ]},
-    { stage:"심화 · 다층적 전제 분석·재구성", en:"Level 3", missions:[
-      { id:"sim-1", icon:"🗺️", src:"독해", title:"비문학 지문에는 하나의 정답이 있다", myth:"글은 한 방향으로 읽힌다", premise:"'필자 = 객관'이라는 전제", reframe:"지문에 깔린 다층적 전제를 추출하면 숨은 논리가 드러난다", badge:"🗺️", badgeName:"구조도탐정" },
-      { id:"sim-2", icon:"🔎", src:"과학", title:"과학 이론은 확정된 사실이다", myth:"이론은 흔들리지 않는다", premise:"'이론 = 불변'이라는 전제", reframe:"이론이 딛고 선 가정을 검증하면, 그 한계와 적용 범위가 보인다", badge:"🔎", badgeName:"조건탐정" },
-      { id:"sim-3", icon:"🔄", src:"시사", title:"경제 기사는 사실을 전한다", myth:"보도는 중립적이다", premise:"'기사 = 사실'이라는 전제", reframe:"기사의 프레임을 걷어내고 대안적 전제로 재구성한다", badge:"🔄", badgeName:"재정의탐정" },
+    { stage:"심화 · 다층적 전제 분석·재구성", en:"Level 3", impact:"완료하면 — 낯선 지문·자료도 숨은 전제를 찾아 스스로 재구성해 읽어내요", missions:[
+      { id:"sim-1", icon:"🗺️", src:"독해", title:"비문학 지문에는 하나의 정답이 있다", myth:"글은 한 방향으로 읽힌다", premise:"'필자 = 객관'이라는 전제", reframe:"지문에 깔린 다층적 전제를 추출하면 숨은 논리가 드러난다", badge:"🗺️", badgeName:"구조도파트너" },
+      { id:"sim-2", icon:"🔎", src:"과학", title:"과학 이론은 확정된 사실이다", myth:"이론은 흔들리지 않는다", premise:"'이론 = 불변'이라는 전제", reframe:"이론이 딛고 선 가정을 검증하면, 그 한계와 적용 범위가 보인다", badge:"🔎", badgeName:"조건파트너" },
+      { id:"sim-3", icon:"🔄", src:"시사", title:"경제 기사는 사실을 전한다", myth:"보도는 중립적이다", premise:"'기사 = 사실'이라는 전제", reframe:"기사의 프레임을 걷어내고 대안적 전제로 재구성한다", badge:"🔄", badgeName:"재정의파트너" },
     ]},
   ];
 
@@ -247,6 +251,43 @@
     return next ? next.id : null;
   }
 
+  // 별자리 좌표 — 미션 수가 같아도 단계별로 다른 모양(입문=마름모, 기본=연 모양, 심화=삼각형)
+  const CONSTELLATIONS = [
+    [[100,10],[180,45],[100,80],[20,45]],
+    [[30,15],[170,25],[140,75],[50,60]],
+    [[100,15],[180,75],[20,75]],
+  ];
+  function buildConstellation(stageIdx, statuses){
+    const pts = CONSTELLATIONS[stageIdx] || CONSTELLATIONS[0];
+    const n = Math.min(pts.length, statuses.length);
+    let d = "M" + pts[0][0] + "," + pts[0][1];
+    for (let i=1; i<n; i++) d += " L" + pts[i][0] + "," + pts[i][1];
+    if (n > 2) d += " Z";
+    const circles = pts.slice(0, n).map((p, i) => {
+      const st = statuses[i];
+      const fill = st === "done" ? "#FFB800" : (st === "current" ? "#0A66FF" : "#DFE3E8");
+      const r = st === "current" ? 5 : 4;
+      return `<circle cx="${p[0]}" cy="${p[1]}" r="${r}" fill="${fill}"${st==="current" ? ' class="conste-pulse"' : ''}/>`;
+    }).join("");
+    return `<svg viewBox="0 0 200 90" class="w-full max-w-[220px] mx-auto mb-4 conste-svg" style="height:66px">
+      <path d="${d}" fill="none" stroke="#0A66FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" class="conste-path"/>
+      ${circles}
+    </svg>`;
+  }
+
+  let costeObserver = null;
+  function observeConstellations(){
+    if (!("IntersectionObserver" in window)) {
+      document.querySelectorAll(".conste-svg").forEach(el => el.classList.add("drawn"));
+      return;
+    }
+    if (costeObserver) costeObserver.disconnect();
+    costeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add("drawn"); costeObserver.unobserve(e.target); } });
+    }, { threshold:.4 });
+    document.querySelectorAll(".conste-svg").forEach(el => costeObserver.observe(el));
+  }
+
   function render(){
     const store = PremiseStore.get();
     const all = allMissions();
@@ -259,22 +300,28 @@
     const inner = $("pathInner");
     inner.innerHTML = "";
 
-    STAGES.forEach(stage => {
+    STAGES.forEach((stage, stageIdx) => {
       const stageWrap = document.createElement("div");
       stageWrap.className = "mb-10";
-      stageWrap.innerHTML = `<p class="en text-[11px] eyebrow uppercase text-point font-semibold mb-1 ml-[76px]">${stage.en}</p>
-        <h2 class="text-[16px] font-bold text-ink mb-5 ml-[76px]">${stage.stage}</h2>`;
 
-      stage.missions.forEach(m => {
+      const statuses = stage.missions.map(m => {
         const isDone = store.completed.includes(m.id);
         const isCurrent = m.id === currentId;
-        const isLocked = !isDone && !isCurrent;
+        return isDone ? "done" : (isCurrent ? "current" : "locked");
+      });
+
+      stageWrap.innerHTML = `${buildConstellation(stageIdx, statuses)}
+        <p class="en text-[11px] eyebrow uppercase text-point font-semibold mb-1 ml-[76px]">${stage.en}</p>
+        <h2 class="text-[16px] font-bold text-ink mb-1 ml-[76px]">${stage.stage}</h2>
+        <p class="text-[13px] text-body mb-5 ml-[76px]">${stage.impact}</p>`;
+
+      stage.missions.forEach((m, mi) => {
+        const nodeState = statuses[mi];
+        const isLocked = nodeState === "locked";
+        const nodeContent = nodeState === "done" ? "✓" : (isLocked ? "🔒" : m.icon);
 
         const row = document.createElement("div");
         row.className = "row relative flex items-center gap-4 mb-4 " + (isLocked ? "locked" : "clickable");
-
-        const nodeState = isDone ? "done" : (isCurrent ? "current" : "locked");
-        const nodeContent = isDone ? "✓" : (isLocked ? "🔒" : m.icon);
 
         row.innerHTML = `
           <div class="node ${nodeState}">${nodeContent}</div>
@@ -297,6 +344,8 @@
       });
       inner.appendChild(stageWrap);
     });
+
+    observeConstellations();
   }
 
   function openModal(m){
@@ -338,7 +387,7 @@
     $("mTitle").textContent = item.title;
     $("mMyth").textContent = item.myth;
     $("mPremise").textContent = "이 트랙은 현재 준비 중입니다.";
-    $("mReframe").textContent = "정식 오픈 시 전제 폭파·탐정 노트 기록까지 체험할 수 있어요.";
+    $("mReframe").textContent = "정식 오픈 시 전제 폭파·파트너 노트 기록까지 체험할 수 있어요.";
     $("mBadge").textContent = "🔔";
     $("mBadgeName").textContent = "Coming soon";
     $("modal").classList.add("open");
@@ -394,8 +443,8 @@
     <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
       <p class="text-[12px] text-white/35">© 2026 PBS 학습법. All rights reserved.</p>
       <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[12px] text-white/45">
-        <a href="#" class="hover:text-white transition">이용약관</a>
-        <a href="#" class="hover:text-white transition">개인정보처리방침</a>
+        <a href="terms.html" class="hover:text-white transition">이용약관</a>
+        <a href="privacy.html" class="hover:text-white transition">개인정보처리방침</a>
       </nav>
     </div>
   </div>

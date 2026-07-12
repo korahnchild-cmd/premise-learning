@@ -11,7 +11,7 @@
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <script>
   tailwind.config = { theme: { extend: {
-    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1" },
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", night:"#0A0E17" },
     fontFamily: { sans:["Pretendard","Inter","sans-serif"] }, borderRadius:{ "4xl":"2rem","5xl":"2.5rem" },
   }}};
 </script>
@@ -54,6 +54,10 @@
   .opt.no{ border-color:#E4A0A0; background:rgba(220,80,80,.05); }
   .opt.dim{ opacity:.5; } .opt:disabled{ cursor:default; }
   .step{ display:none; } .step.show{ display:block; animation:sfade .5s ease both; }
+  #caseCard{ position:relative; overflow:hidden; }
+  #caseCard::after{ content:""; position:absolute; inset:0; pointer-events:none; opacity:0; transition:opacity .35s; background:radial-gradient(200px circle at var(--mx,50%) var(--my,20%), rgba(10,102,255,.12), transparent 65%); }
+  #caseCard:hover::after{ opacity:1; }
+  #caseRing{ transition:stroke-dashoffset .6s ease; }
   @keyframes sfade{ from{opacity:0; transform:translateY(14px)} }
   @media (prefers-reduced-motion:reduce){ *{animation:none!important} }
 </style>
@@ -78,14 +82,21 @@
     <section class="step show text-center" id="s-intro">
       <div class="kozy st-idle mx-auto mb-8" style="width:120px;height:120px" id="k-intro"></div>
       <h1 class="text-[1.9rem] md:text-[2.4rem] font-extrabold leading-tight">전제 3개, <span class="text-point">가입 없이</span> 풀어볼래?</h1>
-      <p class="mt-5 text-[16px] text-body leading-relaxed max-w-md mx-auto">난 전제탐정 루카야. 당연해 보이는 문장 속에 숨은 전제를 찾아 깨는 게 우리가 할 일이야. 딱 3개만 같이 해보자.</p>
-      <button class="btn btn-primary text-[15px] font-semibold px-10 py-4 mt-9" onclick="startCase(0)">시작하기</button>
+      <p class="mt-5 text-[16px] text-body leading-relaxed max-w-md mx-auto">난 사고분석관 루카야. 당연해 보이는 문장 속에 숨은 전제를 찾아 깨는 게 우리가 할 일이야. 딱 3개만 같이 해보자.</p>
+      <p class="mt-8 text-[13px] font-semibold text-faint">학년을 골라줘</p>
+      <div class="grid gap-3 mt-3 max-w-sm mx-auto text-left" id="gradePick"></div>
     </section>
 
     <!-- CASE TEMPLATE (JS로 채움) -->
     <section class="step text-center" id="s-case">
       <div class="flex justify-center gap-1.5 mb-6" id="caseDots"></div>
-      <div class="kozy st-idle mx-auto mb-6" style="width:96px;height:96px" id="k-case"></div>
+      <div class="relative mx-auto mb-6" style="width:96px;height:96px">
+        <svg class="absolute inset-0" width="96" height="96" viewBox="0 0 96 96">
+          <circle cx="48" cy="48" r="44" fill="none" stroke="#ECEEF1" stroke-width="4"/>
+          <circle id="caseRing" cx="48" cy="48" r="44" fill="none" stroke="#0A66FF" stroke-width="4" stroke-linecap="round" stroke-dasharray="276.5" stroke-dashoffset="276.5" transform="rotate(-90 48 48)"/>
+        </svg>
+        <div class="kozy st-idle" style="width:96px;height:96px" id="k-case"></div>
+      </div>
       <p class="text-[12px] font-semibold text-point uppercase tracking-widest mb-2" id="caseLabel"></p>
 
       <div id="caseCard" class="bg-white border border-line rounded-4xl px-6 py-9 mt-2 relative">
@@ -134,50 +145,156 @@
 
   const $ = id => document.getElementById(id);
 
-  // 입문 → 기본 → 심화, 난이도 순으로 3개 (가입 없이 맛보기)
-  const CASES = [
-    {
-      level:"입문 · 전제 알아차리기",
-      text: `공부는 <span class="trigger" id="trig0">열심히</span> 해야 한다`,
-      q: "이 문장이 당연하게 믿고 있는 건 뭘까?",
-      opts: [
-        { label:"많이 할수록 결과가 좋아진다", ok:true, fb:"정확해! '양이 곧 성과'라고 믿는 전제야." },
-        { label:"공부는 원래 지루하다", ok:false, fb:"지루함 얘기가 아니야. '얼마나'에 주목해봐." },
-        { label:"잘하는 사람은 원래 똑똑하다", ok:false, fb:"재능이 아니라 '노력의 양'이 핵심이야." },
-      ],
-      premise: "'열심히'만 하면 된다는 전제",
-      reframe: "방향 없는 노력은 헛돈다 — '어떻게'를 먼저 물어야 한다",
-    },
-    {
-      level:"기본 · 전제를 흔들어 생각 확장",
-      text: `수학은 <span class="trigger" id="trig1">빨리 푸는</span> 과목이다`,
-      q: "숨은 믿음을 골라봐",
-      opts: [
-        { label:"빠르면 잘하는 것이다", ok:true, fb:"정확해! 속도를 실력의 증거로 삼고 있어." },
-        { label:"수학은 어렵다", ok:false, fb:"어렵다는 얘긴 없어. '빨리'에 집중해봐." },
-        { label:"문제는 많이 풀어야 한다", ok:false, fb:"'양'이 아니라 '속도'를 실력으로 보는 게 핵심이야." },
-      ],
-      premise: "'빠름 = 잘함'이라는 전제",
-      reframe: "깊이 이해하는 과목 — 느리게 판 한 문제가 열 문제를 연다",
-    },
-    {
-      level:"심화 · 다층적 전제 분석·재구성",
-      text: `경제 기사는 <span class="trigger" id="trig2">사실</span>을 전한다`,
-      q: "이 문장이 당연하게 믿고 있는 건 뭘까?",
-      opts: [
-        { label:"기사는 있는 그대로를 전달한다", ok:true, fb:"맞아, '기사=객관적 사실'이라는 믿음이 숨어 있어." },
-        { label:"경제는 어렵다", ok:false, fb:"어려움이 아니라 '기사가 곧 사실'이라는 점에 주목해봐." },
-        { label:"기자는 전문가다", ok:false, fb:"전문성이 아니라 '보도=중립'이라는 전제가 핵심이야." },
-      ],
-      premise: "'기사 = 사실'이라는 전제",
-      reframe: "기사의 프레임을 걷어내고 대안적 전제로 재구성한다",
-    },
+  // 학년군 선택 → 학년에 맞는 교과 소재 3개(입문→기본→심화), 톤도 학년별로 분화
+  const GRADES = [
+    { key:"초등", label:"초등 5–6학년", d:"교과서·학교 속 사건으로 시작해요" },
+    { key:"중등", label:"중등 1–3학년", d:"국어·수학·과학 교과 연계 사건" },
+    { key:"고등", label:"고등 1–2학년", d:"통계·그래프·자료 해석 사건" },
   ];
 
+  // 학년군별 루카 톤 — 초등=친구 톤, 중등=선배 톤, 고등=조교 톤 (onboarding.html TONE과 동일한 분화 원칙)
+  const KOZY_LINES = {
+    "초등": { reveal:"짜잔, 이게 바로 숨은 전제야! 반짝이는 단어 보이지?", blast:"이 전제, 우리 같이 팡 터뜨려볼까? 눌러봐!", insight:"짠! 방향이 확 바뀌었지? 이게 바로 PBS 학습법이야." },
+    "중등": { reveal:"바로 이거야. 다들 놓치는 지점이 여기 있었네.", blast:"이제 이 전제를 깰 차례야. 눌러봐.", insight:"봐, 관점이 완전히 달라졌지? 이게 PBS 학습법이 하는 일이야." },
+    "고등": { reveal:"이게 그 전제야. 표시된 부분이 근거 없이 깔려 있던 가정이지.", blast:"이 전제를 검증해서 깨볼까. 눌러봐.", insight:"관점이 재구성된 게 보이지? 이게 PBS 학습법의 사고 과정이야." },
+  };
+
+  // 학년별 교과서·시험에 나올 법한 소재로 구성 (입문 → 기본 → 심화)
+  const CASES_BY_GRADE = {
+    "초등": [
+      {
+        level:"입문 · 전제 알아차리기",
+        text: `이 글은 <span class="trigger" id="trig0">사실만</span>을 전달하고 있다`,
+        q: "이 문장이 당연하게 믿고 있는 건 뭘까?",
+        opts: [
+          { label:"설명문은 있는 그대로만 쓴다", ok:true, fb:"맞아! '설명문=순수 사실 전달'이라고 믿고 있어." },
+          { label:"설명문은 재미가 없다", ok:false, fb:"재미 얘기가 아니야. '사실만'이라는 말에 주목해봐." },
+          { label:"설명문은 짧게 써야 한다", ok:false, fb:"길이가 아니라 '무엇을 담았는지'가 핵심이야." },
+        ],
+        premise: "'설명문 = 순수한 사실 전달'이라는 전제",
+        reframe: "설명문도 필자가 무엇을 넣고 뺄지 고른 글이다 — 완전한 사실 전달은 없다",
+      },
+      {
+        level:"기본 · 전제를 흔들어 생각 확장",
+        text: `<span class="trigger" id="trig1">둘레가 길수록</span> 넓이도 크다`,
+        q: "숨은 믿음을 골라봐",
+        opts: [
+          { label:"둘레가 크면 넓이도 크다고 생각한다", ok:true, fb:"정확해! 둘레와 넓이를 같은 거라고 믿고 있어." },
+          { label:"도형은 어렵다", ok:false, fb:"어려움이 아니라 '둘레'와 '넓이'의 관계에 주목해봐." },
+          { label:"도형은 각이 많을수록 좋다", ok:false, fb:"각의 개수가 아니라 둘레·넓이 관계가 핵심이야." },
+        ],
+        premise: "'둘레가 크다 = 넓이도 크다'는 전제",
+        reframe: "좁고 긴 도형은 둘레는 길어도 넓이는 작을 수 있다 — 둘레와 넓이는 별개다",
+      },
+      {
+        level:"심화 · 다층적 전제 분석·재구성",
+        text: `교과서 내용은 있는 그대로의 <span class="trigger" id="trig2">역사적 사실</span>이다`,
+        q: "이 문장이 당연하게 믿고 있는 건 뭘까?",
+        opts: [
+          { label:"교과서는 객관적으로 쓰여 있다", ok:true, fb:"맞아, '교과서=객관적 사실'이라고 믿고 있어." },
+          { label:"교과서는 지루하다", ok:false, fb:"지루함이 아니라 '있는 그대로'라는 말에 주목해봐." },
+          { label:"역사는 외우는 과목이다", ok:false, fb:"암기 얘기가 아니라 '누가 썼는지'가 핵심이야." },
+        ],
+        premise: "'교과서 = 객관적 사실'이라는 전제",
+        reframe: "교과서도 누군가 고른 관점이 담긴 기록이다 — 다르게 쓰일 수도 있었다",
+      },
+    ],
+    "중등": [
+      {
+        level:"입문 · 전제 알아차리기",
+        text: `설명문은 필자 의견이 없는 <span class="trigger" id="trig0">객관적인</span> 글이다`,
+        q: "이 문장이 당연하게 믿고 있는 건 뭘까?",
+        opts: [
+          { label:"설명문에는 필자의 관점이 안 들어간다", ok:true, fb:"정확해! '설명문=무의견'이라고 믿고 있어." },
+          { label:"설명문은 딱딱하다", ok:false, fb:"문체가 아니라 '객관성'에 주목해봐." },
+          { label:"설명문은 정보 전달용이다", ok:false, fb:"목적이 아니라 '의견이 없다'는 전제가 핵심이야." },
+        ],
+        premise: "'설명문 = 무의견'이라는 전제",
+        reframe: "완전한 객관은 없다 — 무엇을 강조할지는 필자가 선택한다",
+      },
+      {
+        level:"기본 · 전제를 흔들어 생각 확장",
+        text: `<span class="trigger" id="trig1">일차방정식은 항상</span> 해가 하나다`,
+        q: "숨은 믿음을 골라봐",
+        opts: [
+          { label:"일차방정식은 해가 딱 하나만 나온다고 생각한다", ok:true, fb:"맞아! '일차방정식=해 하나'라고 믿고 있어." },
+          { label:"방정식은 어렵다", ok:false, fb:"난이도가 아니라 '항상'이라는 말에 주목해봐." },
+          { label:"방정식은 계산이 복잡하다", ok:false, fb:"복잡함이 아니라 해의 개수가 핵심이야." },
+        ],
+        premise: "'일차방정식 = 해가 항상 하나'라는 전제",
+        reframe: "계수에 따라 해가 없거나 무수히 많을 수도 있다",
+      },
+      {
+        level:"심화 · 다층적 전제 분석·재구성",
+        text: `한 번의 실험 결과는 곧 <span class="trigger" id="trig2">과학적 사실</span>이다`,
+        q: "이 문장이 당연하게 믿고 있는 건 뭘까?",
+        opts: [
+          { label:"한 번 나온 결과를 바로 사실로 받아들인다", ok:true, fb:"맞아, '한 번의 결과=사실'이라고 믿고 있어." },
+          { label:"실험은 위험하다", ok:false, fb:"위험성이 아니라 '한 번의 결과'에 주목해봐." },
+          { label:"과학은 정답이 하나다", ok:false, fb:"정답 개수가 아니라 '재현성'이 핵심이야." },
+        ],
+        premise: "'한 번의 실험 결과 = 과학적 사실'이라는 전제",
+        reframe: "과학적 사실이 되려면 반복 실험으로 재현돼야 한다",
+      },
+    ],
+    "고등": [
+      {
+        level:"입문 · 전제 알아차리기",
+        text: `<span class="trigger" id="trig0">통계로 뒷받침된</span> 주장은 객관적이다`,
+        q: "이 문장이 당연하게 믿고 있는 건 뭘까?",
+        opts: [
+          { label:"숫자가 있으면 무조건 객관적이라 생각한다", ok:true, fb:"정확해! '통계=객관'이라고 믿고 있어." },
+          { label:"통계는 이해하기 어렵다", ok:false, fb:"난이도가 아니라 '객관성'에 주목해봐." },
+          { label:"통계는 숫자만 다룬다", ok:false, fb:"숫자 자체가 아니라 '무엇을 강조했는지'가 핵심이야." },
+        ],
+        premise: "'통계 자료 = 객관적 사실'이라는 전제",
+        reframe: "같은 자료도 무엇을 강조하느냐, 어떤 표본을 썼느냐에 따라 다른 결론을 만들 수 있다",
+      },
+      {
+        level:"기본 · 전제를 흔들어 생각 확장",
+        text: `그래프가 <span class="trigger" id="trig1">우상향하면</span> 두 변수는 인과관계다`,
+        q: "숨은 믿음을 골라봐",
+        opts: [
+          { label:"함께 증가하면 하나가 다른 하나의 원인이라고 생각한다", ok:true, fb:"맞아! '상관관계=인과관계'라고 믿고 있어." },
+          { label:"그래프는 복잡하다", ok:false, fb:"복잡함이 아니라 '우상향=원인'이라는 연결에 주목해봐." },
+          { label:"그래프는 정확한 값을 보여준다", ok:false, fb:"정확성이 아니라 '인과'로 해석하는 게 핵심이야." },
+        ],
+        premise: "'상관관계 = 인과관계'라는 전제",
+        reframe: "그래프의 경향은 상관을 보여줄 뿐, 원인을 증명하지는 않는다",
+      },
+      {
+        level:"심화 · 다층적 전제 분석·재구성",
+        text: `표본조사 결과는 전체 집단을 <span class="trigger" id="trig2">정확히 대표</span>한다`,
+        q: "이 문장이 당연하게 믿고 있는 건 뭘까?",
+        opts: [
+          { label:"일부만 조사해도 전체와 똑같다고 생각한다", ok:true, fb:"맞아, '표본=전체'라고 믿고 있어." },
+          { label:"표본조사는 시간이 오래 걸린다", ok:false, fb:"시간이 아니라 '대표성'에 주목해봐." },
+          { label:"표본조사는 통계학자만 할 수 있다", ok:false, fb:"누가 하느냐가 아니라 대표성 여부가 핵심이야." },
+        ],
+        premise: "'표본조사 결과 = 전체의 정확한 대표'라는 전제",
+        reframe: "표본의 크기와 선정 방식에 따라 대표성이 크게 달라진다",
+      },
+    ],
+  };
+
+  let tier = null;   // 선택된 학년군: 초등/중등/고등
+  let CASES = [];    // tier에 맞춰 채워짐
   let ci = 0;      // case index (0~2)
   let sub = 0;     // sub-step within a case: choice → reveal → blast → insight
   let answered = false;
   const SUBS = ["choice","reveal","blast","insight"];
+
+  function renderGradePick(){
+    const w = $("gradePick"); w.innerHTML = "";
+    GRADES.forEach(g=>{
+      const b = document.createElement("button");
+      b.className = "w-full text-left border border-line bg-white rounded-2xl px-5 py-4 hover:border-point transition";
+      b.innerHTML = `<span class="block text-[15px] font-bold text-ink">${g.label}</span><span class="block text-[13px] text-body mt-0.5">${g.d}</span>`;
+      b.onclick = () => { tier = g.key; CASES = CASES_BY_GRADE[tier]; startCase(0); };
+      w.appendChild(b);
+    });
+  }
+  renderGradePick();
 
   function setK(state){ $("k-case").className = "kozy mx-auto mb-6 "+state; $("k-case").style.width="96px"; $("k-case").style.height="96px"; }
 
@@ -193,10 +310,18 @@
     $("caseDots").innerHTML = CASES.map((_,k)=>`<span class="inline-block w-2.5 h-2.5 rounded-full ${k<ci?'bg-point':k===ci?'bg-point/50':'bg-line'}"></span>`).join("");
   }
 
+  const RING_CIRC = 276.5;
+  function setRing(pct){
+    const ring = $("caseRing"); if(!ring) return;
+    ring.style.strokeDashoffset = RING_CIRC * (1 - pct/100);
+  }
+
   function renderCase(){
     const C = CASES[ci];
     caseDots();
-    $("prog").style.width = Math.round(((ci + (sub+1)/4) / CASES.length) * 100) + "%";
+    const pct = Math.round(((ci + (sub+1)/4) / CASES.length) * 100);
+    $("prog").style.width = pct + "%";
+    setRing(pct);
     $("caseLabel").textContent = C.level;
     $("caseText").innerHTML = C.text;
     const trig = document.getElementById("trig"+ci);
@@ -211,15 +336,15 @@
       html = `<p class="text-[13px] text-body mb-2.5">${C.q}</p><div class="space-y-2" id="copts"></div><p id="cfb" class="text-[14px] mt-3 leading-relaxed hidden"></p>`;
     } else if(st === "reveal"){
       setK("st-scan"); if(trig) trig.classList.add("glow");
-      $("caseKozy").textContent = "바로 이게 숨은 전제야. 반짝이는 단어 보이지?";
+      $("caseKozy").textContent = KOZY_LINES[tier].reveal;
       html = `<div class="rounded-2xl bg-soft border border-line p-4"><p class="text-[11px] font-semibold tracking-widest uppercase text-faint mb-1">숨은 전제</p><p class="text-[15px] font-semibold text-ink">${C.premise}</p></div>`;
     } else if(st === "blast"){
       setK("st-idle"); btn.style.display = "none";
-      $("caseKozy").textContent = "이 전제를 폭파해볼까? 눌러봐!";
+      $("caseKozy").textContent = KOZY_LINES[tier].blast;
       html = `<button id="cblast" class="btn btn-primary w-full py-3.5 text-[15px] font-semibold">전제 폭파하기 💥</button>`;
     } else if(st === "insight"){
       setK("st-discover"); setTimeout(()=>setK("st-octa"),1800);
-      $("caseKozy").textContent = "방향이 바뀌었지? 이게 바로 PBS 학습법이야.";
+      $("caseKozy").textContent = KOZY_LINES[tier].insight;
       html = `<div class="rounded-2xl bg-point/5 border border-point/25 p-4"><p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-1">전제 폭파</p><p class="text-[15px] font-semibold text-ink">${C.reframe}</p></div>`;
       btn.textContent = (ci < CASES.length - 1) ? "다음 사건 →" : "결과 보기 →";
     }
@@ -249,11 +374,21 @@
   $("caseBtn").addEventListener("click", ()=>{
     if(SUBS[sub] === "insight"){
       if(ci < CASES.length - 1){ startCase(ci+1); }
-      else { $("s-case").classList.remove("show"); $("s-done").classList.add("show"); $("prog").style.width = "100%"; }
+      else { $("s-case").classList.remove("show"); $("s-done").classList.add("show"); $("prog").style.width = "100%"; setRing(100); }
       return;
     }
     sub++; renderCase();
   });
+
+  // 확대경 스포트라이트 — 사건 카드 위 마우스 위치에 부드러운 하이라이트
+  (function(){
+    const card = $("caseCard"); if(!card) return;
+    card.addEventListener("mousemove", (e)=>{
+      const r = card.getBoundingClientRect();
+      card.style.setProperty("--mx", ((e.clientX - r.left) / r.width * 100) + "%");
+      card.style.setProperty("--my", ((e.clientY - r.top) / r.height * 100) + "%");
+    });
+  })();
 </script>
 
 <!-- FOOTER -->
@@ -300,8 +435,8 @@
     <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
       <p class="text-[12px] text-white/35">© 2026 PBS 학습법. All rights reserved.</p>
       <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[12px] text-white/45">
-        <a href="#" class="hover:text-white transition">이용약관</a>
-        <a href="#" class="hover:text-white transition">개인정보처리방침</a>
+        <a href="terms.html" class="hover:text-white transition">이용약관</a>
+        <a href="privacy.html" class="hover:text-white transition">개인정보처리방침</a>
       </nav>
     </div>
   </div>

@@ -11,7 +11,7 @@
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <script>
   tailwind.config = { theme: { extend: {
-    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1" },
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", night:"#0A0E17" },
     fontFamily: { sans:["Pretendard","Inter","sans-serif"] }, borderRadius:{ "4xl":"2rem","5xl":"2.5rem" },
   }}};
 </script>
@@ -84,7 +84,7 @@
     <!-- STEP 0 · WELCOME -->
     <section class="step show text-center" id="s0">
       <div class="kozy st-idle mx-auto mb-8" style="width:132px;height:132px" id="k0"></div>
-      <h1 class="text-[2rem] md:text-[2.5rem] font-extrabold leading-tight">안녕, 파트너!<br>난 전제탐정 <span class="text-point">루카</span>야.</h1>
+      <h1 class="text-[2rem] md:text-[2.5rem] font-extrabold leading-tight">안녕, 파트너!<br>난 사고분석관 <span class="text-point">루카</span>야.</h1>
       <p class="mt-5 text-[16px] text-body leading-relaxed max-w-md mx-auto">앞으로 우리는 문장과 지식 속에 숨은 <b class="text-ink">전제</b>를 함께 찾아낼 거야. 준비됐어? 몇 가지만 물어볼게.</p>
       <button class="btn btn-primary text-[15px] font-semibold px-10 py-4 mt-9" onclick="go(1)">시작하기</button>
     </section>
@@ -92,32 +92,41 @@
     <!-- STEP 1 · GRADE -->
     <section class="step text-center" id="s1">
       <div class="kozy st-idle mx-auto mb-6" style="width:84px;height:84px" id="k1"></div>
-      <h2 class="text-[1.6rem] md:text-[2rem] font-extrabold">몇 학년 탐정이야?</h2>
+      <h2 class="text-[1.6rem] md:text-[2rem] font-extrabold">몇 학년 파트너야?</h2>
       <p class="mt-3 text-[15px] text-body">네 수준에 딱 맞는 사건을 골라줄게.</p>
       <div class="grid gap-3 mt-8 text-left" id="grades"></div>
       <div class="flex gap-3 mt-8"><button class="btn btn-ghost flex-1 py-3.5 text-[14px] font-semibold" onclick="go(0)">← 뒤로</button><button id="n1" class="btn btn-primary flex-1 py-3.5 text-[14px] font-semibold" onclick="go(2)" disabled>다음</button></div>
     </section>
 
-    <!-- STEP 2 · NAME -->
+    <!-- STEP 2 · SCORE BAND (성적대) -->
     <section class="step text-center" id="s2">
-      <div class="kozy st-idle mx-auto mb-6" style="width:84px;height:84px" id="k2"></div>
-      <h2 class="text-[1.6rem] md:text-[2rem] font-extrabold">탐정 이름을 정해줘</h2>
-      <p class="mt-3 text-[15px] text-body" id="nameSub">탐정 노트에 이 이름으로 기록될 거야.</p>
-      <input id="nameInput" type="text" maxlength="12" placeholder="예: 지호" class="w-full mt-8 rounded-2xl border border-line bg-white px-5 py-4 text-[16px] text-center outline-none focus:border-point transition" />
-      <div class="flex gap-3 mt-8"><button class="btn btn-ghost flex-1 py-3.5 text-[14px] font-semibold" onclick="go(1)">← 뒤로</button><button class="btn btn-primary flex-1 py-3.5 text-[14px] font-semibold" onclick="go(3)">다음</button></div>
+      <div class="kozy st-idle mx-auto mb-6" style="width:84px;height:84px" id="k2b"></div>
+      <h2 class="text-[1.6rem] md:text-[2rem] font-extrabold">요즘 시험 문제, 어느 정도로 느껴져?</h2>
+      <p class="mt-3 text-[15px] text-body">난이도를 딱 맞게 골라줄게. 정답을 잘 맞히고 못 맞히고는 상관없어.</p>
+      <div class="grid gap-3 mt-8 text-left" id="scoreBands"></div>
+      <div class="flex gap-3 mt-8"><button class="btn btn-ghost flex-1 py-3.5 text-[14px] font-semibold" onclick="go(1)">← 뒤로</button><button id="n2" class="btn btn-primary flex-1 py-3.5 text-[14px] font-semibold" onclick="go(3)" disabled>다음</button></div>
     </section>
 
-    <!-- STEP 3 · INTEREST (소재 취향) -->
+    <!-- STEP 3 · NAME -->
     <section class="step text-center" id="s3">
+      <div class="kozy st-idle mx-auto mb-6" style="width:84px;height:84px" id="k2"></div>
+      <h2 class="text-[1.6rem] md:text-[2rem] font-extrabold">파트너 이름을 정해줘</h2>
+      <p class="mt-3 text-[15px] text-body" id="nameSub">파트너 노트에 이 이름으로 기록될 거야.</p>
+      <input id="nameInput" type="text" maxlength="12" placeholder="예: 지호" class="w-full mt-8 rounded-2xl border border-line bg-white px-5 py-4 text-[16px] text-center outline-none focus:border-point transition" />
+      <div class="flex gap-3 mt-8"><button class="btn btn-ghost flex-1 py-3.5 text-[14px] font-semibold" onclick="go(2)">← 뒤로</button><button class="btn btn-primary flex-1 py-3.5 text-[14px] font-semibold" onclick="go(4)">다음</button></div>
+    </section>
+
+    <!-- STEP 4 · INTEREST (소재 취향) -->
+    <section class="step text-center" id="s4">
       <div class="kozy st-idle mx-auto mb-6" style="width:84px;height:84px" id="k3"></div>
       <h2 class="text-[1.6rem] md:text-[2rem] font-extrabold">어떤 이야기로 시작해볼까?</h2>
       <p class="mt-3 text-[15px] text-body" id="subSub">전제는 모든 곳에 숨어 있어. 네 취향에 맞는 사건부터 꺼내줄게 — 과목이 아니라 '소재'야.</p>
       <div class="grid grid-cols-2 gap-3 mt-8" id="subjects"></div>
-      <div class="flex gap-3 mt-8"><button class="btn btn-ghost flex-1 py-3.5 text-[14px] font-semibold" onclick="go(2)">← 뒤로</button><button id="n3" class="btn btn-primary flex-1 py-3.5 text-[14px] font-semibold" onclick="go(4)" disabled>다음</button></div>
+      <div class="flex gap-3 mt-8"><button class="btn btn-ghost flex-1 py-3.5 text-[14px] font-semibold" onclick="go(3)">← 뒤로</button><button id="n3" class="btn btn-primary flex-1 py-3.5 text-[14px] font-semibold" onclick="go(5)" disabled>다음</button></div>
     </section>
 
-    <!-- STEP 4 · MINI LESSON DEMO -->
-    <section class="step text-center" id="s4">
+    <!-- STEP 5 · MINI LESSON DEMO -->
+    <section class="step text-center" id="s5">
       <div class="kozy st-idle mx-auto mb-6" style="width:96px;height:96px" id="k4"></div>
       <h2 class="text-[1.6rem] md:text-[2rem] font-extrabold">전제가 뭐냐고?</h2>
       <p class="mt-3 text-[15px] text-body" id="demoIntroSub">한 번만 같이 풀어보면 바로 감이 와.</p>
@@ -131,13 +140,13 @@
 
       <p class="mt-5 text-[15px] text-ink leading-relaxed" id="demoKozy"></p>
       <button id="demoBtn" class="btn btn-primary w-full py-3.5 text-[15px] font-semibold mt-5">계속</button>
-      <button class="mt-4 text-[13px] text-faint hover:text-ink transition" onclick="go(3)">← 뒤로</button>
+      <button class="mt-4 text-[13px] text-faint hover:text-ink transition" onclick="go(4)">← 뒤로</button>
     </section>
 
-    <!-- STEP 5 · DONE -->
-    <section class="step text-center" id="s5">
+    <!-- STEP 6 · DONE -->
+    <section class="step text-center" id="s6">
       <div class="kozy st-praise mx-auto mb-8" style="width:132px;height:132px" id="k5"></div>
-      <h2 class="text-[2rem] md:text-[2.5rem] font-extrabold leading-tight">준비 끝, <span class="text-point" id="doneName">파트너</span> 탐정!</h2>
+      <h2 class="text-[2rem] md:text-[2.5rem] font-extrabold leading-tight">준비 끝, <span class="text-point" id="doneName">친구</span> 파트너!</h2>
       <p class="mt-5 text-[16px] text-body leading-relaxed max-w-md mx-auto" id="doneSub">방금 넌 첫 전제를 폭파했어. 진짜 사건은 지금부터야. 오늘의 사건이 널 기다리고 있어.</p>
       <div class="mt-9 flex flex-col items-center gap-3">
         <a href="daily.html" class="btn btn-primary text-[15px] font-semibold px-10 py-4">첫 사건 시작하기 →</a>
@@ -166,17 +175,17 @@
     </g>
     <circle class="ring" cx="50" cy="50" r="30"/><circle class="k-core" cx="50" cy="50" r="4.5"/>
   </g></g></svg>`; }
-  ["k0","k1","k2","k3","k4","k5"].forEach(id=>{ document.getElementById(id).innerHTML = kozySVG(); });
+  ["k0","k1","k2b","k2","k3","k4","k5"].forEach(id=>{ document.getElementById(id).innerHTML = kozySVG(); });
 
-  const profile = { grade:null, tier:null, name:"", subject:null };
+  const profile = { grade:null, tier:null, name:"", subject:null, scoreBand:null };
   let step = 0;
-  const total = 6;
+  const total = 7;
   const $ = id => document.getElementById(id);
 
   // 학년군별 루카 톤 분화 — 초등(입문)=친구 톤, 중등(핵심)=선배 톤, 고등(심화)=조교 톤
   const TONE = {
     "입문": {
-      nameSub: "탐정 노트에 이 이름으로 기록될 거야. 멋진 이름으로 골라봐!",
+      nameSub: "파트너 노트에 이 이름으로 기록될 거야. 멋진 이름으로 골라봐!",
       subSub: "전제는 어디에나 숨어있어! 네가 좋아하는 이야기부터 같이 찾아보자.",
       demoIntroSub: "한 번만 같이 풀어보면 바로 감이 올 거야!",
       demoLines: [
@@ -188,7 +197,7 @@
       doneSub: "방금 첫 번째 전제를 팡 터뜨렸어! 진짜 재밌는 사건은 지금부터야. 오늘의 사건이 기다리고 있어."
     },
     "핵심": {
-      nameSub: "탐정 노트에 계속 남을 이름이야. 마음에 드는 걸로 정해봐.",
+      nameSub: "파트너 노트에 계속 남을 이름이야. 마음에 드는 걸로 정해봐.",
       subSub: "전제는 과목을 가리지 않아. 관심 있는 소재부터 시작해서 감을 잡아보자.",
       demoIntroSub: "말로 설명하는 것보다, 한 번 직접 풀어보는 게 빨라.",
       demoLines: [
@@ -200,7 +209,7 @@
       doneSub: "방금 전제 하나를 제대로 깼어. 앞으로 만날 사건들은 더 흥미로울 거야. 오늘의 사건부터 가보자."
     },
     "심화": {
-      nameSub: "탐정 노트에 기록될 이름이야. 원하는 대로 정해도 좋아.",
+      nameSub: "파트너 노트에 기록될 이름이야. 원하는 대로 정해도 좋아.",
       subSub: "전제는 분야를 가리지 않고 숨어 있어. 익숙한 소재부터 분석을 시작해보자.",
       demoIntroSub: "직접 하나 분석해보면 빠르게 이해될 거야.",
       demoLines: [
@@ -227,8 +236,8 @@
     $("s"+step).classList.add("show");
     $("prog").style.width = Math.round((step+1)/total*100)+"%";
     window.scrollTo({top:0,behavior:"smooth"});
-    if(step===4){ resetDemo(); }
-    if(step===5){ $("doneName").textContent = profile.name || "파트너"; saveProfile(); }
+    if(step===5){ resetDemo(); }
+    if(step===6){ $("doneName").textContent = profile.name || "친구"; saveProfile(); }
   }
 
   // grades
@@ -243,6 +252,20 @@
     el.innerHTML=`<div><p class="text-[15px] font-bold text-ink">${x.g}</p><p class="text-[13px] text-body mt-0.5">${x.d}</p></div><span class="text-[11px] font-bold text-point bg-point/10 rounded-full px-2.5 py-1">${x.t}</span>`;
     el.onclick=()=>{ document.querySelectorAll("#grades .choice").forEach(c=>c.classList.remove("sel")); el.classList.add("sel"); profile.grade=x.g; profile.tier=x.t; $("n1").disabled=false; applyTone(x.t); };
     $("grades").appendChild(el);
+  });
+
+  // 성적대(체감 난이도) — 데일리 미션 사건 난이도를 이 값으로 조정
+  const scoreBands = [
+    { k:"기초", g:"어렵게 느껴져요", d:"기초부터 탄탄히 다져줄게" },
+    { k:"보통", g:"적당해요", d:"개념은 아는데 실전에서 헷갈리는 정도로 맞출게" },
+    { k:"상위", g:"쉽게 느껴져요", d:"응용문제 수준으로 바로 시작할게" },
+  ];
+  scoreBands.forEach(x=>{
+    const el=document.createElement("div");
+    el.className="choice bg-white border border-line rounded-2xl px-5 py-4 flex items-center justify-between";
+    el.innerHTML=`<div><p class="text-[15px] font-bold text-ink">${x.g}</p><p class="text-[13px] text-body mt-0.5">${x.d}</p></div>`;
+    el.onclick=()=>{ document.querySelectorAll("#scoreBands .choice").forEach(c=>c.classList.remove("sel")); el.classList.add("sel"); profile.scoreBand=x.k; $("n2").disabled=false; };
+    $("scoreBands").appendChild(el);
   });
 
   // 관심 소재 (과목 아님 · 예시 소재 취향)
@@ -263,31 +286,58 @@
 
   $("nameInput").addEventListener("input", e=>{ profile.name = e.target.value.trim(); });
 
-  // mini lesson demo (레슨 엔진 톤)
+  // mini lesson demo (레슨 엔진 톤 + 성적대별 난이도)
   function setK4(state){ $("k4").className = "kozy mx-auto mb-6 "+state; $("k4").style.width="96px"; $("k4").style.height="96px"; }
-  const DEMO = [
-    { t:"choice", kozy:"많은 친구가 이 말을 당연하게 여겨. 이 문장이 몰래 믿고 있는 건 뭘까?",
-      q:"숨은 믿음을 골라봐", opts:[
-        { label:"빠르면 잘하는 것이다", ok:true, fb:"정확해! 속도를 실력의 증거로 삼고 있어." },
-        { label:"수학은 어렵다", ok:false, fb:"어렵다는 얘긴 없어. '빨리'에 집중해봐." },
-        { label:"문제는 많이 풀어야 한다", ok:false, fb:"'양'이 아니라 '속도'를 실력으로 보는 게 핵심이야." },
-      ] },
-    { t:"reveal", kozy:"바로 이게 숨은 전제야. 트리거 단어가 보이지?", premise:"‘빠름 = 잘함’ — 속도를 실력의 증거로 삼는 전제" },
-    { t:"blast", kozy:"이 전제를 폭파해볼까? 눌러봐!" },
-    { t:"insight", kozy:"방향이 바뀌었지? 이게 바로 PBS 학습법이야.", reframe:"수학은 깊이 이해하는 과목이다" },
-  ];
 
+  // 성적대별 사건 난이도 세트 — profile.scoreBand로 선택됨
+  const DEMO_BY_BAND = {
+    "기초": { trig:"빨리 푸는", steps:[
+      { t:"choice", kozy:"많은 친구가 이 말을 당연하게 여겨. 이 문장이 몰래 믿고 있는 건 뭘까?",
+        q:"숨은 믿음을 골라봐", opts:[
+          { label:"빠르면 잘하는 것이다", ok:true, fb:"정확해! 속도를 실력의 증거로 삼고 있어." },
+          { label:"수학은 어렵다", ok:false, fb:"어렵다는 얘긴 없어. '빨리'에 집중해봐." },
+          { label:"문제는 많이 풀어야 한다", ok:false, fb:"'양'이 아니라 '속도'를 실력으로 보는 게 핵심이야." },
+        ] },
+      { t:"reveal", kozy:"바로 이게 숨은 전제야. 트리거 단어가 보이지?", premise:"‘빠름 = 잘함’ — 속도를 실력의 증거로 삼는 전제" },
+      { t:"blast", kozy:"이 전제를 폭파해볼까? 눌러봐!" },
+      { t:"insight", kozy:"방향이 바뀌었지? 이게 바로 PBS 학습법이야.", reframe:"수학은 천천히 이해하는 과목이다" },
+    ]},
+    "보통": { trig:"빨리 푸는", steps:[
+      { t:"choice", kozy:"많은 친구가 이 말을 당연하게 여겨. 이 문장이 몰래 믿고 있는 건 뭘까?",
+        q:"숨은 믿음을 골라봐", opts:[
+          { label:"빠르면 잘하는 것이다", ok:true, fb:"정확해! 속도를 실력의 증거로 삼고 있어." },
+          { label:"수학은 어렵다", ok:false, fb:"어렵다는 얘긴 없어. '빨리'에 집중해봐." },
+          { label:"문제는 많이 풀어야 한다", ok:false, fb:"'양'이 아니라 '속도'를 실력으로 보는 게 핵심이야." },
+        ] },
+      { t:"reveal", kozy:"바로 이게 숨은 전제야. 트리거 단어가 보이지?", premise:"‘빠름 = 잘함’ — 속도를 실력의 증거로 삼는 전제" },
+      { t:"blast", kozy:"이 전제를 폭파해볼까? 눌러봐!" },
+      { t:"insight", kozy:"방향이 바뀌었지? 이게 바로 PBS 학습법이야.", reframe:"수학은 깊이 이해하는 과목이다" },
+    ]},
+    "상위": { trig:"공식대로 푸는", steps:[
+      { t:"choice", kozy:"응용문제도 잘 푸는 친구들도 은근히 당연하게 여기는 말이 있어. 이 문장이 몰래 믿고 있는 건 뭘까?",
+        q:"숨은 믿음을 골라봐", opts:[
+          { label:"정해진 절차만이 정답이다", ok:true, fb:"정확해! '공식대로'를 유일한 정답 경로로 삼고 있어." },
+          { label:"수학은 암기 과목이다", ok:false, fb:"암기 얘긴 없어. '공식대로'라는 절차 자체에 집중해봐." },
+          { label:"어려운 문제는 시간이 오래 걸린다", ok:false, fb:"시간이 아니라 '풀이 방법이 하나뿐이라는 믿음'이 핵심이야." },
+        ] },
+      { t:"reveal", kozy:"바로 이게 숨은 전제야. 트리거 단어가 보이지?", premise:"‘공식 = 유일한 방법’ — 정해진 절차만 답이라 여기는 전제" },
+      { t:"blast", kozy:"이 전제를 폭파해볼까? 눌러봐!" },
+      { t:"insight", kozy:"방향이 바뀌었지? 이게 바로 PBS 학습법이야.", reframe:"수학은 여러 방법으로 접근할 수 있는 과목이다" },
+    ]},
+  };
+
+  let demo = DEMO_BY_BAND["보통"];
   let di = 0;
   let demoAnswered = false;
 
   function demoLine(i){
     const t = profile.tier && TONE[profile.tier];
-    return (t && t.demoLines && t.demoLines[i]) ? t.demoLines[i] : DEMO[i].kozy;
+    return (t && t.demoLines && t.demoLines[i]) ? t.demoLines[i] : demo.steps[i].kozy;
   }
 
   function renderDots(){
     const wrap = $("demoDots"); wrap.innerHTML = "";
-    DEMO.forEach((_,i)=>{
+    demo.steps.forEach((_,i)=>{
       const dot = document.createElement("span");
       dot.className = "w-2 h-2 rounded-full " + (i <= di ? "bg-point" : "bg-line");
       wrap.appendChild(dot);
@@ -296,14 +346,14 @@
 
   function renderDemo(){
     renderDots();
-    const d = DEMO[di];
+    const d = demo.steps[di];
     $("demoKozy").textContent = demoLine(di);
     const stepWrap = $("demoStep");
     stepWrap.innerHTML = "";
 
     if (d.t === "choice"){
       setK4("st-scan");
-      $("demoTrig").textContent = "빨리 푸는";
+      $("demoTrig").textContent = demo.trig;
       $("demoTrig").className = "trigger";
       $("demoBtn").textContent = "계속";
       $("demoBtn").disabled = true;
@@ -331,7 +381,7 @@
       });
     } else if (d.t === "reveal"){
       setK4("st-discover");
-      $("demoTrig").textContent = "빨리 푸는";
+      $("demoTrig").textContent = demo.trig;
       $("demoTrig").className = "trigger glow";
       const p = document.createElement("p");
       p.className = "text-[14px] font-semibold text-point bg-point/5 border border-point/20 rounded-2xl px-4 py-3";
@@ -367,16 +417,19 @@
     }
   }
 
-  function resetDemo(){ di = 0; demoAnswered = false; renderDemo(); }
+  function resetDemo(){
+    demo = DEMO_BY_BAND[profile.scoreBand] || DEMO_BY_BAND["보통"];
+    di = 0; demoAnswered = false; renderDemo();
+  }
 
   $("demoBtn").addEventListener("click", ()=>{
     if ($("demoBtn").disabled) return;
-    if (di < DEMO.length - 1){
+    if (di < demo.steps.length - 1){
       di += 1;
       demoAnswered = false;
       renderDemo();
     } else {
-      go(5);
+      go(6);
     }
   });
 
@@ -429,8 +482,8 @@
     <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
       <p class="text-[12px] text-white/35">© 2026 PBS 학습법. All rights reserved.</p>
       <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[12px] text-white/45">
-        <a href="#" class="hover:text-white transition">이용약관</a>
-        <a href="#" class="hover:text-white transition">개인정보처리방침</a>
+        <a href="terms.html" class="hover:text-white transition">이용약관</a>
+        <a href="privacy.html" class="hover:text-white transition">개인정보처리방침</a>
       </nav>
     </div>
   </div>

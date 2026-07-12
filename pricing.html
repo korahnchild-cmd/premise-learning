@@ -11,7 +11,7 @@
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <script>
   tailwind.config = { theme: { extend: {
-    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1" },
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", night:"#0A0E17" },
     fontFamily: { sans:["Pretendard","Inter","sans-serif"] }, borderRadius:{ "4xl":"2rem","5xl":"2.5rem" },
   }}};
 </script>
@@ -39,16 +39,17 @@
   <div class="text-center max-w-2xl mx-auto">
     <p class="text-[11px] font-semibold tracking-[.2em] uppercase text-point mb-3">Pricing</p>
     <h1 class="text-[2rem] md:text-[2.8rem] font-extrabold leading-tight">학원 하나 줄이는 값으로,<br>공부의 근본을 바꾸세요</h1>
-    <p class="mt-5 text-[15px] md:text-[16px] text-body leading-relaxed">PBS 학습법은 성적을 급조하지 않습니다. 6개월에 걸쳐 생각의 습관을 바꾸는 훈련이라, 요금도 6개월 약정을 기본으로 합니다.</p>
+    <p class="mt-5 text-[15px] md:text-[16px] text-body leading-relaxed">PBS 학습법은 성적을 급조하지 않습니다. 생각의 습관은 6개월에 걸쳐 자라기 때문에 6개월 코스를 추천하지만, 약정 없이 월 단위로 먼저 시작하셔도 됩니다.</p>
   </div>
 
   <!-- billing toggle -->
   <div class="flex justify-center mt-8">
     <div class="inline-flex items-center gap-1 bg-white border border-line rounded-full p-1">
-      <button class="seg on px-5 py-2.5 rounded-full text-[13px] font-semibold" data-mode="m6">6개월 약정 <span class="text-[11px] font-bold text-point on:text-white ml-1">–20%</span></button>
-      <button class="seg px-5 py-2.5 rounded-full text-[13px] font-semibold text-body" data-mode="m1">월간 자유</button>
+      <button class="seg on px-5 py-2.5 rounded-full text-[13px] font-semibold" data-mode="m6">6개월 코스 <span class="text-[11px] font-bold text-point on:text-white ml-1">–20%</span></button>
+      <button class="seg px-5 py-2.5 rounded-full text-[13px] font-semibold text-body" data-mode="m1">월 단위로 시작</button>
     </div>
   </div>
+  <p class="text-center text-[12px] text-faint mt-3">약정에 가두지 않아요 — 월 단위로 시작해도, 언제든 1분이면 해지할 수 있습니다.</p>
 
   <!-- plans -->
   <div class="grid md:grid-cols-2 gap-5 max-w-3xl mx-auto mt-8 items-stretch">
@@ -60,12 +61,12 @@
         <span class="text-[2.6rem] font-extrabold text-ink price-num" data-plan="basic">39,000</span>
         <span class="text-body text-[15px]">원 / 월</span>
       </div>
-      <p class="text-[12px] text-faint mb-7" data-sub="basic">6개월 약정 · 총 234,000원 (월간 시 49,000원)</p>
+      <p class="text-[12px] text-faint mb-7" data-sub="basic">6개월 코스 · 총 234,000원 (월간 시 49,000원)</p>
       <ul class="space-y-3.5 text-[14px] text-ink flex-1">
         <li class="flex gap-3"><span class="text-point">✓</span> 하루 1개 전제 미션</li>
-        <li class="flex gap-3"><span class="text-point">✓</span> 국어 · 수학</li>
+        <li class="flex gap-3"><span class="text-point">✓</span> 국어 · 수학 · <span class="font-semibold">입문 단계</span></li>
         <li class="flex gap-3"><span class="text-point">✓</span> 월 1회 성장 리포트</li>
-        <li class="flex gap-3"><span class="text-point">✓</span> 제한적 배틀모드</li>
+        <li class="flex gap-3"><span class="text-point">✓</span> 배틀모드 주 1회<sup class="text-faint">*</sup></li>
       </ul>
       <a href="onboarding.html" class="btn btn-ghost mt-9 py-3.5 text-[14px] font-semibold">7일 무료로 시작</a>
     </div>
@@ -79,12 +80,12 @@
         <span class="text-[2.6rem] font-extrabold text-ink price-num" data-plan="premium">59,000</span>
         <span class="text-body text-[15px]">원 / 월</span>
       </div>
-      <p class="text-[12px] text-faint mb-7" data-sub="premium">6개월 약정 · 총 354,000원 (월간 시 74,000원)</p>
+      <p class="text-[12px] text-faint mb-7" data-sub="premium">6개월 코스 · 총 354,000원 (월간 시 74,000원)</p>
       <ul class="space-y-3.5 text-[14px] text-ink flex-1">
         <li class="flex gap-3"><span class="text-point">✓</span> <span class="font-semibold">무제한</span> 전제 미션</li>
-        <li class="flex gap-3"><span class="text-point">✓</span> <span class="font-semibold">전 과목</span> (국어·수학·사고력·서술형)</li>
-        <li class="flex gap-3"><span class="text-point">✓</span> 주 1회 리포트 + 루카 맞춤 피드백</li>
-        <li class="flex gap-3"><span class="text-point">✓</span> <span class="font-semibold">무제한</span> 배틀모드</li>
+        <li class="flex gap-3"><span class="text-point">✓</span> <span class="font-semibold">전 과목</span> · <span class="font-semibold">입문→기본→심화 전 단계</span></li>
+        <li class="flex gap-3"><span class="text-point">✓</span> 주 1회 리포트 + <span class="font-semibold">학년별 맞춤 톤</span>으로 대화</li>
+        <li class="flex gap-3"><span class="text-point">✓</span> <span class="font-semibold">무제한</span> 배틀모드<sup class="text-faint">*</sup></li>
         <li class="flex gap-3"><span class="text-point">✓</span> 형제 프로필 지원</li>
       </ul>
       <a href="onboarding.html" class="btn btn-primary mt-9 py-3.5 text-[14px] font-semibold">7일 무료로 시작</a>
@@ -92,6 +93,23 @@
   </div>
 
   <p class="text-center text-[13px] text-faint mt-6">모든 플랜 · 신용카드 없이 7일 무료 · 언제든 해지 가능</p>
+  <p class="text-center text-[12px] text-faint mt-2 max-w-lg mx-auto leading-relaxed">* 배틀모드란? 같은 반 친구와 이번 주 정답률로 겨루는 미니 챌린지예요.</p>
+
+  <!-- 파트너 노트 미리보기 -->
+  <div class="card p-7 md:p-9 mt-10 max-w-lg mx-auto">
+    <p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-4 text-center">이런 걸 받아요 — 파트너 노트 미리보기</p>
+    <div class="rounded-2xl bg-soft border border-line p-5">
+      <div class="flex items-center justify-between">
+        <p class="text-[14px] font-bold text-ink">지우 파트너의 이번 주</p>
+        <span class="text-[11px] font-semibold text-point">7일 연속 접속</span>
+      </div>
+      <div class="grid grid-cols-2 gap-3 mt-4 text-center">
+        <div class="rounded-xl bg-white border border-line py-3"><p class="text-[1.4rem] font-extrabold text-ink">5개</p><p class="text-[11px] text-faint mt-0.5">이번 주 전제 폭파</p></div>
+        <div class="rounded-xl bg-white border border-line py-3"><p class="text-[1.4rem] font-extrabold text-ink">🔍 🐢</p><p class="text-[11px] text-faint mt-0.5">새로 얻은 배지</p></div>
+      </div>
+      <p class="text-[13px] text-body mt-4 pt-4 border-t border-line leading-relaxed">"이번 주엔 '빠름 = 잘함'이라는 전제를 제일 잘 깼어. 다음 주엔 심화 단계로 가보자!" <span class="text-faint">— 루카</span></p>
+    </div>
+  </div>
 
   <!-- value anchor vs 사교육비 -->
   <div class="card p-7 md:p-9 mt-12">
@@ -99,22 +117,26 @@
       <p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-2">왜 이 가격인가요?</p>
       <h2 class="text-[1.4rem] md:text-[1.8rem] font-extrabold">사교육비의 일부로, 학원이 못 하는 걸 합니다</h2>
     </div>
-    <div class="grid sm:grid-cols-3 gap-4 mt-8 text-center">
-      <div class="rounded-2xl bg-soft border border-line p-6">
-        <p class="text-[13px] text-body">일반 사설 학원</p>
-        <p class="text-[1.6rem] font-extrabold text-ink mt-1">월 20–50만원</p>
-        <p class="text-[12px] text-faint mt-2">지식을 더 넣는 곳</p>
+    <div class="mt-8 max-w-sm mx-auto" id="costChart">
+      <div class="flex items-end justify-center gap-14" style="height:160px">
+        <div class="w-16 h-full flex items-end">
+          <div class="w-full bg-line rounded-t-xl transition-all ease-out" id="barAcademy" style="height:0%;transition-duration:1100ms"></div>
+        </div>
+        <div class="w-16 h-full flex items-end">
+          <div class="w-full bg-point rounded-t-xl transition-all ease-out" id="barPBS" style="height:0%;transition-duration:1100ms"></div>
+        </div>
       </div>
-      <div class="rounded-2xl bg-point/5 border border-point/25 p-6">
-        <p class="text-[13px] text-point font-semibold">PBS 학습법 프리미엄</p>
-        <p class="text-[1.6rem] font-extrabold text-point mt-1">월 59,000원</p>
-        <p class="text-[12px] text-body mt-2">생각의 태도를 바꾸는 곳</p>
+      <div class="flex justify-center gap-14 mt-3 text-center">
+        <div class="w-16">
+          <p class="text-[13px] font-extrabold text-ink">20–50만</p>
+          <p class="text-[11px] text-faint mt-0.5">일반 학원</p>
+        </div>
+        <div class="w-16">
+          <p class="text-[13px] font-extrabold text-point"><span id="costNumPBS">0</span>원</p>
+          <p class="text-[11px] text-faint mt-0.5">PBS 프리미엄</p>
+        </div>
       </div>
-      <div class="rounded-2xl bg-soft border border-line p-6">
-        <p class="text-[13px] text-body">차이</p>
-        <p class="text-[1.6rem] font-extrabold text-ink mt-1">약 1/5</p>
-        <p class="text-[12px] text-faint mt-2">학원 하나 줄인 값</p>
-      </div>
+      <p class="text-center text-[12px] text-faint mt-4">약 1/5 비용 · 학원 하나 줄인 값 (표시 금액은 실제 요금 기준)</p>
     </div>
     <p class="text-center text-[13px] text-body mt-6 max-w-xl mx-auto leading-relaxed">학원은 '무엇을 아는가'를 늘립니다. PBS 학습법은 '어떻게 생각하는가'를 바꿉니다. 둘은 경쟁이 아니라, 아이가 스스로 공부하게 만드는 <b class="text-ink">근본 한 축</b>을 채웁니다.</p>
   </div>
@@ -136,7 +158,7 @@
       <div class="card p-6 text-center">
         <svg class="mx-auto mb-3" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4.5"/></svg>
         <p class="text-[14px] font-bold text-ink">전문가 감수</p>
-        <p class="text-[12px] text-body mt-1.5 leading-relaxed">현직 교사가 감수하고 검증한 콘텐츠</p>
+        <p class="text-[12px] text-body mt-1.5 leading-relaxed">현직 교사 감수를 거칠 예정인 콘텐츠</p>
       </div>
       <div class="card p-6 text-center">
         <svg class="mx-auto mb-3" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 017-2.6"/></svg>
@@ -153,8 +175,8 @@
 
 <script>
   const PRICE = {
-    m6: { basic:"39,000", premium:"59,000", subBasic:"6개월 약정 · 총 234,000원 (월간 시 49,000원)", subPremium:"6개월 약정 · 총 354,000원 (월간 시 74,000원)" },
-    m1: { basic:"49,000", premium:"74,000", subBasic:"매월 결제 · 언제든 해지 (6개월 약정 시 39,000원)", subPremium:"매월 결제 · 언제든 해지 (6개월 약정 시 59,000원)" },
+    m6: { basic:"39,000", premium:"59,000", subBasic:"6개월 코스 · 총 234,000원 (월간 시 49,000원)", subPremium:"6개월 코스 · 총 354,000원 (월간 시 74,000원)" },
+    m1: { basic:"49,000", premium:"74,000", subBasic:"매월 결제 · 언제든 해지 (6개월 코스 시 39,000원)", subPremium:"매월 결제 · 언제든 해지 (6개월 코스 시 59,000원)" },
   };
   const $ = s => document.querySelector(s);
   function setMode(mode){
@@ -173,6 +195,29 @@
   });
   setMode("m6");
   if(window.PremiseNav) PremiseNav.render("price");
+
+  // 학원비 대비 막대그래프 — 실제 요금(20~50만원 vs 59,000원)만 사용, 가공된 효율 수치 없음
+  (function(){
+    const chart = document.getElementById("costChart");
+    if(!chart) return;
+    let done = false;
+    function run(){
+      if(done) return; done = true;
+      $("#barAcademy").style.height = "100%";
+      $("#barPBS").style.height = "20%";
+      const numEl = $("#costNumPBS");
+      const target = 59000; const dur = 1100; const t0 = performance.now();
+      function step(t){
+        const p = Math.min(1, (t - t0) / dur);
+        numEl.textContent = Math.round(target * p).toLocaleString("ko-KR");
+        if(p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+    if("IntersectionObserver" in window){
+      new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting) run(); }); }, {threshold:.4}).observe(chart);
+    } else { run(); }
+  })();
 </script>
 
 <!-- FOOTER -->
@@ -219,8 +264,8 @@
     <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
       <p class="text-[12px] text-white/35">© 2026 PBS 학습법. All rights reserved.</p>
       <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[12px] text-white/45">
-        <a href="#" class="hover:text-white transition">이용약관</a>
-        <a href="#" class="hover:text-white transition">개인정보처리방침</a>
+        <a href="terms.html" class="hover:text-white transition">이용약관</a>
+        <a href="privacy.html" class="hover:text-white transition">개인정보처리방침</a>
       </nav>
     </div>
   </div>

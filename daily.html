@@ -111,7 +111,7 @@
       <p class="mt-3 text-[15px] text-body leading-relaxed">세 개의 전제를 찾아 폭파했어, 파트너.<br>내일 또 새로운 사건을 들고 올게.</p>
       <div class="mt-6 inline-flex items-center gap-2 font-semibold text-ink"><span>🔥</span> <span id="streakFinal">0</span>일 연속</div>
       <div class="mt-6 flex justify-center gap-3">
-        <a href="notebook.html" class="btn btn-ghost px-6 py-3 text-[14px] font-semibold">탐정 노트 보기</a>
+        <a href="notebook.html" class="btn btn-ghost px-6 py-3 text-[14px] font-semibold">파트너 노트 보기</a>
         <button onclick="location.reload()" class="btn btn-primary px-6 py-3 text-[14px] font-semibold">다시 하기</button>
       </div>
     </div>
@@ -131,7 +131,7 @@
 
   // ===== LESSONS (다단계) =====
   const LESSONS = [
-    { missionId:"in-3", subject:"언어", tag:"Case 1 · 입문", badge:"🕵️", badgeName:"문장탐정 획득!", note:"'조차'가 심은 전제를 포착",
+    { missionId:"in-3", subject:"언어", tag:"Case 1 · 입문", badge:"🕵️", badgeName:"문장파트너 획득!", note:"'조차'가 심은 전제를 포착",
       material:'"너<span class="trig" data-t>조차</span> 그걸 몰랐어."', trigGlow:true,
       steps:[
         { t:"intro", kozy:"이 짧은 말, 그냥 지나치기엔 뭔가 수상해. 딱 한 단어가 몰래 일하고 있거든." },
@@ -153,7 +153,7 @@
         { t:"wrap" },
       ] },
 
-    { missionId:"ba-1", subject:"수학", tag:"Case 2 · 기본", badge:"🐢", badgeName:"깊이탐정 획득!", note:"속도 대신 깊이로 전환",
+    { missionId:"ba-1", subject:"수학", tag:"Case 2 · 기본", badge:"🐢", badgeName:"깊이파트너 획득!", note:"속도 대신 깊이로 전환",
       material:'"수학은 <span class="trig" data-t>빨리 푸는</span> 과목이다."', trigGlow:true,
       steps:[
         { t:"intro", kozy:"많은 친구가 이 말을 당연하게 여겨. 그런데 정말 그럴까?" },
@@ -175,7 +175,7 @@
         { t:"wrap" },
       ] },
 
-    { missionId:"ba-3", subject:"학습", tag:"Case 3 · 기본", badge:"💥", badgeName:"오답폭파탐정 획득!", note:"'틀리면 안 된다' 전제를 깨부숨",
+    { missionId:"ba-3", subject:"학습", tag:"Case 3 · 기본", badge:"💥", badgeName:"오답폭파파트너 획득!", note:"'틀리면 안 된다' 전제를 깨부숨",
       material:'"또 틀렸어. <span class="trig" data-t>난 안 되나 봐</span>."', trigGlow:true,
       steps:[
         { t:"intro", kozy:"이 말 속엔 슬픈 전제가 하나 숨어 있어. 같이 조심스럽게 꺼내보자." },
@@ -244,7 +244,7 @@
     else if(S.t === "insight"){
       setKozy("st-discover"); setTimeout(()=>setKozy("st-octa"), 1800);
       html = `<div class="bg-point/5 border border-point/25 rounded-2xl p-5"><p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-1.5">전제 폭파 — 이렇게 바뀐다</p><p class="text-[16px] font-semibold text-ink leading-relaxed">${S.reframe}</p></div>`;
-      cont.textContent = "탐정 노트에 기록";
+      cont.textContent = "파트너 노트에 기록";
     }
     else if(S.t === "wrap"){
       setKozy("st-praise");
@@ -253,8 +253,8 @@
       html = `<div class="bg-white border border-line rounded-4xl p-7 text-center">
         <div class="text-[44px] mb-2 badge-pop">${L.badge}</div>
         <p class="text-[17px] font-bold text-ink">${L.badgeName}</p>
-        <div class="mt-5 bg-soft border border-line rounded-2xl p-4 text-left"><p class="text-[11px] font-semibold tracking-widest uppercase text-faint mb-1">탐정 노트 적립</p><p class="text-[15px] font-semibold text-ink">“${L.note}”</p></div>
-        <p class="mt-4 text-[13px] text-point font-semibold">🔥 연속 학습 ${st.streak}일 · 탐정 노트에 저장됐어요</p>
+        <div class="mt-5 bg-soft border border-line rounded-2xl p-4 text-left"><p class="text-[11px] font-semibold tracking-widest uppercase text-faint mb-1">파트너 노트 적립</p><p class="text-[15px] font-semibold text-ink">“${L.note}”</p></div>
+        <p class="mt-4 text-[13px] text-point font-semibold">🔥 연속 학습 ${st.streak}일 · 파트너 노트에 저장됐어요</p>
       </div>`;
       cont.textContent = (li < LESSONS.length-1) ? "다음 사건 →" : "오늘의 사건 마치기";
     }

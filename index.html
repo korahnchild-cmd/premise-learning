@@ -97,6 +97,13 @@
   .flip-f{ position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:1.5rem; border:1px solid #EFF1F3; background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:1.75rem; box-shadow:var(--shadow-lg); }
   .flip-f.back{ transform:rotateY(180deg); border-color:#0A66FF; box-shadow:0 12px 34px rgba(10,102,255,.18); }
   .flip-hint{ animation:hintPulse 1.8s ease-in-out infinite; }
+
+  /* 히어로 전제 붕괴 맵 (2D 기둥+파티클) */
+  #collapseStage{ overflow:hidden; }
+  .cl-label{ transform:translateX(-50%); transition:color .4s ease, transform .4s cubic-bezier(.3,1.4,.5,1); }
+  .cl-label.cl-pulse{ transform:translateX(-50%) scale(1.12); }
+  #collapseBlock{ transition:transform .12s; }
+  #collapseBtn:disabled{ opacity:.55; cursor:default; transform:none !important; }
   @keyframes hintPulse{ 0%,100%{ opacity:.5; } 50%{ opacity:1; } }
 
   /* stage head (Pain / Solution / Result dividers) */
@@ -226,21 +233,17 @@
       <b class="text-ink">PBS 학습법</b> — 다니는 학원은 그대로 두고,<br class="hidden sm:block" /> 점수로 이어지는 사고 습관만 <b class="text-point whitespace-nowrap">6개월간</b> 더합니다.
     </p>
 
-    <!-- 히어로 핵심 비주얼: 직접 눌러보는 전제 폭파 데모 -->
+    <!-- 히어로 핵심 비주얼: 전제 붕괴 맵 (기둥 3개가 무너지고 새 전제로 재구성) -->
     <div class="reveal mt-9 flex flex-col items-center" data-d="2">
-      <div class="flip w-full max-w-sm h-40 sm:h-44 cursor-pointer select-none" tabindex="0" onclick="this.classList.toggle('flipped')" role="button" aria-label="카드를 눌러 전제가 깨지는 걸 확인해보세요">
-        <div class="flip-in">
-          <div class="flip-f front">
-            <span class="en text-[10px] eyebrow uppercase text-faint mb-3">Before · 흔한 전제</span>
-            <p class="text-[18px] sm:text-[20px] font-bold text-body">"정답은 가장 그럴듯해 보인다"</p>
-          </div>
-          <div class="flip-f back">
-            <span class="en text-[10px] eyebrow uppercase text-point mb-3">After · 전제 폭파</span>
-            <p class="text-[18px] sm:text-[20px] font-extrabold text-ink">"가장 그럴듯한 '오답'이 진짜 함정이다"</p>
-          </div>
-        </div>
+      <div class="card relative w-full max-w-md mx-auto h-[196px] sm:h-[224px]" id="collapseStage">
+        <canvas id="collapseCv" style="position:absolute;inset:0;width:100%;height:100%;"></canvas>
+        <div id="collapseBlock" class="absolute left-1/2 -translate-x-1/2 top-[16px] sm:top-[18px] px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-[11px] sm:text-[13px] font-bold text-center leading-snug max-w-[84%]" style="background:#0A0E17;color:#fff;">"수학은 공식을 많이 외우는 과목이다"</div>
+        <span class="cl-label absolute bottom-4 sm:bottom-5 text-[12.5px] sm:text-[14px] font-bold text-ink" data-old="공식" data-new="왜">공식</span>
+        <span class="cl-label absolute bottom-4 sm:bottom-5 text-[12.5px] sm:text-[14px] font-bold text-ink" data-old="암기" data-new="원리">암기</span>
+        <span class="cl-label absolute bottom-4 sm:bottom-5 text-[12.5px] sm:text-[14px] font-bold text-ink" data-old="정답" data-new="전제">정답</span>
       </div>
-      <p class="flip-hint mt-3 text-[12px] text-faint">👆 카드를 눌러 전제가 깨지는 걸 직접 확인해보세요</p>
+      <button id="collapseBtn" class="btn btn-primary btn-magnetic text-[13.5px] font-semibold px-6 py-2.5 mt-5">전제 폭파하기 💥</button>
+      <p class="flip-hint mt-2.5 text-[12px] text-faint" id="collapseHint">👆 버튼을 눌러 전제가 무너지고 다시 세워지는 걸 확인해보세요</p>
     </div>
 
     <div class="reveal mt-8" data-d="3">
@@ -260,6 +263,12 @@
   </a>
 </section>
 
+<!-- 사고분석관 루카 소개 — 히어로 직후 -->
+<div class="reveal max-w-lg mx-auto px-5 md:px-8 -mt-2 mb-4 md:mb-6 flex items-center justify-center gap-4 text-center md:text-left flex-col md:flex-row">
+  <div class="kozy st-idle shrink-0" style="width:52px;height:52px" id="introKozy"></div>
+  <p class="text-[13.5px] md:text-[14px] text-faint leading-relaxed">사고분석관 <b class="text-ink">루카</b>가 매 사건마다 함께합니다 — 표정 없는 정육면체 캐릭터가, 전제를 발견할 때마다 정팔면체로 형태를 바꾸며 반응해요.</p>
+</div>
+
 <!-- ============ STAGE 1 · 고통 (PAIN) ============ -->
 <section id="problem" class="py-16 md:py-24 relative overflow-hidden bg-white">
   <div class="orb absolute pointer-events-none" data-par=".1" style="width:400px;height:400px;background:#E9EEFA;top:20%;right:-10%"></div>
@@ -271,23 +280,23 @@
     <div class="mt-14 grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6">
       <div class="tilt reveal card p-8 md:p-10" style="border-top:3px solid #E4574A" data-d="1">
         <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 icon-float" style="animation-delay:0s; background:#FDEDEC"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D6432F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16M6 21V8l6-4 6 4v13M10 21v-5h4v5"/></svg></div>
-        <p class="text-[19px] font-extrabold text-ink">"학원을 여러 개 다녀도"</p>
-        <p class="mt-3 text-body lede text-[15px]">중위권에서 좀처럼 벗어나지 못합니다.</p>
+        <p class="text-[17px] md:text-[18px] font-extrabold text-ink leading-snug">"학원을 3개나 보내는데, 서술형 문제만 나오면 항상 감점을 받아요."</p>
+        <p class="mt-3 text-body lede text-[14px]">이해가 아니라 '패턴 암기'로 풀고 있다는 신호입니다.</p>
       </div>
       <div class="tilt reveal card p-8 md:p-10" style="border-top:3px solid #E4574A" data-d="2">
         <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 icon-float" style="animation-delay:.3s; background:#FDEDEC"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D6432F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></div>
-        <p class="text-[19px] font-extrabold text-ink">"공부 시간을 늘려도"</p>
-        <p class="mt-3 text-body lede text-[15px]">시험만 보면 낯선 문제에서 실수합니다.</p>
+        <p class="text-[17px] md:text-[18px] font-extrabold text-ink leading-snug">"해설지를 보면 다 이해하는데, 막상 시험지에 새 유형이 나오면 손을 못 대요."</p>
+        <p class="mt-3 text-body lede text-[14px]">정답을 아는 것과 '스스로 풀어내는 것'은 다릅니다.</p>
       </div>
       <div class="tilt reveal card p-8 md:p-10" style="border-top:3px solid #E4574A" data-d="3">
         <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 icon-float" style="animation-delay:.6s; background:#FDEDEC"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D6432F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="11" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 10v4M18 10v4"/></svg></div>
-        <p class="text-[19px] font-extrabold text-ink">"투자를 아끼지 않아도"</p>
-        <p class="mt-3 text-body lede text-[15px]">스스로 공부 계획을 세우지 못합니다.</p>
+        <p class="text-[17px] md:text-[18px] font-extrabold text-ink leading-snug">"예습·복습 스케줄은 제가 다 짜줘야 하고, 스스로 '왜 틀렸지?'를 고민한 적이 없어요."</p>
+        <p class="mt-3 text-body lede text-[14px]">전제를 의심해본 적이 없다는 뜻입니다.</p>
       </div>
       <div class="tilt reveal card p-8 md:p-10" style="border-top:3px solid #E4574A" data-d="4">
         <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 icon-float" style="animation-delay:.9s; background:#FDEDEC"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D6432F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="4.5"/><path d="M4.5 21c1.4-4.2 4.2-6.3 7.5-6.3s6.1 2.1 7.5 6.3"/></svg></div>
-        <p class="text-[19px] font-extrabold text-ink">"머리가 좋은 것 같아도"</p>
-        <p class="mt-3 text-body lede text-[15px]">문제 속 숨은 전제를 읽어내지 못합니다.</p>
+        <p class="text-[17px] md:text-[18px] font-extrabold text-ink leading-snug">"정답은 곧잘 맞히는데, '왜 그런지' 물으면 설명을 못해요."</p>
+        <p class="mt-3 text-body lede text-[14px]">왜 맞았는지 모르면, 다음 문제에서 다시 틀립니다.</p>
       </div>
     </div>
     <div class="reveal mt-16 max-w-2xl mx-auto text-center">
@@ -301,7 +310,7 @@
   <div class="max-w-3xl mx-auto px-5 md:px-8 stage-head reveal">
     <span class="stage-badge"><span class="num">2</span>The Solution · 해결</span>
     <h2 class="display text-[1.8rem] md:text-[2.8rem] font-extrabold mt-6">PBS 학습법은 전제를 깨는<br class="hidden md:block" /> 4단계 사고 훈련입니다</h2>
-    <p class="lede mt-5 text-[15px] text-body">문제 속에 숨은 '당연한 전제'를 찾아내 깨뜨리고, 새로운 사고의 틀을 세우는 <b class="text-ink">4단계</b>. 하루 15분, 6개월이면 태도 자체가 바뀝니다.</p>
+    <p class="lede mt-5 text-[15px] text-body">문제 속에 숨은 '당연한 전제'를 찾아내 깨뜨리고, 새로운 사고의 틀을 세우는 <b class="text-ink">4단계</b>. 하루 10분, 6개월이면 태도 자체가 바뀝니다.</p>
   </div>
 </section>
 
@@ -315,28 +324,28 @@
           <p class="en text-[10.5px] eyebrow uppercase text-point font-bold">Detect</p>
           <h3 class="text-[18px] font-extrabold mt-0.5">탐지</h3>
           <p class="text-[12.5px] text-body mt-2 leading-relaxed">문제 속 숨은 전제를 발견</p>
-          <p class="tag text-[11px] text-point font-semibold">확장 질문법 · 스키마 조회</p>
+          <p class="tag text-[11px] text-point font-semibold leading-snug">문제 속 '당연한 가정'에 물음표를 붙인다</p>
         </div>
         <div class="pbs-step" style="animation-delay:.2s">
           <div class="icon" style="background:linear-gradient(160deg,#FFF4D6,#FFE7A8); border:1.5px solid #E0A600"><span class="badge" style="background:#8a6200">02</span><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#8a6200" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.4 5.6 5.6 2.4-5.6 2.4L12 18.5l-2.4-5.6L4 10.5l5.6-2.4z"/></svg></div>
           <p class="en text-[10.5px] eyebrow uppercase font-bold" style="color:#8a6200">Break</p>
           <h3 class="text-[18px] font-extrabold mt-0.5">폭파</h3>
           <p class="text-[12.5px] text-body mt-2 leading-relaxed">전제를 깨뜨려 흔들기</p>
-          <p class="tag text-[11px] font-semibold" style="background:rgba(255,184,0,.14); color:#8a6200">소크라테스식 · 반례 탐색</p>
+          <p class="tag text-[11px] font-semibold leading-snug" style="background:rgba(255,184,0,.14); color:#8a6200">만약 그 가정이 틀렸다면? 상상해 본다</p>
         </div>
         <div class="pbs-step" style="animation-delay:.35s">
           <div class="icon" style="background:linear-gradient(160deg,#EAF1FF,#D3E2FF); border:1.5px solid #0A66FF"><span class="badge">03</span><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6M3 22v-6h6"/><path d="M21 8a9 9 0 00-15-3M3 16a9 9 0 0015 3"/></svg></div>
           <p class="en text-[10.5px] eyebrow uppercase text-point font-bold">Rebuild</p>
           <h3 class="text-[18px] font-extrabold mt-0.5">재구성</h3>
           <p class="text-[12.5px] text-body mt-2 leading-relaxed">새 사고 틀로 다시 세우기</p>
-          <p class="tag text-[11px] text-point font-semibold">시각화 · 유추 전환</p>
+          <p class="tag text-[11px] text-point font-semibold leading-snug">새로운 눈으로 문제를 다시 바라본다</p>
         </div>
         <div class="pbs-step" style="animation-delay:.5s">
           <div class="icon" style="background:linear-gradient(160deg,#0A0E17,#1B2740); border:1.5px solid #0A0E17"><span class="badge" style="background:#FFB800; color:#0A0E17">04</span><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4M3 11v-1a4 4 0 014-4h14M7 22l-4-4 4-4M21 13v1a4 4 0 01-4 4H3"/></svg></div>
           <p class="en text-[10.5px] eyebrow uppercase text-point font-bold">Consolidate</p>
           <h3 class="text-[18px] font-extrabold mt-0.5">정착</h3>
           <p class="text-[12.5px] text-body mt-2 leading-relaxed">반복으로 습관 만들기</p>
-          <p class="tag text-[11px] text-point font-semibold">간격 반복 · 교차 연습</p>
+          <p class="tag text-[11px] text-point font-semibold leading-snug">하루 10분, 이 루틴을 몸에 밴다</p>
         </div>
       </div>
 
@@ -363,6 +372,7 @@
 
       <!-- PBS vs 학원 vs 인강 -->
       <div class="mt-14 max-w-5xl mx-auto">
+        <p class="text-center text-[13px] font-semibold text-point uppercase tracking-wide mb-2">학원 가기 전, 사고를 데우는 워밍업</p>
         <p class="text-center text-[13px] font-semibold text-faint uppercase tracking-wide mb-8">학원 · 인강과는 무엇이 다를까요</p>
         <div class="grid md:grid-cols-3 gap-5 md:gap-6 items-start">
           <div class="vs-card">
@@ -390,7 +400,7 @@
             <div class="vs-row-item"><span class="vlbl">병행</span><span class="vval">PBS와 겹치지 않음</span></div>
           </div>
         </div>
-        <p class="text-center text-[12px] text-faint mt-6">학원·인강을 대체하는 서비스가 아니라, 그 위에서 '어떻게 생각하는가'를 훈련하는 별도의 축입니다.</p>
+        <p class="text-center text-[12px] text-faint mt-6">학원·인강을 대체하지 않습니다. 학원에 가기 전, 스스로 생각하는 근육을 먼저 풀어두는 워밍업입니다.</p>
       </div>
     </div>
   </div>
@@ -414,7 +424,6 @@
   <div class="text-center max-w-3xl mx-auto px-5 md:px-8 pt-16 md:pt-24 reveal">
     <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">How it works</p>
     <h2 class="display text-[1.8rem] md:text-[2.8rem] font-extrabold">아이가 직접 '전제'를 찾는 순간,<br class="hidden md:block" /> 공부의 태도가 바뀝니다.</h2>
-    <p class="lede mt-5 text-[15px] text-body">전제탐정 <b class="text-ink">루카</b>가 매 사건마다 함께합니다 — 표정 없는 정육면체 캐릭터가, 전제를 발견할 때마다 정팔면체로 형태를 바꾸며 반응해요.</p>
   </div>
 
   <div class="relative" id="scrolly" style="height:220vh">
@@ -423,16 +432,18 @@
         <!-- pinned visual -->
         <div class="order-2 md:order-1">
           <div class="card p-8 md:p-12 text-center relative overflow-hidden" id="scVisual">
+            <canvas id="scBrain" width="120" height="90" class="absolute top-5 right-5 opacity-80 pointer-events-none hidden md:block" aria-hidden="true"></canvas>
             <div class="kozy st-idle mx-auto mb-8" style="width:88px;height:88px" id="scKozy"></div>
-            <p class="text-[22px] md:text-[27px] font-bold leading-relaxed">"1등급은 <span class="trig" id="scTrig">실력이 확실하다는</span> 증거다"</p>
-            <p class="mt-7 text-point font-semibold text-[15px] opacity-0 transition-opacity duration-500" id="scLabel">발견한 전제 — "등급 = 실력"</p>
+            <p class="text-[22px] md:text-[27px] font-bold leading-relaxed">"수학 문제는 반드시 <span class="trig" id="scTrig">식으로 풀어야</span> 한다"</p>
+            <p class="mt-7 text-point font-semibold text-[15px] opacity-0 transition-opacity duration-500" id="scLabel">발견한 전제 — "식 = 유일한 방법"</p>
+            <p class="mt-3 text-ink font-semibold text-[14px] opacity-0 transition-opacity duration-500" id="scReframe">그림으로 접근하면 10초 만에 풀리는 문제도 있다</p>
           </div>
         </div>
         <!-- steps -->
         <div class="order-1 md:order-2 space-y-5">
           <div class="stepcard flex gap-4" data-step="0"><div class="shrink-0 w-11 h-11 rounded-2xl bg-point/10 flex items-center justify-center text-point"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg></div><div><p class="en text-[11px] eyebrow uppercase text-point">Step 1</p><h3 class="text-[19px] font-bold">전제 찾기</h3><p class="text-body text-[14px] lede mt-1">문장 속에 숨어 있는 가정을 발견합니다.</p></div></div>
           <div class="stepcard flex gap-4" data-step="1"><div class="shrink-0 w-11 h-11 rounded-2xl bg-point/10 flex items-center justify-center text-point"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.4 5.6 5.6 2.4-5.6 2.4L12 18.5l-2.4-5.6L4 10.5l5.6-2.4z"/></svg></div><div><p class="en text-[11px] eyebrow uppercase text-point">Step 2</p><h3 class="text-[19px] font-bold">전제 폭파</h3><p class="text-body text-[14px] lede mt-1">전제를 깨면 어떤 변화가 생길까 상상합니다.</p></div></div>
-          <div class="stepcard flex gap-4" data-step="2"><div class="shrink-0 w-11 h-11 rounded-2xl bg-point/10 flex items-center justify-center text-point"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="16" rx="2"/><path d="M6 8H4M6 12H4M6 16H4M9.5 9h5M9.5 12.5h5"/></svg></div><div><p class="en text-[11px] eyebrow uppercase text-point">Step 3</p><h3 class="text-[19px] font-bold">탐정 노트</h3><p class="text-body text-[14px] lede mt-1">발견한 전제를 기록해 성장 리포트로 남깁니다.</p></div></div>
+          <div class="stepcard flex gap-4" data-step="2"><div class="shrink-0 w-11 h-11 rounded-2xl bg-point/10 flex items-center justify-center text-point"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="16" rx="2"/><path d="M6 8H4M6 12H4M6 16H4M9.5 9h5M9.5 12.5h5"/></svg></div><div><p class="en text-[11px] eyebrow uppercase text-point">Step 3</p><h3 class="text-[19px] font-bold">파트너 노트</h3><p class="text-body text-[14px] lede mt-1">발견한 전제를 기록해 성장 리포트로 남깁니다.</p></div></div>
         </div>
       </div>
     </div>
@@ -476,7 +487,7 @@
       </div>
       <div class="curri-text">
         <div class="citem"><span class="lvl">01</span><div><p class="cname">입문 — Entry</p><p class="cdsc">일상 문장·짧은 사건에서 숨은 전제를 발견하는 감각을 만듭니다.</p></div></div>
-        <div class="citem"><span class="lvl">02</span><div><p class="cname">기본 — Core</p><p class="cdsc">국어·수학 소재로 확장, '전제 찾기 → 폭파 → 탐정 노트' 루틴을 정착합니다.</p></div></div>
+        <div class="citem"><span class="lvl">02</span><div><p class="cname">기본 — Core</p><p class="cdsc">국어·수학 소재로 확장, '전제 찾기 → 폭파 → 파트너 노트' 루틴을 정착합니다.</p></div></div>
         <div class="citem"><span class="lvl">03</span><div><p class="cname">심화 — Advanced</p><p class="cdsc">수능 지문·시사 소재까지, 어떤 소재에도 같은 사고 습관을 적용합니다.</p></div></div>
       </div>
     </div>
@@ -610,7 +621,7 @@
   <div class="max-w-3xl mx-auto px-5 md:px-8 stage-head reveal">
     <span class="stage-badge"><span class="num">3</span>The Result · 효과</span>
     <h2 class="display text-[1.8rem] md:text-[2.8rem] font-extrabold mt-6">점수가 아니라,<br class="hidden md:block" /> 생각의 태도가 자랍니다</h2>
-    <p class="lede mt-5 text-[15px] text-body">PBS 학습법은 점수를 약속하지 않습니다. 대신 탐정 노트가 아이의 <b class="text-ink">생각하는 습관</b>이 어떻게 자라는지 매주 보여줍니다.</p>
+    <p class="lede mt-5 text-[15px] text-body">PBS 학습법은 점수를 약속하지 않습니다. 대신 파트너 노트가 아이의 <b class="text-ink">생각하는 습관</b>이 어떻게 자라는지 매주 보여줍니다.</p>
   </div>
 </section>
 
@@ -637,9 +648,9 @@
         <p class="gpct">Growth · <span class="gnum">0</span>%</p>
       </div>
     </div>
-    <p class="reveal text-center text-[12px] text-faint mt-6">* 성장 지표는 아이마다 다르게 나타납니다. 위 수치는 탐정 노트 리포트의 예시입니다.</p>
+    <p class="reveal text-center text-[12px] text-faint mt-6">* 성장 지표는 아이마다 다르게 나타납니다. 위 수치는 파트너 노트 리포트의 예시입니다.</p>
     <div class="reveal mt-12 max-w-3xl mx-auto border-l-2 border-point pl-8 md:pl-12">
-      <p class="text-[19px] md:text-[23px] font-medium leading-relaxed">제 아들은 어느 날부터, 문제를 풀기 전에 "이게 왜 이렇지?"를 먼저 묻기 시작했습니다. 답을 맞히는 아이에서 질문을 던지는 아이로 — 저는 그 변화를 눈앞에서 봤고, 그래서 이걸 만들었습니다.</p>
+      <p class="text-[19px] md:text-[23px] font-medium leading-relaxed">제 아들은 어느 날부터, 문제를 풀기 전에 "이게 왜 이렇지?"를 먼저 묻기 시작했습니다. 답을 맞히는 아이에서 질문을 던지는 아이로 — 그 변화를 지켜보는 사이, 수학 내신은 3등급에서 1등급이 되어 있었습니다. 성적은 그 변화가 남긴 결과였을 뿐, 애초의 목표는 아니었습니다. 저는 그 변화를 눈앞에서 봤고, 그래서 이걸 만들었습니다.</p>
       <p class="mt-6 en text-[13px] text-faint font-medium eyebrow uppercase">PBS 학습법 창업자 · 고2 아들의 아빠</p>
     </div>
   </div>
@@ -696,8 +707,8 @@
     <div class="mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
       <div class="reveal card p-7 text-center" data-d="1">
         <svg class="mx-auto mb-4" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-        <p class="text-[14px] font-bold text-ink">현직 교사 감수</p>
-        <p class="text-[12px] text-faint mt-1.5 leading-relaxed">커리큘럼 검수 참여</p>
+        <p class="text-[14px] font-bold text-ink">현직 교사 감수 (예정)</p>
+        <p class="text-[12px] text-faint mt-1.5 leading-relaxed">커리큘럼 검수 진행 예정</p>
       </div>
       <div class="reveal card p-7 text-center" data-d="2">
         <svg class="mx-auto mb-4" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
@@ -740,7 +751,7 @@
         <ul class="space-y-3.5 text-[14px] flex-1">
           <li class="flex gap-3"><span class="text-point">✓</span> 하루 1개 전제 미션</li>
           <li class="flex gap-3"><span class="text-point">✓</span> 입문 · 기본 · 심화 전 단계 (일상·국어·수학·시사 소재)</li>
-          <li class="flex gap-3"><span class="text-point">✓</span> 주간 성장 리포트 + 탐정 노트 전체 기능</li>
+          <li class="flex gap-3"><span class="text-point">✓</span> 주간 성장 리포트 + 파트너 노트 전체 기능</li>
           <li class="flex gap-3"><span class="text-point">✓</span> 학년별 맞춤 톤(초등·중등·고등) 적용</li>
         </ul>
         <a href="pricing.html" class="btn btn-primary mt-9 py-3.5 text-[14px] font-semibold">7일 무료로 시작</a>
@@ -798,7 +809,7 @@
           <span class="cn-num">04</span>
           <p class="relative text-[11px] font-bold tracking-widest uppercase text-white/70 mb-4">How we measure</p>
           <h3 class="relative text-[19px] font-extrabold text-white leading-snug">점수가 아니라<br/>태도로 확인합니다</h3>
-          <p class="relative mt-3 text-[13.5px] text-white/80 leading-relaxed">PBS는 점수를 약속하지 않습니다. 대신 탐정 노트가 "질문의 질", "스스로 세운 계획"이 어떻게 자라는지 매주 보여줍니다.</p>
+          <p class="relative mt-3 text-[13.5px] text-white/80 leading-relaxed">PBS는 점수를 약속하지 않습니다. 대신 파트너 노트가 "질문의 질", "스스로 세운 계획"이 어떻게 자라는지 매주 보여줍니다.</p>
         </div>
         <div class="cn-card snap-center shrink-0 w-[78%] sm:w-[46%] md:w-[29%] rounded-[1.75rem] p-8" style="background:linear-gradient(160deg,#0A0E17,#0B3ACC)">
           <span class="cn-num">05</span>
@@ -932,8 +943,8 @@
     <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
       <p class="text-[12px] text-white/35">© 2026 PBS 학습법. All rights reserved.</p>
       <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[12px] text-white/45">
-        <a href="#" class="hover:text-white transition">이용약관</a>
-        <a href="#" class="hover:text-white transition">개인정보처리방침</a>
+        <a href="terms.html" class="hover:text-white transition">이용약관</a>
+        <a href="privacy.html" class="hover:text-white transition">개인정보처리방침</a>
       </nav>
     </div>
   </div>
@@ -1097,27 +1108,65 @@
     var steps = scrolly.querySelectorAll(".stepcard");
     var trig = document.getElementById("scTrig");
     var label = document.getElementById("scLabel");
+    var reframe = document.getElementById("scReframe");
     var scKozy = document.getElementById("scKozy");
     var last = -1;
+
+    /* 뇌파 신경망 — 전제가 깨질수록 뉴런 연결이 조밀해지는 걸 보여주는 장식용 캔버스 */
+    var brain = document.getElementById("scBrain");
+    var bctx = brain ? brain.getContext("2d") : null;
+    var bNodes = [], bPairs = [];
+    if (brain){
+      var bw = brain.width, bh = brain.height, seed = 42;
+      var rnd = function(){ seed = (seed*9301+49297) % 233280; return seed/233280; };
+      for (var bi=0; bi<9; bi++){ bNodes.push({ x: 10+rnd()*(bw-20), y: 10+rnd()*(bh-20) }); }
+      for (var bp1=0; bp1<bNodes.length; bp1++){
+        for (var bp2=bp1+1; bp2<bNodes.length; bp2++){
+          var dx = bNodes[bp1].x - bNodes[bp2].x, dy = bNodes[bp1].y - bNodes[bp2].y;
+          bPairs.push({ i:bp1, j:bp2, d:Math.sqrt(dx*dx+dy*dy) });
+        }
+      }
+      bPairs.sort(function(a,b){ return a.d - b.d; });
+    }
+    function drawBrain(ratio){
+      if (!bctx) return;
+      bctx.clearRect(0, 0, brain.width, brain.height);
+      var activeCount = Math.round(bPairs.length * Math.min(1, 0.12 + ratio*0.88));
+      bctx.strokeStyle = "rgba(10,102,255,.35)"; bctx.lineWidth = 1;
+      for (var bk=0; bk<activeCount; bk++){
+        var bp = bPairs[bk];
+        bctx.beginPath();
+        bctx.moveTo(bNodes[bp.i].x, bNodes[bp.i].y);
+        bctx.lineTo(bNodes[bp.j].x, bNodes[bp.j].y);
+        bctx.stroke();
+      }
+      bctx.fillStyle = "#0A66FF";
+      bNodes.forEach(function(n){ bctx.beginPath(); bctx.arc(n.x, n.y, 2.2, 0, Math.PI*2); bctx.fill(); });
+    }
+
     function updateScrolly(){
       var rect = scrolly.getBoundingClientRect();
       var total = rect.height - window.innerHeight;
       var progressed = Math.min(Math.max(-rect.top, 0), total);
       var ratio = total > 0 ? progressed / total : 0;
+      drawBrain(ratio);
       var idx = Math.min(steps.length - 1, Math.floor(ratio * steps.length));
       if (idx === last) return;
       last = idx;
       steps.forEach(function(s, i){ s.classList.toggle("act", i === idx); });
       if (idx === 0){
-        if (trig) trig.textContent = "실력이 확실하다는";
+        if (trig){ trig.textContent = "식으로 풀어야"; trig.classList.remove("blast"); }
         if (label) label.style.opacity = "0";
+        if (reframe) reframe.style.opacity = "0";
         if (scKozy) scKozy.className = "kozy st-idle mx-auto mb-8";
       } else if (idx === 1){
-        if (trig){ trig.classList.add("blast"); setTimeout(function(){ if(trig){ trig.textContent = "이 유형에 훈련됐다는"; trig.classList.remove("blast"); } }, 700); }
+        if (trig){ trig.classList.add("blast"); }
         if (label) label.style.opacity = "1";
+        if (reframe) reframe.style.opacity = "0";
         if (scKozy) scKozy.className = "kozy st-discover mx-auto mb-8";
       } else {
         if (label) label.style.opacity = "1";
+        if (reframe) reframe.style.opacity = "1";
         if (scKozy) scKozy.className = "kozy st-octa mx-auto mb-8";
       }
     }
@@ -1200,6 +1249,208 @@
     resize(); tick();
   }
 })();
+</script>
+
+<script>
+  /* ---- 히어로 전제 붕괴 맵 (2D 기둥 + 파티클) ---- */
+  (function(){
+    var stage = document.getElementById("collapseStage");
+    var cv = document.getElementById("collapseCv");
+    if (!stage || !cv) return;
+    var ctx = cv.getContext("2d");
+    var block = document.getElementById("collapseBlock");
+    var btn = document.getElementById("collapseBtn");
+    var hint = document.getElementById("collapseHint");
+    var labels = Array.prototype.slice.call(document.querySelectorAll(".cl-label"));
+    var reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    var TXT_OLD = "\"수학은 공식을 많이 외우는 과목이다\"";
+    var TXT_NEW = "\"수학은 공식이 왜 성립하는지 묻는 과목이다\"";
+
+    var W = 0, H = 0, pillarX = [], pillarTop = 0, pillarBottom = 0, pillarW = 0;
+
+    function layout(){
+      W = cv.offsetWidth; H = cv.offsetHeight;
+      cv.width = W; cv.height = H;
+      var cx = W/2, spacing = Math.max(70, W*0.17);
+      pillarX = [cx-spacing, cx, cx+spacing];
+      pillarTop = H*0.4; pillarBottom = H*0.82;
+      pillarW = Math.max(22, W*0.055);
+      labels.forEach(function(l, i){ l.style.left = pillarX[i] + "px"; });
+    }
+
+    function roundRect(x,y,w,h,r){
+      ctx.beginPath();
+      ctx.moveTo(x+r,y);
+      ctx.arcTo(x+w,y,x+w,y+h,r);
+      ctx.arcTo(x+w,y+h,x,y+h,r);
+      ctx.arcTo(x,y+h,x,y,r);
+      ctx.arcTo(x,y,x+w,y,r);
+      ctx.closePath();
+    }
+
+    function drawPillars(alpha, crack){
+      ctx.clearRect(0,0,W,H);
+      ctx.globalAlpha = alpha;
+      pillarX.forEach(function(x){
+        var g = ctx.createLinearGradient(0,pillarTop,0,pillarBottom);
+        g.addColorStop(0,"rgba(10,102,255,.9)");
+        g.addColorStop(1,"rgba(10,102,255,.55)");
+        ctx.fillStyle = g;
+        roundRect(x-pillarW/2, pillarTop, pillarW, pillarBottom-pillarTop, 6);
+        ctx.fill();
+        ctx.fillStyle = "rgba(255,255,255,.2)";
+        roundRect(x-pillarW/2+2, pillarTop+2, pillarW*0.26, pillarBottom-pillarTop-4, 4);
+        ctx.fill();
+        if (crack){
+          ctx.strokeStyle = "rgba(255,255,255,.7)";
+          ctx.lineWidth = 1.4;
+          var midY = (pillarTop+pillarBottom)/2;
+          ctx.beginPath();
+          ctx.moveTo(x-pillarW/2+3, midY-14);
+          ctx.lineTo(x, midY);
+          ctx.lineTo(x-pillarW/2+4, midY+16);
+          ctx.stroke();
+        }
+      });
+      ctx.globalAlpha = alpha*0.5;
+      ctx.fillStyle = "rgba(10,14,23,.1)";
+      pillarX.forEach(function(x){
+        ctx.beginPath();
+        ctx.ellipse(x, pillarBottom+6, pillarW*0.9, 4, 0, 0, Math.PI*2);
+        ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+    }
+
+    var particles = [];
+    function makeParticles(){
+      particles = [];
+      pillarX.forEach(function(x){
+        for (var i=0;i<20;i++){
+          particles.push({
+            x: x + (Math.random()-0.5)*pillarW,
+            y: pillarTop + Math.random()*(pillarBottom-pillarTop),
+            vx: (Math.random()-0.5)*180,
+            vy: (Math.random()-0.5)*140 - 60,
+            w: 3+Math.random()*5, h: 3+Math.random()*5,
+            rot: Math.random()*Math.PI*2, vr: (Math.random()-0.5)*8,
+            life: 1
+          });
+        }
+      });
+    }
+
+    function stepExplode(dt){
+      ctx.clearRect(0,0,W,H);
+      particles.forEach(function(p){
+        p.x += p.vx*dt; p.y += p.vy*dt; p.vy += 260*dt; p.rot += p.vr*dt; p.life -= dt*0.85;
+        ctx.save();
+        ctx.globalAlpha = Math.max(p.life,0);
+        ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+        ctx.fillStyle = "#0A66FF";
+        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+        ctx.restore();
+      });
+      ctx.globalAlpha = 1;
+    }
+
+    function shakeStage(){
+      stage.style.transition = "none";
+      var n = 0;
+      var iv = setInterval(function(){
+        n++;
+        var amt = Math.max(0, 6 - n*0.6);
+        stage.style.transform = "translateX(" + ((Math.random()-0.5)*amt) + "px)";
+        if (n > 10){ clearInterval(iv); stage.style.transform = ""; stage.style.transition = ""; }
+      }, 28);
+    }
+
+    function burstReform(){
+      var sparks = [];
+      pillarX.forEach(function(x){
+        for (var i=0;i<10;i++){
+          var a = Math.random()*Math.PI*2;
+          sparks.push({ x:x, y:(pillarTop+pillarBottom)/2, vx:Math.cos(a)*90, vy:Math.sin(a)*90, r:2+Math.random()*3, life:1 });
+        }
+      });
+      var last = performance.now();
+      function loop(now){
+        var dt = (now-last)/1000; last = now;
+        sparks.forEach(function(s){ s.x += s.vx*dt; s.y += s.vy*dt; s.life -= dt*1.6; });
+        sparks = sparks.filter(function(s){ return s.life > 0; });
+        drawPillars(1, false);
+        sparks.forEach(function(s){
+          ctx.globalAlpha = Math.max(s.life,0);
+          ctx.fillStyle = "#FFB800";
+          ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill();
+        });
+        ctx.globalAlpha = 1;
+        if (sparks.length) requestAnimationFrame(loop);
+      }
+      requestAnimationFrame(loop);
+    }
+
+    var mode = "idle", raf = null, reformT0 = 0;
+
+    function reset(){
+      if (raf) cancelAnimationFrame(raf);
+      mode = "idle";
+      layout(); drawPillars(1, false);
+      block.textContent = TXT_OLD;
+      labels.forEach(function(l){ l.textContent = l.dataset.old; l.style.color = "#0A0E17"; l.classList.remove("cl-pulse"); });
+      btn.disabled = false; btn.textContent = "전제 폭파하기 💥"; btn.dataset.state = "old";
+      hint.textContent = "👆 버튼을 눌러 전제가 무너지고 다시 세워지는 걸 확인해보세요";
+    }
+
+    function run(){
+      // 붕괴·재구성 파티클은 항상 재생 — reduced-motion 사용자는 화면 흔들림만 생략
+      if (mode !== "idle" && mode !== "done") return;
+      btn.disabled = true;
+      layout();
+      drawPillars(1, true);
+      setTimeout(function(){
+        mode = "exploding";
+        makeParticles();
+        if (!reducedMotion) shakeStage();
+        var last = performance.now();
+        (function loop(now){
+          var dt = Math.min(0.05, (now-last)/1000); last = now;
+          if (mode === "exploding"){
+            stepExplode(dt);
+            var alive = particles.some(function(p){ return p.life > 0; });
+            if (!alive){
+              mode = "reforming"; reformT0 = 0;
+              block.textContent = TXT_NEW;
+              labels.forEach(function(l){ l.textContent = l.dataset.new; l.style.color = "#0A66FF"; l.classList.add("cl-pulse"); });
+              burstReform();
+            }
+          } else if (mode === "reforming"){
+            if (!reformT0) reformT0 = now;
+            var p = Math.min(1, (now-reformT0)/650);
+            drawPillars(p, false);
+            if (p >= 1){
+              mode = "done";
+              btn.disabled = false; btn.textContent = "다시보기 ↺"; btn.dataset.state = "new";
+              hint.textContent = "다시 눌러서 이전 전제로 되돌려볼 수도 있어요";
+              return;
+            }
+          }
+          raf = requestAnimationFrame(loop);
+        })(last);
+      }, 260);
+    }
+
+    btn.addEventListener("click", function(){
+      if (btn.dataset.state === "new"){ reset(); return; }
+      run();
+    });
+    window.addEventListener("resize", function(){ if (mode === "idle" || mode === "done") { layout(); drawPillars(1, false); } });
+
+    btn.dataset.state = "old";
+    layout();
+    drawPillars(1, false);
+  })();
 </script>
 </body>
 </html>
