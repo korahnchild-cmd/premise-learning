@@ -41,7 +41,10 @@
   /* 자주 찾는 질문 — 첫 칩에 은은한 펄스로 시선 유도 */
   #topQs button:first-child{ animation:tqPulse 2.4s ease-in-out infinite; }
   @keyframes tqPulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(10,102,255,.28); } 50%{ box-shadow:0 0 0 6px rgba(10,102,255,0); } }
-  @media (prefers-reduced-motion:reduce){ *{animation:none!important} }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important}
+    #topQs button:first-child{ animation:tqPulse 2.4s ease-in-out infinite !important; }
+  }
 </style>
 </head>
 <body>

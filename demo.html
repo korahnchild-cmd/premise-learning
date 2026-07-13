@@ -67,7 +67,12 @@
   .demo-loop .dl-tag{ font-size:10px; font-weight:800; color:#0A66FF; letter-spacing:.05em; }
   .demo-loop .dl-txt{ font-size:13.5px; font-weight:700; color:#0A0E17; }
   @keyframes demoCycle{ 0%,2%{ opacity:0; transform:translateY(6px); } 8%,28%{ opacity:1; transform:translateY(0); } 34%,100%{ opacity:0; } }
-  @media (prefers-reduced-motion:reduce){ *{animation:none!important} .demo-loop p:first-child{ opacity:1!important; } }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important}
+    .demo-loop p{ animation:demoCycle 10.5s ease-in-out infinite !important; }
+    .demo-loop .dl-2{ animation-delay:3.5s !important; }
+    .demo-loop .dl-3{ animation-delay:7s !important; }
+  }
 </style>
 </head>
 <body class="min-h-screen flex flex-col">

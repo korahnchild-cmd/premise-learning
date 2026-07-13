@@ -36,7 +36,53 @@
   .hl-sweep{ position:relative; display:inline-block; }
   .hl-sweep::after{ content:""; position:absolute; left:0; right:0; bottom:-3px; height:3px; background:#0A66FF; border-radius:2px; transform:scaleX(0); transform-origin:left; animation:hlSweep 3.6s ease-in-out infinite; }
   @keyframes hlSweep{ 0%,10%{ transform:scaleX(0); opacity:1; } 38%,72%{ transform:scaleX(1); opacity:1; } 88%,100%{ transform:scaleX(1); opacity:0; } }
-  @media (prefers-reduced-motion:reduce){ *{animation:none!important} .hl-sweep::after{ transform:scaleX(1); opacity:1; } }
+
+  /* 문제의식/만든 이유 좌우 교차(zigzag) 섹션 */
+  .zz-row{ display:flex; flex-direction:column; gap:22px; align-items:center; }
+  @media (min-width:768px){ .zz-row{ flex-direction:row; gap:36px; } .zz-row.zz-rev{ flex-direction:row-reverse; } }
+  .zz-txt{ flex:1.1; min-width:0; }
+  .zz-img{ flex:1; width:100%; max-width:260px; }
+  .zz-img svg{ width:100%; height:auto; display:block; overflow:visible; }
+  .zzDotA{ animation:zzDotAMove 5s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+  @keyframes zzDotAMove{ 0%,8%{ transform:translateX(0); } 60%,100%{ transform:translateX(136px); } }
+  .zzDotB{ animation:zzDotBPulse 5s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+  @keyframes zzDotBPulse{ 0%,8%{ transform:scale(1); } 20%,40%{ transform:scale(1.4); } 60%,100%{ transform:scale(1); } }
+  .zzOrbit{ animation:zzSpin 12s linear infinite; transform-box:fill-box; transform-origin:100px 80px; }
+  @keyframes zzSpin{ 0%{ transform:rotate(0deg); } 100%{ transform:rotate(360deg); } }
+  .zzNode1,.zzNode2,.zzNode3{ animation:zzNodePulse 4.5s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+  .zzNode2{ animation-delay:1.5s; } .zzNode3{ animation-delay:3s; }
+  @keyframes zzNodePulse{ 0%,6%{ transform:scale(1); } 12%,20%{ transform:scale(1.18); } 26%,100%{ transform:scale(1); } }
+
+  /* PBS 4단계 요약 트랙 (about.html 하단 중복 삽입) */
+  .psum-card{ background:#fff; border:1px solid #ECEEF1; border-radius:22px; padding:26px 18px 20px; box-shadow:0 10px 28px -14px rgba(10,14,23,.14); }
+  .psum-track{ width:100%; height:auto; display:block; overflow:visible; }
+  .psum-fill{ stroke-dasharray:300; stroke-dashoffset:300; animation:psumFill 8s linear infinite; }
+  @keyframes psumFill{ 0%{ stroke-dashoffset:300; } 8%{ stroke-dashoffset:300; } 33%{ stroke-dashoffset:200; } 41%{ stroke-dashoffset:200; } 58%{ stroke-dashoffset:100; } 66%{ stroke-dashoffset:100; } 83%{ stroke-dashoffset:0; } 100%{ stroke-dashoffset:0; } }
+  .psum-node{ animation:psumNodePop 8s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+  @keyframes psumNodePop{ 0%,4%{ transform:scale(1); } 8%,22%{ transform:scale(1.18); } 26%,100%{ transform:scale(1); } }
+  .psum-node:nth-child(3) circle,.psum-node:nth-child(4) circle,.psum-node:nth-child(5) circle,.psum-node:nth-child(6) circle{ animation:psumRing 8s ease-in-out infinite; }
+  .psum-node:nth-child(3) circle{ animation-delay:0s; } .psum-node:nth-child(4) circle{ animation-delay:2s; } .psum-node:nth-child(5) circle{ animation-delay:4s; } .psum-node:nth-child(6) circle{ animation-delay:6s; }
+  @keyframes psumRing{ 0%,4%{ stroke:#E4E9F1; fill:#fff; } 8%,22%{ stroke:#0A66FF; fill:#EAF1FE; } 26%,100%{ stroke:#0A66FF; fill:#fff; } }
+  .psum-caption{ position:relative; height:20px; margin-top:14px; }
+  .psum-caption p{ position:absolute; inset:0; font-size:12.5px; font-weight:600; color:#0A0E17; opacity:0; animation:psumCap 8s ease-in-out infinite; }
+  .psum-caption .pc-0{ animation-delay:0s; } .psum-caption .pc-1{ animation-delay:2s; } .psum-caption .pc-2{ animation-delay:4s; } .psum-caption .pc-3{ animation-delay:6s; }
+  @keyframes psumCap{ 0%,2%{ opacity:0; transform:translateY(4px); } 6%,22%{ opacity:1; transform:translateY(0); } 26%,100%{ opacity:0; } }
+
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important} .hl-sweep::after{ animation:hlSweep 3.6s ease-in-out infinite !important; }
+    .zzDotA{ animation:zzDotAMove 5s ease-in-out infinite !important; }
+    .zzOrbit{ animation:zzSpin 12s linear infinite !important; }
+    .zzNode1{ animation:zzNodePulse 4.5s ease-in-out infinite !important; }
+    .zzNode2{ animation:zzNodePulse 4.5s ease-in-out infinite !important; animation-delay:1.5s !important; }
+    .zzNode3{ animation:zzNodePulse 4.5s ease-in-out infinite !important; animation-delay:3s !important; }
+    .psum-fill{ animation:psumFill 8s linear infinite !important; }
+    .psum-node{ animation:psumNodePop 8s ease-in-out infinite !important; }
+    .psum-node:nth-child(3) circle{ animation:psumRing 8s ease-in-out infinite !important; animation-delay:0s !important; }
+    .psum-node:nth-child(4) circle{ animation:psumRing 8s ease-in-out infinite !important; animation-delay:2s !important; }
+    .psum-node:nth-child(5) circle{ animation:psumRing 8s ease-in-out infinite !important; animation-delay:4s !important; }
+    .psum-node:nth-child(6) circle{ animation:psumRing 8s ease-in-out infinite !important; animation-delay:6s !important; }
+    .psum-caption p{ animation:psumCap 8s ease-in-out infinite !important; }
+    .psum-caption .pc-0{ animation-delay:0s !important; } .psum-caption .pc-1{ animation-delay:2s !important; } .psum-caption .pc-2{ animation-delay:4s !important; } .psum-caption .pc-3{ animation-delay:6s !important; }
+  }
 </style>
 </head>
 <body>
@@ -59,23 +105,78 @@
     <p class="mt-5 text-[15px] md:text-[16px] text-body max-w-xl mx-auto leading-relaxed">PBS 학습법(Premise-Break Schema)은 이 단순한 관찰에서 시작됐습니다.</p>
   </div>
 
-  <div class="mt-14 space-y-6">
-    <div class="card p-8">
-      <p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-3">문제의식</p>
-      <h2 class="text-[1.3rem] font-extrabold mb-3">빨리 맞히는 훈련은 많지만, 의심하는 훈련은 없었습니다</h2>
-      <p class="text-[14.5px] text-body leading-relaxed">학원도, 인강도, 문제집도 대부분 '더 많이, 더 빨리 정답에 도달하는 법'을 가르칩니다. 그런데 정작 상위권 학생들을 관찰하면, 이들은 문제를 풀기 전에 문제가 깔고 있는 전제부터 의심합니다. "이 문장이 당연하게 여기는 게 뭐지?", "이 선택지가 그럴듯해 보이는 이유가 뭐지?" — 이 습관은 지식의 양이 아니라 사고의 방향에서 나옵니다. 하지만 이 방향을 바꿔주는 정규 훈련은 어디에도 없었습니다.</p>
+  <div class="mt-14 space-y-10">
+    <div class="zz-row">
+      <div class="zz-txt">
+        <p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-3">문제의식</p>
+        <h2 class="text-[1.3rem] font-extrabold mb-3">빨리 맞히는 훈련은 많지만, 의심하는 훈련은 없었습니다</h2>
+        <p class="text-[14.5px] text-body leading-relaxed">학원도, 인강도, 문제집도 대부분 '더 많이, 더 빨리 정답에 도달하는 법'을 가르칩니다. 그런데 정작 상위권 학생들을 관찰하면, 이들은 문제를 풀기 전에 문제가 깔고 있는 전제부터 의심합니다. "이 문장이 당연하게 여기는 게 뭐지?", "이 선택지가 그럴듯해 보이는 이유가 뭐지?" — 이 습관은 지식의 양이 아니라 사고의 방향에서 나옵니다. 하지만 이 방향을 바꿔주는 정규 훈련은 어디에도 없었습니다.</p>
+      </div>
+      <div class="zz-img">
+        <svg viewBox="0 0 200 160" role="img" aria-label="빠르게 정답으로 직행하는 경로와, 멈춰서 전제를 의심한 뒤 더 깊은 이해에 도달하는 경로를 비교하는 그림">
+          <rect x="0" y="0" width="200" height="160" rx="18" fill="#F5F6F4"/>
+          <line x1="24" y1="46" x2="160" y2="46" stroke="#DCE3EC" stroke-width="2" stroke-dasharray="4 4"/>
+          <circle class="zzDotA" cx="24" cy="46" r="4" fill="#B9C3D4"/>
+          <circle cx="160" cy="46" r="10" fill="#EDEFF2" stroke="#B9C3D4"/><text x="160" y="50" text-anchor="middle" font-size="11">✓</text>
+          <text x="90" y="34" text-anchor="middle" font-size="9.5" font-weight="700" fill="#9AA4B2">빠르게 정답으로</text>
+          <path d="M24,108 C60,108 60,86 90,86 S120,124 160,124" fill="none" stroke="#0A66FF" stroke-width="2.4" stroke-linecap="round"/>
+          <circle class="zzDotB" cx="24" cy="108" r="4.5" fill="#0A66FF"/>
+          <circle cx="90" cy="86" r="11" fill="#0A0E17"/><text x="90" y="90" text-anchor="middle" font-size="11" fill="#FFB800">?</text>
+          <circle cx="160" cy="124" r="10" fill="#0A66FF"/><text x="160" y="128" text-anchor="middle" font-size="11" fill="#fff">✓</text>
+          <text x="90" y="146" text-anchor="middle" font-size="9.5" font-weight="700" fill="#0A0E17">멈춰서 전제부터 의심</text>
+        </svg>
+      </div>
     </div>
 
-    <div class="card p-8">
-      <p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-3">만든 이유</p>
-      <h2 class="text-[1.3rem] font-extrabold mb-3">전제를 찾고 깨는 과정을, 매일의 루틴으로 만들다</h2>
-      <p class="text-[14.5px] text-body leading-relaxed">PBS 학습법은 '전제 찾기 → 전제 폭파 → 파트너 노트 기록'이라는 세 단계를 매일 반복 가능한 짧은 사건으로 설계했습니다. 커리큘럼은 인지과학 연구를 기반으로 설계했고, 정식 출시 전 현직 교사 감수를 거칠 예정이며, 아이마다 다른 사고의 빈틈을 찾아주는 적응형 전제탐지 시스템은 현재 특허 출원 중입니다. 유행하는 학습법이 아니라, 검증 가능한 사고 훈련의 원리를 담으려 했습니다.</p>
+    <div class="zz-row zz-rev">
+      <div class="zz-txt">
+        <p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-3">만든 이유</p>
+        <h2 class="text-[1.3rem] font-extrabold mb-3">전제를 찾고 깨는 과정을, 매일의 루틴으로 만들다</h2>
+        <p class="text-[14.5px] text-body leading-relaxed">PBS 학습법은 '전제 찾기 → 전제 폭파 → 파트너 노트 기록'이라는 세 단계를 매일 반복 가능한 짧은 사건으로 설계했습니다. 커리큘럼은 인지과학 연구를 기반으로 설계했고, 정식 출시 전 현직 교사 감수를 거칠 예정이며, 아이마다 다른 사고의 빈틈을 찾아주는 적응형 전제탐지 시스템은 현재 특허 출원 중입니다. 유행하는 학습법이 아니라, 검증 가능한 사고 훈련의 원리를 담으려 했습니다.</p>
+      </div>
+      <div class="zz-img">
+        <svg viewBox="0 0 200 160" role="img" aria-label="전제 찾기, 전제 폭파, 파트너 노트 기록의 세 단계가 매일 반복되는 순환 구조 그림">
+          <rect x="0" y="0" width="200" height="160" rx="18" fill="#EAF1FE"/>
+          <g class="zzOrbit">
+            <circle cx="100" cy="80" r="46" fill="none" stroke="#C7D2E3" stroke-width="1.6" stroke-dasharray="3 5"/>
+          </g>
+          <g class="zzNode1"><circle cx="100" cy="34" r="17" fill="#fff" stroke="#0A66FF" stroke-width="2"/><text x="100" y="40" text-anchor="middle" font-size="14">🔍</text></g>
+          <g class="zzNode2"><circle cx="139" cy="103" r="17" fill="#fff" stroke="#0A66FF" stroke-width="2"/><text x="139" y="109" text-anchor="middle" font-size="14">💥</text></g>
+          <g class="zzNode3"><circle cx="61" cy="103" r="17" fill="#fff" stroke="#0A66FF" stroke-width="2"/><text x="61" y="109" text-anchor="middle" font-size="14">📝</text></g>
+        </svg>
+      </div>
     </div>
 
     <div class="card p-8" style="border-left:3px solid #0A66FF">
       <p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-3">우리가 지키는 원칙</p>
       <h2 class="text-[1.3rem] font-extrabold mb-3">점수를 약속하지 않습니다</h2>
       <p class="text-[14.5px] text-body leading-relaxed">사고 습관은 6개월에 걸쳐 천천히 자랍니다. 그래서 저희는 단기 점수 상승이나 결과를 약속하지 않습니다. 대신 7일 무료 체험으로 먼저 충분히 경험하시고, 약정 없이 월 단위로 시작해 언제든 멈출 수 있는 자유를 드립니다. 다니는 학원은 그대로 두고, 그 위에 사고 습관 하나를 더하는 것 — 그것이 PBS 학습법이 할 수 있는 약속입니다.</p>
+    </div>
+  </div>
+
+  <div class="mt-10 text-center">
+    <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-2">In practice</p>
+    <h3 class="text-[16px] font-bold text-ink mb-1">전제를 깨는 4단계 사고 훈련</h3>
+    <p class="text-[12px] text-faint mb-6">이 문제의식과 이유가 실제로는 이 4단계로 매일 반복됩니다</p>
+    <div class="psum-card max-w-lg mx-auto">
+      <svg class="psum-track" viewBox="0 0 400 92" role="img" aria-label="감지, 폭파, 재구성, 정착 4단계가 순서대로 강조되는 진행 트랙">
+        <line x1="50" y1="30" x2="350" y2="30" stroke="#E4E9F1" stroke-width="4" stroke-linecap="round"/>
+        <line class="psum-fill" x1="50" y1="30" x2="350" y2="30" stroke="#0A66FF" stroke-width="4" stroke-linecap="round"/>
+        <g class="psum-node" style="animation-delay:0s"><circle cx="50" cy="30" r="20" fill="#fff" stroke="#E4E9F1" stroke-width="2"/><text x="50" y="37" text-anchor="middle" font-size="17">🔍</text></g>
+        <g class="psum-node" style="animation-delay:2s"><circle cx="150" cy="30" r="20" fill="#fff" stroke="#E4E9F1" stroke-width="2"/><text x="150" y="37" text-anchor="middle" font-size="17">💥</text></g>
+        <g class="psum-node" style="animation-delay:4s"><circle cx="250" cy="30" r="20" fill="#fff" stroke="#E4E9F1" stroke-width="2"/><text x="250" y="37" text-anchor="middle" font-size="17">🧩</text></g>
+        <g class="psum-node" style="animation-delay:6s"><circle cx="350" cy="30" r="20" fill="#fff" stroke="#E4E9F1" stroke-width="2"/><text x="350" y="37" text-anchor="middle" font-size="17">✅</text></g>
+        <text x="50" y="72" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0A0E17">감지</text>
+        <text x="150" y="72" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0A0E17">폭파</text>
+        <text x="250" y="72" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0A0E17">재구성</text>
+        <text x="350" y="72" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0A0E17">정착</text>
+      </svg>
+      <div class="psum-caption">
+        <p class="pc-0">"당연하다"는 말 속 숨은 전제를 찾아냅니다</p>
+        <p class="pc-1">그 전제가 항상 참인지 흔들어 봅니다</p>
+        <p class="pc-2">깨진 자리에 더 정확한 생각을 다시 짭니다</p>
+        <p class="pc-3">파트너 노트에 기록해 습관으로 정착시킵니다</p>
+      </div>
     </div>
   </div>
 

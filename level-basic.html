@@ -59,7 +59,11 @@
   @keyframes lpStrike{ 0%,32%{ transform:scaleX(0); } 52%,100%{ transform:scaleX(1); } }
   .lvl-new{ font-size:12px; font-weight:700; color:#0A66FF; margin-top:6px; animation:lpNewIn 4.6s ease-in-out infinite; }
   @keyframes lpNewIn{ 0%,58%{ opacity:0; transform:translateY(4px); } 72%,100%{ opacity:1; transform:translateY(0); } }
-  @media (prefers-reduced-motion:reduce){ .lvl-old,.lvl-old::after,.lvl-new{ animation:none!important; } .lvl-old::after{ transform:scaleX(0)!important; } }
+  @media (prefers-reduced-motion:reduce){
+    .lvl-old{ animation:lpOldFade 4.6s ease-in-out infinite !important; }
+    .lvl-old::after{ animation:lpStrike 4.6s ease-in-out infinite !important; }
+    .lvl-new{ animation:lpNewIn 4.6s ease-in-out infinite !important; }
+  }
 
   /* 기르는 힘 아이콘 브리딩 */
   .lvl-grid > div:nth-child(1) svg{ animation:lvlPulse 2.6s ease-in-out infinite; }
@@ -67,7 +71,12 @@
   .lvl-grid > div:nth-child(3) svg{ animation:lvlPulse 2.6s ease-in-out infinite .6s; }
   .lvl-grid > div:nth-child(4) svg{ animation:lvlPulse 2.6s ease-in-out infinite .9s; }
   @keyframes lvlPulse{ 0%,100%{ transform:scale(1); opacity:1; } 50%{ transform:scale(1.14); opacity:.7; } }
-  @media (prefers-reduced-motion:reduce){ .lvl-grid svg{ animation:none!important; } }
+  @media (prefers-reduced-motion:reduce){
+    .lvl-grid > div:nth-child(1) svg{ animation:lvlPulse 2.6s ease-in-out infinite !important; }
+    .lvl-grid > div:nth-child(2) svg{ animation:lvlPulse 2.6s ease-in-out infinite .3s !important; }
+    .lvl-grid > div:nth-child(3) svg{ animation:lvlPulse 2.6s ease-in-out infinite .6s !important; }
+    .lvl-grid > div:nth-child(4) svg{ animation:lvlPulse 2.6s ease-in-out infinite .9s !important; }
+  }
 </style>
 </head>
 <body>

@@ -122,6 +122,74 @@
   .pbs-step:last-child::after{ display:none; }
   @media (max-width:640px){ .pbs-steps{ grid-template-columns:1fr 1fr; row-gap:32px; } .pbs-step::after{ display:none; } }
 
+  /* PBS 4단계 요약 트랙 (구 히어로 영상 자리) */
+  .psum-card{ background:#fff; border:1px solid var(--line,#E4E9F1); border-radius:22px; padding:26px 18px 20px; box-shadow:0 10px 28px -14px rgba(10,14,23,.14); }
+  .psum-track{ width:100%; height:auto; display:block; overflow:visible; }
+  .psum-fill{ stroke-dasharray:300; stroke-dashoffset:300; animation:psumFill 8s linear infinite; }
+  @keyframes psumFill{ 0%{ stroke-dashoffset:300; } 8%{ stroke-dashoffset:300; } 33%{ stroke-dashoffset:200; } 41%{ stroke-dashoffset:200; } 58%{ stroke-dashoffset:100; } 66%{ stroke-dashoffset:100; } 83%{ stroke-dashoffset:0; } 100%{ stroke-dashoffset:0; } }
+  .psum-node{ animation:psumNodePop 8s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+  .psum-node circle{ transition:none; }
+  @keyframes psumNodePop{ 0%,4%{ transform:scale(1); } 8%,22%{ transform:scale(1.18); } 26%,100%{ transform:scale(1); } }
+  .psum-node:nth-child(3) circle,.psum-node:nth-child(4) circle,.psum-node:nth-child(5) circle,.psum-node:nth-child(6) circle{ animation:psumRing 8s ease-in-out infinite; }
+  .psum-node:nth-child(3) circle{ animation-delay:0s; } .psum-node:nth-child(4) circle{ animation-delay:2s; } .psum-node:nth-child(5) circle{ animation-delay:4s; } .psum-node:nth-child(6) circle{ animation-delay:6s; }
+  @keyframes psumRing{ 0%,4%{ stroke:#E4E9F1; fill:#fff; } 8%,22%{ stroke:#0A66FF; fill:#EAF1FE; } 26%,100%{ stroke:#0A66FF; fill:#fff; } }
+  .psum-caption{ position:relative; height:20px; margin-top:14px; }
+  .psum-caption p{ position:absolute; inset:0; font-size:12.5px; font-weight:600; color:#0A0E17; opacity:0; animation:psumCap 8s ease-in-out infinite; }
+  .psum-caption .pc-0{ animation-delay:0s; } .psum-caption .pc-1{ animation-delay:2s; } .psum-caption .pc-2{ animation-delay:4s; } .psum-caption .pc-3{ animation-delay:6s; }
+  @keyframes psumCap{ 0%,2%{ opacity:0; transform:translateY(4px); } 6%,22%{ opacity:1; transform:translateY(0); } 26%,100%{ opacity:0; } }
+  @media (prefers-reduced-motion:reduce){
+    .psum-fill{ animation:psumFill 8s linear infinite !important; }
+    .psum-node{ animation:psumNodePop 8s ease-in-out infinite !important; }
+    .psum-node:nth-child(3) circle{ animation:psumRing 8s ease-in-out infinite !important; animation-delay:0s !important; }
+    .psum-node:nth-child(4) circle{ animation:psumRing 8s ease-in-out infinite !important; animation-delay:2s !important; }
+    .psum-node:nth-child(5) circle{ animation:psumRing 8s ease-in-out infinite !important; animation-delay:4s !important; }
+    .psum-node:nth-child(6) circle{ animation:psumRing 8s ease-in-out infinite !important; animation-delay:6s !important; }
+    .psum-caption p{ animation:psumCap 8s ease-in-out infinite !important; }
+    .psum-caption .pc-0{ animation-delay:0s !important; } .psum-caption .pc-1{ animation-delay:2s !important; } .psum-caption .pc-2{ animation-delay:4s !important; } .psum-caption .pc-3{ animation-delay:6s !important; }
+  }
+
+  /* 과목 관통 쇼케이스 탭 (brilliant.org 탭 전환형 참고) */
+  .stx-pills{ display:flex; justify-content:center; gap:8px; margin-bottom:14px; }
+  .stx-pill{ padding:6px 16px; border-radius:9999px; font-size:12.5px; font-weight:700; background:#EDEFF2; color:#7A8499; animation:stxPillActive 16s ease-in-out infinite; }
+  @keyframes stxPillActive{ 0%,2%{ background:#EDEFF2; color:#7A8499; } 4%,21%{ background:#0A0E17; color:#fff; } 23%,100%{ background:#EDEFF2; color:#7A8499; } }
+  .stx-panel-wrap{ position:relative; min-height:180px; background:#fff; border:1px solid var(--line,#E4E9F1); border-radius:20px; box-shadow:0 10px 26px -14px rgba(10,14,23,.12); overflow:hidden; }
+  .stx-panel{ position:absolute; inset:0; padding:20px; opacity:0; animation:stxPanelFade 16s ease-in-out infinite; display:flex; gap:16px; align-items:center; }
+  @keyframes stxPanelFade{ 0%,2%{ opacity:0; } 4%,21%{ opacity:1; } 23%,100%{ opacity:0; } }
+  .stx-txt{ flex:1; min-width:0; }
+  .stx-tag{ display:inline-block; font-size:10px; font-weight:800; color:#fff; background:#0A66FF; border-radius:9999px; padding:2px 8px; margin-bottom:6px; }
+  .stx-title{ font-size:13.5px; font-weight:800; color:#0A0E17; line-height:1.4; }
+  .stx-sub{ font-size:12px; color:#7A8499; margin-top:4px; line-height:1.5; }
+  .stx-scene{ width:104px; height:88px; flex-shrink:0; overflow:visible; }
+  @media (max-width:480px){ .stx-panel{ flex-direction:column; align-items:flex-start; } .stx-scene{ width:100%; height:76px; align-self:center; } }
+  .stx-curve{ stroke-dasharray:120; stroke-dashoffset:120; animation:stxCurveDraw 16s ease-in-out infinite; }
+  @keyframes stxCurveDraw{ 0%,3%{ stroke-dashoffset:120; } 10%,21%{ stroke-dashoffset:0; } 23%,100%{ stroke-dashoffset:0; } }
+  .stx-dot1{ animation:stxDotMove 16s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+  @keyframes stxDotMove{ 0%,3%{ transform:translate(0,0); } 10%,21%{ transform:translate(65px,-40px); } 23%,100%{ transform:translate(0,0); } }
+  .stx-strike{ stroke-dasharray:70; stroke-dashoffset:70; animation:stxStrikeDraw 16s ease-in-out infinite; animation-delay:4s; }
+  @keyframes stxStrikeDraw{ 0%,29%{ stroke-dashoffset:70; } 34%,45%{ stroke-dashoffset:0; } 47%,100%{ stroke-dashoffset:0; } }
+  .stx-newbox,.stx-newtxt{ opacity:0; animation:stxNewIn 16s ease-in-out infinite; animation-delay:4s; }
+  @keyframes stxNewIn{ 0%,35%{ opacity:0; } 40%,45%{ opacity:1; } 47%,100%{ opacity:1; } }
+  .stx-arc1{ stroke-dasharray:44; stroke-dashoffset:44; animation:stxArc1 16s ease-in-out infinite; animation-delay:8s; }
+  @keyframes stxArc1{ 0%,3%{ stroke-dashoffset:44; } 10%,21%{ stroke-dashoffset:0; } 23%,100%{ stroke-dashoffset:0; } }
+  .stx-arc2{ stroke-dasharray:44; stroke-dashoffset:44; animation:stxArc2 16s ease-in-out infinite; animation-delay:8s; }
+  @keyframes stxArc2{ 0%,8%{ stroke-dashoffset:44; } 15%,21%{ stroke-dashoffset:0; } 23%,100%{ stroke-dashoffset:0; } }
+  .stx-check1,.stx-check2,.stx-check3{ opacity:0; transform:scale(.5); transform-box:fill-box; transform-origin:center; animation:stxCheckPop 16s ease-in-out infinite; animation-delay:12s; }
+  .stx-check2{ animation-delay:12.3s; } .stx-check3{ animation-delay:12.6s; }
+  @keyframes stxCheckPop{ 0%,2%{ opacity:0; transform:scale(.5); } 6%,21%{ opacity:1; transform:scale(1); } 23%,100%{ opacity:1; transform:scale(1); } }
+  @media (prefers-reduced-motion:reduce){
+    .stx-pill{ animation:stxPillActive 16s ease-in-out infinite !important; }
+    .stx-panel{ animation:stxPanelFade 16s ease-in-out infinite !important; }
+    .stx-curve{ animation:stxCurveDraw 16s ease-in-out infinite !important; }
+    .stx-dot1{ animation:stxDotMove 16s ease-in-out infinite !important; }
+    .stx-strike{ animation:stxStrikeDraw 16s ease-in-out infinite !important; animation-delay:4s !important; }
+    .stx-newbox,.stx-newtxt{ animation:stxNewIn 16s ease-in-out infinite !important; animation-delay:4s !important; }
+    .stx-arc1{ animation:stxArc1 16s ease-in-out infinite !important; animation-delay:8s !important; }
+    .stx-arc2{ animation:stxArc2 16s ease-in-out infinite !important; animation-delay:8s !important; }
+    .stx-check1{ animation:stxCheckPop 16s ease-in-out infinite !important; animation-delay:12s !important; }
+    .stx-check2{ animation:stxCheckPop 16s ease-in-out infinite !important; animation-delay:12.3s !important; }
+    .stx-check3{ animation:stxCheckPop 16s ease-in-out infinite !important; animation-delay:12.6s !important; }
+  }
+
   /* PBS 4-step exam-format loop animation (실제 문항 예시) */
   .pbs-example{ text-align:center; font-size:12px; font-weight:600; color:#7A8499; margin:-4px 0 22px; }
   .pbs-stage{ border-radius:14px; padding:10px 8px; height:92px; display:flex; align-items:center; justify-content:center; margin:12px 0 4px; box-shadow:inset 0 0 0 1.5px rgba(10,14,23,.05); }
@@ -146,7 +214,18 @@
   @keyframes pbsDotSeq{ 0%{ fill:#2B3A57; } 8%{ fill:#FFB800; } 88%{ fill:#FFB800; } 100%{ fill:#2B3A57; } }
   .pbsCheck{ animation:pbsCheckPop 3.4s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
   @keyframes pbsCheckPop{ 0%,78%{ opacity:0; transform:scale(.5); } 88%,96%{ opacity:1; transform:scale(1); } 100%{ opacity:0; transform:scale(1); } }
-  @media (prefers-reduced-motion:reduce){ .pbsMgTarget,.pbsMgRing,.pbsStrike,.pbsOldTxt,.pbsQTxt,.pbsNewTxt,.pbsUnderline,.pbsDot,.pbsCheck{ animation:none !important; } }
+  @media (prefers-reduced-motion:reduce){
+    .pbsMgTarget{ animation:pbsMgMove 3.4s ease-in-out infinite !important; }
+    .pbsMgRing{ animation:pbsMgPulse 3.4s ease-in-out infinite !important; }
+    .pbsStrike{ animation:pbsDrawStrike 3.4s ease-in-out infinite !important; }
+    .pbsOldTxt{ animation:pbsFadeOld 3.4s ease-in-out infinite !important; }
+    .pbsQTxt{ animation:pbsQFade 3.4s ease-in-out infinite !important; }
+    .pbsNewTxt{ animation:pbsRevealNew 3.4s ease-in-out infinite !important; }
+    .pbsUnderline{ animation:pbsDrawUnder 3.4s ease-in-out infinite !important; }
+    .pbsDot{ animation:pbsDotSeq 3.4s steps(1) infinite !important; }
+    .pbsD0{ animation-delay:0s !important; } .pbsD1{ animation-delay:.18s !important; } .pbsD2{ animation-delay:.36s !important; } .pbsD3{ animation-delay:.54s !important; } .pbsD4{ animation-delay:.72s !important; } .pbsD5{ animation-delay:.9s !important; }
+    .pbsCheck{ animation:pbsCheckPop 3.4s ease-in-out infinite !important; }
+  }
 
   /* 무질서→4단계 정렬 클러스터 (solution-head 브릿지 비주얼) */
   .chaos-viz{ max-width:400px; margin:32px auto 4px; }
@@ -164,7 +243,14 @@
   @keyframes chaosNumFade{ 0%,38%{ opacity:0; } 48%,78%{ opacity:1; } 92%,100%{ opacity:0; } }
   .chaosCap{ animation:chaosCapFade 5.2s ease-in-out infinite; }
   @keyframes chaosCapFade{ 0%,40%{ opacity:.45; } 50%,80%{ opacity:1; } 92%,100%{ opacity:.45; } }
-  @media (prefers-reduced-motion:reduce){ .chaosFrag,.chaosNum,.chaosCap{ animation:none !important; } .chaosFrag{ transform:none !important; } }
+  @media (prefers-reduced-motion:reduce){
+    .cf1{ animation:chaosFrag1 5.2s ease-in-out infinite !important; }
+    .cf2{ animation:chaosFrag2 5.2s ease-in-out infinite !important; }
+    .cf3{ animation:chaosFrag3 5.2s ease-in-out infinite !important; }
+    .cf4{ animation:chaosFrag4 5.2s ease-in-out infinite !important; }
+    .chaosNum{ animation:chaosNumFade 5.2s ease-in-out infinite !important; }
+    .chaosCap{ animation:chaosCapFade 5.2s ease-in-out infinite !important; }
+  }
 
   /* #compare 4카드 아이콘 마이크로 루프 */
   .cmp-ico-1{ transform-origin:center; animation:cmpFlip 3s ease-in-out infinite; }
@@ -175,7 +261,12 @@
   @keyframes cmpScan{ 0%,100%{ transform:translateX(0); } 50%{ transform:translateX(6px); } }
   .cmp-ico-4{ transform-origin:center; animation:cmpPulse 2.2s ease-in-out infinite; }
   @keyframes cmpPulse{ 0%,100%{ transform:scale(1); opacity:1; } 50%{ transform:scale(1.15); opacity:.75; } }
-  @media (prefers-reduced-motion:reduce){ .cmp-ico-1,.cmp-ico-2,.cmp-ico-3,.cmp-ico-4{ animation:none !important; } }
+  @media (prefers-reduced-motion:reduce){
+    .cmp-ico-1{ animation:cmpFlip 3s ease-in-out infinite !important; }
+    .cmp-ico-2{ animation:cmpWiggle 3.4s ease-in-out infinite !important; }
+    .cmp-ico-3{ animation:cmpScan 2.6s ease-in-out infinite !important; }
+    .cmp-ico-4{ animation:cmpPulse 2.2s ease-in-out infinite !important; }
+  }
 
   /* comparison cards v2 */
   .vs-card{ background:#fff; border:1.5px solid #DCE3EC; border-radius:1.5rem; padding:1.75rem; transition:transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s; }
@@ -323,6 +414,64 @@
   <div class="kozy st-idle shrink-0" style="width:52px;height:52px" id="introKozy"></div>
   <p class="text-[13.5px] md:text-[14px] text-faint leading-relaxed">사고분석관 <b class="text-ink">루카</b>가 매 사건마다 함께합니다 — 표정 없는 정육면체 캐릭터가, 전제를 발견할 때마다 정팔면체로 형태를 바꾸며 반응해요.</p>
 </div>
+
+<!-- 과목 관통 쇼케이스 (brilliant.org 탭 전환형 참고, 자동 순환 루프) -->
+<section class="pb-14 md:pb-20 bg-white">
+  <div class="max-w-2xl mx-auto px-5 md:px-8 text-center reveal">
+    <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-3">Across every subject</p>
+    <h2 class="display text-[1.5rem] md:text-[2rem] font-extrabold">과목이 아니라, 과목을 관통하는<br class="hidden md:block"/> 생각의 결을 훈련합니다</h2>
+  </div>
+  <div class="max-w-lg mx-auto px-5 md:px-8 mt-9 reveal">
+    <div class="stx-pills">
+      <span class="stx-pill" style="animation-delay:0s">수학</span>
+      <span class="stx-pill" style="animation-delay:4s">언어</span>
+      <span class="stx-pill" style="animation-delay:8s">사회</span>
+      <span class="stx-pill" style="animation-delay:12s">일상</span>
+    </div>
+    <div class="stx-panel-wrap">
+      <div class="stx-panel" style="animation-delay:0s">
+        <div class="stx-txt"><p class="stx-tag">수학</p><p class="stx-title">"빨리 푸는 과목"이라는 전제</p><p class="stx-sub">→ 느리게 판 한 문제가 열 문제를 엽니다</p></div>
+        <svg class="stx-scene" viewBox="0 0 120 100" aria-hidden="true">
+          <rect x="4" y="4" width="112" height="92" rx="14" fill="#F3F8FF"/>
+          <line x1="30" y1="80" x2="30" y2="20" stroke="#B9C3D4" stroke-width="1.4"/>
+          <line x1="30" y1="80" x2="100" y2="80" stroke="#B9C3D4" stroke-width="1.4"/>
+          <path class="stx-curve" d="M30,75 Q55,15 95,35" fill="none" stroke="#0A66FF" stroke-width="2.4" stroke-linecap="round"/>
+          <circle class="stx-dot1" cx="30" cy="75" r="3.5" fill="#0A66FF"/>
+        </svg>
+      </div>
+      <div class="stx-panel" style="animation-delay:4s">
+        <div class="stx-txt"><p class="stx-tag" style="background:#8a4fd6">언어</p><p class="stx-title">"다들 알고 너도 알 거"라는 전제</p><p class="stx-sub">→ 몰래 심어진 전제를 걷어내면 말이 나를 못 깎습니다</p></div>
+        <svg class="stx-scene" viewBox="0 0 120 100" aria-hidden="true">
+          <rect x="4" y="4" width="112" height="92" rx="14" fill="#F6F1FE"/>
+          <rect x="18" y="26" width="84" height="20" rx="10" fill="#fff" stroke="#E4E9F1"/>
+          <line class="stx-strike" x1="26" y1="36" x2="94" y2="36" stroke="#D6432F" stroke-width="2"/>
+          <text x="60" y="40" text-anchor="middle" font-size="9" font-weight="700" fill="#0A0E17">너조차 몰랐어?</text>
+          <rect class="stx-newbox" x="18" y="56" width="84" height="20" rx="10" fill="#0A0E17"/>
+          <text class="stx-newtxt" x="60" y="70" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">전제부터 확인할게</text>
+        </svg>
+      </div>
+      <div class="stx-panel" style="animation-delay:8s">
+        <div class="stx-txt"><p class="stx-tag" style="background:#8a6200">사회</p><p class="stx-title">"기록 = 진실"이라는 전제</p><p class="stx-sub">→ 기록되지 않은 관점을 상상하면 역사가 입체가 됩니다</p></div>
+        <svg class="stx-scene" viewBox="0 0 120 100" aria-hidden="true">
+          <rect x="4" y="4" width="112" height="92" rx="14" fill="#FCF6E8"/>
+          <circle cx="60" cy="50" r="26" fill="none" stroke="#B9C3D4" stroke-width="1.6"/>
+          <path class="stx-arc1" d="M60,24 A26,26 0 0,1 86,50" fill="none" stroke="#0A66FF" stroke-width="3" stroke-linecap="round"/>
+          <path class="stx-arc2" d="M60,76 A26,26 0 0,1 34,50" fill="none" stroke="#8a6200" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="60" cy="50" r="4" fill="#0A0E17"/>
+        </svg>
+      </div>
+      <div class="stx-panel" style="animation-delay:12s">
+        <div class="stx-txt"><p class="stx-tag">일상</p><p class="stx-title">"열심히만 하면 된다"는 전제</p><p class="stx-sub">→ 방향 없는 노력은 헛돕니다, '어떻게'를 먼저 물어야 합니다</p></div>
+        <svg class="stx-scene" viewBox="0 0 120 100" aria-hidden="true">
+          <rect x="4" y="4" width="112" height="92" rx="14" fill="#EAFBF2"/>
+          <g class="stx-check1"><circle cx="34" cy="34" r="12" fill="#fff" stroke="#14B878" stroke-width="2"/><path d="M28,34 l4,4 8,-8" fill="none" stroke="#14B878" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>
+          <g class="stx-check2"><circle cx="66" cy="34" r="12" fill="#fff" stroke="#14B878" stroke-width="2"/><path d="M60,34 l4,4 8,-8" fill="none" stroke="#14B878" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>
+          <g class="stx-check3"><circle cx="50" cy="64" r="14" fill="#0A66FF"/><path d="M43,64 l5,5 9,-10" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ============ STAGE 1 · 고통 (PAIN) ============ -->
 <section id="problem" class="py-16 md:py-24 relative overflow-hidden bg-white">
@@ -519,15 +668,43 @@
   </div>
 </section>
 
-<!-- HERO VIDEO — PLACEHOLDER (영상 준비되면 iframe/video로 교체, 16:9 유지) -->
+<!-- PBS 4단계 요약 트랙 (구 '1분 소개영상' 자리 — 영상 준비 전까지 4단계 사고훈련 요약 애니메이션) -->
 <section class="py-10 md:py-14 bg-white">
   <div class="max-w-xl mx-auto px-5 md:px-8 reveal text-center">
     <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-2">Product Intro</p>
-    <h3 class="text-[16px] md:text-[18px] font-bold text-ink mb-5">1분 만에 보는 PBS 학습법</h3>
-    <div id="heroVideoSlot" class="relative w-full aspect-video rounded-2xl border-2 border-dashed border-line bg-soft flex flex-col items-center justify-center text-center gap-2">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7A8499" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z"/></svg>
-      <p class="text-[13px] font-semibold text-faint">소개 영상 준비 중</p>
-      <p class="text-[11px] text-faint/80">완성되면 이 자리에 삽입됩니다</p>
+    <h3 class="text-[16px] md:text-[18px] font-bold text-ink mb-1">전제를 깨는 4단계 사고 훈련</h3>
+    <p class="text-[12px] text-faint mb-6">PBS 학습법은 이 4단계를 매일 사건 1개로 반복합니다</p>
+    <div class="psum-card">
+      <svg class="psum-track" viewBox="0 0 400 92" role="img" aria-label="감지, 폭파, 재구성, 정착 4단계가 순서대로 강조되는 진행 트랙">
+        <line x1="50" y1="30" x2="350" y2="30" stroke="#E4E9F1" stroke-width="4" stroke-linecap="round"/>
+        <line class="psum-fill" x1="50" y1="30" x2="350" y2="30" stroke="#0A66FF" stroke-width="4" stroke-linecap="round"/>
+        <g class="psum-node" style="animation-delay:0s">
+          <circle cx="50" cy="30" r="20" fill="#fff" stroke="#E4E9F1" stroke-width="2"/>
+          <text x="50" y="37" text-anchor="middle" font-size="17">🔍</text>
+        </g>
+        <g class="psum-node" style="animation-delay:2s">
+          <circle cx="150" cy="30" r="20" fill="#fff" stroke="#E4E9F1" stroke-width="2"/>
+          <text x="150" y="37" text-anchor="middle" font-size="17">💥</text>
+        </g>
+        <g class="psum-node" style="animation-delay:4s">
+          <circle cx="250" cy="30" r="20" fill="#fff" stroke="#E4E9F1" stroke-width="2"/>
+          <text x="250" y="37" text-anchor="middle" font-size="17">🧩</text>
+        </g>
+        <g class="psum-node" style="animation-delay:6s">
+          <circle cx="350" cy="30" r="20" fill="#fff" stroke="#E4E9F1" stroke-width="2"/>
+          <text x="350" y="37" text-anchor="middle" font-size="17">✅</text>
+        </g>
+        <text x="50" y="72" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0A0E17">감지</text>
+        <text x="150" y="72" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0A0E17">폭파</text>
+        <text x="250" y="72" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0A0E17">재구성</text>
+        <text x="350" y="72" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0A0E17">정착</text>
+      </svg>
+      <div class="psum-caption">
+        <p class="pc-0">"당연하다"는 말 속 숨은 전제를 찾아냅니다</p>
+        <p class="pc-1">그 전제가 항상 참인지 흔들어 봅니다</p>
+        <p class="pc-2">깨진 자리에 더 정확한 생각을 다시 짭니다</p>
+        <p class="pc-3">파트너 노트에 기록해 습관으로 정착시킵니다</p>
+      </div>
     </div>
   </div>
 </section>

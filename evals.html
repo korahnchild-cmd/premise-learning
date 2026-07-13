@@ -55,7 +55,34 @@
   .ev-flip .back{ background:linear-gradient(160deg,#0A0E17,#1B2740); color:#FFB800; animation:evFlipBack 3.4s ease-in-out infinite; }
   @keyframes evFlipFront{ 0%,55%{ transform:scaleX(1); } 68%{ transform:scaleX(0); } 100%{ transform:scaleX(1); } }
   @keyframes evFlipBack{ 0%,55%{ transform:scaleX(0); } 68%,95%{ transform:scaleX(1); } 100%{ transform:scaleX(0); } }
-  @media (prefers-reduced-motion:reduce){ *{animation:none!important} }
+
+  /* 균형 저울 + 검증 통과율 막대그래프 */
+  .evb-wrap{ display:grid; grid-template-columns:1fr; gap:20px; max-width:440px; margin:0 auto; }
+  @media (min-width:560px){ .evb-wrap{ grid-template-columns:1fr 1fr; } }
+  .evb-wrap svg{ width:100%; height:auto; overflow:visible; display:block; }
+  .evb-beam{ animation:evbTilt 7s ease-in-out infinite; transform-box:fill-box; transform-origin:100px 34px; }
+  @keyframes evbTilt{ 0%,6%{ transform:rotate(0deg); } 16%{ transform:rotate(-9deg); } 30%{ transform:rotate(7deg); } 44%,100%{ transform:rotate(0deg); } }
+  .evbar1 .evbarfill,.evbar2 .evbarfill,.evbar3 .evbarfill,.evbar4 .evbarfill{ transform-box:fill-box; transform-origin:bottom; animation:evbGrow 7s ease-in-out infinite; }
+  .evbar2 .evbarfill{ animation-delay:.15s; } .evbar3 .evbarfill{ animation-delay:.3s; } .evbar4 .evbarfill{ animation-delay:.45s; }
+  @keyframes evbGrow{ 0%,4%{ transform:scaleY(0); } 26%,74%{ transform:scaleY(1); } 96%,100%{ transform:scaleY(0); } }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important}
+    .ev-viz .ef0{ animation:evFrag0 5.6s ease-in-out infinite !important; }
+    .ev-viz .ef1{ animation:evFrag1 5.6s ease-in-out infinite !important; }
+    .ev-viz .ef2{ animation:evFrag2 5.6s ease-in-out infinite !important; }
+    .ev-viz .ef3{ animation:evFrag3 5.6s ease-in-out infinite !important; }
+    .ev-viz .ef4{ animation:evFrag4 5.6s ease-in-out infinite !important; }
+    .ev-viz .ef5{ animation:evFrag5 5.6s ease-in-out infinite !important; }
+    .ev-check{ animation:evCheckPop 5.6s ease-in-out infinite !important; }
+    .ev-cap{ animation:evCapFade 5.6s ease-in-out infinite !important; }
+    .ev-flip .front{ animation:evFlipFront 3.4s ease-in-out infinite !important; }
+    .ev-flip .back{ animation:evFlipBack 3.4s ease-in-out infinite !important; }
+    .evb-beam{ animation:evbTilt 7s ease-in-out infinite !important; }
+    .evbar1 .evbarfill{ animation:evbGrow 7s ease-in-out infinite !important; }
+    .evbar2 .evbarfill{ animation:evbGrow 7s ease-in-out infinite !important; animation-delay:.15s !important; }
+    .evbar3 .evbarfill{ animation:evbGrow 7s ease-in-out infinite !important; animation-delay:.3s !important; }
+    .evbar4 .evbarfill{ animation:evbGrow 7s ease-in-out infinite !important; animation-delay:.45s !important; }
+  }
 </style>
 </head>
 <body>
@@ -130,7 +157,36 @@
     </div>
   </div>
 
-  <div class="card p-8 mt-10 text-center">
+  <div class="card p-8 mt-10">
+    <p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-3 text-center">동시에 충족해야 통과</p>
+    <h2 class="text-[1.2rem] font-extrabold mb-6 text-center">조건 하나만 어긋나도 균형이 깨집니다</h2>
+    <div class="evb-wrap">
+      <svg viewBox="0 0 200 110" role="img" aria-label="난이도, 전제 명확성, 답의 유일성 세 조건이 균형을 이루는 저울" class="evb-scale">
+        <line x1="100" y1="18" x2="100" y2="70" stroke="#B9C3D4" stroke-width="3"/>
+        <g class="evb-beam">
+          <line x1="30" y1="34" x2="170" y2="34" stroke="#0A0E17" stroke-width="3" stroke-linecap="round"/>
+          <line x1="30" y1="34" x2="30" y2="52" stroke="#B9C3D4" stroke-width="2"/>
+          <line x1="170" y1="34" x2="170" y2="52" stroke="#B9C3D4" stroke-width="2"/>
+          <rect x="12" y="52" width="36" height="22" rx="6" fill="#EAF1FE" stroke="#0A66FF"/>
+          <text x="30" y="67" text-anchor="middle" font-size="9" font-weight="700" fill="#0A0E17">난이도</text>
+          <rect x="152" y="52" width="36" height="22" rx="6" fill="#EAF7EE" stroke="#14B878"/>
+          <text x="170" y="67" text-anchor="middle" font-size="9" font-weight="700" fill="#0A0E17">유일성</text>
+        </g>
+        <polygon points="100,10 108,22 92,22" fill="#FFB800"/>
+        <rect x="70" y="82" width="60" height="20" rx="6" fill="#0A0E17"/>
+        <text x="100" y="96" text-anchor="middle" font-size="9.5" font-weight="700" fill="#fff">전제 명확성</text>
+      </svg>
+      <svg viewBox="0 0 220 110" role="img" aria-label="검증 통과율 막대그래프, 항목별로 순차적으로 자라남" class="evb-bars">
+        <text x="10" y="14" font-size="10" font-weight="700" fill="#7A8499">검증 통과율</text>
+        <g class="evbar1"><rect x="10" y="20" width="42" height="70" rx="4" fill="#EDEFF2"/><rect class="evbarfill" x="10" y="55" width="42" height="35" rx="4" fill="#0A66FF"/><text x="31" y="102" text-anchor="middle" font-size="9" fill="#7A8499">난이도</text></g>
+        <g class="evbar2"><rect x="63" y="20" width="42" height="70" rx="4" fill="#EDEFF2"/><rect class="evbarfill" x="63" y="30" width="42" height="60" rx="4" fill="#0A66FF"/><text x="84" y="102" text-anchor="middle" font-size="9" fill="#7A8499">전제</text></g>
+        <g class="evbar3"><rect x="116" y="20" width="42" height="70" rx="4" fill="#EDEFF2"/><rect class="evbarfill" x="116" y="40" width="42" height="50" rx="4" fill="#0A66FF"/><text x="137" y="102" text-anchor="middle" font-size="9" fill="#7A8499">유일성</text></g>
+        <g class="evbar4"><rect x="169" y="20" width="42" height="70" rx="4" fill="#EDEFF2"/><rect class="evbarfill" x="169" y="26" width="42" height="64" rx="4" fill="#14B878"/><text x="190" y="102" text-anchor="middle" font-size="9" fill="#7A8499">학년</text></g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="card p-8 mt-6 text-center">
     <div class="ev-flip"><div class="front">🔍</div><div class="back">✓</div></div>
     <h2 class="text-[1.3rem] font-extrabold">이 과정을 거친 사건, 직접 확인해 보세요</h2>
     <p class="mt-2 text-[14px] text-body">가입 없이 몇 개 사건을 먼저 풀어볼 수 있습니다.</p>

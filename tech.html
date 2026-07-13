@@ -37,7 +37,35 @@
   .hl-sweep{ position:relative; display:inline-block; }
   .hl-sweep::after{ content:""; position:absolute; left:0; right:0; bottom:-3px; height:3px; background:#0A66FF; border-radius:2px; transform:scaleX(0); transform-origin:left; animation:hlSweep 3.6s ease-in-out infinite; }
   @keyframes hlSweep{ 0%,10%{ transform:scaleX(0); opacity:1; } 38%,72%{ transform:scaleX(1); opacity:1; } 88%,100%{ transform:scaleX(1); opacity:0; } }
-  @media (prefers-reduced-motion:reduce){ *{animation:none!important} .hl-sweep::after{ transform:scaleX(1); opacity:1; } }
+
+  /* 답안→분석→맞춤조정 흐름 (마스코트 없이, 학습 활동 추적 시각화) */
+  .afx-wrap svg{ width:100%; height:auto; display:block; overflow:visible; }
+  .afx-step{ animation:afxStepPulse 6s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+  @keyframes afxStepPulse{ 0%,4%{ opacity:.55; } 8%,28%{ opacity:1; } 34%,100%{ opacity:.55; } }
+  .afx-arrow1{ stroke-dasharray:34; stroke-dashoffset:34; animation:afxArrow1 6s ease-in-out infinite; }
+  @keyframes afxArrow1{ 0%,26%{ stroke-dashoffset:34; } 32%,60%{ stroke-dashoffset:0; } 66%,100%{ stroke-dashoffset:0; } }
+  .afx-step2{ animation:afxStep2Pulse 6s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+  @keyframes afxStep2Pulse{ 0%,30%{ opacity:.55; } 34%,60%{ opacity:1; } 66%,100%{ opacity:.55; } }
+  .afx-scanring{ animation:afxScan 6s ease-in-out infinite; transform-box:fill-box; transform-origin:160px 55px; }
+  @keyframes afxScan{ 0%,32%{ transform:rotate(0deg) scale(1); } 40%{ transform:rotate(180deg) scale(1.15); } 48%,100%{ transform:rotate(360deg) scale(1); } }
+  .afx-arrow2{ stroke-dasharray:34; stroke-dashoffset:34; animation:afxArrow2 6s ease-in-out infinite; }
+  @keyframes afxArrow2{ 0%,58%{ stroke-dashoffset:34; } 64%,86%{ stroke-dashoffset:0; } 90%,100%{ stroke-dashoffset:0; } }
+  .afx-step3{ animation:afxStep3Pulse 6s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+  @keyframes afxStep3Pulse{ 0%,62%{ opacity:.55; } 66%,90%{ opacity:1; } 96%,100%{ opacity:.55; } }
+  .afx-bar1,.afx-bar2,.afx-bar3{ transform-box:fill-box; transform-origin:bottom; animation:afxBarGrow 6s ease-in-out infinite; }
+  .afx-bar2{ animation-delay:.15s; } .afx-bar3{ animation-delay:.3s; }
+  @keyframes afxBarGrow{ 0%,64%{ transform:scaleY(0); } 72%,90%{ transform:scaleY(1); } 96%,100%{ transform:scaleY(0); } }
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important} .hl-sweep::after{ animation:hlSweep 3.6s ease-in-out infinite !important; }
+    .afx-step{ animation:afxStepPulse 6s ease-in-out infinite !important; }
+    .afx-arrow1{ animation:afxArrow1 6s ease-in-out infinite !important; }
+    .afx-step2{ animation:afxStep2Pulse 6s ease-in-out infinite !important; }
+    .afx-scanring{ animation:afxScan 6s ease-in-out infinite !important; }
+    .afx-arrow2{ animation:afxArrow2 6s ease-in-out infinite !important; }
+    .afx-step3{ animation:afxStep3Pulse 6s ease-in-out infinite !important; }
+    .afx-bar1{ animation:afxBarGrow 6s ease-in-out infinite !important; }
+    .afx-bar2{ animation:afxBarGrow 6s ease-in-out infinite !important; animation-delay:.15s !important; }
+    .afx-bar3{ animation:afxBarGrow 6s ease-in-out infinite !important; animation-delay:.3s !important; }
+  }
 </style>
 </head>
 <body>
@@ -72,6 +100,63 @@
       <p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-3">무엇을 목표로 하는가</p>
       <h2 class="text-[1.3rem] font-extrabold mb-3">"안다"가 아니라 "의심하는 지점을 넓히는 것"</h2>
       <p class="text-[14.5px] text-body leading-relaxed">이 시스템은 정답률을 높이는 걸 목표로 하지 않습니다. 대신 아이가 이전에는 그냥 지나쳤던 전제를 알아차리는 빈도와 범위가 넓어지는지를 봅니다. 파트너 노트에 쌓이는 기록은 그래서 정오표가 아니라, "이번 주에 새로 의심하기 시작한 것들"의 목록에 가깝습니다.</p>
+    </div>
+
+    <div class="card p-8 overflow-hidden">
+      <p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-3">어떻게 조정되는가</p>
+      <h2 class="text-[1.3rem] font-extrabold mb-5">답안 하나하나가 다음 사건을 바꿉니다</h2>
+      <div class="afx-wrap">
+        <svg viewBox="0 0 320 110" role="img" aria-label="학생 답안이 분석을 거쳐 다음 사건의 난이도·유형이 맞춤 조정되는 3단계 흐름">
+          <g class="afx-step">
+            <rect x="4" y="20" width="76" height="70" rx="14" fill="#F5F6F4" stroke="#ECEEF1"/>
+            <rect class="afx-chip" x="20" y="40" width="44" height="14" rx="7" fill="#fff" stroke="#DCE3EC"/>
+            <rect class="afx-chip" x="20" y="60" width="30" height="14" rx="7" fill="#fff" stroke="#DCE3EC"/>
+            <text x="42" y="98" text-anchor="middle" font-size="10" font-weight="700" fill="#7A8499">학생 답안</text>
+          </g>
+          <path class="afx-arrow1" d="M84,55 L118,55" stroke="#C7D2E3" stroke-width="2" marker-end="url(#afxHead)"/>
+          <g class="afx-step2">
+            <circle cx="160" cy="55" r="38" fill="#F3F8FF" stroke="#ECEEF1"/>
+            <circle class="afx-scanring" cx="160" cy="55" r="20" fill="none" stroke="#0A66FF" stroke-width="2.4"/>
+            <line class="afx-scanhandle" x1="174" y1="69" x2="186" y2="81" stroke="#0A66FF" stroke-width="3" stroke-linecap="round"/>
+            <text x="160" y="99" text-anchor="middle" font-size="10" font-weight="700" fill="#7A8499">전제 유형 분석</text>
+          </g>
+          <path class="afx-arrow2" d="M202,55 L236,55" stroke="#C7D2E3" stroke-width="2" marker-end="url(#afxHead)"/>
+          <g class="afx-step3">
+            <rect x="240" y="20" width="76" height="70" rx="14" fill="#EAF7EE" stroke="#ECEEF1"/>
+            <rect class="afx-bar1" x="256" y="66" width="10" height="14" rx="2" fill="#14B878"/>
+            <rect class="afx-bar2" x="272" y="52" width="10" height="28" rx="2" fill="#14B878"/>
+            <rect class="afx-bar3" x="288" y="38" width="10" height="42" rx="2" fill="#14B878"/>
+            <text x="278" y="98" text-anchor="middle" font-size="10" font-weight="700" fill="#7A8499">난이도·유형 조정</text>
+          </g>
+          <defs><marker id="afxHead" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#C7D2E3"/></marker></defs>
+        </svg>
+      </div>
+      <p class="text-[13px] text-faint mt-4">마스코트가 대신 풀어주지 않습니다 — 아이의 답안 패턴이 곧 다음 문제의 방향이 됩니다.</p>
+      <div class="afx-iso mt-6 pt-6" style="border-top:1px solid #ECEEF1">
+        <svg viewBox="0 0 300 70" role="img" aria-label="분석·기록·조정을 상징하는 3개의 아이소메트릭 아이콘" class="w-full h-auto">
+          <g transform="translate(10,5)">
+            <path d="M25,0 L50,14 L25,28 L0,14 Z" fill="#EAF1FE"/>
+            <path d="M0,14 L25,28 L25,52 L0,38 Z" fill="#D5E3FE"/>
+            <path d="M50,14 L25,28 L25,52 L50,38 Z" fill="#0A66FF"/>
+            <circle cx="25" cy="20" r="8" fill="none" stroke="#0A0E17" stroke-width="2.4"/><line x1="30.5" y1="25.5" x2="36" y2="31" stroke="#0A0E17" stroke-width="2.4" stroke-linecap="round"/>
+          </g>
+          <g transform="translate(120,5)">
+            <path d="M25,0 L50,14 L25,28 L0,14 Z" fill="#FDF3E9"/>
+            <path d="M0,14 L25,28 L25,52 L0,38 Z" fill="#FBE7D2"/>
+            <path d="M50,14 L25,28 L25,52 L50,38 Z" fill="#E8A94E"/>
+            <line x1="17" y1="16" x2="33" y2="16" stroke="#0A0E17" stroke-width="2"/><line x1="17" y1="21" x2="33" y2="21" stroke="#0A0E17" stroke-width="2"/><line x1="17" y1="26" x2="27" y2="26" stroke="#0A0E17" stroke-width="2"/>
+          </g>
+          <g transform="translate(230,5)">
+            <path d="M25,0 L50,14 L25,28 L0,14 Z" fill="#EAFBF2"/>
+            <path d="M0,14 L25,28 L25,52 L0,38 Z" fill="#CFF3DD"/>
+            <path d="M50,14 L25,28 L25,52 L50,38 Z" fill="#14B878"/>
+            <path d="M17,22 l6,6 12,-12" fill="none" stroke="#0A0E17" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+          <text x="35" y="66" text-anchor="middle" font-size="9" font-weight="700" fill="#7A8499">분석</text>
+          <text x="145" y="66" text-anchor="middle" font-size="9" font-weight="700" fill="#7A8499">기록</text>
+          <text x="255" y="66" text-anchor="middle" font-size="9" font-weight="700" fill="#7A8499">조정</text>
+        </svg>
+      </div>
     </div>
 
     <div class="card p-8" style="border-left:3px solid #FFB800">

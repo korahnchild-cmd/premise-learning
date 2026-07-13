@@ -36,7 +36,32 @@
   .hl-sweep{ position:relative; display:inline-block; }
   .hl-sweep::after{ content:""; position:absolute; left:0; right:0; bottom:-3px; height:3px; background:#0A66FF; border-radius:2px; transform:scaleX(0); transform-origin:left; animation:hlSweep 3.6s ease-in-out infinite; }
   @keyframes hlSweep{ 0%,10%{ transform:scaleX(0); opacity:1; } 38%,72%{ transform:scaleX(1); opacity:1; } 88%,100%{ transform:scaleX(1); opacity:0; } }
-  @media (prefers-reduced-motion:reduce){ *{animation:none!important} .hl-sweep::after{ transform:scaleX(1); opacity:1; } }
+
+  /* PBS 4단계 요약 트랙 (mission.html 하단 중복 삽입) */
+  .psum-card{ background:#fff; border:1px solid #ECEEF1; border-radius:22px; padding:26px 18px 20px; box-shadow:0 10px 28px -14px rgba(10,14,23,.14); }
+  .psum-track{ width:100%; height:auto; display:block; overflow:visible; }
+  .psum-fill{ stroke-dasharray:300; stroke-dashoffset:300; animation:psumFill 8s linear infinite; }
+  @keyframes psumFill{ 0%{ stroke-dashoffset:300; } 8%{ stroke-dashoffset:300; } 33%{ stroke-dashoffset:200; } 41%{ stroke-dashoffset:200; } 58%{ stroke-dashoffset:100; } 66%{ stroke-dashoffset:100; } 83%{ stroke-dashoffset:0; } 100%{ stroke-dashoffset:0; } }
+  .psum-node{ animation:psumNodePop 8s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+  @keyframes psumNodePop{ 0%,4%{ transform:scale(1); } 8%,22%{ transform:scale(1.18); } 26%,100%{ transform:scale(1); } }
+  .psum-node:nth-child(3) circle,.psum-node:nth-child(4) circle,.psum-node:nth-child(5) circle,.psum-node:nth-child(6) circle{ animation:psumRing 8s ease-in-out infinite; }
+  .psum-node:nth-child(3) circle{ animation-delay:0s; } .psum-node:nth-child(4) circle{ animation-delay:2s; } .psum-node:nth-child(5) circle{ animation-delay:4s; } .psum-node:nth-child(6) circle{ animation-delay:6s; }
+  @keyframes psumRing{ 0%,4%{ stroke:#E4E9F1; fill:#fff; } 8%,22%{ stroke:#0A66FF; fill:#EAF1FE; } 26%,100%{ stroke:#0A66FF; fill:#fff; } }
+  .psum-caption{ position:relative; height:20px; margin-top:14px; }
+  .psum-caption p{ position:absolute; inset:0; font-size:12.5px; font-weight:600; color:#0A0E17; opacity:0; animation:psumCap 8s ease-in-out infinite; }
+  .psum-caption .pc-0{ animation-delay:0s; } .psum-caption .pc-1{ animation-delay:2s; } .psum-caption .pc-2{ animation-delay:4s; } .psum-caption .pc-3{ animation-delay:6s; }
+  @keyframes psumCap{ 0%,2%{ opacity:0; transform:translateY(4px); } 6%,22%{ opacity:1; transform:translateY(0); } 26%,100%{ opacity:0; } }
+
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important} .hl-sweep::after{ animation:hlSweep 3.6s ease-in-out infinite !important; }
+    .psum-fill{ animation:psumFill 8s linear infinite !important; }
+    .psum-node{ animation:psumNodePop 8s ease-in-out infinite !important; }
+    .psum-node:nth-child(3) circle{ animation:psumRing 8s ease-in-out infinite !important; animation-delay:0s !important; }
+    .psum-node:nth-child(4) circle{ animation:psumRing 8s ease-in-out infinite !important; animation-delay:2s !important; }
+    .psum-node:nth-child(5) circle{ animation:psumRing 8s ease-in-out infinite !important; animation-delay:4s !important; }
+    .psum-node:nth-child(6) circle{ animation:psumRing 8s ease-in-out infinite !important; animation-delay:6s !important; }
+    .psum-caption p{ animation:psumCap 8s ease-in-out infinite !important; }
+    .psum-caption .pc-0{ animation-delay:0s !important; } .psum-caption .pc-1{ animation-delay:2s !important; } .psum-caption .pc-2{ animation-delay:4s !important; } .psum-caption .pc-3{ animation-delay:6s !important; }
+  }
 </style>
 </head>
 <body>
@@ -76,6 +101,32 @@
       <p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-3">우리가 하는 것</p>
       <h2 class="text-[1.3rem] font-extrabold mb-3">매일 짧은 사건 하나, 6개월의 루틴</h2>
       <p class="text-[14.5px] text-body leading-relaxed">전제 찾기 → 전제 폭파 → 파트너 노트 기록, 이 세 단계를 매일 짧게 반복합니다. 하루의 학습량은 크지 않지만, 6개월간 쌓이면 문제를 대하는 태도 자체가 달라집니다. 다니는 학원은 그대로 두고, 이 사고 습관 하나만 더하는 것이 저희의 방식입니다.</p>
+    </div>
+  </div>
+
+  <div class="mt-10 text-center">
+    <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-2">In practice</p>
+    <h3 class="text-[16px] font-bold text-ink mb-1">전제를 깨는 4단계 사고 훈련</h3>
+    <p class="text-[12px] text-faint mb-6">이 미션은 실제로 이 4단계로 매일 반복됩니다</p>
+    <div class="psum-card max-w-lg mx-auto">
+      <svg class="psum-track" viewBox="0 0 400 92" role="img" aria-label="감지, 폭파, 재구성, 정착 4단계가 순서대로 강조되는 진행 트랙">
+        <line x1="50" y1="30" x2="350" y2="30" stroke="#E4E9F1" stroke-width="4" stroke-linecap="round"/>
+        <line class="psum-fill" x1="50" y1="30" x2="350" y2="30" stroke="#0A66FF" stroke-width="4" stroke-linecap="round"/>
+        <g class="psum-node" style="animation-delay:0s"><circle cx="50" cy="30" r="20" fill="#fff" stroke="#E4E9F1" stroke-width="2"/><text x="50" y="37" text-anchor="middle" font-size="17">🔍</text></g>
+        <g class="psum-node" style="animation-delay:2s"><circle cx="150" cy="30" r="20" fill="#fff" stroke="#E4E9F1" stroke-width="2"/><text x="150" y="37" text-anchor="middle" font-size="17">💥</text></g>
+        <g class="psum-node" style="animation-delay:4s"><circle cx="250" cy="30" r="20" fill="#fff" stroke="#E4E9F1" stroke-width="2"/><text x="250" y="37" text-anchor="middle" font-size="17">🧩</text></g>
+        <g class="psum-node" style="animation-delay:6s"><circle cx="350" cy="30" r="20" fill="#fff" stroke="#E4E9F1" stroke-width="2"/><text x="350" y="37" text-anchor="middle" font-size="17">✅</text></g>
+        <text x="50" y="72" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0A0E17">감지</text>
+        <text x="150" y="72" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0A0E17">폭파</text>
+        <text x="250" y="72" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0A0E17">재구성</text>
+        <text x="350" y="72" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0A0E17">정착</text>
+      </svg>
+      <div class="psum-caption">
+        <p class="pc-0">"당연하다"는 말 속 숨은 전제를 찾아냅니다</p>
+        <p class="pc-1">그 전제가 항상 참인지 흔들어 봅니다</p>
+        <p class="pc-2">깨진 자리에 더 정확한 생각을 다시 짭니다</p>
+        <p class="pc-3">파트너 노트에 기록해 습관으로 정착시킵니다</p>
+      </div>
     </div>
   </div>
 
