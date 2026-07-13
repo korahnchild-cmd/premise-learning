@@ -52,7 +52,14 @@
   .modal-panel { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:min(92vw,520px); max-height:88vh; overflow:auto; animation:pop .35s cubic-bezier(.3,1.3,.5,1); }
   @keyframes fade{ from{opacity:0} } @keyframes pop{ from{opacity:0; transform:translate(-50%,-46%) scale(.96)} }
   .fadein { animation:fadein .5s ease both; } @keyframes fadein{ from{opacity:0; transform:translateY(10px)} }
-  @media (prefers-reduced-motion:reduce){ *{animation:none!important} }
+
+  /* 과목 관통 예시 사이클 */
+  .cs-loop{ position:relative; height:56px; }
+  .cs-loop p{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; gap:8px; font-size:13.5px; font-weight:700; text-align:center; opacity:0; animation:csCycle 10.5s ease-in-out infinite; }
+  .cs-loop .cs-2{ animation-delay:3.5s; } .cs-loop .cs-3{ animation-delay:7s; }
+  .cs-loop .cs-tag{ font-size:10px; font-weight:800; color:#fff; background:#0A66FF; border-radius:9999px; padding:2px 8px; }
+  @keyframes csCycle{ 0%,2%{ opacity:0; transform:translateY(6px); } 8%,28%{ opacity:1; transform:translateY(0); } 34%,100%{ opacity:0; } }
+  @media (prefers-reduced-motion:reduce){ .cs-loop p{ animation:none!important; opacity:0; } .cs-loop p:first-child{ opacity:1; } }
 </style>
 </head>
 <body>
@@ -76,6 +83,13 @@
       <h1 class="text-[1.7rem] md:text-[2.1rem] font-extrabold">사고의 전제 경로</h1>
       <p class="text-[14px] text-body mt-1">과목을 가르치지 않습니다. 어떤 지식이든 관통하는 '전제를 의심하는 힘'을 <b class="text-ink">입문 → 기본 → 심화</b> 3단계로 훈련합니다.</p>
     </div>
+  </div>
+
+  <!-- 과목을 관통하는 예시 3개 순환 -->
+  <div class="cs-loop mt-6 bg-white border border-line rounded-2xl px-4">
+    <p><span class="cs-tag">수학</span>"빨리 푸는 과목이다" → 깊이 이해하는 과목</p>
+    <p class="cs-2"><span class="cs-tag" style="background:#8a6200">사회</span>"역사는 승자의 기록이다" → 기록되지 않은 관점을 상상하면 입체가 된다</p>
+    <p class="cs-3"><span class="cs-tag">일상</span>"공부는 열심히 해야 한다" → 방향을 먼저 물어야 한다</p>
   </div>
 
   <!-- GRADE TRACK TABS (9트랙 매트릭스: 학년군 × 단계) -->

@@ -32,7 +32,12 @@
   @keyframes kfloat{ 0%,100%{transform:translateY(0) rotate(-6deg)} 50%{transform:translateY(-6px) rotate(6deg)} }
   .eyebrow{ letter-spacing:.22em; }
   .badge-pending{ display:inline-flex; align-items:center; gap:.4rem; padding:.35rem .8rem; border-radius:9999px; background:rgba(255,184,0,.12); color:#8a6200; font-size:11px; font-weight:700; }
-  @media (prefers-reduced-motion:reduce){ *{animation:none!important} }
+
+  /* 강조 문구 스윕 언더라인 */
+  .hl-sweep{ position:relative; display:inline-block; }
+  .hl-sweep::after{ content:""; position:absolute; left:0; right:0; bottom:-3px; height:3px; background:#0A66FF; border-radius:2px; transform:scaleX(0); transform-origin:left; animation:hlSweep 3.6s ease-in-out infinite; }
+  @keyframes hlSweep{ 0%,10%{ transform:scaleX(0); opacity:1; } 38%,72%{ transform:scaleX(1); opacity:1; } 88%,100%{ transform:scaleX(1); opacity:0; } }
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important} .hl-sweep::after{ transform:scaleX(1); opacity:1; } }
 </style>
 </head>
 <body>
@@ -51,7 +56,7 @@
       </g></svg>
     </div>
     <p class="eyebrow uppercase text-[11px] font-semibold text-point mb-4">비하인드 · 기술</p>
-    <h1 class="text-[2rem] md:text-[2.7rem] font-extrabold leading-tight">적응형 전제탐지 시스템</h1>
+    <h1 class="text-[2rem] md:text-[2.7rem] font-extrabold leading-tight"><span class="hl-sweep">적응형</span> 전제탐지 시스템</h1>
     <p class="mt-4"><span class="badge-pending">특허 출원 중</span></p>
     <p class="mt-5 text-[15px] md:text-[16px] text-body max-w-xl mx-auto leading-relaxed">같은 학년이라도, 아이마다 붙잡고 있는 전제는 다릅니다. 그래서 같은 문제를 똑같이 풀리는 대신, 아이의 반응 패턴을 보고 다음 사건을 조정하는 시스템을 만들었습니다.</p>
   </div>

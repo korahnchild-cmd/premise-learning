@@ -37,6 +37,10 @@
   .acc-ic{ transition:transform .35s; } .acc.open .acc-ic{ transform:rotate(45deg); }
   mark{ background:rgba(10,102,255,.18); color:#0A0E17; border-radius:3px; padding:0 1px; }
   .catchip{ transition:all .25s; } .catchip.active{ background:#0A0E17; color:#fff; }
+
+  /* 자주 찾는 질문 — 첫 칩에 은은한 펄스로 시선 유도 */
+  #topQs button:first-child{ animation:tqPulse 2.4s ease-in-out infinite; }
+  @keyframes tqPulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(10,102,255,.28); } 50%{ box-shadow:0 0 0 6px rgba(10,102,255,0); } }
   @media (prefers-reduced-motion:reduce){ *{animation:none!important} }
 </style>
 </head>

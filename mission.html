@@ -31,7 +31,12 @@
   .kozy .kw{ transform-origin:50% 55%; animation:kfloat 4s ease-in-out infinite; }
   @keyframes kfloat{ 0%,100%{transform:translateY(0) rotate(-6deg)} 50%{transform:translateY(-6px) rotate(6deg)} }
   .eyebrow{ letter-spacing:.22em; }
-  @media (prefers-reduced-motion:reduce){ *{animation:none!important} }
+
+  /* 강조 문구 스윕 언더라인 */
+  .hl-sweep{ position:relative; display:inline-block; }
+  .hl-sweep::after{ content:""; position:absolute; left:0; right:0; bottom:-3px; height:3px; background:#0A66FF; border-radius:2px; transform:scaleX(0); transform-origin:left; animation:hlSweep 3.6s ease-in-out infinite; }
+  @keyframes hlSweep{ 0%,10%{ transform:scaleX(0); opacity:1; } 38%,72%{ transform:scaleX(1); opacity:1; } 88%,100%{ transform:scaleX(1); opacity:0; } }
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important} .hl-sweep::after{ transform:scaleX(1); opacity:1; } }
 </style>
 </head>
 <body>
@@ -50,7 +55,7 @@
       </g></svg>
     </div>
     <p class="eyebrow uppercase text-[11px] font-semibold text-point mb-4">우리의 미션</p>
-    <h1 class="text-[2rem] md:text-[2.7rem] font-extrabold leading-tight">전제를 의심할 수 있는<br class="hidden sm:block" />아이로 자라도록</h1>
+    <h1 class="text-[2rem] md:text-[2.7rem] font-extrabold leading-tight">전제를 <span class="hl-sweep">의심할 수 있는</span><br class="hidden sm:block" />아이로 자라도록</h1>
     <p class="mt-5 text-[15px] md:text-[16px] text-body max-w-xl mx-auto leading-relaxed">아이들이 전제를 못 찾는 게 아닙니다. 찾을 필요가 없었을 뿐입니다.</p>
   </div>
 

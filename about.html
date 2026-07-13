@@ -31,7 +31,12 @@
   .kozy .kw{ transform-origin:50% 55%; animation:kfloat 4s ease-in-out infinite; }
   @keyframes kfloat{ 0%,100%{transform:translateY(0) rotate(-6deg)} 50%{transform:translateY(-6px) rotate(6deg)} }
   .eyebrow{ letter-spacing:.22em; }
-  @media (prefers-reduced-motion:reduce){ *{animation:none!important} }
+
+  /* 강조 문구 스윕 언더라인 */
+  .hl-sweep{ position:relative; display:inline-block; }
+  .hl-sweep::after{ content:""; position:absolute; left:0; right:0; bottom:-3px; height:3px; background:#0A66FF; border-radius:2px; transform:scaleX(0); transform-origin:left; animation:hlSweep 3.6s ease-in-out infinite; }
+  @keyframes hlSweep{ 0%,10%{ transform:scaleX(0); opacity:1; } 38%,72%{ transform:scaleX(1); opacity:1; } 88%,100%{ transform:scaleX(1); opacity:0; } }
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important} .hl-sweep::after{ transform:scaleX(1); opacity:1; } }
 </style>
 </head>
 <body>
@@ -50,7 +55,7 @@
       </g></svg>
     </div>
     <p class="eyebrow uppercase text-[11px] font-semibold text-point mb-4">회사 소개</p>
-    <h1 class="text-[2rem] md:text-[2.7rem] font-extrabold leading-tight">정답을 맞히는 능력과<br class="hidden sm:block" />정답을 의심하는 능력은 다릅니다</h1>
+    <h1 class="text-[2rem] md:text-[2.7rem] font-extrabold leading-tight">정답을 맞히는 능력과<br class="hidden sm:block" />정답을 <span class="hl-sweep">의심하는 능력</span>은 다릅니다</h1>
     <p class="mt-5 text-[15px] md:text-[16px] text-body max-w-xl mx-auto leading-relaxed">PBS 학습법(Premise-Break Schema)은 이 단순한 관찰에서 시작됐습니다.</p>
   </div>
 

@@ -59,7 +59,15 @@
   #caseCard:hover::after{ opacity:1; }
   #caseRing{ transition:stroke-dashoffset .6s ease; }
   @keyframes sfade{ from{opacity:0; transform:translateY(14px)} }
-  @media (prefers-reduced-motion:reduce){ *{animation:none!important} }
+
+  /* 인트로 — 학년별 실제 문항 미리보기 순환 */
+  .demo-loop{ position:relative; height:60px; max-width:440px; margin:18px auto 0; }
+  .demo-loop p{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; opacity:0; animation:demoCycle 10.5s ease-in-out infinite; }
+  .demo-loop .dl-2{ animation-delay:3.5s; } .demo-loop .dl-3{ animation-delay:7s; }
+  .demo-loop .dl-tag{ font-size:10px; font-weight:800; color:#0A66FF; letter-spacing:.05em; }
+  .demo-loop .dl-txt{ font-size:13.5px; font-weight:700; color:#0A0E17; }
+  @keyframes demoCycle{ 0%,2%{ opacity:0; transform:translateY(6px); } 8%,28%{ opacity:1; transform:translateY(0); } 34%,100%{ opacity:0; } }
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important} .demo-loop p:first-child{ opacity:1!important; } }
 </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -83,6 +91,13 @@
       <div class="kozy st-idle mx-auto mb-8" style="width:120px;height:120px" id="k-intro"></div>
       <h1 class="text-[1.9rem] md:text-[2.4rem] font-extrabold leading-tight">전제 3개, <span class="text-point">가입 없이</span> 풀어볼래?</h1>
       <p class="mt-5 text-[16px] text-body leading-relaxed max-w-md mx-auto">난 사고분석관 루카야. 당연해 보이는 문장 속에 숨은 전제를 찾아 깨는 게 우리가 할 일이야. 딱 3개만 같이 해보자.</p>
+
+      <div class="demo-loop">
+        <p><span class="dl-tag">초등 예시</span><span class="dl-txt">"둘레가 길수록 넓이도 크다" → 둘레와 넓이는 별개다</span></p>
+        <p class="dl-2"><span class="dl-tag">중등 예시</span><span class="dl-txt">"일차방정식은 항상 해가 하나다" → 해가 없거나 무수히 많을 수도</span></p>
+        <p class="dl-3"><span class="dl-tag">고등 예시</span><span class="dl-txt">"그래프가 우상향하면 인과관계다" → 상관관계일 뿐, 원인을 증명하지 않는다</span></p>
+      </div>
+
       <p class="mt-8 text-[13px] font-semibold text-faint">학년을 골라줘</p>
       <div class="grid gap-3 mt-3 max-w-sm mx-auto text-left" id="gradePick"></div>
     </section>

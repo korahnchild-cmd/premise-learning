@@ -32,6 +32,29 @@
   @keyframes kfloat{ 0%,100%{transform:translateY(0) rotate(-6deg)} 50%{transform:translateY(-6px) rotate(6deg)} }
   .eyebrow{ letter-spacing:.22em; }
   .stepnum{ width:32px; height:32px; border-radius:9999px; background:#0A66FF; color:#fff; font-size:14px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+
+  /* 거친 문항 초안 → 정교한 사건 클러스터 */
+  .ev-viz{ max-width:420px; margin:36px auto 0; }
+  .ev-viz svg{ width:100%; height:auto; overflow:visible; }
+  .evFrag{ transform-box:fill-box; transform-origin:center; }
+  .ev-viz .ef0{ animation:evFrag0 5.6s ease-in-out infinite; } @keyframes evFrag0{ 0%,100%{ transform:translate(10px,-14px) rotate(-16deg); } 32%,76%{ transform:translate(0,0) rotate(0deg); } }
+  .ev-viz .ef1{ animation:evFrag1 5.6s ease-in-out infinite; } @keyframes evFrag1{ 0%,100%{ transform:translate(-8px,16px) rotate(12deg); } 32%,76%{ transform:translate(0,0) rotate(0deg); } }
+  .ev-viz .ef2{ animation:evFrag2 5.6s ease-in-out infinite; } @keyframes evFrag2{ 0%,100%{ transform:translate(14px,10px) rotate(-20deg); } 32%,76%{ transform:translate(0,0) rotate(0deg); } }
+  .ev-viz .ef3{ animation:evFrag3 5.6s ease-in-out infinite; } @keyframes evFrag3{ 0%,100%{ transform:translate(-14px,-8px) rotate(18deg); } 32%,76%{ transform:translate(0,0) rotate(0deg); } }
+  .ev-viz .ef4{ animation:evFrag4 5.6s ease-in-out infinite; } @keyframes evFrag4{ 0%,100%{ transform:translate(8px,14px) rotate(-10deg); } 32%,76%{ transform:translate(0,0) rotate(0deg); } }
+  .ev-viz .ef5{ animation:evFrag5 5.6s ease-in-out infinite; } @keyframes evFrag5{ 0%,100%{ transform:translate(-10px,-16px) rotate(22deg); } 32%,76%{ transform:translate(0,0) rotate(0deg); } }
+  .ev-check{ animation:evCheckPop 5.6s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+  @keyframes evCheckPop{ 0%,58%{ opacity:0; transform:scale(.5); } 68%,90%{ opacity:1; transform:scale(1); } 100%{ opacity:0; transform:scale(1); } }
+  .ev-cap{ animation:evCapFade 5.6s ease-in-out infinite; }
+  @keyframes evCapFade{ 0%,36%{ opacity:.4; } 44%,88%{ opacity:1; } 96%,100%{ opacity:.4; } }
+
+  /* 사건 카드 플립 미리보기 */
+  .ev-flip{ width:64px; height:64px; margin:0 auto 14px; position:relative; }
+  .ev-flip .front, .ev-flip .back{ position:absolute; inset:0; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:22px; backface-visibility:hidden; transform-box:fill-box; }
+  .ev-flip .front{ background:linear-gradient(160deg,#EAF1FF,#D3E2FF); animation:evFlipFront 3.4s ease-in-out infinite; }
+  .ev-flip .back{ background:linear-gradient(160deg,#0A0E17,#1B2740); color:#FFB800; animation:evFlipBack 3.4s ease-in-out infinite; }
+  @keyframes evFlipFront{ 0%,55%{ transform:scaleX(1); } 68%{ transform:scaleX(0); } 100%{ transform:scaleX(1); } }
+  @keyframes evFlipBack{ 0%,55%{ transform:scaleX(0); } 68%,95%{ transform:scaleX(1); } 100%{ transform:scaleX(0); } }
   @media (prefers-reduced-motion:reduce){ *{animation:none!important} }
 </style>
 </head>
@@ -53,6 +76,24 @@
     <p class="eyebrow uppercase text-[11px] font-semibold text-point mb-4">비하인드 · 검증</p>
     <h1 class="text-[2rem] md:text-[2.7rem] font-extrabold leading-tight">사건(문항)은 어떻게<br class="hidden sm:block" />만들어지고 검증되나요</h1>
     <p class="mt-5 text-[15px] md:text-[16px] text-body max-w-xl mx-auto leading-relaxed">전제 하나를 잘못 설계하면, 아이는 엉뚱한 지점을 의심하게 됩니다. 그래서 사건 하나가 나오기까지 거치는 과정을 공개합니다.</p>
+
+    <div class="ev-viz">
+      <svg viewBox="0 0 380 110" aria-hidden="true">
+        <g class="evFrag ef0"><rect x="8" y="10" width="110" height="42" rx="10" fill="#EAF1FF" stroke="#0A66FF" stroke-width="1.5"/></g>
+        <g class="evFrag ef1"><rect x="138" y="10" width="110" height="42" rx="10" fill="#FFF4D6" stroke="#E0A600" stroke-width="1.5"/></g>
+        <g class="evFrag ef2"><rect x="268" y="10" width="110" height="42" rx="10" fill="#EAF1FF" stroke="#0A66FF" stroke-width="1.5"/></g>
+        <g class="evFrag ef3"><rect x="8" y="60" width="110" height="42" rx="10" fill="#FFF4D6" stroke="#E0A600" stroke-width="1.5"/></g>
+        <g class="evFrag ef4"><rect x="138" y="60" width="110" height="42" rx="10" fill="#EAF1FF" stroke="#0A66FF" stroke-width="1.5"/></g>
+        <g class="evFrag ef5"><rect x="268" y="60" width="110" height="42" rx="10" fill="#FFF4D6" stroke="#E0A600" stroke-width="1.5"/></g>
+        <g class="ev-check"><circle cx="108" cy="18" r="9" fill="#0A0E17" stroke="#FFB800" stroke-width="1.5"/><path d="M103,18 L107,22 L114,14" stroke="#FFB800" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+        <g class="ev-check"><circle cx="238" cy="18" r="9" fill="#0A0E17" stroke="#FFB800" stroke-width="1.5"/><path d="M233,18 L237,22 L244,14" stroke="#FFB800" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+        <g class="ev-check"><circle cx="368" cy="18" r="9" fill="#0A0E17" stroke="#FFB800" stroke-width="1.5"/><path d="M363,18 L367,22 L374,14" stroke="#FFB800" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+        <g class="ev-check"><circle cx="108" cy="68" r="9" fill="#0A0E17" stroke="#FFB800" stroke-width="1.5"/><path d="M103,68 L107,72 L114,64" stroke="#FFB800" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+        <g class="ev-check"><circle cx="238" cy="68" r="9" fill="#0A0E17" stroke="#FFB800" stroke-width="1.5"/><path d="M233,68 L237,72 L244,64" stroke="#FFB800" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+        <g class="ev-check"><circle cx="368" cy="68" r="9" fill="#0A0E17" stroke="#FFB800" stroke-width="1.5"/><path d="M363,68 L367,72 L374,64" stroke="#FFB800" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+      </svg>
+      <p class="ev-cap text-center text-[12px] text-faint mt-2 font-semibold">문항 초안 6개 → 검증을 통과한 사건</p>
+    </div>
   </div>
 
   <div class="mt-14 space-y-5">
@@ -90,6 +131,7 @@
   </div>
 
   <div class="card p-8 mt-10 text-center">
+    <div class="ev-flip"><div class="front">🔍</div><div class="back">✓</div></div>
     <h2 class="text-[1.3rem] font-extrabold">이 과정을 거친 사건, 직접 확인해 보세요</h2>
     <p class="mt-2 text-[14px] text-body">가입 없이 몇 개 사건을 먼저 풀어볼 수 있습니다.</p>
     <div class="flex flex-col sm:flex-row justify-center gap-3 mt-6">

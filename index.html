@@ -122,6 +122,61 @@
   .pbs-step:last-child::after{ display:none; }
   @media (max-width:640px){ .pbs-steps{ grid-template-columns:1fr 1fr; row-gap:32px; } .pbs-step::after{ display:none; } }
 
+  /* PBS 4-step exam-format loop animation (실제 문항 예시) */
+  .pbs-example{ text-align:center; font-size:12px; font-weight:600; color:#7A8499; margin:-4px 0 22px; }
+  .pbs-stage{ border-radius:14px; padding:10px 8px; height:92px; display:flex; align-items:center; justify-content:center; margin:12px 0 4px; box-shadow:inset 0 0 0 1.5px rgba(10,14,23,.05); }
+  .pbs-stage svg{ width:100%; height:100%; overflow:visible; }
+  .pbs-step:nth-child(4) .pbs-stage{ box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.08); }
+  .pbsMgTarget{ animation:pbsMgMove 3.4s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+  @keyframes pbsMgMove{ 0%,20%{ transform:translate(0,0); } 45%,65%{ transform:translate(40px,0); } 100%{ transform:translate(0,0); } }
+  .pbsMgRing{ animation:pbsMgPulse 3.4s ease-in-out infinite; }
+  @keyframes pbsMgPulse{ 0%,20%{ opacity:.3; } 32%,60%{ opacity:1; } 75%,100%{ opacity:.3; } }
+  .pbsStrike{ stroke-dasharray:112; stroke-dashoffset:112; animation:pbsDrawStrike 3.4s ease-in-out infinite; }
+  @keyframes pbsDrawStrike{ 0%,30%{ stroke-dashoffset:112; } 55%,80%{ stroke-dashoffset:0; } 95%,100%{ stroke-dashoffset:0; opacity:0; } }
+  .pbsOldTxt{ animation:pbsFadeOld 3.4s ease-in-out infinite; }
+  @keyframes pbsFadeOld{ 0%,75%{ opacity:1; } 90%,100%{ opacity:.3; } }
+  .pbsQTxt{ animation:pbsQFade 3.4s ease-in-out infinite; }
+  @keyframes pbsQFade{ 0%,58%{ opacity:0; } 72%,100%{ opacity:1; } }
+  .pbsNewTxt{ animation:pbsRevealNew 3.4s ease-in-out infinite; }
+  @keyframes pbsRevealNew{ 0%,42%{ opacity:0; transform:translateY(6px); } 60%,90%{ opacity:1; transform:translateY(0px); } 100%{ opacity:0; transform:translateY(-4px); } }
+  .pbsUnderline{ stroke-dasharray:140; stroke-dashoffset:140; animation:pbsDrawUnder 3.4s ease-in-out infinite; }
+  @keyframes pbsDrawUnder{ 0%,46%{ stroke-dashoffset:140; } 66%,90%{ stroke-dashoffset:0; } 100%{ stroke-dashoffset:0; opacity:0; } }
+  .pbsDot{ animation-name:pbsDotSeq; animation-duration:3.4s; animation-iteration-count:infinite; animation-timing-function:steps(1); }
+  .pbsD0{ animation-delay:0s } .pbsD1{ animation-delay:.18s } .pbsD2{ animation-delay:.36s } .pbsD3{ animation-delay:.54s } .pbsD4{ animation-delay:.72s } .pbsD5{ animation-delay:.9s }
+  @keyframes pbsDotSeq{ 0%{ fill:#2B3A57; } 8%{ fill:#FFB800; } 88%{ fill:#FFB800; } 100%{ fill:#2B3A57; } }
+  .pbsCheck{ animation:pbsCheckPop 3.4s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+  @keyframes pbsCheckPop{ 0%,78%{ opacity:0; transform:scale(.5); } 88%,96%{ opacity:1; transform:scale(1); } 100%{ opacity:0; transform:scale(1); } }
+  @media (prefers-reduced-motion:reduce){ .pbsMgTarget,.pbsMgRing,.pbsStrike,.pbsOldTxt,.pbsQTxt,.pbsNewTxt,.pbsUnderline,.pbsDot,.pbsCheck{ animation:none !important; } }
+
+  /* 무질서→4단계 정렬 클러스터 (solution-head 브릿지 비주얼) */
+  .chaos-viz{ max-width:400px; margin:32px auto 4px; }
+  .chaos-viz svg{ width:100%; height:auto; overflow:visible; }
+  .chaosFrag{ transform-box:fill-box; transform-origin:center; }
+  .cf1{ animation:chaosFrag1 5.2s ease-in-out infinite; }
+  @keyframes chaosFrag1{ 0%,100%{ transform:translate(30px,-16px) rotate(-22deg); } 30%,78%{ transform:translate(0,0) rotate(0deg); } }
+  .cf2{ animation:chaosFrag2 5.2s ease-in-out infinite; }
+  @keyframes chaosFrag2{ 0%,100%{ transform:translate(-16px,20px) rotate(18deg); } 30%,78%{ transform:translate(0,0) rotate(0deg); } }
+  .cf3{ animation:chaosFrag3 5.2s ease-in-out infinite; }
+  @keyframes chaosFrag3{ 0%,100%{ transform:translate(20px,-10px) rotate(26deg); } 30%,78%{ transform:translate(0,0) rotate(0deg); } }
+  .cf4{ animation:chaosFrag4 5.2s ease-in-out infinite; }
+  @keyframes chaosFrag4{ 0%,100%{ transform:translate(-24px,14px) rotate(-16deg); } 30%,78%{ transform:translate(0,0) rotate(0deg); } }
+  .chaosNum{ animation:chaosNumFade 5.2s ease-in-out infinite; }
+  @keyframes chaosNumFade{ 0%,38%{ opacity:0; } 48%,78%{ opacity:1; } 92%,100%{ opacity:0; } }
+  .chaosCap{ animation:chaosCapFade 5.2s ease-in-out infinite; }
+  @keyframes chaosCapFade{ 0%,40%{ opacity:.45; } 50%,80%{ opacity:1; } 92%,100%{ opacity:.45; } }
+  @media (prefers-reduced-motion:reduce){ .chaosFrag,.chaosNum,.chaosCap{ animation:none !important; } .chaosFrag{ transform:none !important; } }
+
+  /* #compare 4카드 아이콘 마이크로 루프 */
+  .cmp-ico-1{ transform-origin:center; animation:cmpFlip 3s ease-in-out infinite; }
+  @keyframes cmpFlip{ 0%,60%{ transform:scaleX(1); } 75%{ transform:scaleX(.15); } 90%,100%{ transform:scaleX(1); } }
+  .cmp-ico-2{ transform-origin:center; animation:cmpWiggle 3.4s ease-in-out infinite; }
+  @keyframes cmpWiggle{ 0%,100%{ transform:rotate(0deg); } 25%{ transform:rotate(-10deg); } 75%{ transform:rotate(10deg); } }
+  .cmp-ico-3{ transform-origin:center; animation:cmpScan 2.6s ease-in-out infinite; }
+  @keyframes cmpScan{ 0%,100%{ transform:translateX(0); } 50%{ transform:translateX(6px); } }
+  .cmp-ico-4{ transform-origin:center; animation:cmpPulse 2.2s ease-in-out infinite; }
+  @keyframes cmpPulse{ 0%,100%{ transform:scale(1); opacity:1; } 50%{ transform:scale(1.15); opacity:.75; } }
+  @media (prefers-reduced-motion:reduce){ .cmp-ico-1,.cmp-ico-2,.cmp-ico-3,.cmp-ico-4{ animation:none !important; } }
+
   /* comparison cards v2 */
   .vs-card{ background:#fff; border:1.5px solid #DCE3EC; border-radius:1.5rem; padding:1.75rem; transition:transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s; }
   .vs-card.win{ border-color:#0A66FF; box-shadow:0 20px 46px rgba(10,102,255,.22); background:linear-gradient(180deg,#fff,#F7FAFF); position:relative; }
@@ -311,6 +366,20 @@
     <span class="stage-badge"><span class="num">2</span>The Solution · 해결</span>
     <h2 class="display text-[1.8rem] md:text-[2.8rem] font-extrabold mt-6">PBS 학습법은 전제를 깨는<br class="hidden md:block" /> 4단계 사고 훈련입니다</h2>
     <p class="lede mt-5 text-[15px] text-body">문제 속에 숨은 '당연한 전제'를 찾아내 깨뜨리고, 새로운 사고의 틀을 세우는 <b class="text-ink">4단계</b>. 하루 10분, 6개월이면 태도 자체가 바뀝니다.</p>
+
+    <div class="chaos-viz">
+      <svg viewBox="0 0 350 90" aria-hidden="true">
+        <g class="chaosFrag cf1"><rect x="14" y="22" width="68" height="46" rx="10" fill="#EAF1FF" stroke="#0A66FF" stroke-width="1.5"/></g>
+        <g class="chaosFrag cf2"><rect x="98" y="22" width="68" height="46" rx="10" fill="#FFF4D6" stroke="#E0A600" stroke-width="1.5"/></g>
+        <g class="chaosFrag cf3"><rect x="182" y="22" width="68" height="46" rx="10" fill="#EAF1FF" stroke="#0A66FF" stroke-width="1.5"/></g>
+        <g class="chaosFrag cf4"><rect x="266" y="22" width="68" height="46" rx="10" fill="#0A0E17" stroke="#0A0E17" stroke-width="1.5"/></g>
+        <text class="chaosNum" x="48" y="49" text-anchor="middle" font-size="17" font-weight="800" fill="#0A66FF">1</text>
+        <text class="chaosNum" x="132" y="49" text-anchor="middle" font-size="17" font-weight="800" fill="#8a6200">2</text>
+        <text class="chaosNum" x="216" y="49" text-anchor="middle" font-size="17" font-weight="800" fill="#0A66FF">3</text>
+        <text class="chaosNum" x="300" y="49" text-anchor="middle" font-size="17" font-weight="800" fill="#FFB800">4</text>
+      </svg>
+      <p class="chaosCap text-center text-[12px] text-faint mt-2 font-semibold">방향 없는 반복 → 정렬된 4단계 루틴</p>
+    </div>
   </div>
 </section>
 
@@ -318,11 +387,24 @@
 <section id="what-pbs" class="pb-16 md:pb-24 bg-panel">
   <div class="max-w-6xl mx-auto px-5 md:px-8">
     <div class="reveal bg-white rounded-[2rem] shadow-[var(--shadow-lg)] border border-line p-6 sm:p-10 md:p-14 mt-10">
+      <p class="pbs-example">예시: 고1–2 수학 "등호(=)는 정답을 뜻한다"는 전제 — 실제 심화 트랙 문항 기반</p>
       <div class="pbs-steps">
         <div class="pbs-step" style="animation-delay:.05s">
           <div class="icon" style="background:linear-gradient(160deg,#EAF1FF,#D3E2FF); border:1.5px solid #0A66FF"><span class="badge">01</span><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg></div>
           <p class="en text-[10.5px] eyebrow uppercase text-point font-bold">Detect</p>
           <h3 class="text-[18px] font-extrabold mt-0.5">탐지</h3>
+          <div class="pbs-stage" style="background:linear-gradient(160deg,#EAF1FF,#D3E2FF);">
+            <svg viewBox="0 0 180 92">
+              <text x="14" y="36" font-size="17" font-weight="800" fill="#0A0E17">3x + 2</text>
+              <text x="98" y="36" font-size="19" font-weight="800" fill="#0A66FF">=</text>
+              <text x="118" y="36" font-size="17" font-weight="800" fill="#0A0E17">11</text>
+              <text x="14" y="62" font-size="13" font-weight="600" fill="#4A5570">→ "="는 정답 신호"</text>
+              <g class="pbsMgTarget">
+                <circle class="pbsMgRing" cx="98" cy="30" r="18" fill="none" stroke="#0A66FF" stroke-width="3"/>
+                <line class="pbsMgRing" x1="110" y1="42" x2="120" y2="52" stroke="#0A66FF" stroke-width="3.5" stroke-linecap="round"/>
+              </g>
+            </svg>
+          </div>
           <p class="text-[12.5px] text-body mt-2 leading-relaxed">문제 속 숨은 전제를 발견</p>
           <p class="tag text-[11px] text-point font-semibold leading-snug">문제 속 '당연한 가정'에 물음표를 붙인다</p>
         </div>
@@ -330,6 +412,13 @@
           <div class="icon" style="background:linear-gradient(160deg,#FFF4D6,#FFE7A8); border:1.5px solid #E0A600"><span class="badge" style="background:#8a6200">02</span><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#8a6200" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.4 5.6 5.6 2.4-5.6 2.4L12 18.5l-2.4-5.6L4 10.5l5.6-2.4z"/></svg></div>
           <p class="en text-[10.5px] eyebrow uppercase font-bold" style="color:#8a6200">Break</p>
           <h3 class="text-[18px] font-extrabold mt-0.5">폭파</h3>
+          <div class="pbs-stage" style="background:linear-gradient(160deg,#FFF4D6,#FFE7A8);">
+            <svg viewBox="0 0 180 92">
+              <text x="14" y="40" class="pbsOldTxt" font-size="17" font-weight="800" fill="#0A0E17">등호는 정답 신호다</text>
+              <line class="pbsStrike" x1="12" y1="34" x2="164" y2="34" stroke="#E4574A" stroke-width="3.5" stroke-linecap="round"/>
+              <text x="14" y="66" class="pbsQTxt" font-size="14" font-weight="700" fill="#B0500F">"만약 아니라면?"</text>
+            </svg>
+          </div>
           <p class="text-[12.5px] text-body mt-2 leading-relaxed">전제를 깨뜨려 흔들기</p>
           <p class="tag text-[11px] font-semibold leading-snug" style="background:rgba(255,184,0,.14); color:#8a6200">만약 그 가정이 틀렸다면? 상상해 본다</p>
         </div>
@@ -337,6 +426,15 @@
           <div class="icon" style="background:linear-gradient(160deg,#EAF1FF,#D3E2FF); border:1.5px solid #0A66FF"><span class="badge">03</span><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6M3 22v-6h6"/><path d="M21 8a9 9 0 00-15-3M3 16a9 9 0 0015 3"/></svg></div>
           <p class="en text-[10.5px] eyebrow uppercase text-point font-bold">Rebuild</p>
           <h3 class="text-[18px] font-extrabold mt-0.5">재구성</h3>
+          <div class="pbs-stage" style="background:linear-gradient(160deg,#EAF1FF,#D3E2FF);">
+            <svg viewBox="0 0 180 92">
+              <g class="pbsNewTxt">
+                <text x="14" y="42" font-size="17.5" font-weight="800" fill="#0A66FF">등호는 양쪽의 균형</text>
+                <line class="pbsUnderline" x1="12" y1="50" x2="158" y2="50" stroke="#0A66FF" stroke-width="2.5" stroke-linecap="round"/>
+              </g>
+              <text x="14" y="70" font-size="13" font-weight="600" fill="#4A5570">새로운 눈으로 다시 본다</text>
+            </svg>
+          </div>
           <p class="text-[12.5px] text-body mt-2 leading-relaxed">새 사고 틀로 다시 세우기</p>
           <p class="tag text-[11px] text-point font-semibold leading-snug">새로운 눈으로 문제를 다시 바라본다</p>
         </div>
@@ -344,6 +442,21 @@
           <div class="icon" style="background:linear-gradient(160deg,#0A0E17,#1B2740); border:1.5px solid #0A0E17"><span class="badge" style="background:#FFB800; color:#0A0E17">04</span><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4M3 11v-1a4 4 0 014-4h14M7 22l-4-4 4-4M21 13v1a4 4 0 01-4 4H3"/></svg></div>
           <p class="en text-[10.5px] eyebrow uppercase text-point font-bold">Consolidate</p>
           <h3 class="text-[18px] font-extrabold mt-0.5">정착</h3>
+          <div class="pbs-stage" style="background:rgba(255,255,255,.05);">
+            <svg viewBox="0 0 180 92">
+              <text x="14" y="26" font-size="13" font-weight="700" fill="#B7C0D6">이번 주 루틴</text>
+              <circle class="pbsDot pbsD0" cx="22" cy="62" r="9"/>
+              <circle class="pbsDot pbsD1" cx="50" cy="62" r="9"/>
+              <circle class="pbsDot pbsD2" cx="78" cy="62" r="9"/>
+              <circle class="pbsDot pbsD3" cx="106" cy="62" r="9"/>
+              <circle class="pbsDot pbsD4" cx="134" cy="62" r="9"/>
+              <circle class="pbsDot pbsD5" cx="162" cy="62" r="9"/>
+              <g class="pbsCheck">
+                <circle cx="162" cy="62" r="13" fill="#0A0E17" stroke="#FFB800" stroke-width="2"/>
+                <path d="M156,62 L160,66 L168,57" stroke="#FFB800" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
+            </svg>
+          </div>
           <p class="text-[12.5px] text-body mt-2 leading-relaxed">반복으로 습관 만들기</p>
           <p class="tag text-[11px] text-point font-semibold leading-snug">하루 10분, 이 루틴을 몸에 밴다</p>
         </div>
@@ -510,7 +623,7 @@
     <div class="mt-14 grid md:grid-cols-2 gap-5 md:gap-6 reveal">
       <div class="card p-0 overflow-hidden flex flex-col">
         <div class="p-6 pb-4 flex items-start gap-3">
-          <div class="shrink-0 w-10 h-10 rounded-xl bg-body/10 flex items-center justify-center"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#525A69" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+          <div class="shrink-0 w-10 h-10 rounded-xl bg-body/10 flex items-center justify-center"><svg class="cmp-ico-1" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#525A69" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
           <div><p class="text-[15px] font-bold text-ink">암기 전략</p><p class="text-[12px] text-faint mt-0.5">반복 암기 · 요약노트 · 회독</p></div>
         </div>
         <div class="px-6 py-4 bg-soft border-t border-line">
@@ -524,7 +637,7 @@
       </div>
       <div class="card p-0 overflow-hidden flex flex-col">
         <div class="p-6 pb-4 flex items-start gap-3">
-          <div class="shrink-0 w-10 h-10 rounded-xl bg-body/10 flex items-center justify-center"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#525A69" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.5-3.5a5 5 0 01-6.8 6.8L4.7 22.3l-3-3L12.3 8.6a5 5 0 016.8-6.8l-3.5 3.5z"/></svg></div>
+          <div class="shrink-0 w-10 h-10 rounded-xl bg-body/10 flex items-center justify-center"><svg class="cmp-ico-2" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#525A69" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.5-3.5a5 5 0 01-6.8 6.8L4.7 22.3l-3-3L12.3 8.6a5 5 0 016.8-6.8l-3.5 3.5z"/></svg></div>
           <div><p class="text-[15px] font-bold text-ink">PBL · 프로젝트 기반 학습</p><p class="text-[12px] text-faint mt-0.5">실제 문제를 만들고 해결하기</p></div>
         </div>
         <div class="px-6 py-4 bg-soft border-t border-line">
@@ -538,7 +651,7 @@
       </div>
       <div class="card p-0 overflow-hidden flex flex-col">
         <div class="p-6 pb-4 flex items-start gap-3">
-          <div class="shrink-0 w-10 h-10 rounded-xl bg-body/10 flex items-center justify-center"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#525A69" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+          <div class="shrink-0 w-10 h-10 rounded-xl bg-body/10 flex items-center justify-center"><svg class="cmp-ico-3" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#525A69" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
           <div><p class="text-[15px] font-bold text-ink">IBL · 탐구 기반 학습</p><p class="text-[12px] text-faint mt-0.5">스스로 질문을 세우고 탐구하기</p></div>
         </div>
         <div class="px-6 py-4 bg-soft border-t border-line">
@@ -552,7 +665,7 @@
       </div>
       <div class="card p-0 overflow-hidden flex flex-col">
         <div class="p-6 pb-4 flex items-start gap-3">
-          <div class="shrink-0 w-10 h-10 rounded-xl bg-body/10 flex items-center justify-center"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#525A69" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 015 5c0 1.5-.7 2.4-1.5 3.3-.6.7-1.2 1.4-1.5 2.4v1.3H10v-1.3c-.3-1-.9-1.7-1.5-2.4C7.7 9.4 7 8.5 7 7a5 5 0 015-5z"/><path d="M9.5 18h5M10 21h4"/></svg></div>
+          <div class="shrink-0 w-10 h-10 rounded-xl bg-body/10 flex items-center justify-center"><svg class="cmp-ico-4" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#525A69" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 015 5c0 1.5-.7 2.4-1.5 3.3-.6.7-1.2 1.4-1.5 2.4v1.3H10v-1.3c-.3-1-.9-1.7-1.5-2.4C7.7 9.4 7 8.5 7 7a5 5 0 015-5z"/><path d="M9.5 18h5M10 21h4"/></svg></div>
           <div><p class="text-[15px] font-bold text-ink">메타인지 훈련</p><p class="text-[12px] text-faint mt-0.5">자신의 사고 과정을 점검하기</p></div>
         </div>
         <div class="px-6 py-4 bg-soft border-t border-line">

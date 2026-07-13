@@ -42,6 +42,25 @@
   .modal-panel{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:min(92vw,520px); max-height:88vh; overflow:auto; animation:pop .35s cubic-bezier(.3,1.3,.5,1) }
   @keyframes pop{ from{opacity:0; transform:translate(-50%,-46%) scale(.96)} }
   @media (prefers-reduced-motion:reduce){ *{animation:none!important} .reveal{opacity:1!important;transform:none!important} }
+
+  /* 히어로 예시 사건 루프 */
+  .lvl-preview{ margin-top:18px; background:#F5F6F4; border:1px solid #ECEEF1; border-radius:14px; padding:12px 14px; max-width:190px; text-align:center; }
+  .lvl-preview .lp-eyebrow{ font-size:10px; font-weight:700; color:#9AA4B2; text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px; }
+  .lvl-old{ font-size:12.5px; font-weight:700; color:#0A0E17; position:relative; display:inline-block; animation:lpOldFade 4.6s ease-in-out infinite; }
+  .lvl-old::after{ content:""; position:absolute; left:0; right:0; top:50%; height:2px; background:#E4574A; transform:scaleX(0); transform-origin:left; animation:lpStrike 4.6s ease-in-out infinite; }
+  @keyframes lpOldFade{ 0%,60%{ opacity:1; } 78%,100%{ opacity:.35; } }
+  @keyframes lpStrike{ 0%,32%{ transform:scaleX(0); } 52%,100%{ transform:scaleX(1); } }
+  .lvl-new{ font-size:12px; font-weight:700; color:#0A66FF; margin-top:6px; animation:lpNewIn 4.6s ease-in-out infinite; }
+  @keyframes lpNewIn{ 0%,58%{ opacity:0; transform:translateY(4px); } 72%,100%{ opacity:1; transform:translateY(0); } }
+  @media (prefers-reduced-motion:reduce){ .lvl-old,.lvl-old::after,.lvl-new{ animation:none!important; } .lvl-old::after{ transform:scaleX(0)!important; } }
+
+  /* 기르는 힘 아이콘 브리딩 */
+  .lvl-grid > div:nth-child(1) svg{ animation:lvlPulse 2.6s ease-in-out infinite; }
+  .lvl-grid > div:nth-child(2) svg{ animation:lvlPulse 2.6s ease-in-out infinite .3s; }
+  .lvl-grid > div:nth-child(3) svg{ animation:lvlPulse 2.6s ease-in-out infinite .6s; }
+  .lvl-grid > div:nth-child(4) svg{ animation:lvlPulse 2.6s ease-in-out infinite .9s; }
+  @keyframes lvlPulse{ 0%,100%{ transform:scale(1); opacity:1; } 50%{ transform:scale(1.14); opacity:.7; } }
+  @media (prefers-reduced-motion:reduce){ .lvl-grid svg{ animation:none!important; } }
 </style>
 </head>
 <body>
@@ -74,12 +93,17 @@
         <div class="h-2 rounded-full bg-soft overflow-hidden"><div id="pbar" class="h-full bg-point rounded-full transition-all duration-700" style="width:0%"></div></div>
       </div>
     </div>
-    <div class="hidden md:flex justify-center">
+    <div class="hidden md:flex flex-col items-center justify-center">
       <div class="kozy" style="width:150px;height:150px">
         <svg viewBox="0 0 100 100" aria-label="루카"><g class="kw">
           <polygon class="k-face top" points="50,15 82,33 50,50 18,33"/><polygon class="k-face right" points="82,33 82,67 50,85 50,50"/><polygon class="k-face left" points="18,33 50,50 50,85 18,67"/>
           <polygon class="k-edge" points="50,15 82,33 82,67 50,85 18,67 18,33"/><path class="k-edge" d="M50,50 L82,33 M50,50 L18,33 M50,50 L50,85"/><circle class="k-core" cx="50" cy="50" r="4.5"/>
         </g></svg>
+      </div>
+      <div class="lvl-preview">
+        <p class="lp-eyebrow">예시 사건 · 고등 수준</p>
+        <p class="lvl-old">"과학 이론은 확정된 사실이다"</p>
+        <p class="lvl-new">→ 가정을 검증하면 한계와 적용 범위가 보인다</p>
       </div>
     </div>
   </div>
@@ -87,7 +111,7 @@
   <section class="mt-14">
     <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5 reveal">What you'll build</p>
     <h2 class="text-[1.4rem] md:text-[1.9rem] font-extrabold reveal">이 단계에서 기르는 힘</h2>
-    <div class="grid sm:grid-cols-2 gap-4 mt-8">
+    <div class="grid sm:grid-cols-2 gap-4 mt-8 lvl-grid">
       <div class="reveal card p-6 flex gap-4" data-d="1"><svg class="shrink-0 mt-0.5" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M6 8.5v3a2 2 0 002 2h8a2 2 0 002-2v-3M12 13.5v2"/></svg><div><p class="font-bold text-[15px]">다중 전제 동시 추출</p><p class="text-[13px] text-body mt-1 leading-relaxed">한 편의 글에 겹겹이 깔린 여러 전제를 한꺼번에 짚어냅니다.</p></div></div>
       <div class="reveal card p-6 flex gap-4" data-d="2"><svg class="shrink-0 mt-0.5" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4l10 16M17 4L7 20"/></svg><div><p class="font-bold text-[15px]">전제끼리 충돌시키기</p><p class="text-[13px] text-body mt-1 leading-relaxed">서로 모순되는 전제를 부딪쳐 어느 것이 약한지 검증합니다.</p></div></div>
       <div class="reveal card p-6 flex gap-4" data-d="3"><svg class="shrink-0 mt-0.5" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6M3 22v-6h6"/><path d="M21 8a9 9 0 00-15-3M3 16a9 9 0 0015 3"/></svg><div><p class="font-bold text-[15px]">대안적 전제로 재구성</p><p class="text-[13px] text-body mt-1 leading-relaxed">전제를 갈아끼워 같은 사실을 전혀 다르게 해석해 봅니다.</p></div></div>
