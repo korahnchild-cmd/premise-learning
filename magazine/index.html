@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PBS 매거진 — 전제를 깨고 사고의 틀을 다시 짜다</title>
+<meta name="description" content="매주, 아이가 풀고 있는 문제 하나의 '숨은 전제'를 의심합니다. 수학·국어·사고법·학부모 시선까지. PBS 학습법의 에디토리얼 매거진." />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="PBS 매거진 — 전제를 깨고 사고의 틀을 다시 짜다" />
+<meta property="og:description" content="매주, 아이가 풀고 있는 문제 하나의 '숨은 전제'를 의심합니다." />
+<meta property="og:image" content="https://korahnchild-cmd.github.io/premise-learning/og-pbs-magazine.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="canonical" href="https://korahnchild-cmd.github.io/premise-learning/magazine/" />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" href="theme.css" />
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#7A8499", point:"#0A66FF", pointdeep:"#0B3ACC", accent:"#FFB800", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1" },
+    fontFamily: { sans:["Pretendard","Inter","sans-serif"], en:["Inter","Pretendard","sans-serif"] },
+    borderRadius:{ "4xl":"2rem","5xl":"2.5rem" },
+  }}};
+</script>
+<style>
+  .masthead-rule{ height:3px; background:#0A0E17; }
+  .card-img{ aspect-ratio:16/10; overflow:hidden; position:relative; }
+  .fpill{ padding:8px 16px; border-radius:9999px; font-size:13px; font-weight:700; background:#EDEFF2; color:#7A8499; transition:background .3s, color .3s; cursor:pointer; border:none; }
+  .fpill.active{ background:#0A0E17; color:#fff; }
+  .fpill:hover:not(.active){ background:#E0E3E8; color:#0A0E17; }
+  .post-card{ display:block; }
+  .post-card.hide{ display:none; }
+</style>
+</head>
+<body>
+
+<div id="bar" style="position:fixed;top:0;left:0;height:2.5px;background:linear-gradient(90deg,#0A66FF,#5B93F1);width:0%;z-index:60;transition:width .1s linear"></div>
+
+<!-- ============ NAV ============ -->
+<header id="nav" class="fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur border-b border-transparent h-16 md:h-20 flex items-center transition-all">
+  <div class="max-w-6xl mx-auto px-5 md:px-8 w-full flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-2.5 group">
+      <span class="logo-mark"><svg style="transform:rotate(-45deg)" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.5 15.5L20 20"/></svg></span>
+      <span class="font-bold text-[15px] md:text-[16px] text-ink tracking-tight">PBS 매거진</span>
+    </a>
+    <nav class="hidden md:flex items-center gap-7 text-[13px] text-body font-medium">
+      <a href="#latest" class="hover:text-ink transition-colors">최신 글</a>
+      <a href="#categories" class="hover:text-ink transition-colors">주제</a>
+      <a href="#about" class="hover:text-ink transition-colors">PBS란</a>
+    </nav>
+    <a href="#subscribe" class="btn btn-primary btn-3d text-[13px] font-semibold px-5 py-2.5">구독하기</a>
+  </div>
+</header>
+
+<!-- ============ MASTHEAD ============ -->
+<section id="hero" class="relative pt-28 md:pt-36 pb-12 md:pb-16 overflow-hidden">
+  <!-- 배경: 자기 그리는 곡선 + 좌표축 (v2 애니) -->
+  <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" fill="none">
+    <line class="axis" x1="0" y1="640" x2="1200" y2="640"/>
+    <line class="axis" x1="200" y1="0" x2="200" y2="800"/>
+    <path class="parabola" d="M 100 600 Q 600 -100, 1100 600">
+      <animate attributeName="stroke-dasharray" values="0,1000;1000,0;0,1000" dur="8s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.4;0.4;0" dur="8s" repeatCount="indefinite" keyTimes="0;0.2;0.8;1"/>
+    </path>
+  </svg>
+  <div class="orb" style="width:520px;height:520px;background:#BAD2FB;top:-12%;left:-8%"></div>
+  <div class="orb" style="width:440px;height:440px;background:#D7E0FA;bottom:-14%;right:-6%"></div>
+
+  <div class="max-w-3xl mx-auto px-5 md:px-8 text-center relative">
+    <p class="reveal en eyebrow uppercase text-point text-[11px] md:text-[12px] font-bold" data-d="1">PBS MAGAZINE · PREMISE-BREAK SCHEMA</p>
+
+    <h1 class="reveal display mt-5 text-[34px] sm:text-[44px] md:text-[58px] font-extrabold text-ink" data-d="2" style="word-break:keep-all">
+      매주, 문제 하나의<br/>
+      <span class="kw" id="kw"><span>전제</span><svg viewBox="0 0 200 24" preserveAspectRatio="none"><path d="M4 15 C 55 6, 145 6, 196 13"/></svg></span>를 의심합니다.
+    </h1>
+
+    <p class="reveal lede mt-6 text-[15px] md:text-[17px] text-body max-w-xl mx-auto" data-d="3" style="word-break:keep-all">
+      아이가 풀고 있는 수학·국어 문제 속에는 '당연하게 믿고 있는 전제'가 숨어 있습니다. 그 전제를 한 번 흔들면, 사고의 틀이 바뀝니다. PBS 매거진은 그 사건을 매주 한 편씩 기록합니다.
+    </p>
+
+    <div class="reveal mt-8 flex flex-wrap items-center justify-center gap-3" data-d="4">
+      <a href="#latest" class="btn btn-primary btn-3d text-[14px] font-semibold px-7 py-3">최신 글 읽기 →</a>
+      <a href="#subscribe" class="btn btn-ghost text-[14px] font-semibold px-7 py-3">주간 뉴스레터 구독</a>
+    </div>
+
+    <!-- 소셜 프루프 3스탯 (v2에서 적용) -->
+    <div class="reveal mt-12 flex items-center justify-center gap-8 md:gap-12 text-center" data-d="4">
+      <div>
+        <p class="text-[20px] md:text-[22px] font-extrabold text-ink">초5~고2</p>
+        <p class="text-[11px] text-faint mt-0.5">학년 맞춤</p>
+      </div>
+      <div class="w-px h-8 bg-line"></div>
+      <div>
+        <p class="text-[20px] md:text-[22px] font-extrabold text-ink">11편</p>
+        <p class="text-[11px] text-faint mt-0.5">사건 아카이브</p>
+      </div>
+      <div class="w-px h-8 bg-line"></div>
+      <div>
+        <p class="text-[20px] md:text-[22px] font-extrabold text-ink">매주 화요일</p>
+        <p class="text-[11px] text-faint mt-0.5">새 사건 발행</p>
+      </div>
+    </div>
+
+    <p class="reveal mt-8 text-[11.5px] text-faint" data-d="4">
+      <span class="sample-tag"><span class="sample-dot"></span>SAMPLE</span>
+      &nbsp;런칭 전 샘플 콘텐츠입니다. 실제 통계·증언은 순차적으로 채워집니다.
+    </p>
+  </div>
+</section>
+
+<div class="masthead-rule max-w-6xl mx-auto"></div>
+
+<!-- ============ FEATURED — 이번 주의 사건 ============ -->
+<section id="featured" class="py-12 md:py-20 bg-white">
+  <div class="max-w-6xl mx-auto px-5 md:px-8">
+    <p class="reveal eyebrow uppercase text-faint text-[11px] font-bold mb-5 en">이번 주의 사건 · FEATURED</p>
+
+    <a href="articles/01-math-equation.html" class="reveal block card md:flex flex-row-reverse overflow-hidden group">
+      <div class="card-img md:w-1/2" style="background:linear-gradient(135deg,#0A66FF 0%,#0B3ACC 100%);">
+        <div class="absolute inset-0 flex items-center justify-center p-10">
+          <svg viewBox="0 0 320 200" class="w-full max-w-sm" fill="none">
+            <g opacity="0.95">
+              <text x="160" y="92" text-anchor="middle" font-family="Inter" font-size="30" font-weight="700" fill="#fff">x² + 5x = 14</text>
+            </g>
+            <line x1="60" y1="104" x2="260" y2="70" stroke="#FFB800" stroke-width="6" stroke-linecap="round" stroke-dasharray="240" stroke-dashoffset="240" class="feat-strike"/>
+            <g opacity="0.9">
+              <rect x="40" y="140" width="44" height="44" rx="6" fill="none" stroke="#FFB800" stroke-width="2.5"/>
+              <text x="120" y="170" font-family="Inter" font-size="13" fill="#FFB800">→ 그림으로 풀기</text>
+            </g>
+          </svg>
+        </div>
+        <span class="chip chip-math absolute top-4 left-4">수학 · 풀이의 전제</span>
+      </div>
+      <div class="md:w-1/2 p-7 md:p-10 flex flex-col justify-center">
+        <p class="text-[12px] text-faint font-semibold mb-3">No. 01 · 2026.07.13 · 6분 분량</p>
+        <h2 class="text-[24px] md:text-[32px] font-extrabold text-ink leading-tight" style="word-break:keep-all">
+          "수학 문제는 반드시 식으로 풀어야 한다" — 이 전제를 한 번 흔들어보면
+        </h2>
+        <p class="lede mt-4 text-[14.5px] md:text-[15.5px] text-body" style="word-break:keep-all">
+          고2 아들이 이차방정식 문제 앞에서 멈춰 섰다. 3분이 지나도록 식을 세우지 못했다. 그런데 그 문제는, 그림을 그리면 10초 만에 풀리는 문제였다. 아이가 갇힌 건 난이도가 아니라 '식으로 풀어야 한다'는 전제였다.
+        </p>
+        <p class="mt-6 text-[13px] font-bold text-point group-hover:gap-2 inline-flex items-center gap-1 transition-all">이 사건 읽기 →</p>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ============ CATEGORIES — 필터 ============ -->
+<section id="categories" class="py-12 md:py-16 bg-soft border-y border-line">
+  <div class="max-w-6xl mx-auto px-5 md:px-8">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+      <div>
+        <p class="eyebrow uppercase text-faint text-[11px] font-bold en mb-2">주제별 · BY TOPIC</p>
+        <h3 class="text-[24px] md:text-[30px] font-extrabold text-ink">어떤 전제를 의심할까</h3>
+      </div>
+      <div class="flex flex-wrap gap-2" id="filters">
+        <button class="fpill active" data-cat="all">전체 (11)</button>
+        <button class="fpill" data-cat="math">수학</button>
+        <button class="fpill" data-cat="kor">국어</button>
+        <button class="fpill" data-cat="think">사고법</button>
+        <button class="fpill" data-cat="parent">학부모 시선</button>
+        <button class="fpill" data-cat="advanced">고등 심화</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LATEST GRID — 11개 글 ============ -->
+<section id="latest" class="py-12 md:py-16 bg-soft">
+  <div class="max-w-6xl mx-auto px-5 md:px-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" id="postGrid">
+
+      <!-- 01 · 수학 식 전제 -->
+      <a href="articles/01-math-equation.html" data-cat="math" class="reveal post-card card group">
+        <div class="card-img" style="background:linear-gradient(135deg,#0A66FF 0%,#0B3ACC 100%);">
+          <div class="absolute inset-0 flex items-center justify-center p-8">
+            <svg viewBox="0 0 200 120" class="w-full max-w-[200px]" fill="none">
+              <text x="100" y="55" text-anchor="middle" font-family="Inter" font-size="20" font-weight="800" fill="#fff">x²+5x=14</text>
+              <line x1="40" y1="62" x2="160" y2="48" stroke="#FFB800" stroke-width="3"/>
+              <text x="100" y="98" text-anchor="middle" font-family="Pretendard" font-size="10" fill="#FFB800" font-weight="700">→ 그림으로 10초</text>
+            </svg>
+          </div>
+          <span class="chip chip-math absolute top-3 left-3">수학 · 풀이의 전제</span>
+        </div>
+        <div class="p-6">
+          <p class="text-[11.5px] text-faint font-semibold mb-2">No. 01 · 6분</p>
+          <h4 class="text-[18px] font-extrabold text-ink leading-snug" style="word-break:keep-all">"수학은 반드시 식으로 풀어야 한다" — 이 전제를 흔들어보면</h4>
+          <p class="lede mt-2.5 text-[13.5px] text-body">아이가 갇힌 건 난이도가 아니라 '식으로 풀어야 한다'는 전제였다.</p>
+        </div>
+      </a>
+
+      <!-- 02 · 국어 조차 -->
+      <a href="articles/02-kor-jocha.html" data-cat="kor" class="reveal post-card card group" data-d="1">
+        <div class="card-img" style="background:linear-gradient(135deg,#FFB800 0%,#FF9500 100%);">
+          <div class="absolute inset-0 flex items-center justify-center p-8">
+            <svg viewBox="0 0 200 120" class="w-full max-w-[200px]" fill="none">
+              <text x="100" y="55" text-anchor="middle" font-family="Pretendard" font-size="22" font-weight="800" fill="#fff">~조차</text>
+              <circle cx="68" cy="46" r="6" fill="#0A0E17"/>
+              <line x1="40" y1="80" x2="160" y2="80" stroke="#0A0E17" stroke-width="2" stroke-dasharray="4 4" opacity="0.5"/>
+              <text x="100" y="100" text-anchor="middle" font-family="Pretendard" font-size="10" fill="#0A0E17" font-weight="600">숨은 전제: "기본조차 못한다"</text>
+            </svg>
+          </div>
+          <span class="chip chip-kor absolute top-3 left-3">국어 · 읽기의 전제</span>
+        </div>
+        <div class="p-6">
+          <p class="text-[11.5px] text-faint font-semibold mb-2">No. 02 · 6분</p>
+          <h4 class="text-[18px] font-extrabold text-ink leading-snug" style="word-break:keep-all">"~조차"라는 두 글자가 심어 놓은 전제를 포착하는 법</h4>
+          <p class="lede mt-2.5 text-[13.5px] text-body">비문학 지문에서 '조차·마저'가 등장하면, 글쓴이는 이미 한 가지를 전제로 깔고 있다.</p>
+        </div>
+      </a>
+
+      <!-- 03 · 사고법 -->
+      <a href="articles/03-think-what-is-premise.html" data-cat="think" class="reveal post-card card group" data-d="2">
+        <div class="card-img" style="background:linear-gradient(135deg,#0A0E17 0%,#2A3151 100%);">
+          <div class="absolute inset-0 flex items-center justify-center p-8">
+            <svg viewBox="0 0 200 120" class="w-full max-w-[200px]" fill="none">
+              <rect x="50" y="30" width="20" height="60" fill="#FFB800" opacity="0.9"/>
+              <rect x="90" y="30" width="20" height="60" fill="#FFB800" opacity="0.9"/>
+              <rect x="130" y="30" width="20" height="60" fill="#FFB800" opacity="0.9"/>
+              <line x1="40" y1="30" x2="160" y2="30" stroke="#fff" stroke-width="3"/>
+              <circle cx="150" cy="100" r="14" fill="#0A66FF"/>
+              <path d="M144 100 l4 4 l8 -8" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="chip chip-think absolute top-3 left-3">사고법 · 개념</span>
+        </div>
+        <div class="p-6">
+          <p class="text-[11.5px] text-faint font-semibold mb-2">No. 03 · 4분</p>
+          <h4 class="text-[18px] font-extrabold text-ink leading-snug" style="word-break:keep-all">전제란 무엇인가 — "말하지 않지만 믿고 있는 것"</h4>
+          <p class="lede mt-2.5 text-[13.5px] text-body">전제는 문장 밖에 있다. 그걸 찾는 4단계.</p>
+        </div>
+      </a>
+
+      <!-- 04 · 수학 오답 -->
+      <a href="articles/04-math-wrong-answer.html" data-cat="math" class="reveal post-card card group">
+        <div class="card-img" style="background:linear-gradient(135deg,#0A66FF 0%,#5B93F1 100%);">
+          <div class="absolute inset-0 flex items-center justify-center p-8">
+            <svg viewBox="0 0 200 120" class="w-full max-w-[200px]" fill="none">
+              <text x="100" y="48" text-anchor="middle" font-family="Inter" font-size="20" font-weight="800" fill="#fff">✗ 오답</text>
+              <path d="M40 70 Q100 95 160 70" stroke="#FFB800" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <text x="100" y="100" text-anchor="middle" font-family="Pretendard" font-size="10" fill="#FFB800" font-weight="700">왜 틀렸는지 모르면 다시 틀린다</text>
+            </svg>
+          </div>
+          <span class="chip chip-math absolute top-3 left-3">수학 · 오답의 전제</span>
+        </div>
+        <div class="p-6">
+          <p class="text-[11.5px] text-faint font-semibold mb-2">No. 04 · 5분</p>
+          <h4 class="text-[18px] font-extrabold text-ink leading-snug" style="word-break:keep-all">오답노트가 작동하지 않을 때 — 틀린 '전제'를 기록해야 한다</h4>
+          <p class="lede mt-2.5 text-[13.5px] text-body">'내가 어떤 전제 때문에 이 답을 골랐는지'를 적어야 한다.</p>
+        </div>
+      </a>
+
+      <!-- 05 · 학부모 -->
+      <a href="articles/05-parent-speed.html" data-cat="parent" class="reveal post-card card group" data-d="1">
+        <div class="card-img" style="background:linear-gradient(135deg,#0B3ACC 0%,#3A5BD9 100%);">
+          <div class="absolute inset-0 flex items-center justify-center p-8">
+            <svg viewBox="0 0 200 120" class="w-full max-w-[200px]" fill="none">
+              <circle cx="70" cy="55" r="20" fill="none" stroke="#fff" stroke-width="2.5"/>
+              <circle cx="130" cy="55" r="20" fill="none" stroke="#FFB800" stroke-width="2.5"/>
+              <text x="70" y="92" text-anchor="middle" font-family="Pretendard" font-size="10" fill="#fff" font-weight="600">빨리 풀기</text>
+              <text x="130" y="92" text-anchor="middle" font-family="Pretendard" font-size="10" fill="#FFB800" font-weight="600">깊이 풀기</text>
+              <path d="M90 55 L110 55" stroke="#fff" stroke-width="2" stroke-dasharray="3 3"/>
+            </svg>
+          </div>
+          <span class="chip chip-parent absolute top-3 left-3">학부모 시선</span>
+        </div>
+        <div class="p-6">
+          <p class="text-[11.5px] text-faint font-semibold mb-2">No. 05 · 7분</p>
+          <h4 class="text-[18px] font-extrabold text-ink leading-snug" style="word-break:keep-all">왜 우리 아이는 풀이를 '외우고' 있을까</h4>
+          <p class="lede mt-2.5 text-[13.5px] text-body">"빨리 풀어야 한다"는 전제가 아이의 사고를 얼려버린다.</p>
+        </div>
+      </a>
+
+      <!-- 06 · 수학 문장제 -->
+      <a href="articles/06-math-word-problem.html" data-cat="math" class="reveal post-card card group" data-d="2">
+        <div class="card-img" style="background:linear-gradient(135deg,#5B93F1 0%,#BAD2FB 100%);">
+          <div class="absolute inset-0 flex items-center justify-center p-8">
+            <svg viewBox="0 0 200 120" class="w-full max-w-[200px]" fill="none">
+              <rect x="30" y="40" width="140" height="40" rx="6" fill="#fff" opacity="0.9"/>
+              <text x="100" y="65" text-anchor="middle" font-family="Pretendard" font-size="11" fill="#0A66FF" font-weight="700">"A가 B보다 3배..."</text>
+              <circle cx="100" cy="100" r="12" fill="#0A0E17"/>
+              <text x="100" y="104" text-anchor="middle" font-family="Inter" font-size="12" fill="#fff" font-weight="800">?</text>
+            </svg>
+          </div>
+          <span class="chip chip-math absolute top-3 left-3">수학 · 문장제의 전제</span>
+        </div>
+        <div class="p-6">
+          <p class="text-[11.5px] text-faint font-semibold mb-2">No. 06 · 5분</p>
+          <h4 class="text-[18px] font-extrabold text-ink leading-snug" style="word-break:keep-all">문장제를 어려워하는 아이 — 글 속의 '숨은 단위'를 찾아라</h4>
+          <p class="lede mt-2.5 text-[13.5px] text-body">문장제가 어려운 건 계산이 아니라, 은연중 가정된 단위 관계를 놓쳐서다.</p>
+        </div>
+      </a>
+
+      <!-- 07 · 고등 심화: 통계=객관 -->
+      <a href="articles/07-high-stats-objective.html" data-cat="advanced" class="reveal post-card card group">
+        <div class="card-img" style="background:linear-gradient(135deg,#0A0E17 0%,#0A66FF 120%);">
+          <div class="absolute inset-0 flex items-center justify-center p-8">
+            <svg viewBox="0 0 200 120" class="w-full max-w-[200px]" fill="none">
+              <rect x="40" y="70" width="22" height="34" fill="#5B93F1"/>
+              <rect x="68" y="50" width="22" height="54" fill="#5B93F1"/>
+              <rect x="96" y="30" width="22" height="74" fill="#FFB800"/>
+              <rect x="124" y="60" width="22" height="44" fill="#5B93F1"/>
+              <rect x="152" y="78" width="22" height="26" fill="#5B93F1"/>
+              <text x="100" y="20" text-anchor="middle" font-family="Pretendard" font-size="10" fill="#fff" font-weight="700">데이터 = 진실?</text>
+            </svg>
+          </div>
+          <span class="chip chip-think absolute top-3 left-3" style="background:rgba(255,184,0,.2);color:#FFB800;">고등 심화 · 통계</span>
+        </div>
+        <div class="p-6">
+          <p class="text-[11.5px] text-faint font-semibold mb-2">No. 07 · 7분 · 고등 1–2</p>
+          <h4 class="text-[18px] font-extrabold text-ink leading-snug" style="word-break:keep-all">"통계로 뒷받침된 주장은 객관적이다" — 숫자가 만든 환상</h4>
+          <p class="lede mt-2.5 text-[13.5px] text-body">같은 데이터로 정반대 결론을 낼 수 있다. '통계=객관'이라는 전제를 깬다.</p>
+        </div>
+      </a>
+
+      <!-- 08 · 고등 심화: 상관vs인과 -->
+      <a href="articles/08-high-correlation.html" data-cat="advanced" class="reveal post-card card group" data-d="1">
+        <div class="card-img" style="background:linear-gradient(135deg,#0B3ACC 0%,#0A0E17 120%);">
+          <div class="absolute inset-0 flex items-center justify-center p-8">
+            <svg viewBox="0 0 200 120" class="w-full max-w-[200px]" fill="none">
+              <line x1="30" y1="100" x2="170" y2="100" stroke="rgba(255,255,255,.3)" stroke-width="1"/>
+              <line x1="30" y1="100" x2="30" y2="20" stroke="rgba(255,255,255,.3)" stroke-width="1"/>
+              <circle cx="50" cy="90" r="4" fill="#5B93F1"/>
+              <circle cx="75" cy="78" r="4" fill="#5B93F1"/>
+              <circle cx="95" cy="65" r="4" fill="#5B93F1"/>
+              <circle cx="115" cy="52" r="4" fill="#5B93F1"/>
+              <circle cx="140" cy="38" r="4" fill="#FFB800"/>
+              <path d="M40 95 Q100 60, 160 30" stroke="#FFB800" stroke-width="2" fill="none" stroke-dasharray="4 3"/>
+              <text x="100" y="15" text-anchor="middle" font-family="Pretendard" font-size="10" fill="#fff" font-weight="700">함께 오른다 ≠ 인과</text>
+            </svg>
+          </div>
+          <span class="chip chip-think absolute top-3 left-3" style="background:rgba(255,184,0,.2);color:#FFB800;">고등 심화 · 인과</span>
+        </div>
+        <div class="p-6">
+          <p class="text-[11.5px] text-faint font-semibold mb-2">No. 08 · 7분 · 고등 1–2</p>
+          <h4 class="text-[18px] font-extrabold text-ink leading-snug" style="word-break:keep-all">그래프가 우상향하면 인과관계다? — 상관과 인과의 함정</h4>
+          <p class="lede mt-2.5 text-[13.5px] text-body">아이스크림과 익사 사고가 함께 오른다고, 둘이 인과일까. 제3의 원인을 찾아라.</p>
+        </div>
+      </a>
+
+      <!-- 09 · 고등 심화: 과학 이론=확정사실 -->
+      <a href="articles/09-high-science-fact.html" data-cat="advanced" class="reveal post-card card group" data-d="2">
+        <div class="card-img" style="background:linear-gradient(135deg,#1a2540 0%,#0A66FF 120%);">
+          <div class="absolute inset-0 flex items-center justify-center p-8">
+            <svg viewBox="0 0 200 120" class="w-full max-w-[200px]" fill="none">
+              <ellipse cx="100" cy="60" rx="50" ry="18" fill="none" stroke="#5B93F1" stroke-width="1.5"/>
+              <ellipse cx="100" cy="60" rx="35" ry="12" fill="none" stroke="#5B93F1" stroke-width="1.5"/>
+              <circle cx="100" cy="60" r="8" fill="#FFB800"/>
+              <circle cx="150" cy="60" r="5" fill="#5B93F1"/>
+              <circle cx="65" cy="60" r="4" fill="#5B93F1"/>
+              <text x="100" y="100" text-anchor="middle" font-family="Pretendard" font-size="10" fill="#fff" font-weight="700">이론 = 불변의 진리?</text>
+            </svg>
+          </div>
+          <span class="chip chip-think absolute top-3 left-3" style="background:rgba(255,184,0,.2);color:#FFB800;">고등 심화 · 과학</span>
+        </div>
+        <div class="p-6">
+          <p class="text-[11.5px] text-faint font-semibold mb-2">No. 09 · 6분 · 고등 1–2</p>
+          <h4 class="text-[18px] font-extrabold text-ink leading-snug" style="word-break:keep-all">"과학 이론은 확정된 사실이다" — 가정을 검증하면 한계가 보인다</h4>
+          <p class="lede mt-2.5 text-[13.5px] text-body">뉴턴 역학이 '틀린' 게 아니라, 적용 범위를 벗어난 것이다. 가정의 힘.</p>
+        </div>
+      </a>
+
+      <!-- 10 · 고등 심화: 표본=전체 -->
+      <a href="articles/10-high-sample.html" data-cat="advanced" class="reveal post-card card group">
+        <div class="card-img" style="background:linear-gradient(135deg,#0A66FF 0%,#0A0E17 120%);">
+          <div class="absolute inset-0 flex items-center justify-center p-8">
+            <svg viewBox="0 0 200 120" class="w-full max-w-[200px]" fill="none">
+              <circle cx="100" cy="60" r="45" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
+              <g fill="#5B93F1"><circle cx="80" cy="50" r="3"/><circle cx="100" cy="45" r="3"/><circle cx="120" cy="55" r="3"/><circle cx="90" cy="70" r="3"/><circle cx="110" cy="75" r="3"/><circle cx="75" cy="65" r="3"/><circle cx="125" cy="68" r="3"/></g>
+              <rect x="135" y="35" width="40" height="50" rx="4" fill="none" stroke="#FFB800" stroke-width="2"/>
+              <text x="155" y="55" text-anchor="middle" font-family="Inter" font-size="9" fill="#FFB800" font-weight="700">표본</text>
+              <text x="100" y="20" text-anchor="middle" font-family="Pretendard" font-size="10" fill="#fff" font-weight="700">일부 = 전체?</text>
+            </svg>
+          </div>
+          <span class="chip chip-think absolute top-3 left-3" style="background:rgba(255,184,0,.2);color:#FFB800;">고등 심화 · 표본</span>
+        </div>
+        <div class="p-6">
+          <p class="text-[11.5px] text-faint font-semibold mb-2">No. 10 · 7분 · 고등 1–2</p>
+          <h4 class="text-[18px] font-extrabold text-ink leading-snug" style="word-break:keep-all">"표본조사 결과는 전체를 대표한다" — 대표성의 조건</h4>
+          <p class="lede mt-2.5 text-[13.5px] text-body">100명 잘 뽑은 표본이 10,000명 자발 응답보다 정확하다. 왜 그럴까.</p>
+        </div>
+      </a>
+
+      <!-- 11 · 고등 심화: 비문학 정답 단일성 -->
+      <a href="articles/11-high-nonfiction.html" data-cat="advanced" class="reveal post-card card group" data-d="1">
+        <div class="card-img" style="background:linear-gradient(135deg,#2A3151 0%,#0B3ACC 120%);">
+          <div class="absolute inset-0 flex items-center justify-center p-8">
+            <svg viewBox="0 0 200 120" class="w-full max-w-[200px]" fill="none">
+              <rect x="40" y="25" width="120" height="70" rx="6" fill="#fff" opacity="0.95"/>
+              <line x1="55" y1="45" x2="145" y2="45" stroke="#0A0E17" stroke-width="2"/>
+              <line x1="55" y1="58" x2="120" y2="58" stroke="#0A0E17" stroke-width="2"/>
+              <line x1="55" y1="71" x2="135" y2="71" stroke="#0A0E17" stroke-width="2"/>
+              <circle cx="155" cy="35" r="8" fill="#0A66FF"/>
+              <text x="155" y="39" text-anchor="middle" font-family="Inter" font-size="10" fill="#fff" font-weight="800">1</text>
+              <text x="100" y="112" text-anchor="middle" font-family="Pretendard" font-size="9" fill="#fff" font-weight="700">정답은 하나?</text>
+            </svg>
+          </div>
+          <span class="chip chip-kor absolute top-3 left-3" style="background:rgba(255,184,0,.2);color:#FFB800;">고등 심화 · 비문학</span>
+        </div>
+        <div class="p-6">
+          <p class="text-[11.5px] text-faint font-semibold mb-2">No. 11 · 7분 · 고등 1–2</p>
+          <h4 class="text-[18px] font-extrabold text-ink leading-snug" style="word-break:keep-all">"비문학 지문엔 하나의 정답이 있다" — 필자의 전제 읽기</h4>
+          <p class="lede mt-2.5 text-[13.5px] text-body">객관적이라는 지문도, 필자의 관점이 깔려 있다. 그 관점을 읽어내는 연습.</p>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- 발행 안내 -->
+    <div class="text-center mt-12 reveal">
+      <span class="sample-tag"><span class="sample-dot"></span>SAMPLE</span>
+      <p class="mt-3 text-[13px] text-faint">매주 화요일, 새로운 사건이 한 편씩 올라옵니다. (현재는 런칭 전 샘플)</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ABOUT PBS ============ -->
+<section id="about" class="py-16 md:py-24 bg-white relative overflow-hidden">
+  <div class="orb" style="width:380px;height:380px;background:#E9EEFA;top:-6%;left:-8%"></div>
+  <div class="max-w-3xl mx-auto px-5 md:px-8 text-center relative">
+    <p class="reveal eyebrow uppercase text-point text-[11px] font-bold en mb-4" data-d="1">WHAT IS PBS?</p>
+    <h2 class="reveal text-[28px] md:text-[40px] font-extrabold text-ink leading-tight" data-d="2" style="word-break:keep-all">
+      PBS(Premise-Break Schema)는<br class="hidden md:block"/> 학원을 대체하지 않습니다.
+    </h2>
+    <p class="reveal lede mt-6 text-[15px] md:text-[16.5px] text-body" data-d="3" style="word-break:keep-all">
+      다니는 학원은 그대로 두세요. PBS는 아이가 풀고 있는 <b class="text-ink">문제 하나</b>를 다르게 바라보는 연습을 더합니다. 전제를 찾고(Discover), 깨뜨리고(Break), 새 틀로 다시 세우는(Rebuild) — 하루 10분, 4단계.
+    </p>
+    <div class="reveal mt-10 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto" data-d="4">
+      <div class="text-center">
+        <div class="w-14 h-14 mx-auto rounded-2xl bg-point/10 flex items-center justify-center text-point font-extrabold">①</div>
+        <p class="mt-3 text-[13px] font-bold text-ink">전제 찾기</p>
+        <p class="text-[11.5px] text-faint mt-1">Discover</p>
+      </div>
+      <div class="text-center">
+        <div class="w-14 h-14 mx-auto rounded-2xl bg-point/10 flex items-center justify-center text-point font-extrabold">②</div>
+        <p class="mt-3 text-[13px] font-bold text-ink">전제 폭파</p>
+        <p class="text-[11.5px] text-faint mt-1">Break</p>
+      </div>
+      <div class="text-center">
+        <div class="w-14 h-14 mx-auto rounded-2xl bg-point/10 flex items-center justify-center text-point font-extrabold">③</div>
+        <p class="mt-3 text-[13px] font-bold text-ink">새 틀 세우기</p>
+        <p class="text-[11.5px] text-faint mt-1">Rebuild</p>
+      </div>
+      <div class="text-center">
+        <div class="w-14 h-14 mx-auto rounded-2xl bg-point/10 flex items-center justify-center text-point font-extrabold">④</div>
+        <p class="mt-3 text-[13px] font-bold text-ink">습관화</p>
+        <p class="text-[11.5px] text-faint mt-1">Consolidate</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SUBSCRIBE ============ -->
+<section id="subscribe" class="py-16 md:py-24 relative overflow-hidden" style="background:#0A0E17;">
+  <div class="orb" style="width:400px;height:400px;background:#0A66FF;top:10%;left:5%;opacity:.4"></div>
+  <div class="orb" style="width:340px;height:340px;background:#0B3ACC;bottom:8%;right:6%;opacity:.4"></div>
+  <div class="max-w-2xl mx-auto px-5 md:px-8 text-center relative">
+    <p class="reveal eyebrow uppercase text-accent text-[11px] font-bold en mb-4" data-d="1">주간 뉴스레터</p>
+    <h2 class="reveal text-[26px] md:text-[38px] font-extrabold text-white leading-tight" data-d="2" style="word-break:keep-all">
+      매주 화요일, 아이 문제 하나의<br/>전제를 같이 의심해요.
+    </h2>
+    <p class="reveal lede mt-5 text-[15px] text-white/70" data-d="3" style="word-break:keep-all">
+      3분이면 읽는 한 편의 글. 부모와 아이가 같이 볼 수 있는 '이번 주의 사건'을 메일로 보내드립니다.
+    </p>
+    <form class="reveal mt-8 flex flex-col sm:flex-row gap-3 max-w-md mx-auto" data-d="4" onsubmit="return false;">
+      <input type="email" placeholder="이메일 주소" class="flex-1 px-5 py-3.5 rounded-full text-[14px] text-ink bg-white border-0 outline-none" />
+      <button class="btn btn-primary btn-3d text-[14px] font-bold px-7 py-3.5 whitespace-nowrap">구독하기</button>
+    </form>
+    <p class="reveal mt-4 text-[11.5px] text-white/40" data-d="4">
+      <span class="sample-tag dark"><span class="sample-dot"></span>SAMPLE</span>
+      &nbsp;런칭 전 — 지금 구독하면 첫 50명에게 6개월 무료 제공 예정.
+    </p>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="bg-ink text-white/60 py-12">
+  <div class="max-w-6xl mx-auto px-5 md:px-8">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+      <div class="flex items-center gap-2.5">
+        <span class="logo-mark"><svg style="transform:rotate(-45deg)" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.5 15.5L20 20"/></svg></span>
+        <span class="font-bold text-[15px] text-white">PBS 매거진</span>
+      </div>
+      <nav class="flex flex-wrap gap-x-6 gap-y-2 text-[13px]">
+        <a href="#latest" class="hover:text-white transition-colors">최신 글</a>
+        <a href="#about" class="hover:text-white transition-colors">PBS란</a>
+        <a href="#subscribe" class="hover:text-white transition-colors">구독</a>
+      </nav>
+    </div>
+    <div class="mt-8 pt-6 border-t border-white/10 text-[11.5px] text-white/40">
+      © 2026 PBS 학습법 · Premise-Break Schema · 본 매거진은 런칭 전 샘플 콘텐츠를 포함하고 있습니다.
+    </div>
+  </div>
+</footer>
+
+<script src="common.js"></script>
+<script>
+  /* 카테고리 필터 */
+  var filters = document.querySelectorAll(".fpill");
+  var cards = document.querySelectorAll(".post-card");
+  filters.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      filters.forEach(function (b) { b.classList.remove("active"); });
+      btn.classList.add("active");
+      var cat = btn.dataset.cat;
+      cards.forEach(function (c) {
+        var show = (cat === "all" || c.dataset.cat === cat);
+        c.classList.toggle("hide", !show);
+      });
+    });
+  });
+
+  /* 피처드 스트라이크 */
+  var fs = document.querySelector(".feat-strike");
+  if (fs) {
+    var so = new IntersectionObserver(function (en) {
+      en.forEach(function (e) {
+        if (e.isIntersecting) {
+          fs.style.transition = "stroke-dashoffset 1.4s cubic-bezier(.65,0,.35,1)";
+          fs.style.strokeDashoffset = "0";
+          so.disconnect();
+        }
+      });
+    }, { threshold: 0.4 });
+    so.observe(fs);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+/* ==========================================================================
+   PBS 학습법 v2 — 공통 테마 (Design System + Animation Library)
+   모든 페이지가 이 파일 하나로 동일한 브랜드 경험을 갖는다.
+   ========================================================================== */
+
+/* ----- Design Tokens ----- */
+:root{
+  --brand-primary:#0A66FF;
+  --brand-primary-deep:#0B3ACC;
+  --brand-primary-light:#5B93F1;
+  --brand-accent:#FFB800;
+  --ink-900:#0A0E17;
+  --ink-700:#2A3151;
+  --ink-500:#525A69;
+  --ink-300:#7A8499;
+  --ink-100:#9AA4B2;
+  --line:#ECEEF1;
+  --line-strong:#DFE3E8;
+  --soft:#F5F6F4;
+  --panel:#F2F4F1;
+  --paper:#FBFCFE;
+
+  --motion-fast:150ms;
+  --motion-base:240ms;
+  --motion-slow:520ms;
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --ease-elastic:cubic-bezier(.68,-.55,.27,1.55);
+  --ease-spring:cubic-bezier(.2,1.1,.36,1);
+
+  --shadow-sm:0 2px 10px rgba(10,14,23,.04);
+  --shadow-md:0 8px 24px rgba(10,102,255,.14);
+  --shadow-lg:0 18px 50px rgba(10,14,23,.10);
+  --shadow-3d:0 4px 0 0 rgba(8,87,219,.45);
+}
+
+/* ----- Base ----- */
+html{ scroll-behavior:smooth; }
+body{
+  font-family:"Pretendard","Inter",sans-serif;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  letter-spacing:-.014em;
+  background:#fff;
+  color:var(--ink-900);
+  overflow-x:hidden;
+}
+h1,h2,h3,h4{ letter-spacing:-.04em; }
+.en{ font-family:"Inter","Pretendard",sans-serif; }
+.eyebrow{ letter-spacing:.24em; }
+.display{ line-height:1.05; }
+.lede{ line-height:1.75; }
+::selection{ background:rgba(10,102,255,.15); color:inherit; }
+
+::-webkit-scrollbar{ width:10px; height:10px; }
+::-webkit-scrollbar-track{ background:transparent; }
+::-webkit-scrollbar-thumb{ background:#D6DCE6; border-radius:9999px; border:2.5px solid #fff; }
+::-webkit-scrollbar-thumb:hover{ background:#B9C2D1; }
+
+section[id]{ scroll-margin-top:88px; }
+
+/* ----- Utilities ----- */
+.kw{ position:relative; display:inline-block; color:var(--brand-primary); }
+.kw svg{ position:absolute; left:-2%; bottom:-.12em; width:104%; height:.5em; overflow:visible; }
+.kw path{ fill:none; stroke:var(--brand-primary); stroke-width:5; stroke-linecap:round; stroke-dasharray:520; stroke-dashoffset:520; transition:stroke-dashoffset 1.2s cubic-bezier(.65,0,.35,1); }
+.kw.draw path{ stroke-dashoffset:0; }
+
+.grid-bg{ background-image:radial-gradient(circle,#E4E9F0 1px,transparent 1px); background-size:30px 30px; -webkit-mask-image:radial-gradient(ellipse 60% 55% at 50% 40%,#000 20%,transparent 72%); mask-image:radial-gradient(ellipse 60% 55% at 50% 40%,#000 20%,transparent 72%); }
+
+.hairline{ height:1px; background:var(--line); }
+
+/* ----- Buttons (Brilliant-style 3D) ----- */
+.btn{ display:inline-flex; align-items:center; justify-content:center; gap:.5rem; border-radius:9999px; white-space:nowrap; font-weight:600; cursor:pointer; transition:transform var(--motion-base) var(--ease-out), background .3s, color .3s, border-color .3s, box-shadow .3s; }
+.btn-primary{ background:var(--brand-primary); color:#fff; box-shadow:var(--shadow-md); }
+.btn-primary:hover{ background:#0857db; transform:translateY(-2px); box-shadow:0 12px 30px rgba(10,102,255,.4); }
+.btn-primary:active{ transform:translateY(0); }
+.btn-3d{ box-shadow:var(--shadow-md), var(--shadow-3d); }
+.btn-3d:hover{ transform:translateY(-2px); box-shadow:0 12px 30px rgba(10,102,255,.4), 0 6px 0 rgba(8,87,219,.45); }
+.btn-3d:active{ transform:translateY(2px); box-shadow:var(--shadow-md), 0 0 0 rgba(8,87,219,.45); }
+.btn-ghost{ background:#fff; color:var(--ink-900); border:1px solid var(--line-strong); }
+.btn-ghost:hover{ border-color:var(--brand-primary); color:var(--brand-primary); transform:translateY(-1px); }
+.btn-white{ background:#fff; color:var(--ink-900); box-shadow:var(--shadow-sm); }
+.btn-white:hover{ transform:translateY(-2px); box-shadow:0 12px 34px rgba(0,0,0,.24); }
+
+/* ----- Cards ----- */
+.card{ background:#fff; border:1px solid var(--line); border-radius:1.5rem; box-shadow:var(--shadow-sm); transition:transform .5s var(--ease-out), box-shadow .5s, border-color .5s; }
+.card:hover{ box-shadow:var(--shadow-lg); transform:translateY(-4px); }
+.card-flat{ background:#fff; border:1px solid var(--line); border-radius:1.5rem; }
+
+/* ----- Orb (배경 광원) ----- */
+.orb{ position:absolute; border-radius:9999px; filter:blur(60px); opacity:.5; pointer-events:none; animation:orbFloat 16s ease-in-out infinite alternate; }
+.orb:nth-of-type(2n){ animation-duration:20s; animation-delay:-4s; }
+.orb:nth-of-type(3n){ animation-duration:13s; animation-delay:-8s; }
+@keyframes orbFloat{ 0%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(18px,-22px) scale(1.08); } 100%{ transform:translate(-14px,14px) scale(.96); } }
+
+/* ----- Reveal on scroll ----- */
+.reveal{ opacity:0; transform:translateY(28px); transition:opacity 1.1s var(--ease-out), transform 1.1s var(--ease-out); will-change:opacity,transform; }
+.reveal.in{ opacity:1; transform:none; }
+.reveal[data-d="1"]{ transition-delay:.08s; }
+.reveal[data-d="2"]{ transition-delay:.16s; }
+.reveal[data-d="3"]{ transition-delay:.24s; }
+.reveal[data-d="4"]{ transition-delay:.32s; }
+
+/* ----- Stage badge / Chip ----- */
+.stage-badge{ display:inline-flex; align-items:center; gap:.5rem; padding:.4rem .9rem; border-radius:9999px; background:rgba(10,102,255,.08); color:var(--brand-primary); font-size:11px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; }
+.stage-badge .num{ display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:9999px; background:var(--brand-primary); color:#fff; font-size:10px; font-weight:800; }
+.chip{ display:inline-flex; align-items:center; gap:.4rem; padding:.32rem .8rem; border-radius:9999px; font-size:11px; font-weight:800; }
+.chip-math{ background:rgba(10,102,255,.10); color:var(--brand-primary); }
+.chip-kor{ background:rgba(255,184,0,.16); color:#A87B00; }
+.chip-think{ background:rgba(10,14,23,.08); color:var(--ink-900); }
+.chip-parent{ background:rgba(11,58,204,.08); color:var(--brand-primary-deep); }
+
+/* ----- SAMPLE tag (런칭 전 신뢰 처리) ----- */
+.sample-tag{ display:inline-flex; align-items:center; gap:.35rem; padding:.2rem .6rem; border-radius:9999px; background:#FFF6E0; color:#9A6A00; font-size:10.5px; font-weight:800; letter-spacing:.06em; border:1px solid #FFE6A6; }
+.sample-tag.dark{ background:rgba(255,184,0,.12); color:var(--brand-accent); border-color:rgba(255,184,0,.3); }
+.sample-dot{ width:6px; height:6px; border-radius:9999px; background:var(--brand-accent); animation:blink 1.8s ease-in-out infinite; }
+@keyframes blink{ 0%,100%{ opacity:.4; } 50%{ opacity:1; } }
+
+/* ----- Logo mark ----- */
+.logo-mark{ width:32px; height:32px; border-radius:11px; background:var(--brand-primary); transform:rotate(45deg); display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
+
+/* ==========================================================================
+   ★ 시그니처 루프 애니메이션 라이브러리 (SMIL + CSS)
+   ========================================================================== */
+
+/* A. 자기 그리는 곡선 (히어로/섹션 배경) */
+.axis{ stroke:#E4E9F0; stroke-width:1; }
+.parabola{ fill:none; stroke:var(--brand-primary); stroke-width:2; stroke-linecap:round; opacity:.4; }
+
+/* B. 취소선 루프 (전제 폭파) */
+.crack-line{ stroke:var(--brand-accent); stroke-width:4; stroke-linecap:round; fill:none; stroke-dasharray:360; animation:crackGrow 4.5s ease-in-out infinite; }
+@keyframes crackGrow{
+  0%,20%{ stroke-dashoffset:360; }
+  55%,70%{ stroke-dashoffset:0; }
+  85%,100%{ stroke-dashoffset:-360; }
+}
+
+/* C. 성장 바 루프 (결과 섹션) */
+.grow-bar{ transform-origin:left center; transform-box:fill-box; animation:growFill 6s cubic-bezier(.16,1,.3,1) infinite; }
+@keyframes growFill{
+  0%{ transform:scaleX(0); }
+  40%,75%{ transform:scaleX(1); }
+  90%,100%{ transform:scaleX(0); }
+}
+
+/* D. 정사각형→정팔각형 모프 힌트 (SMIL로 본체 구현, 여기는 라벨용) */
+.morph-label-fade{ animation:morphLabel 7s ease-in-out infinite; }
+@keyframes morphLabel{
+  0%,30%{ opacity:1; }
+  45%,55%{ opacity:0; }
+  70%,100%{ opacity:1; }
+}
+
+/* E. 다각형 회전 무드 (배경 장식) */
+.spin-slow{ animation:spinSlow 60s linear infinite; transform-origin:center; transform-box:fill-box; }
+.spin-rev{ animation:spinSlow 40s linear infinite reverse; transform-origin:center; transform-box:fill-box; }
+@keyframes spinSlow{ to{ transform:rotate(360deg); } }
+
+/* ==========================================================================
+   루카(Kozy) 캐릭터 시스템 — 6상태
+   ========================================================================== */
+.kozy{ display:inline-block; }
+.kozy svg{ display:block; }
+.k-face{ fill:rgba(10,102,255,.08); }
+.k-face.top{ fill:rgba(10,102,255,.14); }
+.k-face.right{ fill:rgba(10,102,255,.05); }
+.k-edge{ fill:none; stroke:var(--brand-primary); stroke-width:2.2; stroke-linejoin:round; }
+.k-core{ fill:var(--brand-primary); filter:drop-shadow(0 0 4px rgba(10,102,255,.85)); }
+.k-ring, .octa{ opacity:0; }
+
+/* st-idle: 대기 (float + turn + core pulse) */
+.k-wrap{ animation:kFloat 4s ease-in-out infinite; transform-origin:center; transform-box:fill-box; }
+@keyframes kFloat{ 0%,100%{ transform:translateY(0) rotate(0deg); } 50%{ transform:translateY(-4px) rotate(2deg); } }
+.k-turn{ animation:kTurn 6s ease-in-out infinite; transform-origin:center; transform-box:fill-box; }
+@keyframes kTurn{ 0%,100%{ transform:rotate(-3deg); } 50%{ transform:rotate(3deg); } }
+.k-core{ transform-origin:center; transform-box:fill-box; animation:kPulse 2.4s ease-in-out infinite; }
+@keyframes kPulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.15); } }
+
+/* st-scan: 스캔 (느린 회전 + 면 순차 flick) */
+.st-scan .k-turn{ animation:kTurnSlow 3s ease-in-out infinite; }
+@keyframes kTurnSlow{ 0%,100%{ transform:rotate(-5deg); } 50%{ transform:rotate(5deg); } }
+.st-scan .k-face.top{ animation:kFlickTop 1.5s ease-in-out infinite; }
+.st-scan .k-face.right{ animation:kFlickRight 1.5s ease-in-out infinite .5s; }
+@keyframes kFlickTop{ 0%,100%{ fill:rgba(10,102,255,.14); } 50%{ fill:rgba(10,102,255,.35); } }
+@keyframes kFlickRight{ 0%,100%{ fill:rgba(10,102,255,.05); } 50%{ fill:rgba(10,102,255,.22); } }
+
+/* st-discover: 변환 (cube out + octa in + ring flash) */
+.st-discover .cube{ animation:kOut 1.8s ease-in-out infinite; transform-origin:center; transform-box:fill-box; }
+@keyframes kOut{ 0%,30%{ opacity:1; transform:scale(1) rotate(0deg); } 60%,100%{ opacity:0; transform:scale(.3) rotate(45deg); } }
+.st-discover .octa{ animation:kIn 1.8s ease-in-out infinite; transform-origin:center; transform-box:fill-box; }
+@keyframes kIn{ 0%,30%{ opacity:0; transform:scale(1.4) rotate(-45deg); } 60%,100%{ opacity:1; transform:scale(1) rotate(0deg); } }
+.st-discover .k-ring{ animation:kr 1.8s ease-in-out infinite; transform-origin:center; transform-box:fill-box; }
+@keyframes kr{ 0%,30%{ opacity:0; transform:scale(.5); } 50%{ opacity:.9; transform:scale(1.3); } 70%,100%{ opacity:0; transform:scale(1.6); } }
+
+/* st-octa: 정팔면체 고정 */
+.st-octa .cube{ opacity:0; }
+.st-octa .octa{ opacity:1; }
+
+/* st-praise: 격려 (바운스 + 반짝) */
+.st-praise .k-wrap{ animation:kBounce .8s var(--ease-elastic) infinite; }
+@keyframes kBounce{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-10px); } }
+.st-praise .k-core{ animation:kSparkle 1s ease-in-out infinite; }
+@keyframes kSparkle{ 0%,100%{ transform:scale(1); filter:drop-shadow(0 0 4px rgba(10,102,255,.85)); } 50%{ transform:scale(1.3); filter:drop-shadow(0 0 10px rgba(255,184,0,.9)); } }
+
+/* st-blast: 폭파 (흔들림 + 파동) */
+.st-blast .k-wrap{ animation:kShake .4s ease-in-out infinite; }
+@keyframes kShake{ 0%,100%{ transform:translateX(0); } 25%{ transform:translateX(-4px); } 75%{ transform:translateX(4px); } }
+.st-blast .k-ring{ animation:kRingBlast 1s ease-out infinite; transform-origin:center; transform-box:fill-box; }
+@keyframes kRingBlast{ 0%{ opacity:.9; transform:scale(.5); } 100%{ opacity:0; transform:scale(2); } }
+
+/* ----- 접근성: reduced motion 글로벌 킬스위치 ----- */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }
+  .reveal{ opacity:1 !important; transform:none !important; }
+  .orb{ display:none; }
+}
