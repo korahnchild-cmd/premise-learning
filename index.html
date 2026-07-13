@@ -152,15 +152,15 @@
   .stx-pills{ display:flex; justify-content:center; gap:8px; margin-bottom:14px; }
   .stx-pill{ padding:6px 16px; border-radius:9999px; font-size:12.5px; font-weight:700; background:#EDEFF2; color:#7A8499; transition:background .3s, color .3s; }
   .stx-pill.active{ background:#0A0E17; color:#fff; }
-  .stx-panel-wrap{ position:relative; min-height:180px; background:#fff; border:1px solid var(--line,#E4E9F1); border-radius:20px; box-shadow:0 10px 26px -14px rgba(10,14,23,.12); overflow:hidden; }
-  .stx-panel{ position:absolute; inset:0; padding:20px; opacity:0; pointer-events:none; transition:opacity .45s ease; display:flex; gap:16px; align-items:center; }
+  .stx-panel-wrap{ position:relative; min-height:240px; background:#fff; border:1px solid var(--line,#E4E9F1); border-radius:20px; box-shadow:0 10px 26px -14px rgba(10,14,23,.12); overflow:hidden; }
+  .stx-panel{ position:absolute; inset:0; padding:26px; opacity:0; pointer-events:none; transition:opacity .45s ease; display:flex; gap:22px; align-items:center; }
   .stx-panel.active{ opacity:1; pointer-events:auto; }
   .stx-txt{ flex:1; min-width:0; }
-  .stx-tag{ display:inline-block; font-size:10px; font-weight:800; color:#fff; background:#0A66FF; border-radius:9999px; padding:2px 8px; margin-bottom:6px; }
-  .stx-title{ font-size:13.5px; font-weight:800; color:#0A0E17; line-height:1.4; }
-  .stx-sub{ font-size:12px; color:#7A8499; margin-top:4px; line-height:1.5; }
-  .stx-scene{ width:104px; height:88px; flex-shrink:0; overflow:visible; }
-  @media (max-width:480px){ .stx-panel{ flex-direction:column; align-items:flex-start; } .stx-scene{ width:100%; height:76px; align-self:center; } }
+  .stx-tag{ display:inline-block; font-size:11px; font-weight:800; color:#fff; background:#0A66FF; border-radius:9999px; padding:3px 10px; margin-bottom:8px; }
+  .stx-title{ font-size:16px; font-weight:800; color:#0A0E17; line-height:1.4; }
+  .stx-sub{ font-size:13.5px; color:#7A8499; margin-top:6px; line-height:1.55; }
+  .stx-scene{ width:160px; height:135px; flex-shrink:0; overflow:visible; }
+  @media (max-width:480px){ .stx-panel{ flex-direction:column; align-items:flex-start; } .stx-scene{ width:100%; height:110px; align-self:center; } }
   .stx-curve{ stroke-dasharray:120; stroke-dashoffset:120; animation:stxCurveDraw 3s ease-in-out infinite; }
   @keyframes stxCurveDraw{ 0%,12%{ stroke-dashoffset:120; } 55%,100%{ stroke-dashoffset:0; } }
   .stx-dot1{ animation:stxDotMove 3s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
@@ -408,16 +408,16 @@
 </section>
 
 <!-- 핵심 약속 배너 — 히어로 직후, 점수보다 근본을 바꾼다는 브랜드 원칙 (CURRICULUM 섹션과 동일한 다크 톤으로 크게) -->
-<section class="reveal py-10 md:py-14 text-white relative overflow-hidden" style="background:linear-gradient(175deg,#0B1730,#0A0E17 65%)">
+<section class="reveal py-16 md:py-24 text-white relative overflow-hidden" style="background:linear-gradient(175deg,#0B1730,#0A0E17 65%)">
   <div class="absolute top-0 left-0 right-0 h-px bg-white/10"></div>
   <div class="max-w-2xl mx-auto px-5 md:px-8 text-center relative">
-    <p class="text-[19px] md:text-[24px] font-extrabold text-white">점수보다 <span style="color:#5B93F1">근본</span>을 바꿉니다</p>
-    <p class="mt-2.5 text-[13.5px] md:text-[14.5px] text-white/70 leading-relaxed max-w-md mx-auto">근본이 바뀌면 점수는 저절로 따라옵니다 — 저희가 매주 보여드리는 건 점수가 아니라, 생각하는 방식이 자라는 과정입니다.</p>
+    <p class="text-[26px] md:text-[36px] font-extrabold text-white">점수보다 <span style="color:#5B93F1">근본</span>을 바꿉니다</p>
+    <p class="mt-4 text-[15px] md:text-[17px] text-white/70 leading-relaxed max-w-lg mx-auto">근본이 바뀌면 점수는 저절로 따라옵니다 — 저희가 매주 보여드리는 건 점수가 아니라, 생각하는 방식이 자라는 과정입니다.</p>
   </div>
 </section>
 
 <!-- 사고분석관 루카 소개 — 히어로 직후 -->
-<div class="reveal max-w-lg mx-auto px-5 md:px-8 -mt-2 mb-4 md:mb-6 flex items-center justify-center gap-4 text-center md:text-left flex-col md:flex-row">
+<div class="reveal max-w-lg mx-auto px-5 md:px-8 mt-8 md:mt-10 mb-6 md:mb-8 flex items-center justify-center gap-4 text-center md:text-left flex-col md:flex-row">
   <div class="kozy st-idle shrink-0" style="width:52px;height:52px" id="introKozy"></div>
   <p class="text-[13.5px] md:text-[14px] text-faint leading-relaxed">사고분석관 <b class="text-ink">루카</b>가 매 사건마다 함께합니다 — 표정 없는 정육면체 캐릭터가, 전제를 발견할 때마다 정팔면체로 형태를 바꾸며 반응해요.</p>
 </div>
