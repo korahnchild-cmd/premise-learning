@@ -151,10 +151,10 @@
   /* 과목 관통 쇼케이스 탭 (brilliant.org 탭 전환형 참고) */
   .stx-pills{ display:flex; justify-content:center; gap:8px; margin-bottom:14px; }
   .stx-pill{ padding:6px 16px; border-radius:9999px; font-size:12.5px; font-weight:700; background:#EDEFF2; color:#7A8499; animation:stxPillActive 16s ease-in-out infinite; }
-  @keyframes stxPillActive{ 0%,2%{ background:#EDEFF2; color:#7A8499; } 4%,21%{ background:#0A0E17; color:#fff; } 23%,100%{ background:#EDEFF2; color:#7A8499; } }
+  @keyframes stxPillActive{ 0%,1%{ background:#EDEFF2; color:#7A8499; } 3%,23%{ background:#0A0E17; color:#fff; } 25%,100%{ background:#EDEFF2; color:#7A8499; } }
   .stx-panel-wrap{ position:relative; min-height:180px; background:#fff; border:1px solid var(--line,#E4E9F1); border-radius:20px; box-shadow:0 10px 26px -14px rgba(10,14,23,.12); overflow:hidden; }
   .stx-panel{ position:absolute; inset:0; padding:20px; opacity:0; animation:stxPanelFade 16s ease-in-out infinite; display:flex; gap:16px; align-items:center; }
-  @keyframes stxPanelFade{ 0%,2%{ opacity:0; } 4%,21%{ opacity:1; } 23%,100%{ opacity:0; } }
+  @keyframes stxPanelFade{ 0%,1%{ opacity:0; } 3%,23%{ opacity:1; } 25%,100%{ opacity:0; } }
   .stx-txt{ flex:1; min-width:0; }
   .stx-tag{ display:inline-block; font-size:10px; font-weight:800; color:#fff; background:#0A66FF; border-radius:9999px; padding:2px 8px; margin-bottom:6px; }
   .stx-title{ font-size:13.5px; font-weight:800; color:#0A0E17; line-height:1.4; }
@@ -166,9 +166,9 @@
   .stx-dot1{ animation:stxDotMove 16s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
   @keyframes stxDotMove{ 0%,3%{ transform:translate(0,0); } 10%,21%{ transform:translate(65px,-40px); } 23%,100%{ transform:translate(0,0); } }
   .stx-strike{ stroke-dasharray:70; stroke-dashoffset:70; animation:stxStrikeDraw 16s ease-in-out infinite; animation-delay:4s; }
-  @keyframes stxStrikeDraw{ 0%,29%{ stroke-dashoffset:70; } 34%,45%{ stroke-dashoffset:0; } 47%,100%{ stroke-dashoffset:0; } }
+  @keyframes stxStrikeDraw{ 0%,3%{ stroke-dashoffset:70; } 9%,23%{ stroke-dashoffset:0; } 25%,100%{ stroke-dashoffset:70; } }
   .stx-newbox,.stx-newtxt{ opacity:0; animation:stxNewIn 16s ease-in-out infinite; animation-delay:4s; }
-  @keyframes stxNewIn{ 0%,35%{ opacity:0; } 40%,45%{ opacity:1; } 47%,100%{ opacity:1; } }
+  @keyframes stxNewIn{ 0%,11%{ opacity:0; } 15%,23%{ opacity:1; } 25%,100%{ opacity:0; } }
   .stx-arc1{ stroke-dasharray:44; stroke-dashoffset:44; animation:stxArc1 16s ease-in-out infinite; animation-delay:8s; }
   @keyframes stxArc1{ 0%,3%{ stroke-dashoffset:44; } 10%,21%{ stroke-dashoffset:0; } 23%,100%{ stroke-dashoffset:0; } }
   .stx-arc2{ stroke-dasharray:44; stroke-dashoffset:44; animation:stxArc2 16s ease-in-out infinite; animation-delay:8s; }
@@ -408,6 +408,14 @@
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
   </a>
 </section>
+
+<!-- 핵심 약속 배너 — 히어로 직후, 점수보다 근본을 바꾼다는 브랜드 원칙 -->
+<div class="reveal max-w-lg mx-auto px-5 md:px-8 mt-2 mb-6 text-center">
+  <div class="inline-flex flex-col items-center gap-1 px-6 py-4 rounded-2xl bg-point/5 border border-point/15">
+    <p class="text-[15px] md:text-[16px] font-extrabold text-ink">점수보다 <span class="text-point">근본</span>을 바꿉니다</p>
+    <p class="text-[12.5px] text-faint">근본이 바뀌면 점수는 저절로 따라옵니다 — 저희가 매주 보여드리는 건 점수가 아니라, 생각하는 방식이 자라는 과정입니다.</p>
+  </div>
+</div>
 
 <!-- 사고분석관 루카 소개 — 히어로 직후 -->
 <div class="reveal max-w-lg mx-auto px-5 md:px-8 -mt-2 mb-4 md:mb-6 flex items-center justify-center gap-4 text-center md:text-left flex-col md:flex-row">
@@ -741,8 +749,9 @@
 </section>
 
 <!-- CURRICULUM teaser -->
-<section class="spotlight py-16 md:py-24 bg-night text-white relative overflow-hidden">
-  <div class="orb absolute pointer-events-none" style="width:400px;height:400px;background:#132038;top:10%;left:5%;opacity:.9"></div>
+<section class="spotlight py-16 md:py-24 text-white relative overflow-hidden" style="background:linear-gradient(175deg,#0B1730,#0A0E17 55%)">
+  <div class="absolute top-0 left-0 right-0 h-px bg-white/10"></div>
+  <div class="orb absolute pointer-events-none" style="width:400px;height:400px;background:#16264a;top:10%;left:5%;opacity:.9"></div>
   <div class="orb absolute pointer-events-none" style="width:360px;height:360px;background:#101a2e;bottom:8%;right:6%;opacity:.9"></div>
   <div class="max-w-5xl mx-auto px-5 md:px-8 relative">
     <div class="text-center max-w-3xl mx-auto reveal">
@@ -911,7 +920,7 @@
   <div class="max-w-3xl mx-auto px-5 md:px-8 stage-head reveal">
     <span class="stage-badge"><span class="num">3</span>The Result · 효과</span>
     <h2 class="display text-[1.8rem] md:text-[2.8rem] font-extrabold mt-6">점수가 아니라,<br class="hidden md:block" /> 생각의 태도가 자랍니다</h2>
-    <p class="lede mt-5 text-[15px] text-body">PBS 학습법은 점수를 약속하지 않습니다. 대신 파트너 노트가 아이의 <b class="text-ink">생각하는 습관</b>이 어떻게 자라는지 매주 보여줍니다.</p>
+    <p class="lede mt-5 text-[15px] text-body">PBS 학습법은 점수보다 근본을 바꿉니다. 근본이 바뀌면 점수는 저절로 따라옵니다 — 파트너 노트가 아이의 <b class="text-ink">생각하는 습관</b>이 어떻게 자라는지 매주 보여줍니다.</p>
   </div>
 </section>
 
@@ -1099,7 +1108,7 @@
           <span class="cn-num">04</span>
           <p class="relative text-[11px] font-bold tracking-widest uppercase text-white/70 mb-4">How we measure</p>
           <h3 class="relative text-[19px] font-extrabold text-white leading-snug">점수가 아니라<br/>태도로 확인합니다</h3>
-          <p class="relative mt-3 text-[13.5px] text-white/80 leading-relaxed">PBS는 점수를 약속하지 않습니다. 대신 파트너 노트가 "질문의 질", "스스로 세운 계획"이 어떻게 자라는지 매주 보여줍니다.</p>
+          <p class="relative mt-3 text-[13.5px] text-white/80 leading-relaxed">PBS는 점수보다 근본을 바꿉니다. 근본이 바뀌면 점수는 저절로 따라옵니다 — 파트너 노트가 "질문의 질", "스스로 세운 계획"이 어떻게 자라는지 매주 보여줍니다.</p>
         </div>
         <div class="cn-card snap-center shrink-0 w-[78%] sm:w-[46%] md:w-[29%] rounded-[1.75rem] p-8" style="background:linear-gradient(160deg,#0A0E17,#0B3ACC)">
           <span class="cn-num">05</span>

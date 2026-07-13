@@ -66,8 +66,6 @@
   @media (min-width:640px){ .mq-wrap{ grid-template-columns:1fr 1fr; max-width:none; } }
   .mq-card{ border-radius:22px; padding:3px; box-shadow:0 10px 28px -12px rgba(10,14,23,.16), 0 2px 8px rgba(10,14,23,.05); position:relative; overflow:visible; }
   .mq-card svg{ width:100%; height:auto; display:block; overflow:visible; }
-  .mq-luka{ position:absolute; top:-14px; right:-10px; width:40px; height:40px; animation:mqLukaFloat 4s ease-in-out infinite; filter:drop-shadow(0 6px 10px rgba(10,102,255,.25)); }
-  @keyframes mqLukaFloat{ 0%,100%{ transform:translateY(0) rotate(-5deg); } 50%{ transform:translateY(-5px) rotate(5deg); } }
 
   .mqMove{ animation:mqSlidePoint 6s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
   @keyframes mqSlidePoint{ 0%,15%{ transform:translate(0,0); } 50%,65%{ transform:translate(28px,26px); } 100%{ transform:translate(0,0); } }
@@ -125,7 +123,6 @@
     .mqCursor{ animation:mqCursorMove 7s ease-in-out infinite !important; }
     .mqClickA{ animation:mqClickRingA 7s ease-in-out infinite !important; }
     .mqClickB{ animation:mqClickRingB 7s ease-in-out infinite !important; }
-    .mq-luka{ animation:mqLukaFloat 4s ease-in-out infinite !important; }
   }
 </style>
 </head>
@@ -177,10 +174,6 @@
         <g class="mqMove"><circle cx="82" cy="92" r="4.5" fill="#0A66FF"/></g>
         <g class="mqMove"><circle cx="124" cy="128" r="4.5" fill="#0A66FF"/></g>
       </svg>
-      <svg class="mq-luka" viewBox="0 0 100 100" aria-hidden="true"><g class="kw">
-        <polygon class="k-face top" points="50,15 82,33 50,50 18,33"/><polygon class="k-face right" points="82,33 82,67 50,85 50,50"/><polygon class="k-face left" points="18,33 50,50 50,85 18,67"/>
-        <polygon class="k-edge" points="50,15 82,33 82,67 50,85 18,67 18,33"/><path class="k-edge" d="M50,50 L82,33 M50,50 L18,33 M50,50 L50,85"/><circle class="k-core" cx="50" cy="50" r="4.5"/>
-      </g></svg>
     </div>
     <div class="mq-card">
       <svg viewBox="0 0 200 150" role="img" aria-label="(x+4)(x+2) 전개식 빈칸을 칩으로 채우는 예시">
@@ -211,10 +204,6 @@
         <circle class="mqClickB" cx="163" cy="108" r="11" fill="none" stroke="#0A66FF" stroke-width="2"/>
         <path class="mqCursor" d="M0,0 L0,15 L3.5,11.5 L6,16.5 L8.5,15 L6,10 L10,10 Z" fill="#0A0E17"/>
       </svg>
-      <svg class="mq-luka" viewBox="0 0 100 100" aria-hidden="true"><g class="kw">
-        <polygon class="k-face top" points="50,15 82,33 50,50 18,33"/><polygon class="k-face right" points="82,33 82,67 50,85 50,50"/><polygon class="k-face left" points="18,33 50,50 50,85 18,67"/>
-        <polygon class="k-edge" points="50,15 82,33 82,67 50,85 18,67 18,33"/><path class="k-edge" d="M50,50 L82,33 M50,50 L18,33 M50,50 L50,85"/><circle class="k-core" cx="50" cy="50" r="4.5"/>
-      </g></svg>
     </div>
   </div>
 
