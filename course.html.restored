@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PBS 학습법 · 코스 — 사고의 전제 경로</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1" },
+    fontFamily: { sans:["Pretendard","Inter","sans-serif"] }, borderRadius:{ "4xl":"2rem","5xl":"2.5rem" },
+  }}};
+</script>
+<style>
+  body { font-family:"Pretendard","Inter",sans-serif; -webkit-font-smoothing:antialiased; letter-spacing:-.012em; background:#F5F6F4; color:#0A0E17; }
+  h1,h2,h3 { letter-spacing:-.03em; }
+  ::selection { background:rgba(10,102,255,.14); }
+  .en{ font-family:"Inter","Pretendard",sans-serif; } .eyebrow{ letter-spacing:.2em; }
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:.5rem; border-radius:9999px; white-space:nowrap; transition:transform .35s cubic-bezier(.16,1,.3,1), background .3s, color .3s, border-color .3s, box-shadow .3s; }
+  .btn-primary { background:#0A66FF; color:#fff; box-shadow:0 4px 14px rgba(10,102,255,.28); } .btn-primary:hover { background:#0857db; transform:translateY(-2px); }
+  .btn-ghost { background:#fff; color:#0A0E17; border:1px solid #DfE3E8; } .btn-ghost:hover { border-color:#0A66FF; color:#0A66FF; }
+
+  .spine { position:absolute; left:30px; top:8px; bottom:8px; width:2px; background:linear-gradient(#0A66FF, #DfE3E8); z-index:0; }
+  .node { width:62px; height:62px; border-radius:9999px; display:flex; align-items:center; justify-content:center; font-size:24px; position:relative; z-index:10; transition:transform .3s, box-shadow .3s; }
+  .node.done { background:#0A66FF; color:#fff; box-shadow:0 6px 18px rgba(10,102,255,.35); }
+  .node.current { background:#fff; border:2.5px solid #0A66FF; box-shadow:0 0 0 6px rgba(10,102,255,.12); animation:nodepulse 2.2s ease-in-out infinite; }
+  @keyframes nodepulse { 0%,100%{box-shadow:0 0 0 6px rgba(10,102,255,.12)} 50%{box-shadow:0 0 0 12px rgba(10,102,255,.05)} }
+  .node.locked { background:#EDEFF2; color:#B6BEC9; }
+  .row.clickable .node:hover { transform:scale(1.08); }
+  .row.clickable .mcard:hover { border-color:#0A66FF; transform:translateY(-2px); }
+  .mcard { transition:transform .3s, border-color .3s; }
+  .row.locked { opacity:.62; } .row.locked .mcard { cursor:not-allowed; }
+  .shake { animation:shake .45s ease; } @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 50%{transform:translateX(5px)} 75%{transform:translateX(-3px)} }
+
+  .kozy svg{ width:100%; height:100%; overflow:visible; }
+  .k-edge{ fill:none; stroke:#0A66FF; stroke-width:2.4; stroke-linejoin:round; stroke-linecap:round; }
+  .k-face{ fill:rgba(10,102,255,.10); } .k-face.top{ fill:rgba(10,102,255,.16); }
+  .k-core{ fill:#0A66FF; filter:drop-shadow(0 0 4px rgba(10,102,255,.85)); }
+  .kozy .kw{ transform-origin:50% 55%; animation:kfloat 4s ease-in-out infinite; }
+  @keyframes kfloat{ 0%,100%{transform:translateY(0) rotate(-6deg)} 50%{transform:translateY(-6px) rotate(6deg)} }
+
+  .modal { position:fixed; inset:0; z-index:60; display:none; } .modal.open { display:block; }
+  .modal-bg { position:absolute; inset:0; background:rgba(10,14,23,.45); backdrop-filter:blur(2px); animation:fade .3s ease; }
+  .modal-panel { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:min(92vw,520px); max-height:88vh; overflow:auto; animation:pop .35s cubic-bezier(.3,1.3,.5,1); }
+  @keyframes fade{ from{opacity:0} } @keyframes pop{ from{opacity:0; transform:translate(-50%,-46%) scale(.96)} }
+  .fadein { animation:fadein .5s ease both; } @keyframes fadein{ from{opacity:0; transform:translateY(10px)} }
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important} }
+</style>
+</head>
+<body>
+
+<!-- NAV (공통) -->
+<div id="topnav"></div>
+<script src="common.js"></script>
+
+<main class="max-w-3xl mx-auto px-5 py-8">
+
+  <!-- header -->
+  <div class="flex items-start gap-4">
+    <div class="kozy shrink-0" style="width:56px;height:56px">
+      <svg viewBox="0 0 100 100" aria-label="루카"><g class="kw">
+        <polygon class="k-face top" points="50,15 82,33 50,50 18,33"/><polygon class="k-face right" points="82,33 82,67 50,85 50,50"/><polygon class="k-face left" points="18,33 50,50 50,85 18,67"/>
+        <polygon class="k-edge" points="50,15 82,33 82,67 50,85 18,67 18,33"/><path class="k-edge" d="M50,50 L82,33 M50,50 L18,33 M50,50 L50,85"/><circle class="k-core" cx="50" cy="50" r="4.5"/>
+      </g></svg>
+    </div>
+    <div>
+      <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-1">The Premise Path</p>
+      <h1 class="text-[1.7rem] md:text-[2.1rem] font-extrabold">사고의 전제 경로</h1>
+      <p class="text-[14px] text-body mt-1">과목을 가르치지 않습니다. 어떤 지식이든 관통하는 '전제를 의심하는 힘'을 <b class="text-ink">입문 → 기본 → 심화</b> 3단계로 훈련합니다.</p>
+    </div>
+  </div>
+
+  <!-- GRADE TRACK TABS (9트랙 매트릭스: 학년군 × 단계) -->
+  <div class="flex gap-2 mt-7 overflow-x-auto pb-1" id="gradeTabs"></div>
+  <p class="text-[12px] text-faint mt-2.5" id="trackFlavor"></p>
+
+  <!-- BUILT VIEW (정식 오픈 트랙 · 진행도 연동) -->
+  <div id="builtView">
+    <!-- progress -->
+    <div class="mt-4 bg-white border border-line rounded-2xl p-5">
+      <div class="flex items-center justify-between mb-2">
+        <p class="text-[13px] font-semibold text-ink">전제 폭파 진행도</p>
+        <p class="text-[13px] text-body"><span id="doneNum" class="text-point font-bold">0</span> / <span id="totalNum">0</span> 미션</p>
+      </div>
+      <div class="h-2.5 rounded-full bg-soft overflow-hidden"><div id="progressBar" class="h-full bg-point rounded-full transition-all duration-700" style="width:0%"></div></div>
+    </div>
+
+    <!-- PATH -->
+    <div class="relative mt-10" id="path">
+      <div class="spine"></div>
+      <div id="pathInner"></div>
+    </div>
+  </div>
+
+  <!-- PREVIEW VIEW (준비 중 트랙 · 단계별 샘플 3개) -->
+  <div id="previewView" class="hidden mt-6"></div>
+
+  <p class="text-center text-[12px] text-faint mt-10 pb-6">각 미션의 소재(일상·수학·과학 등)는 사고 훈련을 위한 예시일 뿐, 배우는 것은 '전제를 의심하는 법'입니다.</p>
+</main>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-bg" onclick="closeModal()"></div>
+  <div class="modal-panel bg-white border border-line rounded-4xl p-7 md:p-9">
+    <div class="flex items-start justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-14 h-14 rounded-2xl bg-point/10 flex items-center justify-center text-point"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg></div>
+        <div>
+          <p class="text-[11px] font-semibold tracking-widest uppercase text-point" id="mUnit"></p>
+          <h3 class="text-[18px] font-bold text-ink" id="mTitle"></h3>
+        </div>
+      </div>
+      <button onclick="closeModal()" class="text-faint hover:text-ink text-[22px] leading-none">×</button>
+    </div>
+    <div class="mt-6 space-y-3">
+      <div class="rounded-2xl bg-soft border border-line p-4"><p class="text-[11px] font-semibold tracking-widest uppercase text-faint mb-1">당연하게 여기는 것</p><p class="text-[15px] text-body" id="mMyth"></p></div>
+      <div class="rounded-2xl bg-soft border border-line p-4"><p class="text-[11px] font-semibold tracking-widest uppercase text-faint mb-1">숨은 전제</p><p class="text-[15px] font-semibold text-ink" id="mPremise"></p></div>
+      <div class="rounded-2xl bg-point/5 border border-point/25 p-4"><p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-1">전제 폭파</p><p class="text-[15px] font-semibold text-ink" id="mReframe"></p></div>
+    </div>
+    <div class="mt-5 flex items-center gap-3 text-[13px] text-body"><span class="inline-flex items-center gap-1.5"><span id="mBadge" class="text-[18px]"></span> <span id="mBadgeName" class="font-semibold text-ink"></span></span></div>
+    <a href="daily.html" class="btn btn-primary w-full mt-6 py-3.5 text-[15px] font-semibold">오늘의 사건에서 체험하기 →</a>
+  </div>
+</div>
+
+<script>
+  // 사고 복잡도 3단계 경로 (과목 아님 · 소재는 예시)
+  const STAGES = [
+    { stage:"입문 · 전제 알아차리기", en:"Level 1", missions:[
+      { id:"in-1", icon:"🎯", src:"일상", title:"공부는 열심히 해야 한다", myth:"노력의 양이 성과를 만든다", premise:"'열심히'만 하면 된다는 전제", reframe:"방향 없는 노력은 헛돈다 — '어떻게'를 먼저 물어야 한다", badge:"🎯", badgeName:"알아차림탐정" },
+      { id:"in-2", icon:"🔍", src:"상식", title:"지구는 둥글다", myth:"배운 지식은 의심할 필요 없다", premise:"'배웠으니 안다'는 전제", reframe:"'어떻게 아는가'를 물으면 지식이 비로소 내 것이 된다", badge:"🔍", badgeName:"구조탐정" },
+      { id:"in-3", icon:"🕵️", src:"언어", title:"\"너조차 그걸 몰랐어\"", myth:"말은 말한 것만 뜻한다", premise:"다들 알고, 너도 당연히 알 거라는 전제", reframe:"말이 몰래 심은 전제를 걷어내면, 그 말은 나를 깎지 못한다", badge:"🕵️", badgeName:"문장탐정" },
+      { id:"in-4", icon:"🧩", src:"일상", title:"친구가 많아야 행복하다", myth:"많을수록 좋다", premise:"'수 = 행복'이라는 전제", reframe:"행복은 관계의 수가 아니라 깊이에서 온다", badge:"🧩", badgeName:"행간탐정" },
+    ]},
+    { stage:"기본 · 전제를 흔들어 생각 확장", en:"Level 2", missions:[
+      { id:"ba-1", icon:"🐢", src:"수학", title:"수학은 빨리 푸는 과목이다", myth:"속도 = 실력", premise:"'빠름 = 잘함'이라는 전제", reframe:"깊이 이해하는 과목 — 느리게 판 한 문제가 열 문제를 연다", badge:"🐢", badgeName:"깊이탐정" },
+      { id:"ba-2", icon:"🔭", src:"사회", title:"역사는 승자의 기록이다", myth:"기록된 것이 사실의 전부", premise:"'기록 = 진실'이라는 전제", reframe:"기록되지 않은 관점을 상상하면 역사가 입체가 된다", badge:"🔭", badgeName:"관점탐정" },
+      { id:"ba-3", icon:"💥", src:"학습", title:"틀리면 안 된다", myth:"오답은 실패다", premise:"'틀림 = 실패'라는 전제", reframe:"오답은 사고의 재료 — 틀린 이유를 알면 자산이 된다", badge:"💥", badgeName:"오답폭파탐정" },
+      { id:"ba-4", icon:"🧭", src:"논리", title:"규칙은 원래 그런 것이다", myth:"약속은 의심하지 않는다", premise:"'원래 그래'라는 전제", reframe:"규칙에도 이유가 있다 — 왜 그런지 캐면 원리가 보인다", badge:"🧭", badgeName:"근거탐정" },
+    ]},
+    { stage:"심화 · 다층적 전제 분석·재구성", en:"Level 3", missions:[
+      { id:"sim-1", icon:"🗺️", src:"독해", title:"비문학 지문에는 하나의 정답이 있다", myth:"글은 한 방향으로 읽힌다", premise:"'필자 = 객관'이라는 전제", reframe:"지문에 깔린 다층적 전제를 추출하면 숨은 논리가 드러난다", badge:"🗺️", badgeName:"구조도탐정" },
+      { id:"sim-2", icon:"🔎", src:"과학", title:"과학 이론은 확정된 사실이다", myth:"이론은 흔들리지 않는다", premise:"'이론 = 불변'이라는 전제", reframe:"이론이 딛고 선 가정을 검증하면, 그 한계와 적용 범위가 보인다", badge:"🔎", badgeName:"조건탐정" },
+      { id:"sim-3", icon:"🔄", src:"시사", title:"경제 기사는 사실을 전한다", myth:"보도는 중립적이다", premise:"'기사 = 사실'이라는 전제", reframe:"기사의 프레임을 걷어내고 대안적 전제로 재구성한다", badge:"🔄", badgeName:"재정의탐정" },
+    ]},
+  ];
+
+  const $ = id => document.getElementById(id);
+
+  // ===== 9트랙 매트릭스 (학년군 3 × 단계 3) =====
+  // '중등' 트랙만 현재 정식 오픈(진행도 연동). 초등·고등은 단계별 샘플 3개 미리보기.
+  const TRACKS = {
+    "초등": {
+      label: "초등 5–6",
+      flavor: "동네사건 — 우리 동네·학교에서 일어나는 일로 전제를 찾아요.",
+      built: false,
+      previews: {
+        "입문 · 전제 알아차리기": [
+          { title:"떡볶이집 이모가 나만 더 많이 줘", myth:"편애해서 그런 거다" },
+          { title:"제일 빨리 뛰는 애가 제일 멋있다", myth:"빠르면 멋지다" },
+          { title:"엄마가 아침부터 화나 있으면 내 잘못이다", myth:"엄마 기분은 나 때문이다" },
+        ],
+        "기본 · 전제를 흔들어 생각 확장": [
+          { title:"놀이터 규칙을 안 지키면 나쁜 애다", myth:"규칙 위반 = 나쁜 사람" },
+          { title:"숙제를 안 하면 선생님이 날 싫어할 거다", myth:"실수 = 미움받음" },
+          { title:"동생이 울면 항상 내 탓이다", myth:"동생 울음 = 내 잘못" },
+        ],
+        "심화 · 다층적 전제 분석·재구성": [
+          { title:"우리 동네가 옆 동네보다 살기 좋다", myth:"내가 사는 곳이 늘 더 낫다" },
+          { title:"만화책은 공부에 도움이 안 된다", myth:"재밌으면 공부가 아니다" },
+          { title:"일찍 자는 애가 늘 건강하다", myth:"이른 시간 = 무조건 좋음" },
+        ],
+      }
+    },
+    "중등": { label:"중등 1–3", flavor:"학교·일상 — 지금 정식으로 열려 있는 트랙이에요.", built:true },
+    "고등": {
+      label:"고등 1–2",
+      flavor:"기사 해부 — 뉴스·통계·논증 속 전제를 분석해요.",
+      built: false,
+      previews: {
+        "입문 · 전제 알아차리기": [
+          { title:"SNS 팔로워 수가 곧 영향력이다", myth:"팔로워 수 = 영향력" },
+          { title:"기사 제목만 봐도 내용을 알 수 있다", myth:"제목 = 본문 요약" },
+          { title:"전공은 취업률만 보고 정해야 한다", myth:"취업률 = 전공 가치" },
+        ],
+        "기본 · 전제를 흔들어 생각 확장": [
+          { title:"여론조사 결과는 항상 객관적이다", myth:"수치 = 객관성" },
+          { title:"성적이 좋으면 사고력도 뛰어나다", myth:"점수 = 사고력" },
+          { title:"역사적 인물 평가는 시대를 초월해 고정돼 있다", myth:"평가 = 불변의 사실" },
+        ],
+        "심화 · 다층적 전제 분석·재구성": [
+          { title:"이 통계 그래프는 있는 그대로의 사실을 보여준다", myth:"그래프 = 중립적 사실" },
+          { title:"전문가 의견이니 반론의 여지가 없다", myth:"전문가 = 반박 불가" },
+          { title:"이 사설의 주장은 중립적 분석이다", myth:"사설 = 중립" },
+        ],
+      }
+    }
+  };
+
+  function gradeFromProfile(){
+    try{
+      const p = JSON.parse(localStorage.getItem("premise_profile")||"{}");
+      if(p.grade && p.grade.includes("초등")) return "초등";
+      if(p.grade && p.grade.includes("고등")) return "고등";
+    }catch(e){}
+    return "중등";
+  }
+  let activeTrack = gradeFromProfile();
+
+  function renderTabs(){
+    const wrap = $("gradeTabs"); wrap.innerHTML = "";
+    Object.keys(TRACKS).forEach(key=>{
+      const t = TRACKS[key];
+      const b = document.createElement("button");
+      b.className = "px-4 py-2 rounded-full text-[13px] font-semibold whitespace-nowrap transition border "
+        + (key === activeTrack ? "bg-ink text-white border-ink" : "bg-white text-body border-line hover:border-point hover:text-point");
+      b.textContent = t.label + (t.built ? "" : " · 준비중");
+      b.onclick = () => { activeTrack = key; renderTabs(); renderTrack(); };
+      wrap.appendChild(b);
+    });
+  }
+
+  function renderTrack(){
+    const t = TRACKS[activeTrack];
+    $("trackFlavor").textContent = t.flavor;
+    if (t.built){
+      $("builtView").classList.remove("hidden");
+      $("previewView").classList.add("hidden");
+      render();
+    } else {
+      $("builtView").classList.add("hidden");
+      $("previewView").classList.remove("hidden");
+      renderPreview(t);
+    }
+  }
+
+  // ===== 중등(정식) 트랙 렌더 =====
+  function allMissions(){ return STAGES.flatMap(s => s.missions); }
+
+  function firstIncompleteId(){
+    const done = PremiseStore.get().completed;
+    const all = allMissions();
+    const next = all.find(m => !done.includes(m.id));
+    return next ? next.id : null;
+  }
+
+  function render(){
+    const store = PremiseStore.get();
+    const all = allMissions();
+    const doneCount = all.filter(m => store.completed.includes(m.id)).length;
+    $("doneNum").textContent = doneCount;
+    $("totalNum").textContent = all.length;
+    $("progressBar").style.width = Math.round((doneCount / all.length) * 100) + "%";
+
+    const currentId = firstIncompleteId();
+    const inner = $("pathInner");
+    inner.innerHTML = "";
+
+    STAGES.forEach(stage => {
+      const stageWrap = document.createElement("div");
+      stageWrap.className = "mb-10";
+      stageWrap.innerHTML = `<p class="en text-[11px] eyebrow uppercase text-point font-semibold mb-1 ml-[76px]">${stage.en}</p>
+        <h2 class="text-[16px] font-bold text-ink mb-5 ml-[76px]">${stage.stage}</h2>`;
+
+      stage.missions.forEach(m => {
+        const isDone = store.completed.includes(m.id);
+        const isCurrent = m.id === currentId;
+        const isLocked = !isDone && !isCurrent;
+
+        const row = document.createElement("div");
+        row.className = "row relative flex items-center gap-4 mb-4 " + (isLocked ? "locked" : "clickable");
+
+        const nodeState = isDone ? "done" : (isCurrent ? "current" : "locked");
+        const nodeContent = isDone ? "✓" : (isLocked ? "🔒" : m.icon);
+
+        row.innerHTML = `
+          <div class="node ${nodeState}">${nodeContent}</div>
+          <div class="mcard flex-1 bg-white border border-line rounded-2xl p-4 ${isLocked ? "" : "cursor-pointer"}">
+            <p class="text-[11px] text-faint font-semibold uppercase tracking-wide">${m.src}</p>
+            <p class="text-[15px] font-bold text-ink mt-0.5">${m.title}</p>
+          </div>`;
+
+        row.querySelector(".mcard").addEventListener("click", () => {
+          if (isLocked){
+            const node = row.querySelector(".node");
+            node.classList.add("shake");
+            setTimeout(() => node.classList.remove("shake"), 450);
+            return;
+          }
+          openModal(m);
+        });
+
+        stageWrap.appendChild(row);
+      });
+      inner.appendChild(stageWrap);
+    });
+  }
+
+  function openModal(m){
+    $("mUnit").textContent = m.src;
+    $("mTitle").textContent = m.title;
+    $("mMyth").textContent = m.myth;
+    $("mPremise").textContent = m.premise;
+    $("mReframe").textContent = m.reframe;
+    $("mBadge").textContent = m.badge;
+    $("mBadgeName").textContent = m.badgeName;
+    $("modal").classList.add("open");
+  }
+  function closeModal(){ $("modal").classList.remove("open"); }
+
+  // ===== 초등/고등(준비중) 트랙 미리보기 =====
+  function renderPreview(t){
+    const wrap = $("previewView");
+    wrap.innerHTML = "";
+    Object.keys(t.previews).forEach(stageName => {
+      const stageWrap = document.createElement("div");
+      stageWrap.className = "mb-10";
+      stageWrap.innerHTML = `<h2 class="text-[15px] font-bold text-ink mb-4">${stageName}</h2>`;
+      const grid = document.createElement("div");
+      grid.className = "grid gap-3";
+      t.previews[stageName].forEach(item => {
+        const card = document.createElement("div");
+        card.className = "bg-white border border-line rounded-2xl p-4 cursor-pointer hover:border-point transition fadein";
+        card.innerHTML = `<p class="text-[14px] font-bold text-ink">${item.title}</p><p class="text-[12px] text-faint mt-1">숨은 전제 보기 →</p>`;
+        card.onclick = () => openPreviewModal(item);
+        grid.appendChild(card);
+      });
+      stageWrap.appendChild(grid);
+      wrap.appendChild(stageWrap);
+    });
+  }
+
+  function openPreviewModal(item){
+    $("mUnit").textContent = "준비 중인 트랙";
+    $("mTitle").textContent = item.title;
+    $("mMyth").textContent = item.myth;
+    $("mPremise").textContent = "이 트랙은 현재 준비 중입니다.";
+    $("mReframe").textContent = "정식 오픈 시 전제 폭파·탐정 노트 기록까지 체험할 수 있어요.";
+    $("mBadge").textContent = "🔔";
+    $("mBadgeName").textContent = "Coming soon";
+    $("modal").classList.add("open");
+  }
+
+  // ===== init =====
+  PremiseNav.render("coz");
+  renderTabs();
+  renderTrack();
+</script>
+
+<!-- FOOTER -->
+<footer class="pt-16 pb-10 bg-night text-white/65 border-t border-white/10">
+  <div class="max-w-6xl mx-auto px-5 md:px-8">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-x-6 gap-y-10 md:gap-8 pb-12 border-b border-white/10">
+      <div class="col-span-2 md:col-span-2 pr-4">
+        <a href="index.html" class="flex items-center gap-2.5 font-bold text-[15px] text-white mb-4">
+          <svg width="28" height="28" viewBox="0 0 40 40" aria-label="PBS 학습법 로고">
+            <defs><clipPath id="logoClipFooter"><circle cx="20" cy="20" r="18"/></clipPath></defs>
+            <circle cx="20" cy="20" r="18" fill="#0A66FF"/>
+            <rect x="-8" y="17" width="56" height="6.5" fill="#0A0E17" transform="rotate(-34 20 20)" clip-path="url(#logoClipFooter)"/>
+          </svg>
+          PBS 학습법<span class="text-[10px] align-top ml-0.5">™</span>
+        </a>
+        <p class="text-[13px] leading-relaxed text-white/45 max-w-[220px]">숨은 전제를 찾아 깨고 다시 짜는, 10~17세를 위한 6개월 사고 훈련.</p>
+      </div>
+      <div>
+        <p class="text-[11px] font-semibold tracking-widest uppercase text-white/35 mb-4">제품</p>
+        <nav class="flex flex-col gap-3 text-[13px]">
+          <a href="course.html" class="hover:text-white transition">코스 소개</a>
+          <a href="pricing.html" class="hover:text-white transition">요금 안내</a>
+          <a href="demo.html" class="hover:text-white transition">무료로 풀어보기</a>
+          <a href="onboarding.html" class="hover:text-white transition">7일 무료 체험</a>
+          <a href="faq.html" class="hover:text-white transition">자주 묻는 질문</a>
+        </nav>
+      </div>
+      <div>
+        <p class="text-[11px] font-semibold tracking-widest uppercase text-white/35 mb-4">회사</p>
+        <nav class="flex flex-col gap-3 text-[13px]">
+          <a href="about.html" class="hover:text-white transition">회사 소개</a>
+          <a href="mission.html" class="hover:text-white transition">우리의 미션</a>
+          <a href="academy-guide.html" class="hover:text-white transition">학원 병행 가이드</a>
+        </nav>
+      </div>
+      <div>
+        <p class="text-[11px] font-semibold tracking-widest uppercase text-white/35 mb-4">비하인드</p>
+        <nav class="flex flex-col gap-3 text-[13px]">
+          <a href="tech.html" class="hover:text-white transition">적응형 전제탐지 시스템</a>
+          <a href="evals.html" class="hover:text-white transition">문항은 어떻게 검증되나요</a>
+        </nav>
+      </div>
+    </div>
+    <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+      <p class="text-[12px] text-white/35">© 2026 PBS 학습법. All rights reserved.</p>
+      <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[12px] text-white/45">
+        <a href="#" class="hover:text-white transition">이용약관</a>
+        <a href="#" class="hover:text-white transition">개인정보처리방침</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
