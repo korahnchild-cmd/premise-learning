@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>파이널 스파크 — PBS 학습법</title>
+<meta name="description" content="시험 D-5. 새로운 걸 배우기보다, 확실히 아는 것부터 다시 챙기는 마무리 세션." />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", accent:"#FFB800" },
+    fontFamily: { sans:["Pretendard","Inter","sans-serif"] },
+    borderRadius: { "4xl":"2rem", "5xl":"2.5rem" },
+  }}};
+</script>
+<style>
+  .card { background:#fff; border:1px solid #ECEEF1; border-radius:1.5rem; }
+  .btn-primary { background:#0A66FF; color:#fff; box-shadow:0 8px 24px rgba(10,102,255,.14); }
+  .btn-primary:hover { background:#0857db; transform:translateY(-2px); }
+  .btn-ghost { background:#fff; color:#0A0E17; border:1px solid #DFE3E8; }
+  .opt { transition:all .2s; cursor:pointer; }
+  .opt:hover { border-color:#0A66FF; transform:translateY(-1px); }
+  .opt.correct { border-color:#14B878; background:#EAFBF2; }
+  .opt.wrong { border-color:#E4574A; background:#FDEDEC; }
+  .opt.locked { pointer-events:none; }
+  .phase { display:none; }
+  .phase.active { display:block; animation:fade .4s ease; }
+  @keyframes fade { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+  .chip { display:inline-flex; align-items:center; gap:.35rem; padding:.3rem .7rem; border-radius:9999px; font-size:11px; font-weight:800; }
+  .kozy{ display:inline-block; } .kozy svg{ width:100%; height:100%; overflow:visible; display:block; }
+  .kozy.on-blue .k-face{ fill:rgba(255,255,255,.16); } .kozy.on-blue .k-face.top{ fill:rgba(255,255,255,.26); }
+  .kozy.on-blue .k-edge{ fill:none; stroke:#fff; stroke-width:2.4; stroke-linejoin:round; stroke-linecap:round; }
+  .kozy.on-blue .k-core{ fill:#fff; filter:drop-shadow(0 0 4px rgba(255,255,255,.85)); }
+  .kozy.on-white .k-face{ fill:rgba(10,102,255,.10); } .kozy.on-white .k-face.top{ fill:rgba(10,102,255,.16); }
+  .kozy.on-white .k-edge{ fill:none; stroke:#0A66FF; stroke-width:2.4; stroke-linejoin:round; stroke-linecap:round; }
+  .kozy.on-white .k-core{ fill:#0A66FF; filter:drop-shadow(0 0 4px rgba(10,102,255,.85)); }
+  .kozy .octa, .kozy .k-ring{ opacity:0; }
+</style>
+</head>
+<body class="bg-soft">
+
+<!-- topnav 자리 -->
+<div id="topnav"></div>
+<script src="common.js"></script>
+<script>PremiseNav.render("lab");</script>
+
+<main class="max-w-2xl mx-auto px-5 pt-12 pb-20">
+
+  <!-- 헤더 — "다시 확인하기" 톤 -->
+  <div class="mb-8 text-center">
+    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4" style="background:rgba(255,184,0,.15)">
+      <span class="text-[16px]">⚡</span>
+      <span class="text-[12px] font-bold text-[#9A6A00]">시험 D-5 · FINAL SPARK</span>
+    </div>
+    <h1 class="text-[28px] md:text-[36px] font-extrabold text-ink leading-tight" style="word-break:keep-all">
+      오늘은 새로운 걸 배우기보다,<br/>확실히 아는 것부터 다시 챙기는 날
+    </h1>
+    <p class="mt-4 text-[14px] text-body lede max-w-lg mx-auto" style="word-break:keep-all">
+      새 진도가 아니에요. 그동안 자주 걸렸던 전제 함정만 골라서, 마지막으로 다시 확인하는 짧은 시간입니다.
+    </p>
+  </div>
+
+  <!-- 베이직 플랜 게이트 (프리미엄 전용) -->
+  <div id="planGateCard" class="card p-8 md:p-10 text-center mb-8" style="display:none">
+    <p class="text-[11px] font-bold tracking-[.2em] uppercase mb-3" style="color:#9A6A00">프리미엄 전용 기능</p>
+    <p class="text-[18px] md:text-[20px] font-extrabold text-ink mb-2" style="word-break:keep-all">파이널 스파크는 프리미엄에서 열려요</p>
+    <p class="text-[13.5px] text-body leading-relaxed max-w-sm mx-auto mb-6" style="word-break:keep-all">시험 D-5~D-1, 자주 틀렸던 유형만 짧게 다시 확인하는 마무리 세션이에요. 연 4회, 프리미엄 전용입니다.</p>
+    <div class="flex flex-wrap items-center justify-center gap-3">
+      <a href="pricing.html" class="btn-primary px-6 py-3 rounded-full text-[13px] font-semibold">프리미엄 자세히 보기</a>
+      <button class="btn-ghost px-6 py-3 rounded-full text-[13px] font-semibold" onclick="PremiseStore.setPlan('premium');location.reload()">데모로 프리미엄 체험하기</button>
+    </div>
+  </div>
+
+  <!-- 진행 바 -->
+  <div class="flex items-center justify-center gap-1.5 mb-8" id="dots"></div>
+
+  <!-- 문항 영역 -->
+  <div id="sparkHost"></div>
+
+  <!-- 하단 -->
+  <div class="text-center mt-8" id="sparkNav" style="display:none">
+    <button class="btn-primary px-8 py-3.5 rounded-full text-[14px] font-semibold" onclick="nextSpark()">다음 함정 확인 →</button>
+  </div>
+
+</main>
+
+<footer class="py-8 text-center text-[11px] text-faint">
+  © 2026 PBS 학습법 · Premise-Break Schema
+</footer>
+
+<script src="application-lab-data.js"></script>
+<script>
+/* 파이널 스파크 — finalSparkEligible 문항 7개 선별 */
+var sparkItems = APPLICATION_LAB_ITEMS.filter(function(i){ return i.finalSparkEligible; }).slice(0, 7);
+var sIdx = 0;
+var answered = false;
+
+/* 루카 아이콘 — 정적 버전 (결과 카드용) */
+function kozyIconSVG() {
+  return '<svg viewBox="0 0 100 100" aria-label="루카">'
+    + '<polygon class="k-face top" points="50,10 85,28 50,46 15,28"/>'
+    + '<polygon class="k-face right" points="50,46 85,28 85,68 50,86"/>'
+    + '<polygon class="k-face" points="50,46 15,28 15,68 50,86"/>'
+    + '<polygon class="k-edge" points="50,10 85,28 50,46 15,28"/>'
+    + '<polygon class="k-edge" points="50,46 85,28 85,68 50,86"/>'
+    + '<polygon class="k-edge" points="50,46 15,28 15,68 50,86"/>'
+    + '<circle class="k-core" cx="50" cy="48" r="4.5"/>'
+    + '</svg>';
+}
+/* 루카가 같이 하는 느낌을 주는 몰입 멘트 — 시험 직전 톤이라 더 담백하게 */
+var LUKA_SPARK_CORRECT = [
+  "그래, 이번엔 잡았네. 이 감각 그대로 시험장에 가져가.",
+  "좋아, 이 유형은 이제 걱정 없겠다.",
+  "역시. 같이 짚었던 게 남아있네."
+];
+var LUKA_SPARK_WRONG = [
+  "여기, 지난번에도 걸렸던 자리야. 나랑 한 번만 더 보자.",
+  "괜찮아, 시험 전에 다시 걸린 게 다행이야. 같이 정리하자.",
+  "이 함정, 오늘 나랑 확실히 정리하고 가자."
+];
+
+function renderDots() {
+  var dots = document.getElementById("dots");
+  dots.innerHTML = "";
+  sparkItems.forEach(function(_, i) {
+    var d = document.createElement("span");
+    d.className = "w-2.5 h-2.5 rounded-full transition-all " + (i <= sIdx ? "bg-point" : "bg-line");
+    if (i === sIdx) d.style.transform = "scale(1.3)";
+    dots.appendChild(d);
+  });
+}
+
+function renderSpark() {
+  var item = sparkItems[sIdx];
+  if (!item) return;
+  answered = false;
+  renderDots();
+
+  var stemHtml = item.stem.replace(/\n/g, "<br/>");
+  var choicesHtml = item.choices.map(function(c) {
+    return '<button class="opt w-full text-left px-5 py-4 rounded-xl border-2 border-line bg-white text-[14px] text-ink font-medium mb-2.5" data-correct="'+c.correct+'" onclick="chooseSpark(this)" style="word-break:keep-all">'
+      + '<span class="font-bold text-point mr-2">'+c.label+'</span>' + c.text + '</button>';
+  }).join("");
+
+  document.getElementById("sparkHost").innerHTML =
+    '<div class="card p-7 md:p-9">'
+    + '<div class="flex items-center gap-2 mb-4">'
+    + '<span class="chip" style="background:rgba(10,102,255,.1);color:#0A66FF">'+item.subject+'</span>'
+    + '<span class="chip" style="background:rgba(10,14,23,.06);color:#0A0E17">'+item.domain+'</span>'
+    + '<span class="chip ml-auto" style="background:rgba(255,184,0,.15);color:#9A6A00">자주 틀리는 유형</span>'
+    + '</div>'
+    + '<p class="text-[11px] text-faint font-semibold mb-4">다시 확인 ' + (sIdx+1) + ' / ' + sparkItems.length + '</p>'
+    + '<p class="text-[15px] text-ink leading-relaxed mb-6" style="word-break:keep-all">'+stemHtml+'</p>'
+    + '<div id="spChoice" class="phase active">'+choicesHtml+'</div>'
+    + '<div id="spResult" class="phase"><div id="spResultBox"></div></div>'
+    + '</div>';
+
+  document.getElementById("sparkNav").style.display = "block";
+  var navBtn = document.querySelector("#sparkNav button");
+  navBtn.textContent = sIdx < sparkItems.length - 1 ? "다음 함정 확인 →" : "마무리 ✓";
+}
+
+function chooseSpark(btn) {
+  if (answered) return;
+  answered = true;
+  var correct = btn.getAttribute("data-correct") === "true";
+
+  document.querySelectorAll(".opt").forEach(function(o) {
+    o.classList.add("locked");
+    if (o.getAttribute("data-correct") === "true") o.classList.add("correct");
+  });
+  if (!correct) btn.classList.add("wrong");
+
+  var item = sparkItems[sIdx];
+  var h = "";
+
+  if (correct) {
+    h += '<div class="rounded-2xl p-5 mb-4" style="background:#EAFBF2;border:1px solid #14B878">'
+      + '<p class="text-[14px] font-bold text-[#0E8050]">✓ 이번엔 잡았네요. 이 감각 그대로.</p></div>';
+  } else {
+    h += '<div class="rounded-2xl p-5 mb-4" style="background:#FFF6E0;border:1px solid #FFE6A6">'
+      + '<p class="text-[14px] font-bold text-[#9A6A00]">여기가 바로 그 함정이에요. 한 번 더 확인해요.</p></div>';
+  }
+
+  /* 숨은 전제 */
+  h += '<div class="rounded-2xl p-5 mb-4" style="background:#F4F6FC;border:1px solid #E4E9F1">'
+    + '<p class="text-[11px] font-bold tracking-[.18em] uppercase text-point mb-2">📍 숨은 전제</p>'
+    + '<p class="text-[14.5px] font-bold text-ink leading-relaxed" style="word-break:keep-all">'+item.hiddenPremise+'</p></div>';
+
+  /* 루카 — 아이콘 + 몰입 멘트 + 짧은 해설 */
+  var sparkOpen = correct
+    ? LUKA_SPARK_CORRECT[sIdx % LUKA_SPARK_CORRECT.length]
+    : LUKA_SPARK_WRONG[sIdx % LUKA_SPARK_WRONG.length];
+  h += '<div class="rounded-2xl p-5 mb-4" style="background:linear-gradient(160deg,#0A66FF,#0B3ACC)">'
+    + '<div class="flex items-center gap-2.5 mb-2">'
+    + '<div class="kozy on-blue shrink-0" style="width:28px;height:28px">' + kozyIconSVG() + '</div>'
+    + '<p class="text-[11px] font-bold text-white/70">사고분석관 루카</p>'
+    + '</div>'
+    + '<p class="text-[13px] text-white/90 font-semibold mb-1.5" style="word-break:keep-all">'+sparkOpen+'</p>'
+    + '<p class="text-[14px] text-white font-medium leading-relaxed" style="word-break:keep-all">'+item.lukaExplain+'</p></div>';
+
+  document.getElementById("spResultBox").innerHTML = h;
+  document.getElementById("spChoice").classList.remove("active");
+  document.getElementById("spResult").classList.add("active");
+}
+
+function nextSpark() {
+  if (sIdx < sparkItems.length - 1) {
+    sIdx++;
+    renderSpark();
+    window.scrollTo({ top: 120, behavior: "smooth" });
+  } else {
+    document.getElementById("sparkHost").innerHTML =
+      '<div class="card p-10 text-center">'
+      + '<div class="kozy on-white mx-auto mb-4" style="width:56px;height:56px">' + kozyIconSVG() + '</div>'
+      + '<p class="text-[22px] font-extrabold text-ink mb-3">마무리 완료, 수고했어 파트너</p>'
+      + '<p class="text-[14px] text-body mb-2" style="word-break:keep-all">자주 걸렸던 전제 함정을 마지막으로 같이 다시 확인했어요.</p>'
+      + '<p class="text-[13px] text-faint mb-6" style="word-break:keep-all">시험장에서 이 감각이 빛날 거예요. 나도 같이 응원할게. 좋은 결과 있기를.</p>'
+      + '<button class="btn-ghost px-7 py-3 rounded-full text-[14px] font-semibold" onclick="resetSpark()">다시 확인 ↺</button>'
+      + '</div>';
+    document.getElementById("sparkNav").style.display = "none";
+    document.getElementById("dots").innerHTML = "";
+  }
+}
+function resetSpark() { sIdx = 0; renderSpark(); }
+
+/* 베이직 플랜은 게이트만 보여주고 세션은 렌더링하지 않음 */
+if (window.PremiseStore && PremiseStore.getPlan() !== "premium") {
+  document.getElementById("planGateCard").style.display = "block";
+  document.getElementById("dots").style.display = "none";
+} else {
+  renderSpark();
+}
+</script>
+</body>
+</html>

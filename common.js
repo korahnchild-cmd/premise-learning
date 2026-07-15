@@ -77,6 +77,7 @@
         ["coz", "course.html", "코스"],
         ["daily", "daily.html", "오늘의 사건"],
         ["cal", "calendar.html", "PBS 캘린더"],
+        ["lab", "application-lab.html", "실전 적용 랩"],
         ["note", "notebook.html", "파트너 노트"]
       ];
       const links = items.map(([k, href, label]) =>

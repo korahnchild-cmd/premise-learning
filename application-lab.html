@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>실전 적용 랩 — PBS 학습법</title>
+<meta name="description" content="실전 기출 수준의 문제를 풀며, 매 문항 뒤에 숨은 전제와 함정을 짚어내는 훈련." />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", accent:"#FFB800" },
+    fontFamily: { sans:["Pretendard","Inter","sans-serif"] },
+    borderRadius: { "4xl":"2rem", "5xl":"2.5rem" },
+  }}};
+</script>
+<style>
+  .card { background:#fff; border:1px solid #ECEEF1; border-radius:1.5rem; }
+  .btn-primary { background:#0A66FF; color:#fff; box-shadow:0 8px 24px rgba(10,102,255,.14); }
+  .btn-primary:hover { background:#0857db; transform:translateY(-2px); }
+  .btn-ghost { background:#fff; color:#0A0E17; border:1px solid #DFE3E8; }
+  .btn-ghost:hover { border-color:#0A66FF; color:#0A66FF; }
+  .opt { transition:all .2s; cursor:pointer; }
+  .opt:hover { border-color:#0A66FF; transform:translateY(-1px); }
+  .opt.correct { border-color:#14B878; background:#EAFBF2; }
+  .opt.wrong { border-color:#E4574A; background:#FDEDEC; }
+  .opt.locked { pointer-events:none; }
+  .phase { display:none; }
+  .phase.active { display:block; animation:fade .4s ease; }
+  @keyframes fade { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+  .chip { display:inline-flex; align-items:center; gap:.35rem; padding:.3rem .7rem; border-radius:9999px; font-size:11px; font-weight:800; }
+  .kozy{ display:inline-block; } .kozy svg{ width:100%; height:100%; overflow:visible; display:block; }
+  .kozy.on-blue .k-face{ fill:rgba(255,255,255,.16); } .kozy.on-blue .k-face.top{ fill:rgba(255,255,255,.26); }
+  .kozy.on-blue .k-edge{ fill:none; stroke:#fff; stroke-width:2.4; stroke-linejoin:round; stroke-linecap:round; }
+  .kozy.on-blue .k-core{ fill:#fff; filter:drop-shadow(0 0 4px rgba(255,255,255,.85)); }
+  .kozy.on-white .k-face{ fill:rgba(10,102,255,.10); } .kozy.on-white .k-face.top{ fill:rgba(10,102,255,.16); }
+  .kozy.on-white .k-edge{ fill:none; stroke:#0A66FF; stroke-width:2.4; stroke-linejoin:round; stroke-linecap:round; }
+  .kozy.on-white .k-core{ fill:#0A66FF; filter:drop-shadow(0 0 4px rgba(10,102,255,.85)); }
+  .kozy .octa, .kozy .k-ring{ opacity:0; }
+</style>
+</head>
+<body class="bg-soft">
+
+<!-- topnav 자리 (common.js에서 주입) -->
+<div id="topnav"></div>
+<script src="common.js"></script>
+<script>PremiseNav.render("lab");</script>
+
+<!-- 진행 바 -->
+<div class="fixed top-16 left-0 right-0 h-1 bg-line z-40">
+  <div id="progFill" class="h-full bg-point transition-all duration-500" style="width:0%"></div>
+</div>
+
+<main class="max-w-2xl mx-auto px-5 pt-12 pb-20">
+
+  <!-- 헤더 -->
+  <div class="mb-8">
+    <p class="text-[11px] tracking-[.24em] uppercase text-point font-bold mb-2">실전 적용 랩 · APPLICATION LAB</p>
+    <h1 class="text-[26px] md:text-[32px] font-extrabold text-ink" style="word-break:keep-all">매 문항 뒤에, 숨은 전제를 짚는다</h1>
+    <p class="mt-2 text-[14px] text-body lede" style="word-break:keep-all">정답을 맞히는 게 목적이 아니에요. "이 문제, 어떤 전제를 의심해야 하는 문제였지?"를 매 문항 뒤에 짚어내는 게 핵심입니다.</p>
+  </div>
+
+  <!-- 베이직 플랜 게이트 (프리미엄 전용) -->
+  <div id="planGateCard" class="card p-8 md:p-10 text-center mb-8" style="display:none">
+    <p class="text-[11px] font-bold tracking-[.2em] uppercase text-accent mb-3" style="color:#9A6A00">프리미엄 전용 기능</p>
+    <p class="text-[18px] md:text-[20px] font-extrabold text-ink mb-2" style="word-break:keep-all">실전 적용 랩은 프리미엄에서 열려요</p>
+    <p class="text-[13.5px] text-body leading-relaxed max-w-sm mx-auto mb-6" style="word-break:keep-all">시험 4주 전부터, 실제 기출·모의고사 수준 문제로 감각을 다지는 훈련실이에요. 연 4회, 프리미엄 전용입니다.</p>
+    <div class="flex flex-wrap items-center justify-center gap-3">
+      <a href="pricing.html" class="btn-primary px-6 py-3 rounded-full text-[13px] font-semibold">프리미엄 자세히 보기</a>
+      <button class="btn-ghost px-6 py-3 rounded-full text-[13px] font-semibold" onclick="PremiseStore.setPlan('premium');location.reload()">데모로 프리미엄 체험하기</button>
+    </div>
+  </div>
+
+  <!-- 필터 -->
+  <p class="text-[11px] font-bold text-faint uppercase tracking-wide mb-2">과목</p>
+  <div class="flex flex-wrap gap-2 mb-5" id="filters">
+    <button class="fbtn active px-5 py-2.5 rounded-full text-[13px] font-bold bg-ink text-white transition-all" data-subject="all">전체</button>
+    <button class="fbtn px-5 py-2.5 rounded-full text-[13px] font-bold bg-white border border-line text-body transition-all" data-subject="국어">국어</button>
+    <button class="fbtn px-5 py-2.5 rounded-full text-[13px] font-bold bg-white border border-line text-body transition-all" data-subject="수학">수학</button>
+    <button class="fbtn px-5 py-2.5 rounded-full text-[13px] font-bold bg-white border border-line text-body transition-all" data-subject="역사">역사</button>
+  </div>
+  <p class="text-[11px] font-bold text-faint uppercase tracking-wide mb-2">학년</p>
+  <div class="flex flex-wrap gap-2 mb-8" id="trackFilters">
+    <button class="tbtn active px-5 py-2.5 rounded-full text-[13px] font-bold bg-ink text-white transition-all" data-track="all">전체</button>
+    <button class="tbtn px-5 py-2.5 rounded-full text-[13px] font-bold bg-white border border-line text-body transition-all" data-track="초등">초등</button>
+    <button class="tbtn px-5 py-2.5 rounded-full text-[13px] font-bold bg-white border border-line text-body transition-all" data-track="중등">중등</button>
+    <button class="tbtn px-5 py-2.5 rounded-full text-[13px] font-bold bg-white border border-line text-body transition-all" data-track="고등">고등</button>
+  </div>
+
+  <!-- 문항 영역 -->
+  <div id="labHost"></div>
+
+  <!-- 하단 네비 -->
+  <div class="flex justify-between mt-8" id="labNav" style="display:none">
+    <button class="btn-ghost px-5 py-2.5 rounded-full text-[13px] font-semibold" onclick="prevItem()">← 이전</button>
+    <span class="text-[13px] text-faint font-semibold self-center" id="counter">1 / 10</span>
+    <button class="btn-primary px-5 py-2.5 rounded-full text-[13px] font-semibold" onclick="nextItem()">다음 →</button>
+  </div>
+
+</main>
+
+<footer class="py-8 text-center text-[11px] text-faint">
+  © 2026 PBS 학습법 · Premise-Break Schema
+</footer>
+
+<script src="application-lab-data.js"></script>
+<script>
+/* ===== 상태 ===== */
+var currentSubject = "all";
+var currentTrack = "all";
+var filtered = [];
+var idx = 0;
+var answered = false;
+
+/* 루카 아이콘 — 정적 버전 (결과 카드용) */
+function kozyIconSVG() {
+  return '<svg viewBox="0 0 100 100" aria-label="루카">'
+    + '<polygon class="k-face top" points="50,10 85,28 50,46 15,28"/>'
+    + '<polygon class="k-face right" points="50,46 85,28 85,68 50,86"/>'
+    + '<polygon class="k-face" points="50,46 15,28 15,68 50,86"/>'
+    + '<polygon class="k-edge" points="50,10 85,28 50,46 15,28"/>'
+    + '<polygon class="k-edge" points="50,46 85,28 85,68 50,86"/>'
+    + '<polygon class="k-edge" points="50,46 15,28 15,68 50,86"/>'
+    + '<circle class="k-core" cx="50" cy="48" r="4.5"/>'
+    + '</svg>';
+}
+/* 루카가 같이 하는 느낌을 주는 몰입 멘트 */
+var LUKA_OPEN_CORRECT = [
+  "역시, 같이 보니까 더 잘 보이지?",
+  "좋아, 이 감각 그대로 가자.",
+  "나도 이 문제 좋아해. 같이 한 번 더 짚어볼게.",
+  "잘했어. 근데 왜 맞았는지도 같이 확인해보자."
+];
+var LUKA_OPEN_WRONG = [
+  "괜찮아, 나도 처음엔 여기서 헷갈렸어. 같이 보자.",
+  "여기, 나랑 같이 다시 뜯어보자.",
+  "잠깐, 이 부분은 나도 같이 짚고 넘어갈게.",
+  "혼자 끙끙대지 마. 이건 나랑 같이 푸는 문제야."
+];
+
+function getFiltered() {
+  return APPLICATION_LAB_ITEMS.filter(function(i){
+    var subjectOk = currentSubject === "all" || i.subject === currentSubject;
+    var trackOk = currentTrack === "all" || i.track === currentTrack;
+    return subjectOk && trackOk;
+  });
+}
+
+function renderItem() {
+  var item = filtered[idx];
+  if (!item) {
+    document.getElementById("labHost").innerHTML =
+      '<div class="card p-10 text-center"><p class="text-[15px] font-bold text-ink mb-2">아직 이 조합의 문제가 없어요</p><p class="text-[13px] text-body">다른 과목·학년 조합을 선택해보세요.</p></div>';
+    document.getElementById("labNav").style.display = "none";
+    return;
+  }
+  answered = false;
+
+  document.getElementById("counter").textContent = (idx+1) + " / " + filtered.length;
+  document.getElementById("progFill").style.width = ((idx) / filtered.length * 100) + "%";
+
+  var stemHtml = item.stem.replace(/\n/g, "<br/>");
+  var choicesHtml = item.choices.map(function(c, i) {
+    return '<button class="opt w-full text-left px-5 py-4 rounded-xl border-2 border-line bg-white text-[14px] text-ink font-medium mb-2.5" data-correct="'+c.correct+'" data-trap="'+escapeAttr(c.trapNote)+'" onclick="choose(this)" style="word-break:keep-all">'
+      + '<span class="font-bold text-point mr-2">'+c.label+'</span>' + c.text + '</button>';
+  }).join("");
+
+  document.getElementById("labHost").innerHTML =
+    '<div class="card p-7 md:p-9">'
+    + '<div class="flex items-center gap-2 mb-4">'
+    + '<span class="chip" style="background:rgba(10,102,255,.1);color:#0A66FF">'+item.subject+'</span>'
+    + '<span class="chip" style="background:rgba(10,14,23,.06);color:#0A0E17">'+item.domain+'</span>'
+    + '<span class="chip" style="background:rgba(255,184,0,.15);color:#A87B00">'+item.track+' · '+item.stage+'</span>'
+    + '<span class="chip ml-auto" style="background:#F2F4F1;color:#525A69">난이도 '+item.difficulty+'/5</span>'
+    + '</div>'
+    + '<p class="text-[15px] text-ink leading-relaxed mb-6" style="word-break:keep-all">'+stemHtml+'</p>'
+
+    + '<div id="choicePhase" class="phase active">'
+    + '<div class="space-y-0">'+choicesHtml+'</div>'
+    + '</div>'
+
+    + '<div id="resultPhase" class="phase">'
+    + '<div id="resultBox"></div>'
+    + '</div>'
+
+    + '</div>';
+
+  document.getElementById("labNav").style.display = "flex";
+}
+
+function escapeAttr(s) {
+  return (s||"").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
+function choose(btn) {
+  if (answered) return;
+  answered = true;
+
+  var correct = btn.getAttribute("data-correct") === "true";
+  var trap = btn.getAttribute("data-trap");
+
+  /* 모든 보기 잠금 + 정답 표시 */
+  var opts = document.querySelectorAll(".opt");
+  opts.forEach(function(o) {
+    o.classList.add("locked");
+    if (o.getAttribute("data-correct") === "true") o.classList.add("correct");
+  });
+
+  if (!correct) {
+    btn.classList.add("wrong");
+  }
+
+  var item = filtered[idx];
+
+  var resultHtml = "";
+  if (correct) {
+    resultHtml += '<div class="rounded-2xl p-6 mb-4" style="background:#EAFBF2;border:1px solid #14B878">'
+      + '<p class="text-[15px] font-bold text-[#0E8050] mb-1">✓ 정답입니다</p>'
+      + '<p class="text-[13px] text-body">맞았어요. 하지만 이 문제의 진짜 가치는 해설에 있어요.</p>'
+      + '</div>';
+  } else {
+    resultHtml += '<div class="rounded-2xl p-6 mb-4" style="background:#FFF6E0;border:1px solid #FFE6A6">'
+      + '<p class="text-[15px] font-bold text-[#9A6A00] mb-1">오답 — 그런데 괜찮아요</p>'
+      + '<p class="text-[13px] text-body">틀린 이유가 중요해요. 어떤 전제에 걸렸는지 보세요.</p>'
+      + '</div>';
+  }
+
+  /* 숨은 전제 */
+  resultHtml += '<div class="rounded-2xl p-6 mb-4" style="background:#F4F6FC;border:1px solid #E4E9F1">'
+    + '<p class="text-[11px] font-bold tracking-[.18em] uppercase text-point mb-2">📍 숨은 전제</p>'
+    + '<p class="text-[15px] font-bold text-ink leading-relaxed" style="word-break:keep-all">'+item.hiddenPremise+'</p>'
+    + '</div>';
+
+  /* 함정 */
+  if (trap) {
+    resultHtml += '<div class="rounded-2xl p-6 mb-4" style="background:#FFF6E0;border:1px solid #FFE6A6">'
+      + '<p class="text-[11px] font-bold tracking-[.18em] uppercase text-[#A87B00] mb-2">⚠ 함정 포인트</p>'
+      + '<p class="text-[13.5px] text-body leading-relaxed" style="word-break:keep-all">'+item.commonMistake+'</p>'
+      + '</div>';
+  }
+
+  /* 루카 해설 — 아이콘 + 같이 하는 느낌의 오프닝 멘트 */
+  var lukaOpen = correct
+    ? LUKA_OPEN_CORRECT[idx % LUKA_OPEN_CORRECT.length]
+    : LUKA_OPEN_WRONG[idx % LUKA_OPEN_WRONG.length];
+  resultHtml += '<div class="rounded-2xl p-6 mb-4" style="background:linear-gradient(160deg,#0A66FF,#0B3ACC)">'
+    + '<div class="flex items-center gap-3 mb-3">'
+    + '<div class="kozy on-blue shrink-0" style="width:34px;height:34px">' + kozyIconSVG() + '</div>'
+    + '<p class="text-[12px] font-bold text-white/80">사고분석관 루카</p>'
+    + '</div>'
+    + '<p class="text-[13.5px] text-white/90 font-semibold mb-2" style="word-break:keep-all">'+lukaOpen+'</p>'
+    + '<p class="text-[14.5px] text-white font-medium leading-relaxed" style="word-break:keep-all">'+item.lukaExplain+'</p>'
+    + '</div>';
+
+  /* 재구성 */
+  resultHtml += '<div class="rounded-2xl p-6" style="background:#F2F4F1;border-left:4px solid #0A66FF">'
+    + '<p class="text-[11px] font-bold tracking-[.18em] uppercase text-point mb-2">💡 재구성</p>'
+    + '<p class="text-[14px] text-ink leading-relaxed" style="word-break:keep-all">'+item.reframe+'</p>'
+    + '</div>';
+
+  document.getElementById("resultBox").innerHTML = resultHtml;
+
+  /* phase 전환 */
+  document.getElementById("choicePhase").classList.remove("active");
+  document.getElementById("resultPhase").classList.add("active");
+}
+
+function nextItem() {
+  if (idx < filtered.length - 1) {
+    idx++;
+    renderItem();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  } else {
+    document.getElementById("labHost").innerHTML =
+      '<div class="card p-10 text-center">'
+      + '<div class="kozy on-white mx-auto mb-4" style="width:52px;height:52px">' + kozyIconSVG() + '</div>'
+      + '<p class="text-[22px] font-extrabold text-ink mb-3">실전 적용 랩 완료! 수고했어, 파트너</p>'
+      + '<p class="text-[14px] text-body mb-6">정답보다, 매 문항 뒤의 숨은 전제를 짚어내는 감각이 자랐어요. 다음에도 같이 하자.</p>'
+      + '<button class="btn-primary px-7 py-3 rounded-full text-[14px] font-semibold" onclick="resetLab()">처음부터 다시 →</button>'
+      + '</div>';
+    document.getElementById("labNav").style.display = "none";
+  }
+}
+function prevItem() {
+  if (idx > 0) { idx--; renderItem(); window.scrollTo({ top:0, behavior:"smooth" }); }
+}
+function resetLab() { idx = 0; renderItem(); }
+
+/* 필터 — 과목 */
+document.querySelectorAll(".fbtn").forEach(function(btn) {
+  btn.addEventListener("click", function() {
+    document.querySelectorAll(".fbtn").forEach(function(b){
+      b.classList.remove("active","bg-ink","text-white");
+      b.classList.add("bg-white","border","border-line","text-body");
+    });
+    btn.classList.add("active","bg-ink","text-white");
+    btn.classList.remove("bg-white","border","border-line","text-body");
+    currentSubject = btn.getAttribute("data-subject");
+    filtered = getFiltered();
+    idx = 0;
+    renderItem();
+  });
+});
+
+/* 필터 — 학년 */
+document.querySelectorAll(".tbtn").forEach(function(btn) {
+  btn.addEventListener("click", function() {
+    document.querySelectorAll(".tbtn").forEach(function(b){
+      b.classList.remove("active","bg-ink","text-white");
+      b.classList.add("bg-white","border","border-line","text-body");
+    });
+    btn.classList.add("active","bg-ink","text-white");
+    btn.classList.remove("bg-white","border","border-line","text-body");
+    currentTrack = btn.getAttribute("data-track");
+    filtered = getFiltered();
+    idx = 0;
+    renderItem();
+  });
+});
+
+/* 베이직 플랜은 게이트만 보여주고 문항은 렌더링하지 않음 */
+if (window.PremiseStore && PremiseStore.getPlan() !== "premium") {
+  document.getElementById("planGateCard").style.display = "block";
+  document.getElementById("filters").style.display = "none";
+  document.getElementById("trackFilters").style.display = "none";
+} else {
+  filtered = getFiltered();
+  renderItem();
+}
+</script>
+</body>
+</html>
