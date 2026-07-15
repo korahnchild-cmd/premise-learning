@@ -14,6 +14,8 @@
       // 코스의 '완료' 노드와 일치 (입문 전체 + 기본 1)
       completed: ["in-1", "in-2", "in-3", "in-4", "ba-1"],
       badges: ["🎯", "🔍", "🕵️", "🧩", "🐢"],
+      plan: "basic", // "basic" | "premium" — 데모용 플랜 시뮬레이션
+      exams: [], // PBS 캘린더: { id, name, date(YYYY-MM-DD), subject }
       premises: [
         { subject: "수학", note: "속도 대신 깊이로 전환", badge: "🐢", badgeName: "깊이파트너", date: "오늘" },
         { subject: "일상", note: "'수 = 행복' 전제를 흔듦", badge: "🧩", badgeName: "행간파트너", date: "어제" },
@@ -44,6 +46,25 @@
       if (s.lastActive !== today()) { s.streak += 1; s.lastActive = today(); }
       save(s);
       return s;
+    },
+    /* ===== PBS 캘린더 ===== */
+    getPlan: () => s.plan || "basic",
+    setPlan: (p) => { s.plan = p === "premium" ? "premium" : "basic"; save(s); return s; },
+    getExams: () => (s.exams || []).slice().sort((a, b) => a.date < b.date ? -1 : 1),
+    examLimit: () => (s.plan === "premium" ? Infinity : 3),
+    addExam: (exam) => {
+      if (!s.exams) s.exams = [];
+      const limit = s.plan === "premium" ? Infinity : 3;
+      if (s.exams.length >= limit) return { ok: false, reason: "limit" };
+      const id = "ex-" + Date.now();
+      s.exams.push({ id, name: exam.name, date: exam.date, subject: exam.subject || "" });
+      save(s);
+      return { ok: true, id };
+    },
+    removeExam: (id) => {
+      s.exams = (s.exams || []).filter((e) => e.id !== id);
+      save(s);
+      return s;
     }
   };
 
@@ -55,6 +76,7 @@
       const items = [
         ["coz", "course.html", "코스"],
         ["daily", "daily.html", "오늘의 사건"],
+        ["cal", "calendar.html", "PBS 캘린더"],
         ["note", "notebook.html", "파트너 노트"]
       ];
       const links = items.map(([k, href, label]) =>

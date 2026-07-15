@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PBS 학습법 · PBS 캘린더</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1" },
+    fontFamily: { sans:["Pretendard","Inter","sans-serif"] },
+    borderRadius: { "4xl":"2rem", "5xl":"2.5rem" },
+  }}};
+</script>
+<style>
+  body { font-family:"Pretendard","Inter",sans-serif; -webkit-font-smoothing:antialiased; letter-spacing:-.012em; background:#F5F6F4; color:#0A0E17; }
+  h1,h2,h3 { letter-spacing:-.03em; }
+  ::selection { background:rgba(10,102,255,.14); }
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:.5rem; border-radius:9999px; transition:transform .35s cubic-bezier(.16,1,.3,1), background .3s, border-color .3s, color .3s; white-space:nowrap; }
+  .btn-primary { background:#0A66FF; color:#fff; box-shadow:0 4px 14px rgba(10,102,255,.28); }
+  .btn-primary:hover { background:#0857db; transform:translateY(-2px); }
+  .btn-primary:disabled { opacity:.4; cursor:not-allowed; transform:none; box-shadow:none; }
+  .btn-ghost { background:#fff; color:#0A0E17; border:1px solid #DfE3E8; }
+  .btn-ghost:hover { border-color:#0A66FF; color:#0A66FF; }
+  .card { background:#fff; border:1px solid #ECEEF1; border-radius:1.5rem; }
+  .fadein{ animation:fadein .6s ease both; } @keyframes fadein{ from{opacity:0; transform:translateY(12px)} }
+  input[type=text], input[type=date], select { border:1px solid #DfE3E8; border-radius:.8rem; padding:.65rem .9rem; font-size:14px; width:100%; background:#fff; }
+  input:focus, select:focus { outline:none; border-color:#0A66FF; box-shadow:0 0 0 3px rgba(10,102,255,.12); }
+  .day-cell{ aspect-ratio:1; border-radius:.6rem; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; background:#EAEEF3; color:#9AA4B2; position:relative; }
+  .day-cell.done{ background:#0A66FF; color:#fff; }
+  .day-cell.today{ box-shadow:0 0 0 2px #0A66FF inset; }
+  .day-cell.exam{ background:#FFB800; color:#0A0E17; }
+  .plan-toggle{ display:inline-flex; background:#fff; border:1px solid #ECEEF1; border-radius:9999px; padding:3px; }
+  .plan-toggle button{ padding:6px 14px; border-radius:9999px; font-size:12px; font-weight:600; color:#9AA4B2; transition:background .2s,color .2s; }
+  .plan-toggle button.on{ background:#0A0E17; color:#fff; }
+  .lock-badge{ display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:600; color:#9AA4B2; background:#F2F4F1; padding:3px 9px; border-radius:9999px; }
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important} }
+</style>
+</head>
+<body>
+
+<!-- NAV (공통) -->
+<div id="topnav"></div>
+<script src="common.js"></script>
+
+<main class="max-w-4xl mx-auto px-5 py-8">
+
+  <!-- header -->
+  <div class="flex items-center justify-between flex-wrap gap-4">
+    <div>
+      <p class="text-[11px] font-semibold tracking-widest uppercase text-point">PBS 캘린더</p>
+      <h1 class="text-[1.8rem] md:text-[2.2rem] font-extrabold mt-1">시험 일정을 등록하면, 루카가 미리 챙겨요</h1>
+      <p class="text-[13px] text-body mt-2 max-w-lg">학교·모의고사 일정을 등록하면 D-Day와 그날까지의 맞춤 미션을 알려드려요. 시험 4주 전엔 <b class="text-ink">실전 적용 기간</b>이 자동으로 시작됩니다.<sup class="text-faint">†</sup></p>
+    </div>
+    <div class="flex flex-col items-end gap-2">
+      <p class="text-[11px] text-faint">데모: 플랜 전환해보기</p>
+      <div class="plan-toggle" id="planToggle">
+        <button data-plan="basic">베이직</button>
+        <button data-plan="premium">프리미엄</button>
+      </div>
+    </div>
+  </div>
+  <p class="text-[11px] text-faint mt-3 max-w-lg leading-relaxed">† 실전 적용 기간이란? 그동안 훈련한 전제 감각을 실제 기출·모의고사 유형 문제에 적용해보는 집중 기간이에요. (연 4회, 프리미엄 전용)</p>
+
+  <!-- exam registration -->
+  <div class="card p-6 md:p-7 mt-6 fadein">
+    <div class="flex items-center justify-between mb-4">
+      <p class="text-[15px] font-bold text-ink">시험 등록</p>
+      <span class="lock-badge" id="limitBadge">베이직 · 0/3개 등록</span>
+    </div>
+    <form id="examForm" class="grid sm:grid-cols-5 gap-3">
+      <input type="text" id="examName" placeholder="시험 이름 (예: 중간고사)" class="sm:col-span-2" required />
+      <select id="examSubject" class="sm:col-span-1">
+        <option value="국어">국어</option>
+        <option value="수학">수학</option>
+        <option value="전과목">전과목</option>
+      </select>
+      <input type="date" id="examDate" class="sm:col-span-1" required />
+      <button type="submit" class="btn btn-primary sm:col-span-1 py-2.5 text-[13px] font-semibold">＋ 등록</button>
+    </form>
+    <p class="text-[12px] text-point mt-3 hidden" id="limitMsg">베이직 플랜은 시험 3개까지 등록할 수 있어요. 프리미엄으로 전환하면 무제한으로 등록할 수 있습니다.</p>
+  </div>
+
+  <div class="grid lg:grid-cols-5 gap-4 mt-4">
+    <!-- D-Day list -->
+    <div class="lg:col-span-2 space-y-4" id="examList"></div>
+
+    <!-- monthly grid -->
+    <div class="card p-6 lg:col-span-3 fadein">
+      <div class="flex items-center justify-between mb-5">
+        <div>
+          <p class="text-[15px] font-bold text-ink" id="monthLabel">이번 달 미션 현황</p>
+          <p class="text-[12px] text-body mt-0.5">파란 칸 = 완료한 날 · 노란 칸 = 등록된 시험일</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-7 gap-1.5 text-center text-[10px] text-faint mb-1.5">
+        <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+      </div>
+      <div class="grid grid-cols-7 gap-1.5" id="monthGrid"></div>
+    </div>
+  </div>
+
+  <!-- notification preview -->
+  <div class="card p-6 md:p-7 mt-4 fadein">
+    <p class="text-[15px] font-bold text-ink mb-1">알림 미리보기</p>
+    <p class="text-[12px] text-body mb-4">등록한 시험을 기준으로, 이런 알림을 받게 돼요. (데모 화면 — 실제 알림은 발송되지 않아요)</p>
+    <div class="grid sm:grid-cols-2 gap-3" id="notifPreview"></div>
+  </div>
+
+</main>
+
+<footer class="border-t border-line mt-16">
+  <div class="max-w-4xl mx-auto px-5 py-8 text-center text-[12px] text-faint">
+    <a href="index.html" class="hover:text-ink transition">PBS 학습법으로 돌아가기</a>
+  </div>
+</footer>
+
+<script>
+PremiseNav.render("cal");
+
+const store = PremiseStore;
+const $ = (id) => document.getElementById(id);
+const todayStr = () => new Date().toISOString().slice(0,10);
+const dDay = (dateStr) => {
+  const d1 = new Date(todayStr()); const d2 = new Date(dateStr);
+  return Math.ceil((d2 - d1) / 86400000);
+};
+
+function renderPlanToggle() {
+  const plan = store.getPlan();
+  document.querySelectorAll("#planToggle button").forEach(b => b.classList.toggle("on", b.dataset.plan === plan));
+}
+document.querySelectorAll("#planToggle button").forEach(b => {
+  b.addEventListener("click", () => { store.setPlan(b.dataset.plan); renderAll(); });
+});
+
+function renderLimitBadge() {
+  const plan = store.getPlan();
+  const exams = store.getExams();
+  const limit = store.examLimit();
+  $("limitBadge").textContent = plan === "premium"
+    ? `프리미엄 · ${exams.length}개 등록 · 무제한`
+    : `베이직 · ${exams.length}/${limit}개 등록`;
+  $("limitMsg").classList.toggle("hidden", !(plan === "basic" && exams.length >= limit));
+}
+
+function renderExamList() {
+  const exams = store.getExams();
+  const wrap = $("examList");
+  if (!exams.length) {
+    wrap.innerHTML = `<div class="card p-6 text-center fadein"><p class="text-[13px] text-faint">아직 등록된 시험이 없어요.<br/>왼쪽 상단에서 첫 시험을 등록해보세요.</p></div>`;
+    return;
+  }
+  wrap.innerHTML = exams.map(e => {
+    const d = dDay(e.date);
+    const dLabel = d === 0 ? "D-DAY" : d > 0 ? `D-${d}` : `종료`;
+    const applyPhase = d > 0 && d <= 28;
+    return `<div class="card p-5 fadein">
+      <div class="flex items-start justify-between">
+        <div>
+          <p class="text-[13px] text-faint">${e.subject || "전과목"}</p>
+          <p class="text-[15px] font-bold text-ink mt-0.5">${e.name}</p>
+          <p class="text-[12px] text-body mt-1">${e.date}</p>
+        </div>
+        <div class="text-right shrink-0">
+          <p class="text-[1.3rem] font-extrabold ${d <= 3 && d >= 0 ? "text-point" : "text-ink"}">${dLabel}</p>
+          <button class="text-[11px] text-faint hover:text-ink mt-1" onclick="removeExam('${e.id}')">삭제</button>
+        </div>
+      </div>
+      ${applyPhase ? `<p class="text-[11px] font-semibold text-point mt-3 pt-3 border-t border-line">🔥 실전 적용 기간 진행 중 — 기출·모의고사 유형 문제로 감각을 다지는 시기예요.</p>` : ""}
+    </div>`;
+  }).join("");
+}
+
+function renderMonthGrid() {
+  const now = new Date();
+  const y = now.getFullYear(), m = now.getMonth();
+  $("monthLabel").textContent = `${y}년 ${m+1}월 미션 현황`;
+  const firstDay = new Date(y, m, 1).getDay();
+  const daysInMonth = new Date(y, m+1, 0).getDate();
+  const exams = store.getExams();
+  const examDates = new Set(exams.map(e => e.date));
+  const todayD = now.getDate();
+  // 데모용: streak 값 기준으로 최근 N일을 '완료'로 표시
+  const streak = store.get().streak || 0;
+  let html = "";
+  for (let i = 0; i < firstDay; i++) html += `<div></div>`;
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+    const isToday = d === todayD;
+    const isExam = examDates.has(dateStr);
+    const isDone = d <= todayD && (todayD - d) < streak;
+    const cls = ["day-cell"];
+    if (isExam) cls.push("exam"); else if (isDone) cls.push("done");
+    if (isToday) cls.push("today");
+    html += `<div class="${cls.join(" ")}">${d}</div>`;
+  }
+  $("monthGrid").innerHTML = html;
+}
+
+function renderNotifPreview() {
+  const exams = store.getExams();
+  const wrap = $("notifPreview");
+  if (!exams.length) {
+    wrap.innerHTML = `<p class="text-[12px] text-faint sm:col-span-2">시험을 등록하면 알림 예시가 여기에 표시돼요.</p>`;
+    return;
+  }
+  const e = exams[0];
+  const cards = [
+    { d: 28, msg: `실전 적용 기간이 시작됐어요. ${e.name} 대비, 기출 유형으로 감각을 다져볼까요?` },
+    { d: 14, msg: `${e.name}까지 2주 남았어요. 이번 주는 자주 틀리던 전제를 다시 점검해봐요.` },
+    { d: 7, msg: `일주일 남았어요. 무리한 진도보다 확실히 아는 것부터 다시 챙겨요.` },
+    { d: 1, msg: `내일이 ${e.name}이에요. 오늘은 새로운 걸 배우기보다 푹 쉬는 게 좋아요.` },
+  ];
+  wrap.innerHTML = cards.map(c => `
+    <div class="rounded-2xl bg-soft border border-line p-4">
+      <p class="text-[11px] font-semibold text-point">D-${c.d} 알림</p>
+      <p class="text-[13px] text-ink mt-1.5 leading-relaxed">${c.msg} <span class="text-faint">— 루카</span></p>
+    </div>`).join("");
+}
+
+window.removeExam = (id) => { store.removeExam(id); renderAll(); };
+
+$("examForm").addEventListener("submit", (ev) => {
+  ev.preventDefault();
+  const name = $("examName").value.trim();
+  const date = $("examDate").value;
+  const subject = $("examSubject").value;
+  if (!name || !date) return;
+  const res = store.addExam({ name, date, subject });
+  if (!res.ok) { $("limitMsg").classList.remove("hidden"); return; }
+  $("examName").value = ""; $("examDate").value = "";
+  renderAll();
+});
+
+function renderAll() {
+  renderPlanToggle();
+  renderLimitBadge();
+  renderExamList();
+  renderMonthGrid();
+  renderNotifPreview();
+}
+renderAll();
+</script>
+
+</body>
+</html>
