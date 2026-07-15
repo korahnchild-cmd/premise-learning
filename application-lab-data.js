@@ -2959,4 +2959,1802 @@ var APPLICATION_LAB_ITEMS_KOR_HIGH = [
 ];
 APPLICATION_LAB_ITEMS = APPLICATION_LAB_ITEMS.concat(APPLICATION_LAB_ITEMS_KOR_HIGH);
 
-/* 통계: 국어 66문항(완료) / 수학 15문항 / 역사 15문항 = 총 96문항 (200 목표) */
+/* ===================== 수학 초등 추가 (math-016 ~ math-032, 17문항) ===================== */
+var APPLICATION_LAB_ITEMS_MATH_ELEM = [
+  {
+    "id": "al-math-016", "subject": "수학", "domain": "대수", "track": "초등", "stage": "입문",
+    "difficulty": 1, "finalSparkEligible": false,
+    "stem": "다음을 계산하시오.\n\n12 + 3 × 4 = ?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "60", "correct": false, "trapNote": "앞에서부터 순서대로 (12+3)×4 계산" },
+      { "label": "②", "text": "24", "correct": true, "trapNote": "" },
+      { "label": "③", "text": "48", "correct": false, "trapNote": "12×4만 계산" },
+      { "label": "④", "text": "19", "correct": false, "trapNote": "12+3+4로 계산" },
+      { "label": "⑤", "text": "84", "correct": false, "trapNote": "12×(3+4) 계산" }
+    ],
+    "hiddenPremise": "계산은 무조건 왼쪽부터 순서대로 한다는 전제. 실제로는 곱셈을 덧셈보다 먼저 계산해야 함.",
+    "commonMistake": "①을 고르는 학생 — 왼쪽부터 순서대로 12+3=15, 15×4로 계산.",
+    "lukaExplain": "곱셈은 덧셈보다 먼저 계산해야 해. 3×4=12를 먼저 하고, 12+12=24. 순서를 바꾸면 답이 완전히 달라져.",
+    "reframe": "사칙연산의 계산 순서(곱셈·나눗셈 우선)를 지키는 기초 능력."
+  },
+  {
+    "id": "al-math-017", "subject": "수학", "domain": "대수", "track": "초등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": true,
+    "stem": "다음 문장제를 푸시오.\n\n'한 상자에 12개씩 담긴 사탕이 5상자 있다. 그중 8개를 먹었다면, 남은 사탕은 몇 개인가?'",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "52개", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "60개", "correct": false, "trapNote": "먹은 8개를 빼지 않음" },
+      { "label": "③", "text": "17개", "correct": false, "trapNote": "12×5 대신 12+5로 계산" },
+      { "label": "④", "text": "4개", "correct": false, "trapNote": "5상자를 무시하고 12-8만 계산" },
+      { "label": "⑤", "text": "48개", "correct": false, "trapNote": "5상자를 4상자로 착각" }
+    ],
+    "hiddenPremise": "문제의 정보 중 일부만 사용해도 된다는 전제. 전체 개수(12×5)를 구한 뒤 먹은 개수를 빼야 함.",
+    "commonMistake": "②를 고르는 학생 — 전체 개수만 구하고 먹은 것을 빼는 걸 잊음.",
+    "lukaExplain": "먼저 전체 사탕 수부터 구해야 해. 12개씩 5상자니까 12×5=60개. 그중 8개를 먹었으니 60-8=52개. 두 단계를 다 거쳐야 하는 문제야.",
+    "reframe": "여러 단계를 거치는 문장제에서 모든 조건을 순서대로 적용하는 능력."
+  },
+  {
+    "id": "al-math-018", "subject": "수학", "domain": "기하", "track": "초등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": false,
+    "stem": "정사각형의 한 변의 길이가 5cm일 때, 둘레를 구하시오.",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "10cm", "correct": false, "trapNote": "변 2개만 더함" },
+      { "label": "②", "text": "20cm", "correct": true, "trapNote": "" },
+      { "label": "③", "text": "25cm", "correct": false, "trapNote": "넓이(5×5) 공식과 혼동" },
+      { "label": "④", "text": "15cm", "correct": false, "trapNote": "변 3개만 더함" },
+      { "label": "⑤", "text": "5cm", "correct": false, "trapNote": "한 변의 길이를 둘레로 착각" }
+    ],
+    "hiddenPremise": "정사각형은 변이 4개라는 걸 놓치고 일부 변만 계산하는 전제.",
+    "commonMistake": "③을 고르는 학생 — 넓이 공식(5×5)과 둘레 공식을 혼동.",
+    "lukaExplain": "정사각형은 네 변이 모두 같은 길이야. 5cm짜리 변이 4개니까 5×4=20cm. 넓이(5×5=25)랑 헷갈리지 마 — 둘레는 테두리 길이야.",
+    "reframe": "정사각형의 변의 개수(4개)를 정확히 세어 둘레를 구하는 능력."
+  },
+  {
+    "id": "al-math-019", "subject": "수학", "domain": "대수", "track": "초등", "stage": "입문",
+    "difficulty": 1, "finalSparkEligible": false,
+    "stem": "다음 분수의 크기를 비교하시오.\n\n2/3 과 3/5 중 더 큰 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "2/3", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "3/5", "correct": false, "trapNote": "분자가 크면 크다고 착각" },
+      { "label": "③", "text": "둘이 같다", "correct": false, "trapNote": "분모·분자 합이 비슷해 보여 착각" },
+      { "label": "④", "text": "비교할 수 없다", "correct": false, "trapNote": "'분모가 다르면 비교 불가'라는 잘못된 전제" },
+      { "label": "⑤", "text": "3/5가 항상 더 크다", "correct": false, "trapNote": "근거 없는 단정" }
+    ],
+    "hiddenPremise": "분자가 크면 분수도 크다고 착각하는 전제(3>2이니 3/5가 클 것 같다는 착각). 분모까지 함께 봐야 함.",
+    "commonMistake": "②를 고르는 학생 — 분자 3이 2보다 크다는 것만 보고 판단.",
+    "lukaExplain": "분모를 통일해서 비교해보자. 2/3 = 10/15, 3/5 = 9/15. 10이 9보다 크니까 2/3이 더 커. 분자만 보면 안 되고, 분모를 맞춰서 비교해야 정확해.",
+    "reframe": "분모를 통일하여 분수의 크기를 정확히 비교하는 능력."
+  },
+  {
+    "id": "al-math-020", "subject": "수학", "domain": "대수", "track": "초등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": true,
+    "stem": "다음을 계산하시오.\n\n3/4 + 1/2 = ?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "4/6", "correct": false, "trapNote": "분모끼리, 분자끼리 그냥 더함" },
+      { "label": "②", "text": "5/4", "correct": true, "trapNote": "" },
+      { "label": "③", "text": "4/4", "correct": false, "trapNote": "통분 과정에서 분자 계산 오류" },
+      { "label": "④", "text": "1", "correct": false, "trapNote": "어림잡아 반올림" },
+      { "label": "⑤", "text": "3/2", "correct": false, "trapNote": "1/2를 2/4가 아닌 다른 값으로 통분" }
+    ],
+    "hiddenPremise": "분수의 덧셈을 자연수처럼 분모·분자를 각각 더하면 된다는 전제. 실제로는 분모를 통일(통분)한 뒤 분자만 더해야 함.",
+    "commonMistake": "①을 고르는 학생 다수 — 분모는 분모끼리, 분자는 분자끼리 그냥 더함(3+1=4, 4+2=6).",
+    "lukaExplain": "분수는 분모가 같아야 더할 수 있어. 1/2을 2/4로 바꾸면 3/4 + 2/4 = 5/4가 돼. 분모·분자를 각각 더하면 절대 안 돼 — 통분부터 해야 해.",
+    "reframe": "분수 덧셈에서 통분의 필요성을 이해하는 능력."
+  },
+  {
+    "id": "al-math-021", "subject": "수학", "domain": "기하", "track": "초등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": false,
+    "stem": "다음 중 삼각형이 될 수 있는 세 변의 길이는?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "3cm, 4cm, 5cm", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "2cm, 3cm, 6cm", "correct": false, "trapNote": "2+3<6, 삼각형 안 됨" },
+      { "label": "③", "text": "1cm, 2cm, 3cm", "correct": false, "trapNote": "1+2=3, 삼각형 안 됨(일직선)" },
+      { "label": "④", "text": "5cm, 5cm, 15cm", "correct": false, "trapNote": "5+5<15, 삼각형 안 됨" },
+      { "label": "⑤", "text": "숫자만 있으면 항상 삼각형이 된다", "correct": false, "trapNote": "삼각형 성립 조건을 무시" }
+    ],
+    "hiddenPremise": "세 변의 길이만 있으면 무조건 삼각형이 만들어진다는 전제. 실제로는 '두 변의 합이 나머지 한 변보다 커야' 삼각형이 됨.",
+    "commonMistake": "②나 ④를 고르는 학생 — 세 숫자만 보고 삼각형이 될 거라 단정, 변의 길이 관계를 확인 안 함.",
+    "lukaExplain": "아무 세 길이나 다 삼각형이 되는 게 아니야. 짧은 두 변을 더한 게 가장 긴 변보다 커야 해. 3+4=7>5니까 ①은 삼각형이 돼. 2+3=5는 6보다 작으니까 ②는 안 만들어져 — 선이 이어지지 않거든.",
+    "reframe": "삼각형이 성립하는 조건(두 변의 합 > 나머지 한 변)을 확인하는 능력."
+  },
+  {
+    "id": "al-math-022", "subject": "수학", "domain": "대수", "track": "초등", "stage": "심화",
+    "difficulty": 3, "finalSparkEligible": true,
+    "stem": "다음 문장제를 푸시오.\n\n'어떤 수에 7을 더한 다음 3을 곱했더니 30이 되었다. 어떤 수는?'",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "3", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "9", "correct": false, "trapNote": "30÷3=10에서 7을 더함" },
+      { "label": "③", "text": "23", "correct": false, "trapNote": "30에서 7만 뺌, 3 곱하기 처리 안 함" },
+      { "label": "④", "text": "13", "correct": false, "trapNote": "순서를 반대로(3을 먼저 더함)" },
+      { "label": "⑤", "text": "17", "correct": false, "trapNote": "30÷3에서 잘못된 나눗셈" }
+    ],
+    "hiddenPremise": "문제에 나온 순서(더하기→곱하기)대로 거꾸로 풀지 않고 아무렇게나 계산하는 전제. 거꾸로 풀 땐 반대 순서(나누기→빼기)로 가야 함.",
+    "commonMistake": "③을 고르는 학생 — 곱하기 3을 거꾸로 어떻게 풀어야 할지 몰라 빼기만 함.",
+    "lukaExplain": "거꾸로 풀 땐 순서도 거꾸로! 문제는 '+7 그다음 ×3'이었지? 거꾸로 풀 땐 반대로 '÷3 그다음 -7'이야. 30÷3=10, 10-7=3. 어떤 수는 3이야.",
+    "reframe": "여러 단계 연산을 거꾸로 풀 때 순서와 역연산을 함께 적용하는 능력."
+  },
+  {
+    "id": "al-math-023", "subject": "수학", "domain": "기하", "track": "초등", "stage": "입문",
+    "difficulty": 1, "finalSparkEligible": false,
+    "stem": "다음 중 원의 지름이 10cm일 때, 반지름은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "20cm", "correct": false, "trapNote": "지름을 2배로 계산" },
+      { "label": "②", "text": "5cm", "correct": true, "trapNote": "" },
+      { "label": "③", "text": "10cm", "correct": false, "trapNote": "지름과 반지름을 같다고 착각" },
+      { "label": "④", "text": "15cm", "correct": false, "trapNote": "지름에 5를 더함" },
+      { "label": "⑤", "text": "2.5cm", "correct": false, "trapNote": "지름을 4로 나눔" }
+    ],
+    "hiddenPremise": "지름과 반지름을 같은 것으로 착각하는 전제. 반지름은 지름의 절반.",
+    "commonMistake": "③을 고르는 학생 — 지름과 반지름의 차이를 모름.",
+    "lukaExplain": "지름은 원을 완전히 가로지르는 길이고, 반지름은 그 절반, 중심에서 테두리까지 거리야. 지름 10cm의 절반이니 반지름은 5cm.",
+    "reframe": "지름과 반지름의 관계(반지름 = 지름 ÷ 2)를 정확히 아는 능력."
+  },
+  {
+    "id": "al-math-024", "subject": "수학", "domain": "대수", "track": "초등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": false,
+    "stem": "다음 소수를 계산하시오.\n\n2.5 + 1.75 = ?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "4.25", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "3.8", "correct": false, "trapNote": "자릿수를 안 맞추고 더함" },
+      { "label": "③", "text": "4.0", "correct": false, "trapNote": "소수점 아래 계산 누락" },
+      { "label": "④", "text": "3.25", "correct": false, "trapNote": "정수 부분 덧셈 오류" },
+      { "label": "⑤", "text": "42.5", "correct": false, "trapNote": "소수점 위치 오류" }
+    ],
+    "hiddenPremise": "소수점 자리를 맞추지 않고 숫자만 더하면 된다는 전제. 소수 덧셈은 소수점 자리를 맞춰야 함.",
+    "commonMistake": "②를 고르는 학생 — 2.5를 2.50으로 맞추지 않고 1.75와 자릿수를 안 맞춰 계산.",
+    "lukaExplain": "2.5를 2.50으로 생각하면 자릿수가 맞아. 2.50 + 1.75 = 4.25. 소수는 소수점 자리를 맞춰서 더해야 정확해.",
+    "reframe": "소수 덧셈에서 자릿수(소수점)를 맞추는 능력."
+  },
+  {
+    "id": "al-math-025", "subject": "수학", "domain": "확률", "track": "초등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": false,
+    "stem": "주머니에 빨간 구슬 3개, 파란 구슬 2개가 있다. 구슬 하나를 꺼낼 때 파란 구슬일 가능성을 분수로 나타내면?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "2/5", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "2/3", "correct": false, "trapNote": "전체(5)가 아닌 빨간 구슬 수(3)로 나눔" },
+      { "label": "③", "text": "3/5", "correct": false, "trapNote": "빨간 구슬 확률과 혼동" },
+      { "label": "④", "text": "1/2", "correct": false, "trapNote": "구슬 색이 2가지니 반반이라 착각" },
+      { "label": "⑤", "text": "2/2", "correct": false, "trapNote": "전체 구슬 수를 색깔 수(2)로 착각" }
+    ],
+    "hiddenPremise": "색이 2가지면 확률도 반반(1/2)이라는 전제. 실제로는 각 색의 '개수'가 중요함.",
+    "commonMistake": "④를 고르는 학생 — 색깔이 2종류라서 무조건 반반이라고 생각. 실제로는 구슬 개수가 다름(3개 vs 2개).",
+    "lukaExplain": "색이 두 가지라고 확률이 꼭 반반은 아니야. 전체 구슬은 5개(3+2), 그중 파란 구슬은 2개. 그러니까 2/5. 색깔 수가 아니라 실제 개수를 세는 게 중요해.",
+    "reframe": "전체 경우의 수 대비 원하는 경우의 수를 정확히 세는 능력."
+  },
+  {
+    "id": "al-math-026", "subject": "수학", "domain": "대수", "track": "초등", "stage": "심화",
+    "difficulty": 3, "finalSparkEligible": true,
+    "stem": "다음 규칙을 보고 빈칸에 알맞은 수를 구하시오.\n\n2, 5, 10, 17, ( ), 37",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "24", "correct": false, "trapNote": "일정하게 +7만 더함" },
+      { "label": "②", "text": "26", "correct": true, "trapNote": "" },
+      { "label": "③", "text": "25", "correct": false, "trapNote": "차이 값을 잘못 계산" },
+      { "label": "④", "text": "22", "correct": false, "trapNote": "규칙을 잘못 추정" },
+      { "label": "⑤", "text": "30", "correct": false, "trapNote": "규칙 없이 어림잡음" }
+    ],
+    "hiddenPremise": "규칙은 항상 일정한 수를 더하는 것(등차)이라는 전제. 실제로는 더하는 수가 3,5,7,9로 점점 커지는 규칙(제곱수+1: 1²+1,2²+1,3²+1...).",
+    "commonMistake": "①을 고르는 학생 — 17-10=7이니 다음도 +7만 더함. 하지만 차이는 3,5,7,9로 점점 커짐.",
+    "lukaExplain": "차이를 살펴보자: 5-2=3, 10-5=5, 17-10=7. 차이가 3,5,7로 2씩 커지고 있어. 다음 차이는 9겠지? 17+9=26. 그다음 26+11=37로 맞아떨어져. 차이의 규칙까지 봐야 해.",
+    "reframe": "수열에서 차이가 일정하지 않고 규칙적으로 변하는 패턴을 찾는 능력."
+  },
+  {
+    "id": "al-math-027", "subject": "수학", "domain": "기하", "track": "초등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": false,
+    "stem": "직육면체의 면은 모두 몇 개인가?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "4개", "correct": false, "trapNote": "옆면만 셈" },
+      { "label": "②", "text": "6개", "correct": true, "trapNote": "" },
+      { "label": "③", "text": "8개", "correct": false, "trapNote": "꼭짓점 수와 혼동" },
+      { "label": "④", "text": "12개", "correct": false, "trapNote": "모서리 수와 혼동" },
+      { "label": "⑤", "text": "5개", "correct": false, "trapNote": "밑면 하나를 빠뜨림" }
+    ],
+    "hiddenPremise": "눈에 보이는 면(앞·옆)만 세고 위·아래·뒤를 빠뜨리는 전제.",
+    "commonMistake": "①을 고르는 학생 — 옆에서 보이는 4면만 세고 위·아래 면을 빠뜨림.",
+    "lukaExplain": "직육면체는 상자 모양이야. 위, 아래, 앞, 뒤, 왼쪽, 오른쪽 — 다 세어봐. 6개지? 눈에 안 보이는 뒷면이나 밑면도 잊지 말고 같이 세어보자.",
+    "reframe": "입체도형의 보이지 않는 면까지 빠짐없이 세는 능력."
+  },
+  {
+    "id": "al-math-028", "subject": "수학", "domain": "대수", "track": "초등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": false,
+    "stem": "다음 문장제를 푸시오.\n\n'연필 한 자루는 500원이다. 3000원으로 연필을 최대 몇 자루 살 수 있는가?'",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "6자루", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "5자루", "correct": false, "trapNote": "500과 3000의 자릿수 계산 실수" },
+      { "label": "③", "text": "15자루", "correct": false, "trapNote": "3000÷500 대신 3000÷200으로 계산" },
+      { "label": "④", "text": "60자루", "correct": false, "trapNote": "자릿수를 잘못 나눔(3000÷50)" },
+      { "label": "⑤", "text": "600자루", "correct": false, "trapNote": "3000÷5로 잘못 계산" }
+    ],
+    "hiddenPremise": "나눗셈에서 0의 개수를 정확히 맞추지 않는 전제. 3000÷500은 0을 하나씩 지우면 30÷5=6.",
+    "commonMistake": "④·⑤처럼 0을 잘못 지워서 자릿수가 틀리는 실수.",
+    "lukaExplain": "3000÷500을 계산할 때, 양쪽에서 0을 똑같이 2개씩 지우면 30÷5=6이 돼. 0을 지울 때는 양쪽에서 같은 개수만큼 지워야 해.",
+    "reframe": "끝자리 0을 활용해 나눗셈을 간단히 계산하는 능력."
+  },
+  {
+    "id": "al-math-029", "subject": "수학", "domain": "기하", "track": "초등", "stage": "심화",
+    "difficulty": 3, "finalSparkEligible": false,
+    "stem": "가로 6cm, 세로 4cm인 직사각형과 넓이가 같은 정사각형의 한 변의 길이는? (단, 정수가 아니어도 됨)",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "약 4.9cm (√24)", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "5cm", "correct": false, "trapNote": "(6+4)÷2로 평균을 구함" },
+      { "label": "③", "text": "10cm", "correct": false, "trapNote": "6+4를 그대로 변의 길이로 착각" },
+      { "label": "④", "text": "24cm", "correct": false, "trapNote": "넓이 값을 변의 길이로 착각" },
+      { "label": "⑤", "text": "2cm", "correct": false, "trapNote": "6-4를 변의 길이로 착각" }
+    ],
+    "hiddenPremise": "직사각형의 가로·세로를 더하거나 평균 내면 정사각형 변이 된다는 잘못된 전제. 실제로는 넓이(24)가 같아지도록 제곱근을 구해야 함.",
+    "commonMistake": "②를 고르는 학생 — (6+4)÷2=5로 평균을 냄. 하지만 이건 넓이를 보존하지 않음(5×5=25≠24).",
+    "lukaExplain": "직사각형 넓이는 6×4=24야. 정사각형도 넓이가 24가 되려면, 변×변=24인 수를 찾아야 해. 그게 √24(약 4.9)야. 평균을 내면 넓이가 달라져버려.",
+    "reframe": "넓이를 보존하는 조건(제곱근)으로 정사각형의 변을 구하는 능력."
+  },
+  {
+    "id": "al-math-030", "subject": "수학", "domain": "대수", "track": "초등", "stage": "입문",
+    "difficulty": 1, "finalSparkEligible": false,
+    "stem": "다음 중 짝수가 아닌 것을 고르시오.",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "24", "correct": false, "trapNote": "짝수" },
+      { "label": "②", "text": "37", "correct": true, "trapNote": "" },
+      { "label": "③", "text": "50", "correct": false, "trapNote": "짝수" },
+      { "label": "④", "text": "0", "correct": false, "trapNote": "0도 짝수" },
+      { "label": "⑤", "text": "18", "correct": false, "trapNote": "짝수" }
+    ],
+    "hiddenPremise": "0은 짝수도 홀수도 아니라고 여기는 전제. 실제로 0은 짝수.",
+    "commonMistake": "④를 짝수가 아니라고 착각하는 학생 — 0은 특별한 수라 짝수가 아니라고 오해.",
+    "lukaExplain": "짝수는 2로 나누어떨어지는 수야. 0÷2=0으로 나누어떨어지니까 0도 짝수야. 37은 2로 안 나누어떨어지니 홀수고. 끝자리 숫자로 봐도 37은 짝수가 아니야.",
+    "reframe": "0을 포함한 짝수의 정확한 정의를 아는 능력."
+  },
+  {
+    "id": "al-math-031", "subject": "수학", "domain": "대수", "track": "초등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": true,
+    "stem": "다음 문장제를 푸시오.\n\n'어떤 반의 학생 수는 남학생과 여학생의 비가 3:2이고, 전체 학생은 25명이다. 남학생은 몇 명인가?'",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "15명", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "10명", "correct": false, "trapNote": "3과 2를 반대로 적용" },
+      { "label": "③", "text": "12명", "correct": false, "trapNote": "25÷2로 절반 계산" },
+      { "label": "④", "text": "3명", "correct": false, "trapNote": "비율 숫자를 그대로 답으로 씀" },
+      { "label": "⑤", "text": "20명", "correct": false, "trapNote": "비를 무시하고 임의로 계산" }
+    ],
+    "hiddenPremise": "비율 숫자(3, 2)를 그대로 인원수로 착각하거나, 전체를 단순히 반으로 나누는 전제. 실제로는 전체를 비의 합(5)으로 나눈 뒤 비율만큼 곱해야 함.",
+    "commonMistake": "④를 고르는 학생 — 비율의 숫자 3을 그대로 답이라고 씀.",
+    "lukaExplain": "비 3:2는 전체를 5묶음으로 나눈 것 중 남학생이 3묶음이라는 뜻이야. 25명을 5로 나누면 한 묶음은 5명. 남학생은 3묶음이니 5×3=15명.",
+    "reframe": "비율을 전체 합으로 나누어 실제 인원을 구하는 능력."
+  },
+  {
+    "id": "al-math-032", "subject": "수학", "domain": "기하", "track": "초등", "stage": "입문",
+    "difficulty": 1, "finalSparkEligible": false,
+    "stem": "다음 중 각의 크기가 90도인 각의 이름은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "예각", "correct": false, "trapNote": "90도보다 작은 각" },
+      { "label": "②", "text": "직각", "correct": true, "trapNote": "" },
+      { "label": "③", "text": "둔각", "correct": false, "trapNote": "90도보다 크고 180도보다 작은 각" },
+      { "label": "④", "text": "평각", "correct": false, "trapNote": "180도인 각" },
+      { "label": "⑤", "text": "예각과 둔각 사이의 각은 이름이 없다", "correct": false, "trapNote": "'직각'이라는 이름이 있음" }
+    ],
+    "hiddenPremise": "정확히 90도인 각에도 특별한 이름이 없을 거라 여기는 전제.",
+    "commonMistake": "⑤를 고르는 학생 — 예각과 둔각 사이라 이름이 없을 거라 짐작.",
+    "lukaExplain": "정확히 90도는 특별해서 따로 이름이 있어 — 직각이야. 그보다 작으면 예각, 크면(180도 미만) 둔각. 90도라는 딱 떨어지는 각은 직각으로 꼭 기억해두자.",
+    "reframe": "각의 크기에 따른 정확한 명칭(예각/직각/둔각/평각)을 아는 능력."
+  }
+];
+APPLICATION_LAB_ITEMS = APPLICATION_LAB_ITEMS.concat(APPLICATION_LAB_ITEMS_MATH_ELEM);
+
+/* ===================== 수학 중등 추가 (math-033 ~ math-049, 17문항) ===================== */
+var APPLICATION_LAB_ITEMS_MATH_MID = [
+  {
+    "id": "al-math-033", "subject": "수학", "domain": "대수", "track": "중등", "stage": "입문",
+    "difficulty": 2, "finalSparkEligible": true,
+    "stem": "다음 일차방정식을 푸시오.\n\n2x − 5 = 3x + 1",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "x = −6", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "x = 6", "correct": false, "trapNote": "이항할 때 부호를 바꾸지 않음" },
+      { "label": "③", "text": "x = −4", "correct": false, "trapNote": "상수항 이항 시 부호 오류" },
+      { "label": "④", "text": "x = 4", "correct": false, "trapNote": "양변 부호를 모두 반대로 착각" },
+      { "label": "⑤", "text": "x = 1", "correct": false, "trapNote": "계산 중간 항을 누락" }
+    ],
+    "hiddenPremise": "이항할 때 부호를 바꾸지 않아도 된다는 전제. 항을 반대편으로 옮기면 부호가 반드시 바뀜.",
+    "commonMistake": "②를 고르는 학생 — 2x-3x=1+5로 이항하면서 부호를 안 바꿈.",
+    "lukaExplain": "이항할 땐 부호가 꼭 바뀌어. 2x-3x = 1+5로 옮기면 -x = 6, 그래서 x = -6. 이항할 때 부호 바꾸는 거 잊지 마 — 이거 진짜 자주 틀리는 실수야.",
+    "reframe": "이항 시 부호 변화 규칙을 정확히 적용하는 능력."
+  },
+  {
+    "id": "al-math-034", "subject": "수학", "domain": "대수", "track": "중등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": true,
+    "stem": "다음을 전개하시오.\n\n(x + 3)(x − 3) = ?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "x² − 9", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "x² + 9", "correct": false, "trapNote": "부호를 잘못 적용" },
+      { "label": "③", "text": "x² − 6x − 9", "correct": false, "trapNote": "합차공식 대신 완전제곱식처럼 전개" },
+      { "label": "④", "text": "x² − 6x + 9", "correct": false, "trapNote": "(x-3)²과 혼동" },
+      { "label": "⑤", "text": "x² + 6x − 9", "correct": false, "trapNote": "중간항 부호 오류" }
+    ],
+    "hiddenPremise": "합차공식 (a+b)(a-b)=a²-b²을 완전제곱식 공식과 혼동하는 전제.",
+    "commonMistake": "③·④를 고르는 학생 — (x+3)(x-3)을 (x-3)²처럼 완전제곱식으로 착각해서 전개.",
+    "lukaExplain": "(x+3)(x-3)은 합차공식이야 — a²-b² 꼴로 딱 떨어져. 가운데 항(-6x, +6x)은 서로 상쇄돼서 안 남아. x²-9로 끝. 완전제곱식이랑 헷갈리지 마.",
+    "reframe": "곱셈공식(합차공식 vs 완전제곱식)을 구별해서 적용하는 능력."
+  },
+  {
+    "id": "al-math-035", "subject": "수학", "domain": "함수", "track": "중등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": false,
+    "stem": "일차함수 y = 2x + 3의 그래프가 지나지 않는 사분면은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "제1사분면", "correct": false, "trapNote": "실제로 지남" },
+      { "label": "②", "text": "제2사분면", "correct": false, "trapNote": "실제로 지남" },
+      { "label": "③", "text": "제3사분면", "correct": false, "trapNote": "실제로 지남" },
+      { "label": "④", "text": "제4사분면", "correct": true, "trapNote": "" },
+      { "label": "⑤", "text": "모든 사분면을 지난다", "correct": false, "trapNote": "기울기·절편을 그래프로 그려보지 않고 단정" }
+    ],
+    "hiddenPremise": "기울기가 양수면 모든 사분면을 지날 거라 어림짐작하는 전제. 실제로는 y절편의 위치까지 함께 봐야 함.",
+    "commonMistake": "⑤를 고르는 학생 — 그래프를 직접 그려보지 않고 '기울기가 양수니까 다 지나겠지'라고 짐작.",
+    "lukaExplain": "y=2x+3은 기울기 양수, y절편 +3(위쪽에서 시작)이야. x가 커질수록 y도 커지니까 오른쪽 아래(4사분면, x>0·y<0)로는 절대 안 내려가. 그래프를 대략이라도 그려보면 바로 보여.",
+    "reframe": "기울기와 절편으로 그래프가 지나는/지나지 않는 사분면을 판단하는 능력."
+  },
+  {
+    "id": "al-math-036", "subject": "수학", "domain": "대수", "track": "중등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": true,
+    "stem": "다음 연립방정식을 푸시오.\n\nx + y = 7\nx − y = 1",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "x = 4, y = 3", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "x = 3, y = 4", "correct": false, "trapNote": "x와 y 값을 서로 바꿈" },
+      { "label": "③", "text": "x = 8, y = 6", "correct": false, "trapNote": "두 식을 곱해서 처리하는 오류" },
+      { "label": "④", "text": "x = 3.5, y = 3.5", "correct": false, "trapNote": "두 식을 더하지 않고 평균을 냄" },
+      { "label": "⑤", "text": "x = 6, y = 1", "correct": false, "trapNote": "뺄셈 과정에서 부호 오류" }
+    ],
+    "hiddenPremise": "연립방정식은 아무 값이나 대입해서 어림잡아도 된다는 전제. 실제로는 두 식을 더하거나 빼서 문자를 소거해야 함.",
+    "commonMistake": "②를 고르는 학생 — 계산은 맞았지만 x, y를 헷갈려서 바꿔 씀.",
+    "lukaExplain": "두 식을 더해보자: (x+y)+(x-y)=7+1, 2x=8, x=4. 그다음 x+y=7에 대입하면 y=3. 답 나오면 꼭 원래 식에 다시 넣어서 x, y가 안 바뀌었는지 확인하는 습관 들이자.",
+    "reframe": "가감법으로 연립방정식을 정확히 풀고 결과를 검산하는 능력."
+  },
+  {
+    "id": "al-math-037", "subject": "수학", "domain": "기하", "track": "중등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": false,
+    "stem": "삼각형의 세 내각의 크기가 각각 x, 2x, 3x일 때, 가장 큰 각의 크기는?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "90°", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "60°", "correct": false, "trapNote": "x값을 가장 큰 각으로 착각" },
+      { "label": "③", "text": "30°", "correct": false, "trapNote": "x값 자체를 답으로 착각" },
+      { "label": "④", "text": "120°", "correct": false, "trapNote": "180을 6등분으로 나눠 계산 오류" },
+      { "label": "⑤", "text": "180°", "correct": false, "trapNote": "세 각의 합을 가장 큰 각으로 착각" }
+    ],
+    "hiddenPremise": "삼각형 내각의 합이 180°라는 조건을 쓰지 않고 비율 숫자만으로 답을 정하는 전제.",
+    "commonMistake": "③을 고르는 학생 — x+2x+3x=180이라는 방정식을 세우지 않고 x=30을 그냥 답으로 씀(가장 큰 각은 3x).",
+    "lukaExplain": "삼각형 내각의 합은 항상 180°야. x+2x+3x=180, 6x=180, x=30. 가장 큰 각은 3x니까 3×30=90°. x값 자체가 아니라 '가장 큰 각'을 물었다는 걸 놓치지 마.",
+    "reframe": "삼각형 내각의 합(180°) 조건으로 방정식을 세우고 묻는 대상을 정확히 파악하는 능력."
+  },
+  {
+    "id": "al-math-038", "subject": "수학", "domain": "확률", "track": "중등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": false,
+    "stem": "동전을 두 번 던질 때, 두 번 다 앞면이 나올 확률은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "1/4", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "1/2", "correct": false, "trapNote": "한 번만 던지는 확률과 혼동" },
+      { "label": "③", "text": "2/4", "correct": false, "trapNote": "경우의 수를 잘못 셈" },
+      { "label": "④", "text": "1/3", "correct": false, "trapNote": "경우의 수를 3가지로 착각(앞앞/뒤뒤/하나씩)" },
+      { "label": "⑤", "text": "1", "correct": false, "trapNote": "반드시 앞면이 나온다고 착각" }
+    ],
+    "hiddenPremise": "동전을 두 번 던진 경우의 수가 3가지(앞앞/뒤뒤/앞뒤 섞임)뿐이라는 잘못된 전제. 실제로는 앞뒤와 뒤앞을 구분해 4가지.",
+    "commonMistake": "④를 고르는 학생 — '둘 다 앞면·둘 다 뒷면·서로 다름' 이렇게 3가지 경우만 있다고 착각.",
+    "lukaExplain": "동전 두 개(또는 두 번)를 던지면 경우의 수는 앞앞, 앞뒤, 뒤앞, 뒤뒤 이렇게 4가지야. '앞뒤'와 '뒤앞'은 다른 경우로 세야 해. 그중 앞앞은 1가지니까 확률은 1/4.",
+    "reframe": "순서가 있는 독립시행에서 경우의 수를 빠짐없이 세는 능력."
+  },
+  {
+    "id": "al-math-039", "subject": "수학", "domain": "대수", "track": "중등", "stage": "심화",
+    "difficulty": 3, "finalSparkEligible": true,
+    "stem": "다음 이차방정식을 푸시오.\n\nx² − 5x + 6 = 0",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "x = 2, x = 3", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "x = −2, x = −3", "correct": false, "trapNote": "인수분해 시 부호를 반대로 씀" },
+      { "label": "③", "text": "x = 2, x = −3", "correct": false, "trapNote": "부호 하나만 반대로 씀" },
+      { "label": "④", "text": "x = 1, x = 6", "correct": false, "trapNote": "곱은 맞지만 합이 틀린 잘못된 인수분해" },
+      { "label": "⑤", "text": "x = 5, x = 6", "correct": false, "trapNote": "계수를 그대로 답으로 착각" }
+    ],
+    "hiddenPremise": "인수분해에서 곱해서 6이 되는 두 수 중 아무거나 골라도 된다는 전제. 실제로는 곱이 6, 합이 -5(즉 두 수가 -2, -3)가 되는 조합이어야 함.",
+    "commonMistake": "④를 고르는 학생 — 곱이 6인 조합(1×6)만 확인하고 합(-5)이 맞는지는 확인 안 함.",
+    "lukaExplain": "인수분해할 땐 곱과 합을 둘 다 맞춰야 해. 곱해서 6, 더해서 -5가 되는 두 수는 -2와 -3. (x-2)(x-3)=0이니까 x=2 또는 x=3. 부호는 인수분해식과 반대로 나온다는 것도 기억해둬.",
+    "reframe": "인수분해 시 곱과 합 조건을 동시에 만족하는 두 수를 찾는 능력."
+  },
+  {
+    "id": "al-math-040", "subject": "수학", "domain": "기하", "track": "중등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": false,
+    "stem": "피타고라스 정리를 이용해 직각삼각형의 빗변의 길이를 구하시오. (두 직각변: 6cm, 8cm)",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "10cm", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "14cm", "correct": false, "trapNote": "두 변을 그냥 더함" },
+      { "label": "③", "text": "48cm", "correct": false, "trapNote": "곱을 그대로 답으로 씀" },
+      { "label": "④", "text": "100cm", "correct": false, "trapNote": "제곱근을 안 취하고 36+64=100을 그대로 답으로 씀" },
+      { "label": "⑤", "text": "7cm", "correct": false, "trapNote": "두 변의 평균을 계산" }
+    ],
+    "hiddenPremise": "피타고라스 정리에서 제곱합(a²+b²)까지만 계산하고 제곱근 취하는 걸 잊는 전제.",
+    "commonMistake": "④를 고르는 학생 — 6²+8²=36+64=100까지 계산하고 √100을 안 취함.",
+    "lukaExplain": "피타고라스 정리는 (빗변)²=6²+8²=36+64=100이야. 여기서 끝이 아니라 제곱근을 취해야 해 — √100=10. 마지막에 제곱근 취하는 거 절대 빼먹지 마.",
+    "reframe": "피타고라스 정리에서 제곱합 계산 후 제곱근까지 취하는 능력."
+  },
+  {
+    "id": "al-math-041", "subject": "수학", "domain": "대수", "track": "중등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": true,
+    "stem": "다음 부등식을 푸시오.\n\n−3x + 6 > 0",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "x < 2", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "x > 2", "correct": false, "trapNote": "음수로 나눌 때 부등호를 안 바꿈" },
+      { "label": "③", "text": "x < −2", "correct": false, "trapNote": "부호 처리 이중 오류" },
+      { "label": "④", "text": "x > −2", "correct": false, "trapNote": "이항과 부등호 방향을 모두 잘못 처리" },
+      { "label": "⑤", "text": "x = 2", "correct": false, "trapNote": "부등식을 등식으로 착각" }
+    ],
+    "hiddenPremise": "부등식 양변을 음수로 나눌 때도 부등호 방향이 그대로 유지된다는 전제. 실제로는 음수로 나누면 부등호가 반드시 반대로 바뀜.",
+    "commonMistake": "②를 고르는 학생 — -3x>-6까지 이항은 맞게 했지만, -3으로 나눌 때 부등호를 안 바꿈.",
+    "lukaExplain": "6을 이항하면 -3x > -6. 여기서 양변을 -3으로 나눠야 하는데, 음수로 나누면 부등호 방향이 뒤집혀! >가 <로 바뀌어서 x < 2. 음수로 나누는 순간 방향 바꾸는 거, 시험에서 진짜 많이 틀리는 포인트야.",
+    "reframe": "부등식에서 음수를 곱하거나 나눌 때 부등호 방향이 바뀌는 규칙을 적용하는 능력."
+  },
+  {
+    "id": "al-math-042", "subject": "수학", "domain": "함수", "track": "중등", "stage": "심화",
+    "difficulty": 3, "finalSparkEligible": false,
+    "stem": "두 일차함수 y=2x+1과 y=2x-3의 그래프의 관계로 옳은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "서로 평행하다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "한 점에서 만난다", "correct": false, "trapNote": "기울기가 같으면 만나지 않는다는 걸 모름" },
+      { "label": "③", "text": "일치한다", "correct": false, "trapNote": "y절편이 다른데 같다고 착각" },
+      { "label": "④", "text": "수직으로 만난다", "correct": false, "trapNote": "기울기의 곱이 -1일 때 조건과 혼동" },
+      { "label": "⑤", "text": "원점에서 만난다", "correct": false, "trapNote": "근거 없는 임의의 판단" }
+    ],
+    "hiddenPremise": "기울기가 같은 두 직선은 어딘가에서 만날 거라 생각하는 전제. 실제로는 기울기가 같고 y절편이 다르면 평행(절대 안 만남).",
+    "commonMistake": "②를 고르는 학생 — 직선은 다 어딘가에서 만난다고 막연히 생각.",
+    "lukaExplain": "두 직선의 기울기가 똑같이 2야. 기울기가 같다는 건 두 직선이 같은 방향으로 나란히 뻗어간다는 뜻 — 그러니까 절대 안 만나. y절편만 다르니(1과 -3) 평행이야. 일치하려면 절편까지 같아야 해.",
+    "reframe": "기울기와 y절편으로 두 직선의 위치 관계(평행/일치/교차)를 판별하는 능력."
+  },
+  {
+    "id": "al-math-043", "subject": "수학", "domain": "대수", "track": "중등", "stage": "입문",
+    "difficulty": 1, "finalSparkEligible": true,
+    "stem": "다음을 계산하시오.\n\n(−3) × (−4) = ?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "12", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "−12", "correct": false, "trapNote": "음수×음수를 음수로 착각" },
+      { "label": "③", "text": "7", "correct": false, "trapNote": "곱셈을 덧셈으로 착각" },
+      { "label": "④", "text": "−7", "correct": false, "trapNote": "곱셈을 뺄셈으로 착각" },
+      { "label": "⑤", "text": "1", "correct": false, "trapNote": "부호 계산 오류" }
+    ],
+    "hiddenPremise": "음수끼리 곱하면 결과도 음수라는 전제. 실제로는 음수×음수=양수.",
+    "commonMistake": "②를 고르는 학생 다수 — '음수가 들어가면 결과도 음수'라고 단순하게 기억.",
+    "lukaExplain": "부호 규칙: 같은 부호끼리 곱하면 양수, 다른 부호끼리 곱하면 음수야. (-3)×(-4)는 둘 다 음수(같은 부호)니까 결과는 양수 12. 부호 규칙은 시험 직전에 꼭 한 번 더 점검하자.",
+    "reframe": "음수의 곱셈에서 부호 규칙(동일 부호→양수)을 정확히 적용하는 능력."
+  },
+  {
+    "id": "al-math-044", "subject": "수학", "domain": "기하", "track": "중등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": false,
+    "stem": "원기둥의 밑면 반지름이 3cm, 높이가 5cm일 때 부피는? (π로 표현)",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "45π cm³", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "15π cm³", "correct": false, "trapNote": "반지름을 제곱하지 않고 그냥 곱함" },
+      { "label": "③", "text": "30π cm³", "correct": false, "trapNote": "지름을 반지름으로 착각해서 계산" },
+      { "label": "④", "text": "90π cm³", "correct": false, "trapNote": "부피 공식에 2를 추가로 곱함" },
+      { "label": "⑤", "text": "8π cm³", "correct": false, "trapNote": "반지름과 높이를 더함" }
+    ],
+    "hiddenPremise": "원기둥 부피 공식에서 반지름을 제곱하지 않고 그냥 곱해도 된다는 전제. 실제 공식은 π × r² × h.",
+    "commonMistake": "②를 고르는 학생 — π×3×5처럼 반지름을 제곱하지 않고 그냥 곱함.",
+    "lukaExplain": "원기둥 부피는 밑면(원) 넓이 × 높이야. 밑면 넓이는 π×r²=π×3²=9π. 여기에 높이 5를 곱하면 9π×5=45π. 반지름은 꼭 제곱해야 해 — 이거 자주 놓치는 부분이야.",
+    "reframe": "원기둥 부피 공식(πr²h)에서 반지름 제곱을 빠뜨리지 않는 능력."
+  },
+  {
+    "id": "al-math-045", "subject": "수학", "domain": "대수", "track": "중등", "stage": "심화",
+    "difficulty": 3, "finalSparkEligible": false,
+    "stem": "다음 문장제를 푸시오.\n\n'어떤 수의 3배에서 5를 뺀 값이 그 수에 7을 더한 값과 같다. 어떤 수는?'",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "6", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "1", "correct": false, "trapNote": "식을 3x-5=x+7이 아닌 다른 형태로 잘못 세움" },
+      { "label": "③", "text": "12", "correct": false, "trapNote": "부호 처리 과정에서 이항 오류" },
+      { "label": "④", "text": "−6", "correct": false, "trapNote": "최종 부호를 반대로 씀" },
+      { "label": "⑤", "text": "2", "correct": false, "trapNote": "식을 잘못 세워 다른 값 도출" }
+    ],
+    "hiddenPremise": "문장을 그대로 순서대로 나열하면 식이 자동으로 세워진다는 전제. 실제로는 '어떤 수'를 x로 놓고 조건을 하나씩 정확히 번역해야 함.",
+    "commonMistake": "②·⑤처럼 식을 잘못 세워 엉뚱한 값이 나오는 경우 — '3배에서 5를 뺀 값'과 '그 수에 7을 더한 값'을 정확히 매칭 못함.",
+    "lukaExplain": "어떤 수를 x라 하면, '3배에서 5를 뺀 값'은 3x-5, '그 수에 7을 더한 값'은 x+7. 이 둘이 같다니까 3x-5=x+7. 이항하면 2x=12, x=6. 문장을 하나씩 정확히 식으로 옮기는 게 핵심이야.",
+    "reframe": "문장을 정확한 대수식으로 번역해 방정식을 세우는 능력."
+  },
+  {
+    "id": "al-math-046", "subject": "수학", "domain": "확률", "track": "중등", "stage": "심화",
+    "difficulty": 3, "finalSparkEligible": true,
+    "stem": "주사위를 한 번 던질 때, 3의 배수 또는 짝수가 나올 확률은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "2/3", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "5/6", "correct": false, "trapNote": "겹치는 경우(6)를 중복해서 셈" },
+      { "label": "③", "text": "1/2", "correct": false, "trapNote": "짝수만 계산하고 3의 배수 추가를 놓침" },
+      { "label": "④", "text": "1/3", "correct": false, "trapNote": "3의 배수만 계산" },
+      { "label": "⑤", "text": "1", "correct": false, "trapNote": "모든 수가 해당한다고 착각" }
+    ],
+    "hiddenPremise": "'또는' 조건에서 겹치는 경우를 두 번 세어도 된다는 전제. 실제로는 중복되는 경우(6)를 한 번만 세야 함.",
+    "commonMistake": "②를 고르는 학생 — 3의 배수(3,6) 2개 + 짝수(2,4,6) 3개 = 5개로 단순히 더함, 6이 두 번 겹치는 걸 못 봄.",
+    "lukaExplain": "3의 배수는 3,6. 짝수는 2,4,6. 그냥 더하면 6이 두 번 세어져. 겹치는 6은 한 번만 세야 해서, 실제 경우는 2,3,4,6 이렇게 4가지. 4/6을 약분하면 2/3.",
+    "reframe": "'또는' 조건에서 중복되는 경우를 한 번만 세는(합집합) 능력."
+  },
+  {
+    "id": "al-math-047", "subject": "수학", "domain": "대수", "track": "중등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": true,
+    "stem": "다음 식을 간단히 하시오.\n\n3(x + 2) − 2(x − 1) = ?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "x + 8", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "x + 4", "correct": false, "trapNote": "분배법칙에서 두 번째 항 부호 오류" },
+      { "label": "③", "text": "5x + 4", "correct": false, "trapNote": "괄호를 풀지 않고 계수를 그냥 더함" },
+      { "label": "④", "text": "x − 8", "correct": false, "trapNote": "부호를 전체적으로 반대로 계산" },
+      { "label": "⑤", "text": "x + 6", "correct": false, "trapNote": "상수항 계산 실수" }
+    ],
+    "hiddenPremise": "괄호 앞에 마이너스(-)가 있을 때 괄호 안 모든 항의 부호를 바꾸지 않아도 된다는 전제.",
+    "commonMistake": "②를 고르는 학생 — -2(x-1)을 전개할 때 -2×(-1)=+2를 놓치고 -2로 처리.",
+    "lukaExplain": "괄호를 하나씩 풀어보자. 3(x+2)=3x+6. -2(x-1)은 -2×x=-2x, -2×(-1)=+2 — 부호 조심! 그래서 -2x+2. 합치면 3x+6-2x+2 = x+8. 괄호 앞 부호가 마이너스일 때 안의 항 부호가 다 바뀌는 거 꼭 확인해.",
+    "reframe": "분배법칙에서 음수 부호를 괄호 안 모든 항에 정확히 적용하는 능력."
+  },
+  {
+    "id": "al-math-048", "subject": "수학", "domain": "기하", "track": "중등", "stage": "입문",
+    "difficulty": 1, "finalSparkEligible": false,
+    "stem": "다음 중 이등변삼각형의 성질로 옳지 않은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "두 변의 길이가 같다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "②", "text": "두 밑각의 크기가 같다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "③", "text": "세 변의 길이가 모두 같다", "correct": true, "trapNote": "" },
+      { "label": "④", "text": "꼭지각의 이등분선은 밑변을 수직이등분한다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "⑤", "text": "두 개의 직각삼각형으로 나눌 수 있다", "correct": false, "trapNote": "옳은 설명" }
+    ],
+    "hiddenPremise": "이등변삼각형과 정삼각형을 같은 것으로 혼동하는 전제. 세 변이 모두 같은 건 정삼각형의 성질.",
+    "commonMistake": "이등변삼각형이면 당연히 세 변도 같을 거라 생각하는 학생들 — 정삼각형과 혼동.",
+    "lukaExplain": "이등변삼각형은 '두' 변만 같으면 돼. 세 변이 다 같은 건 정삼각형이야. 이등변삼각형은 정삼각형보다 더 넓은 개념이고, 정삼각형은 이등변삼각형의 특별한 경우라고 생각하면 헷갈리지 않아.",
+    "reframe": "이등변삼각형과 정삼각형의 정의 차이를 정확히 구분하는 능력."
+  },
+  {
+    "id": "al-math-049", "subject": "수학", "domain": "대수", "track": "중등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": false,
+    "stem": "다음 문장제를 푸시오.\n\n'현재 아버지의 나이는 아들 나이의 3배이다. 5년 후에는 아버지 나이가 아들 나이의 2배가 된다. 현재 아들의 나이는?'",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "5세", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "10세", "correct": false, "trapNote": "5년 후 조건을 현재 나이에 바로 적용" },
+      { "label": "③", "text": "15세", "correct": false, "trapNote": "아버지 나이와 혼동" },
+      { "label": "④", "text": "3세", "correct": false, "trapNote": "비율 숫자를 그대로 답으로 씀" },
+      { "label": "⑤", "text": "20세", "correct": false, "trapNote": "방정식을 세우지 않고 임의로 추정" }
+    ],
+    "hiddenPremise": "'5년 후'라는 조건을 양쪽 나이에 똑같이 5를 더하는 걸 빠뜨리는 전제.",
+    "commonMistake": "②를 고르는 학생 — 5년 후 조건식을 세울 때 아들 나이에만 5를 더하고 아버지 나이엔 안 더함(또는 그 반대).",
+    "lukaExplain": "아들 나이를 x라 하면 아버지는 3x. 5년 후엔 둘 다 5살씩 더 먹으니까 (3x+5)=2(x+5). 풀면 3x+5=2x+10, x=5. '5년 후'는 아버지·아들 나이 둘 다에 5를 더해야 한다는 거 잊지 마.",
+    "reframe": "시간 경과 조건에서 두 대상 모두에게 동일하게 시간을 적용해 방정식을 세우는 능력."
+  }
+];
+APPLICATION_LAB_ITEMS = APPLICATION_LAB_ITEMS.concat(APPLICATION_LAB_ITEMS_MATH_MID);
+
+/* ===================== 수학 고등 추가 (math-050 ~ math-066, 17문항) ===================== */
+var APPLICATION_LAB_ITEMS_MATH_HIGH = [
+  {
+    "id": "al-math-050", "subject": "수학", "domain": "함수", "track": "고등", "stage": "기본",
+    "difficulty": 3, "finalSparkEligible": true,
+    "stem": "이차함수 f(x) = (x-2)² + 3의 최솟값은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "3", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "2", "correct": false, "trapNote": "x좌표를 최솟값으로 착각" },
+      { "label": "③", "text": "-3", "correct": false, "trapNote": "부호를 반대로 씀" },
+      { "label": "④", "text": "5", "correct": false, "trapNote": "2와 3을 더함" },
+      { "label": "⑤", "text": "-2", "correct": false, "trapNote": "꼭짓점 x좌표의 부호를 착각" }
+    ],
+    "hiddenPremise": "완전제곱식 (x-2)²+3에서 꼭짓점의 x좌표(2)를 최솟값으로 착각하는 전제. 실제 최솟값은 y좌표(3).",
+    "commonMistake": "②를 고르는 학생 — 괄호 안의 2를 최솟값으로 혼동.",
+    "lukaExplain": "f(x)=(x-2)²+3 꼴은 꼭짓점이 (2, 3)이야. (x-2)²는 항상 0 이상이니까 최솟값은 x=2일 때 f(x)=0+3=3. 괄호 안 숫자(x좌표)가 아니라 맨 뒤 상수(y좌표)가 최솟값이야.",
+    "reframe": "완전제곱식에서 꼭짓점의 x좌표와 최솟값(y좌표)을 구분하는 능력."
+  },
+  {
+    "id": "al-math-051", "subject": "수학", "domain": "대수", "track": "고등", "stage": "기본",
+    "difficulty": 3, "finalSparkEligible": true,
+    "stem": "이차방정식 x² - 4x + k = 0이 중근을 가질 때, k의 값은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "4", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "2", "correct": false, "trapNote": "판별식 계산에서 4를 절반만 씀" },
+      { "label": "③", "text": "16", "correct": false, "trapNote": "b²만 계산하고 4ac 조건을 잘못 적용" },
+      { "label": "④", "text": "0", "correct": false, "trapNote": "중근 조건을 판별식=0이 아니라 k=0으로 착각" },
+      { "label": "⑤", "text": "-4", "correct": false, "trapNote": "부호를 반대로 계산" }
+    ],
+    "hiddenPremise": "중근 조건(판별식=0)을 정확히 계산하지 않고 계수를 어림잡아 대입하는 전제.",
+    "commonMistake": "③을 고르는 학생 — 판별식 b²-4ac=0에서 4ac 부분 계산을 실수함.",
+    "lukaExplain": "중근이 되려면 판별식 b²-4ac=0이어야 해. 여기선 (-4)²-4×1×k=0, 16-4k=0, k=4. 판별식 공식을 정확히 대입하는 게 핵심이야 — b가 아니라 b² 라는 거 꼭 확인해.",
+    "reframe": "이차방정식의 중근 조건(판별식=0)을 정확히 계산하는 능력."
+  },
+  {
+    "id": "al-math-052", "subject": "수학", "domain": "함수", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": false,
+    "stem": "함수 f(x) = 2x + 1의 역함수 f⁻¹(x)를 구하시오.",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "f⁻¹(x) = (x-1)/2", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "f⁻¹(x) = (x+1)/2", "correct": false, "trapNote": "부호를 반대로 이항" },
+      { "label": "③", "text": "f⁻¹(x) = 2x - 1", "correct": false, "trapNote": "역함수를 원함수의 역연산 순서 없이 단순 부호만 바꿈" },
+      { "label": "④", "text": "f⁻¹(x) = 1/(2x+1)", "correct": false, "trapNote": "역함수를 역수로 착각" },
+      { "label": "⑤", "text": "f⁻¹(x) = (1-x)/2", "correct": false, "trapNote": "이항 부호 이중 오류" }
+    ],
+    "hiddenPremise": "역함수를 구할 때 단순히 역수를 취하면 된다는 전제. 실제로는 y=2x+1에서 x와 y를 바꾼 뒤 x에 대해 다시 풀어야 함.",
+    "commonMistake": "④를 고르는 학생 — '역'함수라는 이름 때문에 분수의 역수(1/f(x))로 착각.",
+    "lukaExplain": "역함수는 y=2x+1에서 x, y 자리를 바꿔서(x=2y+1) y를 다시 구하는 거야. x=2y+1 → x-1=2y → y=(x-1)/2. '역'이라는 말 때문에 역수랑 헷갈리기 쉬운데, 역함수는 입력·출력을 바꾸는 거지 역수가 아니야.",
+    "reframe": "역함수를 구하는 절차(x,y 교환 후 재정리)를 정확히 적용하는 능력."
+  },
+  {
+    "id": "al-math-053", "subject": "수학", "domain": "대수", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": false,
+    "stem": "등차수열 {aₙ}에서 a₁ = 3, 공차 d = 4일 때, a₁₀의 값은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "39", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "43", "correct": false, "trapNote": "n을 10 그대로 곱함(a₁+10d)" },
+      { "label": "③", "text": "40", "correct": false, "trapNote": "(n-1) 대신 n을 곱함" },
+      { "label": "④", "text": "33", "correct": false, "trapNote": "공차를 9번이 아니라 8번만 더함" },
+      { "label": "⑤", "text": "36", "correct": false, "trapNote": "a₁을 더하지 않고 d만 10배" }
+    ],
+    "hiddenPremise": "등차수열 일반항 공식에서 (n-1)이 아니라 n을 그대로 곱해도 된다는 전제. 실제 공식은 aₙ=a₁+(n-1)d.",
+    "commonMistake": "②를 고르는 학생 — a₁₀=a₁+10d로 계산, (n-1) 대신 n=10을 그대로 씀.",
+    "lukaExplain": "등차수열 공식은 aₙ=a₁+(n-1)d야. a₁₀을 구할 땐 (10-1)=9번만 공차를 더해. a₁₀=3+9×4=3+36=39. n번째 항은 처음 항에서 (n-1)번 이동한다는 걸 기억해 — 첫 항 자체는 이미 0번 이동한 상태니까.",
+    "reframe": "등차수열 일반항 공식에서 (n-1) 항을 정확히 적용하는 능력."
+  },
+  {
+    "id": "al-math-054", "subject": "수학", "domain": "기하", "track": "고등", "stage": "기본",
+    "difficulty": 3, "finalSparkEligible": true,
+    "stem": "직선 y = 2x + 3에 평행하고 점 (0, 5)를 지나는 직선의 방정식은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "y = 2x + 5", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "y = 2x + 3", "correct": false, "trapNote": "새 절편을 구하지 않고 원래 직선 식을 그대로 씀" },
+      { "label": "③", "text": "y = -1/2 x + 5", "correct": false, "trapNote": "평행 조건 대신 수직 조건(기울기의 곱=-1)을 적용" },
+      { "label": "④", "text": "y = 2x - 5", "correct": false, "trapNote": "절편의 부호를 반대로 씀" },
+      { "label": "⑤", "text": "y = 5x + 2", "correct": false, "trapNote": "기울기와 절편 자리를 서로 바꿈" }
+    ],
+    "hiddenPremise": "평행한 직선을 구할 때 원래 직선의 절편을 그대로 재사용해도 된다는 전제. 실제로는 기울기(2)만 유지하고, 주어진 점을 대입해 절편을 새로 구해야 함.",
+    "commonMistake": "②를 고르는 학생 — 기울기만 맞으면 된다고 생각해 절편을 다시 구하지 않고 원래 식을 그대로 답으로 씀.",
+    "lukaExplain": "평행하니까 기울기는 그대로 2, 그래서 y=2x+b 꼴이 돼. 여기에 점 (0,5)를 대입하면 5=2×0+b, b=5. 그래서 y=2x+5. 기울기가 같다고 절편까지 같은 건 아니야 — 새 점을 대입해서 절편을 다시 구해야 해.",
+    "reframe": "평행선 조건(기울기 동일)에서 주어진 점을 대입해 새로운 절편을 구하는 능력."
+  },
+  {
+    "id": "al-math-055", "subject": "수학", "domain": "대수", "track": "고등", "stage": "기본",
+    "difficulty": 3, "finalSparkEligible": true,
+    "stem": "다음 부등식을 만족하는 정수 x의 개수를 구하시오.\n\n|x - 3| < 2",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "3개 (2,3,4)", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "5개", "correct": false, "trapNote": "등호를 포함해 범위를 넓게 착각" },
+      { "label": "③", "text": "2개", "correct": false, "trapNote": "경계값 하나를 빠뜨림" },
+      { "label": "④", "text": "1개", "correct": false, "trapNote": "절댓값 부등식을 잘못 풀어 범위를 과도하게 좁힘" },
+      { "label": "⑤", "text": "4개", "correct": false, "trapNote": "부등호 방향을 착각해 경계값 포함" }
+    ],
+    "hiddenPremise": "절댓값 부등식 |x-3|<2를 x<2 또는 x<3처럼 단순하게 푸는 전제. 실제로는 -2<x-3<2로 풀어야 함.",
+    "commonMistake": "②를 고르는 학생 — 부등호를 ≤로 착각해 경계값(1, 5)까지 포함시킴.",
+    "lukaExplain": "|x-3|<2는 -2<x-3<2로 풀어. 양변에 3을 더하면 1<x<5. 이 범위 안의 정수는 2,3,4 — 1과 5는 등호가 없어서 제외돼. 부등호가 <인지 ≤인지 꼭 확인하는 습관 들이자.",
+    "reframe": "절댓값 부등식을 범위 부등식으로 정확히 전개하고 경계값 포함 여부를 판단하는 능력."
+  },
+  {
+    "id": "al-math-056", "subject": "수학", "domain": "확률", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": false,
+    "stem": "서로 다른 5개의 공에서 3개를 뽑아 일렬로 나열하는 경우의 수는?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "60", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "10", "correct": false, "trapNote": "순열(순서 있음)을 조합(순서 없음)으로 착각" },
+      { "label": "③", "text": "125", "correct": false, "trapNote": "5³으로 중복순열처럼 계산" },
+      { "label": "④", "text": "15", "correct": false, "trapNote": "5×3으로 잘못 계산" },
+      { "label": "⑤", "text": "20", "correct": false, "trapNote": "5×4만 계산하고 마지막 자리 곱을 빠뜨림" }
+    ],
+    "hiddenPremise": "'뽑아서 나열'하는 문제를 조합(순서 무관)으로 착각하는 전제. '나열'이라는 말은 순서가 있다는 뜻이므로 순열로 계산해야 함.",
+    "commonMistake": "②를 고르는 학생 — 조합 공식 C(5,3)=10을 사용, '나열'이라는 순서 조건을 놓침.",
+    "lukaExplain": "'나열한다'는 건 순서가 다르면 다른 경우로 센다는 뜻이야 — 순열! 5개 중 3개를 순서대로 뽑는 거니까 5×4×3=60. 조합이랑 순열, '순서가 중요한가'로 구분하는 습관을 들이자.",
+    "reframe": "순열과 조합을 '순서 고려 여부'로 구분해 적용하는 능력."
+  },
+  {
+    "id": "al-math-057", "subject": "수학", "domain": "함수", "track": "고등", "stage": "기본",
+    "difficulty": 3, "finalSparkEligible": true,
+    "stem": "지수법칙에 따라 다음을 계산하시오.\n\n2³ × 2⁴ = ?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "2⁷", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "2¹²", "correct": false, "trapNote": "지수끼리 곱함" },
+      { "label": "③", "text": "4⁷", "correct": false, "trapNote": "밑을 더함" },
+      { "label": "④", "text": "2¹", "correct": false, "trapNote": "지수를 뺌" },
+      { "label": "⑤", "text": "16⁷", "correct": false, "trapNote": "밑을 곱함" }
+    ],
+    "hiddenPremise": "같은 밑의 지수 곱셈에서 지수끼리 곱해야 한다는 전제. 실제 지수법칙은 밑이 같으면 지수를 '더함'(aᵐ×aⁿ=aᵐ⁺ⁿ).",
+    "commonMistake": "②를 고르는 학생 — '곱셈이니까 지수도 곱해야지'라고 직관적으로 착각.",
+    "lukaExplain": "지수법칙 aᵐ×aⁿ=aᵐ⁺ⁿ이야 — 곱셈인데 지수는 '더해'. 2³×2⁴=2³⁺⁴=2⁷. 반대로 나눗셈일 땐 지수를 빼(aᵐ÷aⁿ=aᵐ⁻ⁿ). 곱셈=지수 더하기, 나눗셈=지수 빼기로 짝지어 기억하자.",
+    "reframe": "지수법칙에서 곱셈은 지수를 더하고 거듭제곱은 지수를 곱한다는 차이를 정확히 아는 능력."
+  },
+  {
+    "id": "al-math-058", "subject": "수학", "domain": "대수", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": false,
+    "stem": "두 근이 2와 3인 이차방정식을 x²의 계수가 1이 되도록 만드시오.",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "x² - 5x + 6 = 0", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "x² + 5x + 6 = 0", "correct": false, "trapNote": "합의 부호를 반대로 씀" },
+      { "label": "③", "text": "x² - 5x - 6 = 0", "correct": false, "trapNote": "곱의 부호를 반대로 씀" },
+      { "label": "④", "text": "x² - 6x + 5 = 0", "correct": false, "trapNote": "합과 곱의 값을 서로 바꿈" },
+      { "label": "⑤", "text": "x² + 6x + 5 = 0", "correct": false, "trapNote": "합·곱 부호를 모두 반대로 씀" }
+    ],
+    "hiddenPremise": "두 근으로 이차방정식을 만들 때 근의 합과 곱을 서로 바꿔 쓰거나 부호를 그대로 쓰는 전제. 실제 공식은 x²-(합)x+(곱)=0.",
+    "commonMistake": "④를 고르는 학생 — 합(5)과 곱(6)의 자리를 헷갈려서 서로 바꿔 씀.",
+    "lukaExplain": "두 근이 α, β일 때 방정식은 x²-(α+β)x+αβ=0이야. 근이 2, 3이면 합은 5, 곱은 6. x²-5x+6=0. '합은 -x 자리에 부호 반대로, 곱은 상수항에 그대로' 이렇게 순서를 기억해두면 헷갈리지 않아.",
+    "reframe": "두 근으로부터 근과 계수의 관계를 이용해 이차방정식을 세우는 능력."
+  },
+  {
+    "id": "al-math-059", "subject": "수학", "domain": "기하", "track": "고등", "stage": "기본",
+    "difficulty": 3, "finalSparkEligible": false,
+    "stem": "두 점 A(1, 2), B(4, 6) 사이의 거리를 구하시오.",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "5", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "7", "correct": false, "trapNote": "x차와 y차를 그냥 더함" },
+      { "label": "③", "text": "25", "correct": false, "trapNote": "제곱근을 취하지 않음" },
+      { "label": "④", "text": "√7", "correct": false, "trapNote": "차이를 제곱하지 않고 그냥 더한 후 제곱근" },
+      { "label": "⑤", "text": "9", "correct": false, "trapNote": "좌표를 잘못 대입" }
+    ],
+    "hiddenPremise": "두 점 사이 거리를 구할 때 x차와 y차를 그냥 더하면 된다는 전제. 실제 공식은 √((x차)²+(y차)²).",
+    "commonMistake": "②를 고르는 학생 — |4-1|+|6-2|=3+4=7로 단순히 더함(맨해튼 거리와 혼동).",
+    "lukaExplain": "두 점 사이 거리 공식은 √((x₂-x₁)²+(y₂-y₁)²)이야. x차는 4-1=3, y차는 6-2=4. 3²+4²=9+16=25, √25=5. 피타고라스 정리랑 똑같은 원리야 — 각 차이를 제곱해서 더한 다음 제곱근을 취해야 해.",
+    "reframe": "두 점 사이의 거리 공식(피타고라스 원리)을 정확히 적용하는 능력."
+  },
+  {
+    "id": "al-math-060", "subject": "수학", "domain": "함수", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": false,
+    "stem": "함수 f(x) = x² - 4x + 5의 그래프를 x축 방향으로 2만큼, y축 방향으로 -3만큼 평행이동한 함수의 최솟값은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "-2", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "1", "correct": false, "trapNote": "평행이동을 적용하지 않고 원래 최솟값만 답함" },
+      { "label": "③", "text": "4", "correct": false, "trapNote": "y축 이동량을 더함(부호 착각)" },
+      { "label": "④", "text": "-4", "correct": false, "trapNote": "이동량 계산 시 부호를 이중으로 착각" },
+      { "label": "⑤", "text": "3", "correct": false, "trapNote": "x축 이동량을 최솟값에 잘못 적용" }
+    ],
+    "hiddenPremise": "평행이동에서 y값 이동은 최솟값에 영향을 안 준다고 여기거나, x축 이동량을 최솟값에 적용하는 전제. 실제로는 y축 방향 이동만 최솟값에 그대로 더해짐.",
+    "commonMistake": "②를 고르는 학생 — f(x)=x²-4x+5=(x-2)²+1로 원래 최솟값 1까지는 구했지만, 평행이동을 반영 안 함.",
+    "lukaExplain": "먼저 f(x)=(x-2)²+1로 정리하면 원래 최솟값은 1(x=2일 때). y축 방향 -3만큼 이동하면 최솟값도 그대로 -3만큼 이동해서 1-3=-2. x축 이동은 최솟값의 '크기'엔 영향 없고 위치(x좌표)만 바꿔 — 최솟값 자체를 바꾸는 건 y축 이동이야.",
+    "reframe": "평행이동에서 x축·y축 이동이 그래프의 최솟값에 미치는 영향을 구분하는 능력."
+  },
+  {
+    "id": "al-math-061", "subject": "수학", "domain": "대수", "track": "고등", "stage": "기본",
+    "difficulty": 3, "finalSparkEligible": true,
+    "stem": "다음 로그를 계산하시오.\n\nlog₂ 8 = ?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "3", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "4", "correct": false, "trapNote": "8÷2로 잘못 계산" },
+      { "label": "③", "text": "6", "correct": false, "trapNote": "2×3으로 밑과 답을 혼동" },
+      { "label": "④", "text": "16", "correct": false, "trapNote": "2×8로 잘못 계산" },
+      { "label": "⑤", "text": "2", "correct": false, "trapNote": "밑을 그대로 답으로 씀" }
+    ],
+    "hiddenPremise": "로그를 나눗셈이나 곱셈으로 착각하는 전제. log₂8은 '2를 몇 번 곱해야 8이 되는가'를 묻는 것.",
+    "commonMistake": "②를 고르는 학생 — log를 나눗셈처럼 8÷2=4로 계산.",
+    "lukaExplain": "log₂8은 '2를 몇 제곱해야 8이 되냐'는 질문이야. 2³=8이니까 log₂8=3. 로그는 나눗셈이 아니라 '지수를 거꾸로 묻는 것'이라고 생각하면 헷갈리지 않아.",
+    "reframe": "로그의 정의(밑을 몇 제곱해야 진수가 되는가)를 정확히 이해하는 능력."
+  },
+  {
+    "id": "al-math-062", "subject": "수학", "domain": "확률", "track": "고등", "stage": "기본",
+    "difficulty": 3, "finalSparkEligible": true,
+    "stem": "주머니에 흰 공 4개, 검은 공 6개가 있다. 공 하나를 꺼낼 때 흰 공일 확률은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "2/5", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "4/6", "correct": false, "trapNote": "전체(10) 대신 검은 공 수(6)로 나눔" },
+      { "label": "③", "text": "1/2", "correct": false, "trapNote": "색이 2가지니 반반이라 착각" },
+      { "label": "④", "text": "6/10", "correct": false, "trapNote": "검은 공 확률과 혼동" },
+      { "label": "⑤", "text": "4/10 아닌 4/4", "correct": false, "trapNote": "흰 공 수를 그대로 분모로 씀" }
+    ],
+    "hiddenPremise": "전체 개수(10)가 아니라 다른 색의 개수(6)나 색깔 종류 수(2)로 나누는 전제.",
+    "commonMistake": "③을 고르는 학생 — 색이 두 가지라 무조건 확률이 반반일 거라 짐작.",
+    "lukaExplain": "확률은 항상 '전체'로 나눠야 해. 전체 공은 4+6=10개, 흰 공은 4개. 확률은 4/10=2/5. 색깔 종류 수가 아니라 실제 개수 비율이 확률이야.",
+    "reframe": "전체 경우의 수 대비 원하는 경우의 수 비율로 확률을 정확히 계산하는 능력."
+  },
+  {
+    "id": "al-math-063", "subject": "수학", "domain": "대수", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": false,
+    "stem": "등비수열 {aₙ}에서 a₁ = 2, 공비 r = 3일 때, a₄의 값은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "54", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "24", "correct": false, "trapNote": "공비를 4번 곱함(2×3⁴)" },
+      { "label": "③", "text": "18", "correct": false, "trapNote": "공비를 2번만 곱함" },
+      { "label": "④", "text": "6", "correct": false, "trapNote": "공비를 곱하지 않고 그냥 더함" },
+      { "label": "⑤", "text": "162", "correct": false, "trapNote": "공비를 5번 곱함" }
+    ],
+    "hiddenPremise": "등비수열 일반항에서 공비를 n번 곱한다는 전제. 실제 공식은 aₙ=a₁×r^(n-1) — (n-1)번만 곱해야 함.",
+    "commonMistake": "②를 고르는 학생 — a₄=a₁×r⁴로 계산, (n-1) 대신 n=4를 그대로 지수로 씀.",
+    "lukaExplain": "등비수열 공식은 aₙ=a₁×r^(n-1)이야. a₄를 구할 땐 (4-1)=3번만 공비를 곱해. a₄=2×3³=2×27=54. 등차수열과 마찬가지로 (n-1)번만 적용한다는 걸 꼭 기억해.",
+    "reframe": "등비수열 일반항 공식에서 (n-1) 지수를 정확히 적용하는 능력."
+  },
+  {
+    "id": "al-math-064", "subject": "수학", "domain": "기하", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": false,
+    "stem": "원 x² + y² = 25와 직선 y = x + 1의 교점의 개수는?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "2개", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "0개", "correct": false, "trapNote": "판별식을 계산하지 않고 직관적으로 안 만난다고 추측" },
+      { "label": "③", "text": "1개", "correct": false, "trapNote": "판별식=0(접함)으로 착각" },
+      { "label": "④", "text": "무한개", "correct": false, "trapNote": "원과 직선을 같은 도형으로 착각" },
+      { "label": "⑤", "text": "3개", "correct": false, "trapNote": "이차방정식의 근이 최대 2개라는 사실을 무시" }
+    ],
+    "hiddenPremise": "원과 직선의 교점 개수를 그래프를 안 그려보고 감으로 추측하는 전제. 실제로는 연립해서 나온 이차방정식의 판별식을 계산해야 함.",
+    "commonMistake": "②·③을 고르는 학생 — 판별식을 실제로 계산하지 않고 원의 크기와 직선 위치를 눈대중으로만 판단.",
+    "lukaExplain": "y=x+1을 원의 식에 대입하면 x²+(x+1)²=25, 전개하면 2x²+2x-24=0, x²+x-12=0. 판별식 D=1²-4×1×(-12)=1+48=49>0. 판별식이 0보다 크니까 서로 다른 두 점에서 만나 — 교점 2개.",
+    "reframe": "원과 직선의 교점 개수를 연립방정식의 판별식으로 정확히 판단하는 능력."
+  },
+  {
+    "id": "al-math-065", "subject": "수학", "domain": "대수", "track": "고등", "stage": "기본",
+    "difficulty": 3, "finalSparkEligible": true,
+    "stem": "다음 식을 인수분해하시오.\n\nx² - 9 = ?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "(x+3)(x-3)", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "(x-9)(x+1)", "correct": false, "trapNote": "곱은 -9이지만 합 조건을 확인 안 함" },
+      { "label": "③", "text": "(x-3)²", "correct": false, "trapNote": "합차공식을 완전제곱식으로 착각" },
+      { "label": "④", "text": "(x+9)(x-1)", "correct": false, "trapNote": "곱과 합 조건 둘 다 틀림" },
+      { "label": "⑤", "text": "(x+3)²", "correct": false, "trapNote": "부호와 공식을 모두 착각" }
+    ],
+    "hiddenPremise": "x²-9를 완전제곱식으로 착각하거나, 곱해서 -9가 되는 아무 두 수나 골라도 된다는 전제. 실제로는 a²-b² 합차공식(x²-3²)임을 봐야 함.",
+    "commonMistake": "③을 고르는 학생 — x²-9를 (x-3)²처럼 완전제곱식으로 착각(부호 있는 항이 없는데도).",
+    "lukaExplain": "x²-9는 x²-3² 꼴이야 — 합차공식 a²-b²=(a+b)(a-b) 그대로 적용하면 (x+3)(x-3). 가운데 항(x의 1차항)이 없다는 게 합차공식의 신호야. 완전제곱식이면 중간에 항이 있어야 해.",
+    "reframe": "합차공식과 완전제곱식을 구별해 인수분해하는 능력."
+  },
+  {
+    "id": "al-math-066", "subject": "수학", "domain": "함수", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": false,
+    "stem": "함수 y = |x - 2|의 그래프에 대한 설명으로 옳은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "x=2에서 꺾이며, 최솟값은 0이다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "x=0에서 꺾이며, 최솟값은 2이다", "correct": false, "trapNote": "절댓값 안 상수의 부호를 반대로 해석" },
+      { "label": "③", "text": "일차함수이므로 직선이다", "correct": false, "trapNote": "절댓값 기호를 무시하고 일반 일차함수로 착각" },
+      { "label": "④", "text": "x=-2에서 꺾이며, 최솟값은 0이다", "correct": false, "trapNote": "꺾이는 점의 부호를 반대로 계산" },
+      { "label": "⑤", "text": "최솟값이 없다", "correct": false, "trapNote": "절댓값 함수의 최솟값 존재를 놓침" }
+    ],
+    "hiddenPremise": "절댓값 기호를 무시하고 y=x-2처럼 일반 직선으로 취급하는 전제. 실제로는 절댓값 안이 0이 되는 지점(x=2)에서 그래프가 꺾임(V자 모양).",
+    "commonMistake": "③을 고르는 학생 — 절댓값 기호가 있어도 그냥 일차함수(직선)라고 생각.",
+    "lukaExplain": "y=|x-2|는 절댓값 안(x-2)이 0이 되는 x=2에서 V자 모양으로 꺾여. x=2일 때 y=0이 최솟값이고, 그 외에는 항상 0보다 커. 절댓값 기호가 붙으면 무조건 직선이 아니라 꺾인 그래프가 된다는 걸 기억해둬.",
+    "reframe": "절댓값 함수의 그래프가 꺾이는 지점과 최솟값을 정확히 파악하는 능력."
+  }
+];
+APPLICATION_LAB_ITEMS = APPLICATION_LAB_ITEMS.concat(APPLICATION_LAB_ITEMS_MATH_HIGH);
+
+/* ===================== 역사 초등 추가 (hist-016 ~ hist-030, 15문항) ===================== */
+var APPLICATION_LAB_ITEMS_HIST_ELEM = [
+  {
+    "id": "al-hist-016", "subject": "역사", "domain": "고대사", "track": "초등", "stage": "입문",
+    "difficulty": 1, "finalSparkEligible": false,
+    "stem": "우리나라 최초의 국가로 알려진 나라는?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "고조선", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "고구려", "correct": false, "trapNote": "삼국시대 국가와 혼동" },
+      { "label": "③", "text": "발해", "correct": false, "trapNote": "남북국시대 국가와 혼동" },
+      { "label": "④", "text": "고려", "correct": false, "trapNote": "이름이 비슷해 착각" },
+      { "label": "⑤", "text": "가야", "correct": false, "trapNote": "삼국시대 소국 연맹과 혼동" }
+    ],
+    "hiddenPremise": "'고'로 시작하는 나라 이름이 다 비슷한 시기라고 착각하는 전제. 고조선과 고구려는 이름은 비슷해도 세워진 시기가 다름.",
+    "commonMistake": "②를 고르는 학생 — 고조선과 고구려의 '고'자 때문에 헷갈림.",
+    "lukaExplain": "고조선은 단군왕검이 세운 우리 역사 최초의 국가야. 고구려는 그보다 훨씬 뒤, 삼국시대에 세워진 나라고. 이름이 비슷해도 시대가 완전히 다르다는 거 기억해두자.",
+    "reframe": "이름이 비슷한 국가명을 시대 순서로 구분하는 능력."
+  },
+  {
+    "id": "al-hist-017", "subject": "역사", "domain": "고대사", "track": "초등", "stage": "입문",
+    "difficulty": 1, "finalSparkEligible": false,
+    "stem": "삼국시대에 해당하지 않는 나라는?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "고구려", "correct": false, "trapNote": "삼국 중 하나" },
+      { "label": "②", "text": "백제", "correct": false, "trapNote": "삼국 중 하나" },
+      { "label": "③", "text": "신라", "correct": false, "trapNote": "삼국 중 하나" },
+      { "label": "④", "text": "발해", "correct": true, "trapNote": "" },
+      { "label": "⑤", "text": "고구려·백제·신라 모두 삼국이다", "correct": false, "trapNote": "옳은 설명" }
+    ],
+    "hiddenPremise": "'삼국시대'라는 이름 때문에 그 시기에 존재한 나라는 무조건 삼국에 포함된다고 착각하는 전제. 발해는 신라와 같은 시기지만 삼국이 아니라 '남북국시대'의 북쪽 나라.",
+    "commonMistake": "④를 삼국 중 하나로 착각하는 학생 — 발해도 옛날 나라니까 삼국에 속할 거라 짐작.",
+    "lukaExplain": "삼국은 고구려·백제·신라 이 셋뿐이야. 발해는 고구려가 멸망한 뒤, 신라와 같은 시기에 북쪽에서 세워진 나라라서 '남북국시대'라고 따로 불러. 시기가 겹친다고 삼국에 포함되는 건 아니야.",
+    "reframe": "삼국시대와 남북국시대의 국가 구성을 정확히 구분하는 능력."
+  },
+  {
+    "id": "al-hist-018", "subject": "역사", "domain": "중세사", "track": "초등", "stage": "입문",
+    "difficulty": 1, "finalSparkEligible": false,
+    "stem": "고려를 세운 사람은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "왕건", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "이성계", "correct": false, "trapNote": "조선을 세운 인물과 혼동" },
+      { "label": "③", "text": "김유신", "correct": false, "trapNote": "신라의 장군과 혼동" },
+      { "label": "④", "text": "세종대왕", "correct": false, "trapNote": "조선의 왕과 혼동" },
+      { "label": "⑤", "text": "광개토대왕", "correct": false, "trapNote": "고구려의 왕과 혼동" }
+    ],
+    "hiddenPremise": "'왕'이라는 호칭이 붙은 유명한 인물이면 나라를 세웠을 거라 짐작하는 전제.",
+    "commonMistake": "②를 고르는 학생 — 이성계가 세운 나라(조선)와 고려를 혼동.",
+    "lukaExplain": "고려는 왕건이 세운 나라야. 조선을 세운 사람은 이성계고. 두 나라 모두 '건국자'가 있는데, 이름이랑 나라를 짝지어서 기억해두면 헷갈리지 않아 — 왕건→고려, 이성계→조선.",
+    "reframe": "각 왕조의 건국자를 정확히 매칭하는 능력."
+  },
+  {
+    "id": "al-hist-019", "subject": "역사", "domain": "중세사", "track": "초등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": true,
+    "stem": "고려시대에 만들어진 것으로 옳은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "팔만대장경", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "훈민정음", "correct": false, "trapNote": "조선 세종 때 만들어짐" },
+      { "label": "③", "text": "경국대전", "correct": false, "trapNote": "조선의 법전" },
+      { "label": "④", "text": "동의보감", "correct": false, "trapNote": "조선의 의학서" },
+      { "label": "⑤", "text": "천상열차분야지도", "correct": false, "trapNote": "조선 태조 때 제작" }
+    ],
+    "hiddenPremise": "옛날 문화유산은 다 비슷한 시기에 만들어졌을 거라 짐작하는 전제. 고려와 조선은 시대가 다르고 대표 문화유산도 다름.",
+    "commonMistake": "②를 고르는 학생 — 유명한 문화유산이라 다 고려 것이라 착각.",
+    "lukaExplain": "팔만대장경은 고려시대에 몽골의 침입을 부처님 힘으로 물리치길 바라며 만든 거야. 훈민정음·경국대전·동의보감은 전부 조선시대 것들이야. 나라 이름과 대표 유산을 짝지어 기억해두자 — 고려→팔만대장경, 조선→훈민정음.",
+    "reframe": "시대별 대표 문화유산을 정확한 왕조와 연결하는 능력."
+  },
+  {
+    "id": "al-hist-020", "subject": "역사", "domain": "중세사", "track": "초등", "stage": "입문",
+    "difficulty": 1, "finalSparkEligible": false,
+    "stem": "조선을 세운 사람은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "이성계", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "왕건", "correct": false, "trapNote": "고려를 세운 인물과 혼동" },
+      { "label": "③", "text": "세종대왕", "correct": false, "trapNote": "조선의 4대 왕(건국자 아님)과 혼동" },
+      { "label": "④", "text": "정약용", "correct": false, "trapNote": "조선 후기 실학자와 혼동" },
+      { "label": "⑤", "text": "을지문덕", "correct": false, "trapNote": "고구려의 장군과 혼동" }
+    ],
+    "hiddenPremise": "조선의 유명한 인물이면 누구나 건국자일 수 있다고 착각하는 전제. 세종대왕은 조선의 왕이지만 나라를 세운 사람은 아님(4대 왕).",
+    "commonMistake": "③을 고르는 학생 — 세종대왕이 조선의 가장 유명한 왕이라 건국자로 착각.",
+    "lukaExplain": "조선을 세운 사람은 이성계(태조)야. 세종대왕은 조선의 4번째 왕으로, 나라를 세운 게 아니라 한글을 만드는 등 나라를 더 발전시킨 왕이지. '유명하다'와 '건국했다'는 다른 얘기야.",
+    "reframe": "왕조의 건국자와 후대의 유명한 왕을 구분하는 능력."
+  },
+  {
+    "id": "al-hist-021", "subject": "역사", "domain": "중세사", "track": "초등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": true,
+    "stem": "세종대왕이 만든 것으로 옳은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "훈민정음(한글)", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "팔만대장경", "correct": false, "trapNote": "고려시대 제작물과 혼동" },
+      { "label": "③", "text": "거북선", "correct": false, "trapNote": "이순신과 관련된 것과 혼동" },
+      { "label": "④", "text": "첨성대", "correct": false, "trapNote": "신라시대 유물과 혼동" },
+      { "label": "⑤", "text": "석굴암", "correct": false, "trapNote": "통일신라시대 유물과 혼동" }
+    ],
+    "hiddenPremise": "유명한 우리 문화유산은 전부 세종대왕과 관련 있을 거라 짐작하는 전제.",
+    "commonMistake": "③을 고르는 학생 — 거북선도 조선시대 자랑스러운 발명품이라 세종대왕이 만들었을 거라 착각(실제로는 임진왜란 때 이순신).",
+    "lukaExplain": "세종대왕은 훈민정음(한글)을 만든 왕이야. 거북선은 그보다 훨씬 뒤, 임진왜란 때 이순신 장군과 관련된 거고. '조선시대 자랑스러운 것 = 세종대왕'이 아니라, 각각 누가 언제 만들었는지 따로 기억해야 해.",
+    "reframe": "같은 왕조 안에서도 시기별로 다른 인물의 업적을 구분하는 능력."
+  },
+  {
+    "id": "al-hist-022", "subject": "역사", "domain": "근현대사", "track": "초등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": false,
+    "stem": "1919년에 일어난, 일본의 지배에 저항해 전국적으로 만세를 부른 사건은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "3·1 운동", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "6·25 전쟁", "correct": false, "trapNote": "1950년에 일어난 다른 사건과 혼동" },
+      { "label": "③", "text": "임진왜란", "correct": false, "trapNote": "조선시대 전쟁과 혼동" },
+      { "label": "④", "text": "광복", "correct": false, "trapNote": "1945년 사건과 혼동" },
+      { "label": "⑤", "text": "병자호란", "correct": false, "trapNote": "조선시대 전쟁과 혼동" }
+    ],
+    "hiddenPremise": "일본과 관련된 역사적 사건은 다 비슷한 시기라고 뭉뚱그려 생각하는 전제. 각 사건은 정확한 연도와 성격이 다름.",
+    "commonMistake": "④를 고르는 학생 — 만세를 부르는 게 '해방'과 같은 느낌이라 광복과 혼동.",
+    "lukaExplain": "3·1 운동은 1919년 3월 1일, 일본의 식민 지배에 저항해 전국에서 '대한독립만세'를 외친 사건이야. 광복은 그보다 나중인 1945년에 실제로 해방된 걸 말해. 만세를 불렀다고 바로 독립된 게 아니라는 것도 함께 기억해두자.",
+    "reframe": "독립운동 관련 사건들을 정확한 연도와 함께 구분하는 능력."
+  },
+  {
+    "id": "al-hist-023", "subject": "역사", "domain": "근현대사", "track": "초등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": true,
+    "stem": "우리나라가 일본으로부터 광복을 맞이한 해는?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "1945년", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "1919년", "correct": false, "trapNote": "3·1 운동 연도와 혼동" },
+      { "label": "③", "text": "1950년", "correct": false, "trapNote": "6·25 전쟁 연도와 혼동" },
+      { "label": "④", "text": "1592년", "correct": false, "trapNote": "임진왜란 발발 연도와 혼동" },
+      { "label": "⑤", "text": "1897년", "correct": false, "trapNote": "대한제국 수립 연도와 혼동" }
+    ],
+    "hiddenPremise": "일본 관련 사건이면 3·1 운동과 광복을 같은 해라고 착각하는 전제. 3·1 운동(1919)과 광복(1945)은 26년 차이가 남.",
+    "commonMistake": "②를 고르는 학생 — 만세운동(3·1운동)과 실제 해방(광복)을 같은 사건으로 착각.",
+    "lukaExplain": "광복은 1945년 8월 15일이야. 3·1 운동은 그보다 훨씬 전인 1919년으로, 독립을 외친 사건이지 실제 독립은 아니었어. 외친 것과 실제로 이뤄진 것 사이에 시간 차이가 있다는 걸 기억해두면 헷갈리지 않아.",
+    "reframe": "독립을 요구한 사건과 실제 독립이 이뤄진 사건의 연도를 구분하는 능력."
+  },
+  {
+    "id": "al-hist-024", "subject": "역사", "domain": "근현대사", "track": "초등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": false,
+    "stem": "6·25 전쟁이 일어난 연도는?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "1950년", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "1945년", "correct": false, "trapNote": "광복 연도와 혼동" },
+      { "label": "③", "text": "1919년", "correct": false, "trapNote": "3·1 운동 연도와 혼동" },
+      { "label": "④", "text": "1953년", "correct": false, "trapNote": "휴전협정 연도와 혼동" },
+      { "label": "⑤", "text": "1961년", "correct": false, "trapNote": "5·16 군사정변 연도와 혼동" }
+    ],
+    "hiddenPremise": "전쟁의 시작 연도와 끝난(휴전) 연도를 같은 것으로 혼동하는 전제.",
+    "commonMistake": "④를 고르는 학생 — 6·25 전쟁이 끝난(휴전) 1953년을 시작 연도로 착각.",
+    "lukaExplain": "6·25 전쟁은 1950년 6월 25일에 시작됐어. 3년 가까이 이어지다가 1953년에 휴전협정으로 멈췄지 — 이건 '끝난' 해야. '6·25'라는 이름 자체가 시작된 날짜(6월 25일)를 가리킨다는 걸 알면 헷갈리지 않아.",
+    "reframe": "전쟁의 시작 연도와 종료(휴전) 연도를 구분하는 능력."
+  },
+  {
+    "id": "al-hist-025", "subject": "역사", "domain": "고대사", "track": "초등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": false,
+    "stem": "삼국을 통일한 나라는?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "신라", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "고구려", "correct": false, "trapNote": "가장 강했던 나라라 통일했을 거라 착각" },
+      { "label": "③", "text": "백제", "correct": false, "trapNote": "삼국 중 하나이나 통일 주체 아님" },
+      { "label": "④", "text": "발해", "correct": false, "trapNote": "삼국통일 이후에 세워진 나라와 혼동" },
+      { "label": "⑤", "text": "가야", "correct": false, "trapNote": "삼국 이전에 신라에 병합된 소국 연맹" }
+    ],
+    "hiddenPremise": "삼국 중 영토가 가장 넓거나 강했던 나라(고구려)가 통일했을 거라 짐작하는 전제. 실제로는 신라가 당나라와 손잡고 통일함.",
+    "commonMistake": "②를 고르는 학생 — 고구려가 삼국 중 가장 강하고 넓었다는 인상 때문에 통일 주체로 착각.",
+    "lukaExplain": "삼국을 통일한 나라는 신라야. 신라는 당나라와 동맹을 맺고 백제(660년), 고구려(668년)를 차례로 무너뜨렸어. '가장 강한 나라 = 통일한 나라'가 아니라는 게 이 문제의 핵심 포인트야.",
+    "reframe": "국력이 강한 나라와 실제 통일을 이룬 나라를 구분하는 능력."
+  },
+  {
+    "id": "al-hist-026", "subject": "역사", "domain": "고대사", "track": "초등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": false,
+    "stem": "광개토대왕은 어느 나라의 왕인가?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "고구려", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "백제", "correct": false, "trapNote": "삼국 중 다른 나라와 혼동" },
+      { "label": "③", "text": "신라", "correct": false, "trapNote": "삼국 중 다른 나라와 혼동" },
+      { "label": "④", "text": "고려", "correct": false, "trapNote": "이름이 비슷한 후대 국가와 혼동" },
+      { "label": "⑤", "text": "발해", "correct": false, "trapNote": "고구려 멸망 이후 세워진 나라와 혼동" }
+    ],
+    "hiddenPremise": "이름에 '고'가 들어가면 고려와 관련 있을 거라 착각하는 전제. 광개토대왕은 고구려의 왕으로, 고려와는 다른 나라.",
+    "commonMistake": "④를 고르는 학생 — '고구려'와 '고려'의 이름이 비슷해서 착각.",
+    "lukaExplain": "광개토대왕은 고구려의 왕이야. 영토를 크게 넓힌 걸로 유명하지. 고려는 그보다 한참 뒤에(고구려 멸망 후 200여 년 뒤) 왕건이 세운 완전히 다른 나라야. 이름이 비슷하다고 같은 나라가 아니라는 거 기억해두자.",
+    "reframe": "이름이 비슷한 왕과 국가를 정확한 시대에 배치하는 능력."
+  },
+  {
+    "id": "al-hist-027", "subject": "역사", "domain": "중세사", "track": "초등", "stage": "심화",
+    "difficulty": 3, "finalSparkEligible": true,
+    "stem": "다음 중 시대 순서가 옳은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "고조선 → 삼국시대 → 고려 → 조선", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "삼국시대 → 고조선 → 고려 → 조선", "correct": false, "trapNote": "고조선과 삼국시대의 순서를 반대로 앎" },
+      { "label": "③", "text": "고조선 → 고려 → 삼국시대 → 조선", "correct": false, "trapNote": "고려와 삼국시대의 순서를 반대로 앎" },
+      { "label": "④", "text": "조선 → 고려 → 삼국시대 → 고조선", "correct": false, "trapNote": "전체 순서를 거꾸로 앎" },
+      { "label": "⑤", "text": "고조선 → 조선 → 삼국시대 → 고려", "correct": false, "trapNote": "'조선'이라는 이름 때문에 고조선 바로 다음이라 착각" }
+    ],
+    "hiddenPremise": "이름이 비슷하면(고조선-조선) 시대도 가까울 거라 짐작하는 전제. 실제로는 고조선과 조선 사이에 삼국시대, 고려가 있어 시간 차이가 매우 큼.",
+    "commonMistake": "⑤를 고르는 학생 — '고조선' 다음이 이름이 비슷한 '조선'일 거라 착각, 사이의 긴 시간을 놓침.",
+    "lukaExplain": "순서는 고조선 → 삼국시대(고구려·백제·신라) → (남북국시대: 통일신라·발해) → 고려 → 조선이야. 이름이 비슷하다고 시대도 가까운 게 아니야 — 고조선과 조선 사이엔 수천 년의 차이가 있어. 전체 흐름을 큰 그림으로 먼저 그려두면 헷갈리지 않아.",
+    "reframe": "이름의 유사성에 흔들리지 않고 실제 역사적 시대 순서를 파악하는 능력."
+  },
+  {
+    "id": "al-hist-028", "subject": "역사", "domain": "고대사", "track": "초등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": false,
+    "stem": "첨성대는 어느 나라의 유물인가?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "신라", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "백제", "correct": false, "trapNote": "삼국 중 다른 나라와 혼동" },
+      { "label": "③", "text": "고구려", "correct": false, "trapNote": "삼국 중 다른 나라와 혼동" },
+      { "label": "④", "text": "고려", "correct": false, "trapNote": "후대 국가와 혼동" },
+      { "label": "⑤", "text": "조선", "correct": false, "trapNote": "후대 국가와 혼동" }
+    ],
+    "hiddenPremise": "오래된 유물이면 아무 옛날 나라나 다 가능하다고 짐작하는 전제. 첨성대는 신라의 천문 관측 시설로 정확히 알려져 있음.",
+    "commonMistake": "②·③을 고르는 학생 — 삼국시대 유물이라는 것만 기억하고 어느 나라인지는 확신 못함.",
+    "lukaExplain": "첨성대는 신라의 천문 관측대야. 별과 하늘을 관찰하기 위해 만들어졌다고 알려져 있어. 경주(신라의 수도)에 있다는 것도 함께 기억해두면 '신라=경주=첨성대'로 잘 안 헷갈려.",
+    "reframe": "유물의 소재지와 역사적 배경을 연결해 정확한 국가를 파악하는 능력."
+  },
+  {
+    "id": "al-hist-029", "subject": "역사", "domain": "근현대사", "track": "초등", "stage": "심화",
+    "difficulty": 3, "finalSparkEligible": false,
+    "stem": "다음 중 일어난 순서가 옳은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "3·1 운동 → 광복 → 6·25 전쟁", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "광복 → 3·1 운동 → 6·25 전쟁", "correct": false, "trapNote": "3·1운동과 광복의 순서를 반대로 앎" },
+      { "label": "③", "text": "6·25 전쟁 → 3·1 운동 → 광복", "correct": false, "trapNote": "6·25 전쟁을 가장 먼저라고 착각" },
+      { "label": "④", "text": "3·1 운동 → 6·25 전쟁 → 광복", "correct": false, "trapNote": "광복과 6·25 전쟁의 순서를 반대로 앎" },
+      { "label": "⑤", "text": "광복 → 6·25 전쟁 → 3·1 운동", "correct": false, "trapNote": "전체 순서를 거꾸로 앎" }
+    ],
+    "hiddenPremise": "근현대사 사건들의 이름만 알고 정확한 연도(1919, 1945, 1950)를 몰라 순서를 감으로 나열하는 전제.",
+    "commonMistake": "④를 고르는 학생 — 광복(1945) 전에 6·25 전쟁(1950)이 일어났다고 착각.",
+    "lukaExplain": "연도로 기억하면 헷갈리지 않아: 3·1 운동(1919) → 광복(1945) → 6·25 전쟁(1950). 독립을 외치고(3·1운동), 실제로 독립하고(광복), 그 후에 전쟁이 났어(6·25). 연도 숫자를 순서대로 짝지어 외워두면 편해.",
+    "reframe": "근현대사 주요 사건을 정확한 연도 순서로 배열하는 능력."
+  },
+  {
+    "id": "al-hist-030", "subject": "역사", "domain": "고대사", "track": "초등", "stage": "입문",
+    "difficulty": 1, "finalSparkEligible": false,
+    "stem": "고구려, 백제, 신라 중 한반도 남서쪽에 위치했던 나라는?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "백제", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "고구려", "correct": false, "trapNote": "북쪽에 위치했던 나라" },
+      { "label": "③", "text": "신라", "correct": false, "trapNote": "남동쪽에 위치했던 나라" },
+      { "label": "④", "text": "발해", "correct": false, "trapNote": "훨씬 북쪽(만주 일대)에 위치했던 나라" },
+      { "label": "⑤", "text": "위치는 셋 다 같다", "correct": false, "trapNote": "삼국의 지리적 위치 차이를 무시" }
+    ],
+    "hiddenPremise": "삼국은 이름만 다를 뿐 위치는 비슷했을 거라 짐작하는 전제. 실제로는 고구려(북)·백제(서남)·신라(동남)로 뚜렷이 구분됨.",
+    "commonMistake": "③을 고르는 학생 — 백제와 신라의 위치(서남 vs 동남)를 서로 바꿔 기억.",
+    "lukaExplain": "삼국의 위치를 지도로 그려보면 고구려는 북쪽, 백제는 남서쪽(한강 유역에서 시작해 점점 남서쪽으로), 신라는 남동쪽(경주 중심)이야. 위치를 지도랑 같이 기억해두면 헷갈리지 않아.",
+    "reframe": "삼국의 지리적 위치를 정확히 구분하는 능력."
+  }
+];
+APPLICATION_LAB_ITEMS = APPLICATION_LAB_ITEMS.concat(APPLICATION_LAB_ITEMS_HIST_ELEM);
+
+/* ===================== 역사 중등 추가 (hist-031 ~ hist-049, 19문항) ===================== */
+var APPLICATION_LAB_ITEMS_HIST_MID = [
+  {
+    "id": "al-hist-031", "subject": "역사", "domain": "고대사", "track": "중등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": true,
+    "stem": "고구려가 수나라의 대군을 물리친 전투로 알려진 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "살수대첩", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "귀주대첩", "correct": false, "trapNote": "고려-거란 전쟁의 전투와 혼동" },
+      { "label": "③", "text": "한산도대첩", "correct": false, "trapNote": "조선-임진왜란 전투와 혼동" },
+      { "label": "④", "text": "행주대첩", "correct": false, "trapNote": "조선-임진왜란 전투와 혼동" },
+      { "label": "⑤", "text": "황산벌 전투", "correct": false, "trapNote": "백제-신라 전투와 혼동" }
+    ],
+    "hiddenPremise": "'대첩'이라는 단어가 붙으면 다 비슷한 시기·상대의 전투라고 뭉뚱그리는 전제. 각 대첩은 시대와 상대국이 다름.",
+    "commonMistake": "②를 고르는 학생 — '대첩'이라는 이름만 보고 아무거나 고름. 귀주대첩은 고려-거란 전쟁.",
+    "lukaExplain": "살수대첩은 고구려의 을지문덕 장군이 수나라의 대군을 살수(청천강)에서 크게 물리친 전투야. 귀주대첩은 그보다 훨씬 뒤, 고려 강감찬 장군이 거란을 물리친 전투고. '대첩'이라는 이름이 같아도 시대·상대·인물이 다 다르니 세트로 기억해야 해.",
+    "reframe": "역사적 대첩들을 시대·상대국·인물 세트로 정확히 구분하는 능력."
+  },
+  {
+    "id": "al-hist-032", "subject": "역사", "domain": "중세사", "track": "중등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": true,
+    "stem": "고려가 거란(요)의 침입을 물리친 전투로 알려진 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "귀주대첩", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "살수대첩", "correct": false, "trapNote": "고구려-수나라 전투와 혼동" },
+      { "label": "③", "text": "한산도대첩", "correct": false, "trapNote": "조선-임진왜란 전투와 혼동" },
+      { "label": "④", "text": "명량대첩", "correct": false, "trapNote": "조선-임진왜란 전투와 혼동" },
+      { "label": "⑤", "text": "황산벌 전투", "correct": false, "trapNote": "백제-신라 전투와 혼동" }
+    ],
+    "hiddenPremise": "'대첩'이 붙은 전투를 임진왜란과 자동으로 연결짓는 전제(이순신 관련 대첩이 워낙 유명해서).",
+    "commonMistake": "③·④를 고르는 학생 — '대첩'이라 하면 이순신의 해전을 먼저 떠올림.",
+    "lukaExplain": "귀주대첩은 고려의 강감찬 장군이 거란의 침입을 귀주에서 크게 물리친 전투야. 이순신의 한산도대첩·명량대첩은 그보다 훨씬 뒤(조선, 임진왜란)의 일이고. 나라·시대별로 대표 전투를 짝지어 기억해두자: 고구려-살수대첩, 고려-귀주대첩, 조선(임진왜란)-한산도·명량대첩.",
+    "reframe": "동일한 명칭 패턴(대첩)의 전투를 시대와 지휘관별로 정확히 매칭하는 능력."
+  },
+  {
+    "id": "al-hist-033", "subject": "역사", "domain": "중세사", "track": "중등", "stage": "심화",
+    "difficulty": 3, "finalSparkEligible": false,
+    "stem": "고려시대 몽골의 침입에 대한 설명으로 옳지 않은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "고려는 몽골의 침입에 맞서 강화도로 도읍을 옮겼다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "②", "text": "팔만대장경은 몽골 침입 당시 만들어졌다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "③", "text": "고려는 몽골에 항복한 적이 없다", "correct": true, "trapNote": "" },
+      { "label": "④", "text": "삼별초는 몽골과의 강화에 반발해 항쟁을 이어갔다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "⑤", "text": "몽골과의 전쟁은 약 30년간 지속되었다", "correct": false, "trapNote": "옳은 설명" }
+    ],
+    "hiddenPremise": "삼별초의 항쟁이 있었으니 고려 전체가 끝까지 항복하지 않았을 거라 짐작하는 전제. 실제로는 고려 왕실이 몽골과 강화(항복에 가까운 화친)를 맺었고, 이에 반발한 것이 삼별초.",
+    "commonMistake": "③을 옳은 설명으로 착각하는 학생 — 삼별초의 저항만 기억하고 왕실의 강화 사실을 놓침.",
+    "lukaExplain": "고려 왕실은 결국 몽골과 강화를 맺고 개경으로 환도했어. 이 강화에 반발해서 끝까지 싸운 게 삼별초야. 그러니까 '고려가 항복한 적이 없다'는 건 틀린 설명 — 왕실의 강화와 삼별초의 저항은 서로 다른 이야기라는 걸 구분해야 해.",
+    "reframe": "왕실의 공식 결정과 일부 세력의 독자적 저항을 구분해서 이해하는 능력."
+  },
+  {
+    "id": "al-hist-034", "subject": "역사", "domain": "중세사", "track": "중등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": false,
+    "stem": "고려시대의 신분제도에 대한 설명으로 옳은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "귀족, 중류층, 양민, 천민으로 구성되었다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "양반, 중인, 상민, 천민으로 구성되었다", "correct": false, "trapNote": "조선의 신분제도와 혼동" },
+      { "label": "③", "text": "신분제도가 존재하지 않았다", "correct": false, "trapNote": "역사적 사실과 반대" },
+      { "label": "④", "text": "골품제로 신분이 나뉘었다", "correct": false, "trapNote": "신라의 신분제도와 혼동" },
+      { "label": "⑤", "text": "모든 백성이 평등하게 대우받았다", "correct": false, "trapNote": "역사적 사실과 반대" }
+    ],
+    "hiddenPremise": "옛날 신분제도는 다 '양반·중인·상민·천민'이었을 거라 조선의 제도를 모든 왕조에 그대로 적용하는 전제.",
+    "commonMistake": "②를 고르는 학생 — 가장 익숙한 조선의 신분제(양반·중인·상민·천민)를 고려에도 그대로 적용.",
+    "lukaExplain": "고려의 신분제도는 귀족·중류층·양민·천민으로 나뉘어. 양반·중인·상민·천민은 조선의 신분제야. 골품제는 그보다 더 이전인 신라의 제도고. 왕조마다 신분제 이름이 다르다는 걸 꼭 구분해서 기억해야 해.",
+    "reframe": "왕조별로 다른 신분제도의 명칭과 구성을 정확히 구분하는 능력."
+  },
+  {
+    "id": "al-hist-035", "subject": "역사", "domain": "중세사", "track": "중등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": true,
+    "stem": "조선의 신분제도에 대한 설명으로 옳은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "양반, 중인, 상민, 천민으로 구성되었다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "귀족, 중류층, 양민, 천민으로 구성되었다", "correct": false, "trapNote": "고려의 신분제도와 혼동" },
+      { "label": "③", "text": "골품제로 신분이 나뉘었다", "correct": false, "trapNote": "신라의 신분제도와 혼동" },
+      { "label": "④", "text": "신분제도가 조선 후기에 처음 생겼다", "correct": false, "trapNote": "역사적 사실과 반대" },
+      { "label": "⑤", "text": "노비 제도는 존재하지 않았다", "correct": false, "trapNote": "역사적 사실과 반대(천민에 노비 포함)" }
+    ],
+    "hiddenPremise": "왕조가 바뀌어도 신분제도의 이름이나 구성은 크게 다르지 않을 거라 짐작하는 전제.",
+    "commonMistake": "②를 고르는 학생 — 고려의 신분제(귀족·중류층·양민·천민)와 조선의 신분제를 혼동.",
+    "lukaExplain": "조선의 신분제는 양반·중인·상민·천민 네 계층이야. 고려는 귀족·중류층·양민·천민, 신라는 골품제였지. 왕조가 바뀌면 신분제 이름도 함께 바뀐다는 걸 기억해두면 좋아.",
+    "reframe": "조선 신분제의 명칭과 구성을 다른 왕조와 구분해 정확히 아는 능력."
+  },
+  {
+    "id": "al-hist-036", "subject": "역사", "domain": "근현대사", "track": "중등", "stage": "심화",
+    "difficulty": 3, "finalSparkEligible": true,
+    "stem": "임진왜란에 대한 설명으로 옳지 않은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "1592년 일본의 침입으로 시작되었다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "②", "text": "이순신 장군이 한산도대첩에서 승리했다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "③", "text": "임진왜란은 병자호란보다 나중에 일어났다", "correct": true, "trapNote": "" },
+      { "label": "④", "text": "권율 장군이 행주대첩에서 승리했다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "⑤", "text": "임진왜란 이후에도 정유재란이 이어졌다", "correct": false, "trapNote": "옳은 설명" }
+    ],
+    "hiddenPremise": "임진왜란과 병자호란 둘 다 조선시대 외침이니 순서는 아무렇게나 기억해도 될 거라 짐작하는 전제. 실제로는 임진왜란(1592)이 병자호란(1636)보다 먼저 일어남.",
+    "commonMistake": "③을 옳다고 착각하는 학생 — 두 전쟁의 순서를 정확한 연도로 기억하지 못함.",
+    "lukaExplain": "임진왜란은 1592년 일본의 침입, 병자호란은 그보다 훨씬 뒤인 1636년 청나라의 침입이야. 임진왜란이 먼저 일어났어. '왜란(일본)'과 '호란(청·여진족)'을 상대국과 함께 연도 순서로 기억해두면 안 헷갈려.",
+    "reframe": "조선시대 두 차례의 외침을 정확한 연도 순서와 상대국으로 구분하는 능력."
+  },
+  {
+    "id": "al-hist-037", "subject": "역사", "domain": "근현대사", "track": "중등", "stage": "심화",
+    "difficulty": 3, "finalSparkEligible": false,
+    "stem": "병자호란에 대한 설명으로 옳은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "청나라의 침입으로 인조가 남한산성에서 항전하다 항복했다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "일본의 침입으로 이순신이 활약했다", "correct": false, "trapNote": "임진왜란과 혼동" },
+      { "label": "③", "text": "몽골의 침입으로 강화도로 천도했다", "correct": false, "trapNote": "고려-몽골 침입과 혼동" },
+      { "label": "④", "text": "수나라의 침입을 살수에서 물리쳤다", "correct": false, "trapNote": "고구려-수나라 전쟁과 혼동" },
+      { "label": "⑤", "text": "거란의 침입을 귀주에서 물리쳤다", "correct": false, "trapNote": "고려-거란 전쟁과 혼동" }
+    ],
+    "hiddenPremise": "'외침'이라는 공통점만 보고 임진왜란·몽골 침입·병자호란 등을 뒤섞어 기억하는 전제. 각 사건은 침입국·시대·결과가 모두 다름.",
+    "commonMistake": "②를 고르는 학생 — 조선시대 전쟁이라 하면 임진왜란(일본)부터 떠올려 병자호란과 혼동.",
+    "lukaExplain": "병자호란은 청나라(여진족이 세운 나라)가 조선을 침입한 전쟁이야. 인조 임금이 남한산성에서 버티다 결국 항복했지(삼전도의 굴욕). 임진왜란은 일본, 병자호란은 청나라 — 침입한 나라가 다르다는 걸 정확히 짝지어 기억해야 해.",
+    "reframe": "각 외침 사건의 침입국과 결과를 정확히 매칭하는 능력."
+  },
+  {
+    "id": "al-hist-038", "subject": "역사", "domain": "근현대사", "track": "중등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": true,
+    "stem": "동학농민운동이 일어난 주된 배경으로 가장 적절한 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "탐관오리의 수탈과 사회 모순에 대한 반발", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "일본의 직접적인 식민 통치에 대한 저항", "correct": false, "trapNote": "1894년은 아직 식민 통치 이전 시기임을 놓침" },
+      { "label": "③", "text": "고려 왕실의 부패", "correct": false, "trapNote": "시대(고려)를 잘못 연결" },
+      { "label": "④", "text": "몽골의 침입에 대한 저항", "correct": false, "trapNote": "완전히 다른 시대·사건과 혼동" },
+      { "label": "⑤", "text": "6·25 전쟁 중 발생한 저항운동", "correct": false, "trapNote": "시대 순서를 완전히 뒤바꿈" }
+    ],
+    "hiddenPremise": "'저항운동'이라는 단어를 보면 무조건 일본의 식민 통치에 대한 저항일 거라 짐작하는 전제. 동학농민운동(1894)은 아직 조선이 일본의 완전한 식민지가 되기 전(1910년 이전) 발생한, 국내 정치 부패에 대한 저항.",
+    "commonMistake": "②를 고르는 학생 — '농민운동=일본에 대한 저항'이라는 성급한 연결.",
+    "lukaExplain": "동학농민운동(1894)은 탐관오리의 수탈, 즉 조선 내부의 부패한 관리들에 맞선 농민들의 봉기야. 이때는 아직 일본의 식민 통치(1910년부터) 이전이었어. 시기를 정확히 따져보면 '일본 식민 통치에 대한 저항'이라는 답이 시대상 맞지 않는다는 걸 알 수 있어.",
+    "reframe": "역사적 사건의 정확한 연도를 기준으로 배경과 성격을 판단하는 능력."
+  },
+  {
+    "id": "al-hist-039", "subject": "역사", "domain": "근현대사", "track": "중등", "stage": "심화",
+    "difficulty": 3, "finalSparkEligible": false,
+    "stem": "다음 중 일어난 순서가 옳은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "동학농민운동 → 을사늑약 → 국권 피탈(경술국치)", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "을사늑약 → 동학농민운동 → 국권 피탈", "correct": false, "trapNote": "동학농민운동과 을사늑약의 순서를 반대로 앎" },
+      { "label": "③", "text": "국권 피탈 → 동학농민운동 → 을사늑약", "correct": false, "trapNote": "국권 피탈을 가장 먼저라고 착각" },
+      { "label": "④", "text": "동학농민운동 → 국권 피탈 → 을사늑약", "correct": false, "trapNote": "을사늑약과 국권 피탈의 순서를 반대로 앎" },
+      { "label": "⑤", "text": "국권 피탈 → 을사늑약 → 동학농민운동", "correct": false, "trapNote": "전체 순서를 거꾸로 앎" }
+    ],
+    "hiddenPremise": "일본의 조선 침탈 과정이 한 번에 이루어졌다고 생각해 세부 사건들의 순서를 신경 쓰지 않는 전제. 실제로는 단계적으로 진행됨(1894→1905→1910).",
+    "commonMistake": "④를 고르는 학생 — 을사늑약(외교권 박탈)과 국권 피탈(주권 완전 상실)의 순서를 헷갈림.",
+    "lukaExplain": "연도로 정리하면: 동학농민운동(1894) → 을사늑약(1905, 외교권을 빼앗김) → 국권 피탈(1910, 나라를 완전히 빼앗김). 일본의 침탈은 한 번에 일어난 게 아니라 여러 단계를 거쳤다는 걸 기억해두면 순서가 헷갈리지 않아.",
+    "reframe": "일본의 조선 침탈 과정을 단계별 연도로 정확히 파악하는 능력."
+  },
+  {
+    "id": "al-hist-040", "subject": "역사", "domain": "근현대사", "track": "중등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": false,
+    "stem": "대한민국 임시정부가 수립된 지역은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "상하이", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "서울", "correct": false, "trapNote": "국내 지역이라 착각" },
+      { "label": "③", "text": "도쿄", "correct": false, "trapNote": "일본 지역과 혼동" },
+      { "label": "④", "text": "베이징", "correct": false, "trapNote": "중국의 다른 도시와 혼동" },
+      { "label": "⑤", "text": "평양", "correct": false, "trapNote": "국내 지역이라 착각" }
+    ],
+    "hiddenPremise": "임시정부는 우리나라를 대표하는 정부니까 국내(서울·평양)에 세워졌을 거라 짐작하는 전제. 실제로는 일본의 감시를 피해 중국 상하이에서 수립됨.",
+    "commonMistake": "②를 고르는 학생 — '정부'라는 이름 때문에 당연히 국내에 세워졌을 거라 짐작.",
+    "lukaExplain": "대한민국 임시정부는 1919년, 일본의 감시가 미치지 않는 중국 상하이에서 수립됐어. 국내에서는 일본이 강하게 통제하고 있어서 독립운동을 이어가기 어려웠거든. 그래서 나라 밖(상하이)에 임시로 정부를 세운 거야.",
+    "reframe": "임시정부 수립의 배경(국외 활동의 필요성)과 정확한 위치를 함께 이해하는 능력."
+  },
+  {
+    "id": "al-hist-041", "subject": "역사", "domain": "고대사", "track": "중등", "stage": "심화",
+    "difficulty": 3, "finalSparkEligible": false,
+    "stem": "발해에 대한 설명으로 옳지 않은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "발해는 백제 유민이 중심이 되어 세운 나라이다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "발해는 고구려 계승 의식을 가지고 있었다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "③", "text": "발해는 통일신라와 같은 시기에 존재했다", "correct": false, "trapNote": "옳은 설명(남북국시대)" },
+      { "label": "④", "text": "발해는 대조영이 세운 나라이다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "⑤", "text": "발해는 '해동성국'이라 불릴 만큼 강성했던 시기가 있었다", "correct": false, "trapNote": "옳은 설명" }
+    ],
+    "hiddenPremise": "삼국 유민이 세운 나라라면 아무 유민이나 가능하다고 짐작하는 전제. 실제로는 발해는 고구려 유민(대조영)이 중심이 되어 세운 나라이지 백제 유민이 아님.",
+    "commonMistake": "①을 옳은 설명으로 착각하는 학생 — 발해를 세운 유민 집단을 백제로 잘못 기억.",
+    "lukaExplain": "발해는 고구려가 멸망한 뒤, 고구려 유민 출신인 대조영이 세운 나라야. 그래서 발해는 스스로 고구려를 계승했다는 의식을 강하게 가지고 있었어. 백제 유민이 아니라 고구려 유민이라는 게 핵심 포인트야.",
+    "reframe": "발해 건국의 주체 세력(고구려 유민)을 정확히 아는 능력."
+  },
+  {
+    "id": "al-hist-042", "subject": "역사", "domain": "중세사", "track": "중등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": true,
+    "stem": "고려의 과거제도를 처음 실시한 왕은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "광종", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "태조 왕건", "correct": false, "trapNote": "고려 건국자와 혼동" },
+      { "label": "③", "text": "성종", "correct": false, "trapNote": "고려의 다른 왕과 혼동" },
+      { "label": "④", "text": "세종대왕", "correct": false, "trapNote": "조선의 왕과 혼동" },
+      { "label": "⑤", "text": "공민왕", "correct": false, "trapNote": "고려 말의 다른 왕과 혼동" }
+    ],
+    "hiddenPremise": "고려의 대표적인 제도는 다 건국자(왕건)가 만들었을 거라 짐작하는 전제. 실제로는 4대 왕인 광종이 과거제도를 처음 도입.",
+    "commonMistake": "②를 고르는 학생 — 고려 하면 왕건이 가장 먼저 떠올라서 웬만한 제도는 다 왕건이 만들었다고 착각.",
+    "lukaExplain": "과거제도는 고려 4대 왕인 광종이 처음 실시했어. 중국(후주)에서 온 쌍기의 건의를 받아들인 거지. 나라를 세운 왕(왕건)과 나라를 발전시킨 후대 왕(광종)의 업적을 구분해서 기억해야 해.",
+    "reframe": "건국자와 후대 왕의 서로 다른 업적을 정확히 구분하는 능력."
+  },
+  {
+    "id": "al-hist-043", "subject": "역사", "domain": "중세사", "track": "중등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": false,
+    "stem": "조선의 기본 법전으로, 통치 체제의 기틀을 마련한 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "경국대전", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "팔만대장경", "correct": false, "trapNote": "고려시대 불교 경전과 혼동" },
+      { "label": "③", "text": "삼국사기", "correct": false, "trapNote": "고려시대 역사서와 혼동" },
+      { "label": "④", "text": "동의보감", "correct": false, "trapNote": "조선의 의학서와 혼동(법전 아님)" },
+      { "label": "⑤", "text": "훈민정음", "correct": false, "trapNote": "조선의 문자 체계와 혼동(법전 아님)" }
+    ],
+    "hiddenPremise": "조선시대의 유명한 책이면 다 비슷한 성격(법전)일 거라 뭉뚱그리는 전제. 훈민정음(문자), 동의보감(의학서), 경국대전(법전)은 성격이 전혀 다름.",
+    "commonMistake": "④·⑤를 고르는 학생 — 조선시대의 유명한 책이라는 것만 기억하고 각각의 성격(의학서 vs 법전)을 구분 못함.",
+    "lukaExplain": "경국대전은 조선의 기본 법전으로, 나라를 다스리는 기틀이 되는 법을 정리한 책이야. 동의보감은 의학서, 훈민정음은 문자 체계, 삼국사기는 역사서 — 다 조선(또는 고려) 시대의 유명한 책이지만 성격이 완전히 달라. 이름과 '무슨 책인지'를 함께 기억해야 해.",
+    "reframe": "같은 시대의 여러 문헌을 성격(법전/의학서/역사서/문자)별로 구분하는 능력."
+  },
+  {
+    "id": "al-hist-044", "subject": "역사", "domain": "고대사", "track": "중등", "stage": "심화",
+    "difficulty": 3, "finalSparkEligible": false,
+    "stem": "신라의 골품제에 대한 설명으로 옳지 않은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "골품에 따라 관직 승진의 상한선이 정해져 있었다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "②", "text": "골품제는 개인의 능력만으로 신분 이동이 자유로웠다", "correct": true, "trapNote": "" },
+      { "label": "③", "text": "성골과 진골은 왕이 될 수 있는 신분이었다", "correct": false, "trapNote": "옳은 설명(성골 소멸 후 진골이 왕위 계승)" },
+      { "label": "④", "text": "골품에 따라 집의 크기, 옷의 색깔 등 일상생활까지 제한받았다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "⑤", "text": "6두품은 능력이 뛰어나도 일정 관직 이상 오르기 어려웠다", "correct": false, "trapNote": "옳은 설명" }
+    ],
+    "hiddenPremise": "신분제도라고 하면 어느 정도는 노력으로 극복할 수 있었을 거라 현대적 관점을 과거에 그대로 적용하는 전제. 골품제는 태어날 때부터 정해진 혈통에 따라 엄격히 제한되는 폐쇄적 신분제였음.",
+    "commonMistake": "②를 옳은 설명으로 착각하는 학생 — 신분 상승이 어느 정도는 가능했을 거라 짐작.",
+    "lukaExplain": "골품제는 태어날 때부터 신분(골품)이 정해지고, 개인의 능력과 상관없이 그 틀 안에서만 살아야 했던 제도야. 아무리 능력이 뛰어나도 6두품은 일정 관직(아찬) 이상 오를 수 없었어. '노력하면 신분이 바뀔 수 있었다'는 현대적 생각을 그대로 적용하면 틀리기 쉬워.",
+    "reframe": "폐쇄적 신분제(골품제)의 엄격한 제한을 현대적 관점과 구분해 이해하는 능력."
+  },
+  {
+    "id": "al-hist-045", "subject": "역사", "domain": "근현대사", "track": "중등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": true,
+    "stem": "갑오개혁에 대한 설명으로 가장 적절한 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "신분제 폐지 등 근대적 개혁을 시도했다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "일본의 식민 통치가 시작된 사건이다", "correct": false, "trapNote": "국권 피탈(1910)과 혼동" },
+      { "label": "③", "text": "고려시대에 일어난 개혁이다", "correct": false, "trapNote": "시대(고려)를 잘못 연결" },
+      { "label": "④", "text": "동학농민운동을 진압하기 위한 군사 작전이다", "correct": false, "trapNote": "개혁과 군사 진압을 혼동" },
+      { "label": "⑤", "text": "3·1 운동 이후에 일어난 개혁이다", "correct": false, "trapNote": "순서를 반대로 앎(갑오개혁이 먼저, 1894)" }
+    ],
+    "hiddenPremise": "1894년 전후의 사건들(동학농민운동, 갑오개혁, 을사늑약 등)을 뭉뚱그려서 순서나 성격을 구분하지 않는 전제.",
+    "commonMistake": "⑤를 고르는 학생 — 근대적 사건이라 하면 3·1 운동(1919) 이후일 거라 막연히 짐작, 실제로는 갑오개혁(1894)이 훨씬 먼저.",
+    "lukaExplain": "갑오개혁(1894)은 신분제 폐지, 과거제 폐지 등 조선을 근대적인 나라로 바꾸려 한 개혁이야. 동학농민운동과 비슷한 시기지만 서로 다른 사건이고, 3·1 운동(1919)보다 25년이나 앞서 일어났어. 연도를 기준으로 사건들을 순서대로 정리해두면 헷갈리지 않아.",
+    "reframe": "근대 개혁과 저항운동을 정확한 연도로 구분해 순서를 파악하는 능력."
+  },
+  {
+    "id": "al-hist-046", "subject": "역사", "domain": "고대사", "track": "중등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": false,
+    "stem": "백제의 전성기를 이끈 왕으로, 영토를 크게 넓힌 왕은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "근초고왕", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "광개토대왕", "correct": false, "trapNote": "고구려의 왕과 혼동" },
+      { "label": "③", "text": "진흥왕", "correct": false, "trapNote": "신라의 왕과 혼동" },
+      { "label": "④", "text": "온조왕", "correct": false, "trapNote": "백제의 건국자와 혼동(전성기 왕 아님)" },
+      { "label": "⑤", "text": "무령왕", "correct": false, "trapNote": "백제의 다른 왕과 혼동" }
+    ],
+    "hiddenPremise": "삼국의 전성기를 이끈 왕이 다 비슷하게 유명해서 나라와 상관없이 아무렇게나 골라도 된다는 전제. 각 나라의 전성기 왕은 정확히 구분됨.",
+    "commonMistake": "②를 고르는 학생 — '전성기 왕' 하면 가장 유명한 광개토대왕(고구려)을 먼저 떠올림.",
+    "lukaExplain": "백제의 전성기는 근초고왕 때야. 고구려의 전성기는 광개토대왕·장수왕, 신라의 전성기는 진흥왕 때고. 삼국 각각의 전성기 왕을 나라별로 짝지어 기억해두면 헷갈리지 않아 — 백제-근초고왕, 고구려-광개토대왕, 신라-진흥왕.",
+    "reframe": "삼국 각각의 전성기를 이끈 왕을 정확히 매칭하는 능력."
+  },
+  {
+    "id": "al-hist-047", "subject": "역사", "domain": "고대사", "track": "중등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": false,
+    "stem": "신라의 전성기를 이끌며 한강 유역을 차지한 왕은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "진흥왕", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "근초고왕", "correct": false, "trapNote": "백제의 왕과 혼동" },
+      { "label": "③", "text": "광개토대왕", "correct": false, "trapNote": "고구려의 왕과 혼동" },
+      { "label": "④", "text": "무열왕", "correct": false, "trapNote": "삼국통일 시기 신라의 다른 왕과 혼동" },
+      { "label": "⑤", "text": "혁거세", "correct": false, "trapNote": "신라의 건국자와 혼동" }
+    ],
+    "hiddenPremise": "신라와 관련된 유명한 왕이면 아무나 전성기 왕으로 짐작하는 전제.",
+    "commonMistake": "④를 고르는 학생 — 무열왕(삼국통일 관련)과 진흥왕(전성기, 영토 확장)의 역할을 혼동.",
+    "lukaExplain": "진흥왕은 신라의 전성기를 이끈 왕으로, 한강 유역을 차지하고 영토를 크게 넓혔어. 무열왕은 그보다 나중에 삼국통일의 기초를 닦은 왕이고. 두 왕 모두 유명하지만 시기와 업적이 달라 — 진흥왕은 '영토 확장', 무열왕은 '통일 준비'로 구분해서 기억하자.",
+    "reframe": "신라의 서로 다른 시기 왕들의 업적을 정확히 구분하는 능력."
+  },
+  {
+    "id": "al-hist-048", "subject": "역사", "domain": "근현대사", "track": "중등", "stage": "기본",
+    "difficulty": 2, "finalSparkEligible": true,
+    "stem": "흥선대원군이 실시한 정책으로 옳은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "서양과의 통상을 거부하는 통상수교거부정책(쇄국정책)을 폈다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "서양 문물을 적극적으로 받아들이는 개방정책을 폈다", "correct": false, "trapNote": "실제 정책과 정반대" },
+      { "label": "③", "text": "신분제를 전면 폐지했다", "correct": false, "trapNote": "갑오개혁(1894)의 내용과 혼동" },
+      { "label": "④", "text": "한글을 창제했다", "correct": false, "trapNote": "세종대왕의 업적과 혼동" },
+      { "label": "⑤", "text": "과거제도를 처음 도입했다", "correct": false, "trapNote": "고려 광종의 업적과 혼동" }
+    ],
+    "hiddenPremise": "조선 후기의 정책이면 다 개방적이고 근대적이었을 거라 짐작하는 전제. 실제로 흥선대원군은 서양과의 통상을 거부하는 쇄국정책을 폈음.",
+    "commonMistake": "②를 고르는 학생 — '후기니까 점점 개방적으로 바뀌었을 것'이라는 막연한 시대 흐름 추측.",
+    "lukaExplain": "흥선대원군은 서양의 통상 요구를 거부하는 통상수교거부정책(쇄국정책)을 폈어. 병인양요·신미양요 같은 서양과의 충돌도 이 시기에 있었지. 시대가 흐른다고 무조건 개방적으로 변한 게 아니라는 걸 기억해두면 좋아.",
+    "reframe": "역사적 흐름을 '무조건 개방적으로 발전'이라 단정하지 않고 사실에 근거해 판단하는 능력."
+  },
+  {
+    "id": "al-hist-049", "subject": "역사", "domain": "근현대사", "track": "중등", "stage": "심화",
+    "difficulty": 3, "finalSparkEligible": false,
+    "stem": "다음 중 일어난 순서가 옳은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "병인양요 → 갑오개혁 → 을사늑약 → 국권 피탈", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "갑오개혁 → 병인양요 → 을사늑약 → 국권 피탈", "correct": false, "trapNote": "병인양요와 갑오개혁의 순서를 반대로 앎" },
+      { "label": "③", "text": "을사늑약 → 병인양요 → 갑오개혁 → 국권 피탈", "correct": false, "trapNote": "을사늑약을 가장 먼저라고 착각" },
+      { "label": "④", "text": "병인양요 → 을사늑약 → 갑오개혁 → 국권 피탈", "correct": false, "trapNote": "갑오개혁과 을사늑약의 순서를 반대로 앎" },
+      { "label": "⑤", "text": "국권 피탈 → 을사늑약 → 갑오개혁 → 병인양요", "correct": false, "trapNote": "전체 순서를 거꾸로 앎" }
+    ],
+    "hiddenPremise": "근현대사 사건이 너무 많아서 정확한 연도를 몰라도 대충 익숙한 이름 순서대로 나열해도 될 거라 짐작하는 전제.",
+    "commonMistake": "④를 고르는 학생 — 을사늑약(1905)과 갑오개혁(1894)의 순서를 헷갈림.",
+    "lukaExplain": "연도로 정리하면: 병인양요(1866) → 갑오개혁(1894) → 을사늑약(1905) → 국권 피탈(1910). 조선 후기부터 나라를 잃기까지 여러 사건이 있었는데, 연도를 하나씩 짝지어 순서를 외워두면 시험에서 훨씬 든든해.",
+    "reframe": "근현대사의 여러 사건을 정확한 연도 순서로 배열하는 능력."
+  }
+];
+APPLICATION_LAB_ITEMS = APPLICATION_LAB_ITEMS.concat(APPLICATION_LAB_ITEMS_HIST_MID);
+
+/* ===================== 역사 고등 추가 (hist-050 ~ hist-068, 19문항) ===================== */
+var APPLICATION_LAB_ITEMS_HIST_HIGH = [
+  {
+    "id": "al-hist-050", "subject": "역사", "domain": "고대사", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": false,
+    "stem": "신라의 삼국통일에 대한 평가로 다음 자료가 뒷받침하는 주장으로 가장 적절한 것은?\n\n'신라는 통일 과정에서 당나라를 끌어들였으나, 이후 당의 한반도 지배 야욕에 맞서 나당전쟁을 벌여 실질적인 자주적 통일을 이루었다.'",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "신라의 통일은 외세를 이용했지만 이후 그 외세를 몰아낸 자주적 성격도 함께 지닌다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "신라의 통일은 처음부터 끝까지 완전히 자주적으로 이루어졌다", "correct": false, "trapNote": "당나라의 개입 사실을 무시" },
+      { "label": "③", "text": "신라의 통일은 당나라에 의해 이루어진 것이므로 의미가 없다", "correct": false, "trapNote": "나당전쟁으로 당을 몰아낸 사실을 무시" },
+      { "label": "④", "text": "신라는 삼국통일에 실패했다", "correct": false, "trapNote": "자료의 핵심 내용과 반대" },
+      { "label": "⑤", "text": "당나라가 삼국통일의 주체였다", "correct": false, "trapNote": "자료의 논지와 반대" }
+    ],
+    "hiddenPremise": "'외세를 이용했다'와 '자주적이다'가 양립할 수 없다는 이분법적 전제. 자료는 두 측면이 함께 존재했다고 설명하고 있음.",
+    "commonMistake": "②·③처럼 한쪽 측면(외세 이용 또는 자주성)만 보고 극단적으로 판단하는 경우.",
+    "lukaExplain": "자료를 잘 보면 '당을 끌어들였으나(외세 이용) → 이후 당과 싸워 몰아냈다(자주적 통일)'는 두 단계를 다 말하고 있어. 역사적 사건은 한 단어로 딱 잘라 평가하기보다, 과정 전체를 봐야 정확한 이해가 가능해.",
+    "reframe": "역사적 사건의 복합적 성격(외세 이용+자주적 극복)을 자료에 근거해 균형 있게 평가하는 능력."
+  },
+  {
+    "id": "al-hist-051", "subject": "역사", "domain": "중세사", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": false,
+    "stem": "다음 정책이 시행된 배경으로 가장 적절한 것은?\n\n'고려 광종은 노비안검법을 실시해 불법으로 노비가 된 자를 양민으로 해방시켰다.'",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "호족 세력을 약화시키고 왕권을 강화하기 위해", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "농업 생산량을 늘리기 위해", "correct": false, "trapNote": "정책의 정치적 목적을 놓친 경제적 해석" },
+      { "label": "③", "text": "불교를 장려하기 위해", "correct": false, "trapNote": "관련 없는 종교적 목적으로 오해" },
+      { "label": "④", "text": "거란의 침입에 대비하기 위해", "correct": false, "trapNote": "군사적 목적과 혼동" },
+      { "label": "⑤", "text": "과거제도를 대체하기 위해", "correct": false, "trapNote": "노비안검법과 과거제를 서로 대체 관계로 착각" }
+    ],
+    "hiddenPremise": "노비를 해방시키는 정책을 단순한 '선의'나 경제 정책으로만 해석하는 전제. 실제로는 호족들이 불법으로 소유한 노비(사병·경제 기반)를 줄여 호족 세력을 약화시키려는 정치적 목적이 큼.",
+    "commonMistake": "②를 고르는 학생 — 노비를 양민으로 바꾸면 세금 내는 인구가 늘어난다는 경제적 측면만 생각.",
+    "lukaExplain": "노비안검법은 호족들이 불법으로 차지한 노비를 양민으로 되돌려서, 호족의 경제력·군사력(사병)을 약화시키려는 정책이었어. 같은 시기 광종이 과거제도도 도입했는데, 둘 다 '호족 견제 + 왕권 강화'라는 같은 목적을 가진 정책들이야. 겉으로 보이는 정책의 내용(노비 해방)보다 그 뒤에 숨은 정치적 목적을 파악하는 게 중요해.",
+    "reframe": "정책의 표면적 내용이 아니라 그 뒤에 숨은 정치적 의도를 파악하는 능력."
+  },
+  {
+    "id": "al-hist-052", "subject": "역사", "domain": "중세사", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": true,
+    "stem": "다음 중 무신정변(1170) 이후 고려 사회에 대한 설명으로 옳지 않은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "무신정변 이후에도 국왕이 실질적인 통치권을 그대로 유지했다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "무신들이 정권을 장악하며 문신 중심 사회 질서가 크게 흔들렸다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "③", "text": "최씨 무신정권이 오랜 기간 권력을 독점했다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "④", "text": "무신정권기에 하층민의 봉기(망이·망소이의 난 등)가 여러 차례 일어났다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "⑤", "text": "무신정변으로 문벌귀족 중심의 지배 질서가 무너지는 계기가 되었다", "correct": false, "trapNote": "옳은 설명" }
+    ],
+    "hiddenPremise": "'정변'이 일어나도 왕은 상징적으로 자리를 지켰으니 실권도 유지했을 거라 짐작하는 전제. 실제로는 무신정변 이후 실권은 무신(이후 최씨 정권)에게 넘어가고 왕은 명목상의 존재로 전락함.",
+    "commonMistake": "①을 옳은 설명으로 착각하는 학생 — 왕이 폐위되지 않고 자리를 지켰다는 사실만 보고 실권도 유지했다고 판단.",
+    "lukaExplain": "무신정변 이후 왕은 자리는 지켰지만 실제 권력은 무신들, 특히 나중에는 최씨 정권(최충헌 등)에게 완전히 넘어갔어. '왕좌에 앉아 있다'와 '실제로 다스린다'는 다른 이야기야 — 명목상의 지위와 실질적 권력을 구분해서 봐야 해.",
+    "reframe": "정치적 지위(왕좌)와 실질적 권력(통치권)을 구분해서 역사적 상황을 판단하는 능력."
+  },
+  {
+    "id": "al-hist-053", "subject": "역사", "domain": "중세사", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": false,
+    "stem": "다음 중 조선의 통치 체제에 대한 설명으로 옳지 않은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "의정부는 삼사(사헌부·사간원·홍문관)의 감찰과 견제를 전혀 받지 않는 독립 기구였다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "삼사는 언론 기능을 통해 권력의 견제와 균형을 담당했다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "③", "text": "의정부는 국정을 총괄하는 최고 행정기구였다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "④", "text": "6조는 실제 행정 업무를 분담해 처리했다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "⑤", "text": "왕과 신하들은 경연을 통해 학문과 정책을 논의했다", "correct": false, "trapNote": "옳은 설명" }
+    ],
+    "hiddenPremise": "높은 지위의 기구(의정부)는 다른 기구의 견제를 받지 않았을 거라 짐작하는 전제. 실제로는 조선의 통치 체제가 권력 분산과 상호 견제를 중요한 원리로 설계됨.",
+    "commonMistake": "①을 옳은 설명으로 착각하는 학생 — 의정부가 최고 행정기구라는 점만 보고 견제받지 않는 독립 기구라고 확대 해석.",
+    "lukaExplain": "조선은 권력이 한쪽에 집중되지 않도록 설계됐어. 삼사(사헌부·사간원·홍문관)는 의정부나 왕의 정책까지도 비판하고 견제하는 언론 기능을 가졌지. '최고 기구니까 아무도 못 건드린다'는 생각은 조선의 견제와 균형 원리를 놓치는 거야.",
+    "reframe": "권력기구 간의 상호 견제 구조를 이해하고 지위의 높음과 견제 여부를 구분하는 능력."
+  },
+  {
+    "id": "al-hist-054", "subject": "역사", "domain": "근현대사", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": true,
+    "stem": "다음 두 사건의 공통된 성격으로 가장 적절한 것은?\n\n'임술농민봉기(1862)'와 '동학농민운동(1894)'",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "삼정의 문란 등 지배층의 수탈에 저항한 민중 운동이었다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "둘 다 일본의 식민 통치에 저항한 항일 운동이었다", "correct": false, "trapNote": "두 사건 모두 일본의 완전한 식민 지배 이전에 일어남" },
+      { "label": "③", "text": "둘 다 왕권 강화를 목표로 한 운동이었다", "correct": false, "trapNote": "민중 봉기의 목적을 왕권과 관련짓는 오류" },
+      { "label": "④", "text": "둘 다 성공적으로 신분제 폐지를 이끌어냈다", "correct": false, "trapNote": "봉기 자체가 신분제를 직접 폐지한 건 아님(갑오개혁에서 폐지)" },
+      { "label": "⑤", "text": "둘 다 외국 군대와의 직접적인 전투였다", "correct": false, "trapNote": "임술농민봉기는 국내 지배층에 대한 저항" }
+    ],
+    "hiddenPremise": "조선 후기의 저항운동은 무조건 '항일'이었을 거라 짐작하는 전제. 실제로 두 사건 모두 일본의 식민 통치 이전, 국내 지배층의 수탈과 부패에 대한 저항이 핵심.",
+    "commonMistake": "②를 고르는 학생 — '저항 운동'이라 하면 자동으로 일본에 대한 저항으로 연결.",
+    "lukaExplain": "임술농민봉기(1862)와 동학농민운동(1894) 둘 다 삼정의 문란(세금 수탈 등) 같은 국내 지배층의 부패와 착취에 맞선 민중 저항이야. 이때는 아직 일본의 완전한 식민 지배(1910년) 이전이었으니, '항일 운동'으로 단정하면 시대상 오류가 생겨. 저항의 대상이 누구인지 정확히 확인하는 습관이 중요해.",
+    "reframe": "저항운동의 대상(국내 지배층 vs 외세)을 정확한 시대적 맥락 속에서 구분하는 능력."
+  },
+  {
+    "id": "al-hist-055", "subject": "역사", "domain": "근현대사", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": false,
+    "stem": "다음 중 대한제국(1897~1910)에 대한 설명으로 옳지 않은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "대한제국 수립으로 조선은 완전한 자주독립국의 지위를 국제적으로 확고히 보장받았다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "고종이 황제로 즉위하며 자주독립국임을 대내외에 선포했다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "③", "text": "광무개혁을 통해 근대적 개혁을 추진했다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "④", "text": "대한제국 시기에도 열강의 이권 침탈은 계속되었다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "⑤", "text": "결국 1910년 국권을 상실했다", "correct": false, "trapNote": "옳은 설명" }
+    ],
+    "hiddenPremise": "'황제'라는 칭호를 쓰고 '제국'을 선포하면 실질적으로도 완전한 자주독립이 보장됐을 거라 짐작하는 전제. 실제로는 선포와 별개로 열강의 간섭과 이권 침탈이 계속되었고 결국 국권을 상실함.",
+    "commonMistake": "①을 옳은 설명으로 착각하는 학생 — '황제국 선포'라는 상징적 선언을 실질적인 국제적 보장으로 확대 해석.",
+    "lukaExplain": "대한제국은 황제 칭호를 쓰고 자주독립을 선포했지만, 이는 어디까지나 대내외적 '선언'이었어. 실제로는 여전히 러시아·일본 등 열강의 간섭과 이권 침탈이 이어졌고, 결국 1910년 국권을 완전히 빼앗겼지. 선포한 것과 실제로 보장받은 것은 다르다는 걸 구분해야 해.",
+    "reframe": "정치적 선언(명목상 지위)과 실제 국제 관계 속 현실을 구분해 평가하는 능력."
+  },
+  {
+    "id": "al-hist-056", "subject": "역사", "domain": "근현대사", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": true,
+    "stem": "1919년 3·1 운동이 이후 독립운동에 끼친 영향으로 가장 적절한 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "대한민국 임시정부 수립의 계기가 되었고, 독립운동이 조직적·체계적으로 전개되는 전환점이 되었다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "일본이 3·1 운동 직후 조선의 독립을 승인했다", "correct": false, "trapNote": "역사적 사실과 반대" },
+      { "label": "③", "text": "3·1 운동 이후 모든 독립운동이 중단되었다", "correct": false, "trapNote": "역사적 사실과 반대" },
+      { "label": "④", "text": "3·1 운동으로 조선의 신분제가 폐지되었다", "correct": false, "trapNote": "갑오개혁(1894)과 혼동, 시대 순서도 반대" },
+      { "label": "⑤", "text": "3·1 운동은 실패로 끝나 이후 독립운동에 아무 영향을 주지 못했다", "correct": false, "trapNote": "역사적 사실과 반대(임시정부 수립 등 실질적 영향)" }
+    ],
+    "hiddenPremise": "만세를 불렀지만 독립을 즉시 얻지 못했으니 3·1 운동이 '실패해서 아무 의미 없다'고 단순하게 결론짓는 전제. 실제로는 즉각적 독립은 못 이뤘지만 임시정부 수립 등 이후 독립운동의 조직화에 결정적 영향을 줌.",
+    "commonMistake": "⑤를 고르는 학생 — 즉각적인 독립이라는 목표를 이루지 못했다는 이유로 '실패=무의미'라고 단정.",
+    "lukaExplain": "3·1 운동으로 바로 독립이 이뤄지진 않았지만, 이 운동을 계기로 그해(1919) 상하이에서 대한민국 임시정부가 수립됐어. 이후 독립운동이 여기저기 흩어져 있던 것에서 좀 더 조직적으로 전개되는 전환점이 된 거지. 즉각적인 목표 달성 여부와 장기적인 영향은 따로 평가해야 해.",
+    "reframe": "역사적 사건을 즉각적 결과뿐 아니라 장기적 영향까지 함께 평가하는 능력."
+  },
+  {
+    "id": "al-hist-057", "subject": "역사", "domain": "근현대사", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": false,
+    "stem": "1930년대 이후 일제의 식민 통치 방식 변화(민족말살통치)에 대한 설명으로 옳은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "일본어 사용 강요, 창씨개명, 신사참배 강요 등 우리 민족의 정체성을 말살하려 했다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "조선의 문화와 전통을 적극적으로 보존·장려했다", "correct": false, "trapNote": "역사적 사실과 정반대" },
+      { "label": "③", "text": "1910년대의 무단통치보다 훨씬 관대하고 온건한 통치 방식이었다", "correct": false, "trapNote": "실제로는 더 강압적인 동화 정책" },
+      { "label": "④", "text": "조선인의 정치 참여를 전면 확대했다", "correct": false, "trapNote": "역사적 사실과 반대" },
+      { "label": "⑤", "text": "조선어 사용을 적극 장려했다", "correct": false, "trapNote": "실제로는 조선어 교육과 사용을 금지·억압" }
+    ],
+    "hiddenPremise": "일제 식민 통치가 시간이 지날수록 점점 관대해졌을 거라 짐작하는 전제. 실제로는 1930년대 이후(중일전쟁·태평양전쟁 시기) 오히려 민족 정체성을 말살하려는 더 강압적인 정책으로 전환됨.",
+    "commonMistake": "③을 고르는 학생 — '통치가 오래될수록 안정되고 온건해질 것'이라는 막연한 시대 흐름 추측.",
+    "lukaExplain": "1930년대 이후 일제는 중일전쟁·태평양전쟁을 준비하며 조선인을 전쟁에 동원하기 위해 오히려 더 강하게 민족 정체성을 지우려 했어. 창씨개명(이름을 일본식으로 바꾸게 함), 신사참배 강요, 조선어 교육 금지 같은 정책이 이 시기에 집중됐지. '시간이 지나면 통치가 완화된다'는 생각은 이 시기엔 맞지 않아.",
+    "reframe": "식민 통치의 강도를 시간 순서에 따른 단순한 완화가 아니라 정세(전쟁 준비)와 연결해 이해하는 능력."
+  },
+  {
+    "id": "al-hist-058", "subject": "역사", "domain": "근현대사", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": false,
+    "stem": "8·15 광복(1945) 이후 한반도 상황에 대한 설명으로 옳은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "광복 직후 남과 북에 각각 미군과 소련군이 진주해 군정이 실시되었다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "광복과 동시에 통일된 하나의 독립 정부가 즉시 수립되었다", "correct": false, "trapNote": "실제로는 남북 분단 상황이 이어짐" },
+      { "label": "③", "text": "광복 이후 즉시 6·25 전쟁이 시작되었다", "correct": false, "trapNote": "광복(1945)과 6·25 전쟁(1950) 사이 5년의 시차를 무시" },
+      { "label": "④", "text": "광복 이후 일본의 통치가 형태만 바꿔 계속되었다", "correct": false, "trapNote": "역사적 사실과 반대" },
+      { "label": "⑤", "text": "광복 직후 대한민국 정부가 즉시 수립되어 안정적으로 통치했다", "correct": false, "trapNote": "실제 정부 수립은 1948년으로 3년의 시차가 있음" }
+    ],
+    "hiddenPremise": "'광복'이라는 단어 때문에 해방과 동시에 완전한 독립 정부 수립까지 한 번에 이뤄졌을 거라 짐작하는 전제. 실제로는 광복(1945) 이후 미소 군정을 거쳐 1948년에야 정부가 수립됨.",
+    "commonMistake": "②·⑤를 고르는 학생 — 광복=독립정부 수립을 같은 시점의 일로 착각.",
+    "lukaExplain": "광복(1945.8.15)은 일본의 지배에서 벗어난 것이고, 그 직후 남쪽엔 미군, 북쪽엔 소련군이 들어와 군정을 실시했어. 대한민국 정부가 정식으로 수립된 건 그로부터 3년 뒤인 1948년이야. '해방됐다'와 '독립 정부가 세워졌다' 사이에 시간 차이가 있다는 걸 꼭 기억해야 해.",
+    "reframe": "해방과 정부 수립 사이의 시간적 간극과 그 사이의 과정(군정)을 정확히 이해하는 능력."
+  },
+  {
+    "id": "al-hist-059", "subject": "역사", "domain": "근현대사", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": true,
+    "stem": "6·25 전쟁(1950~1953)에 대한 설명으로 옳지 않은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "전쟁은 완전한 승리로 끝나 남북통일이 이루어졌다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "1953년 휴전협정이 체결되며 전쟁이 멈췄다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "③", "text": "유엔군과 중국군이 각각 남과 북을 지원하며 국제전 성격을 띠었다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "④", "text": "전쟁으로 남북 간의 분단이 더욱 고착화되었다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "⑤", "text": "전쟁 중 서울이 여러 차례 주인이 바뀌었다(1·4후퇴 등)", "correct": false, "trapNote": "옳은 설명" }
+    ],
+    "hiddenPremise": "전쟁이 3년이나 지속됐으니 결국 어느 한쪽의 완전한 승리로 끝났을 거라 짐작하는 전제. 실제로는 승자 없이 휴전협정으로 전투가 멈췄고, 통일도 이루어지지 않음.",
+    "commonMistake": "①을 옳은 설명으로 착각하는 학생 — '전쟁=승패가 갈려야 끝난다'는 일반적 통념을 그대로 적용.",
+    "lukaExplain": "6·25 전쟁은 1953년 휴전협정으로 멈췄을 뿐, 아직도 공식적으로 '종전'이 아니라 '휴전' 상태야. 어느 한쪽이 완전히 이긴 게 아니라 원래의 분단선과 비슷한 위치(휴전선)에서 전투가 멈춘 거지. 그래서 통일은 이루어지지 않았고 분단이 오히려 굳어졌어. '오래 끈 전쟁=승패로 끝난다'는 통념이 항상 맞는 건 아니야.",
+    "reframe": "전쟁의 종결 방식(승리/패배/휴전)을 정확한 역사적 사실에 근거해 판단하는 능력."
+  },
+  {
+    "id": "al-hist-060", "subject": "역사", "domain": "고대사", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": false,
+    "stem": "다음 중 통일신라 시기의 사회 변화에 대한 설명으로 옳지 않은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "통일 이후 골품제가 폐지되어 신분에 따른 제약이 완전히 사라졌다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "통일 이후에도 골품제에 따른 신분적 제약은 계속 유지되었다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "③", "text": "6두품 세력 중 일부는 신라 말 반신라적 성향을 보이기도 했다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "④", "text": "통일 이후 영토와 인구가 늘어나며 왕권이 강화되었다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "⑤", "text": "9주 5소경 체제로 지방 행정 조직을 정비했다", "correct": false, "trapNote": "옳은 설명" }
+    ],
+    "hiddenPremise": "나라가 통일되고 커지면 옛 신분제 같은 낡은 제도는 자연히 사라졌을 거라 짐작하는 전제. 실제로는 통일 이후에도 골품제는 그대로 유지되어 오히려 나중에 6두품의 불만(반신라적 성향)으로 이어짐.",
+    "commonMistake": "①을 옳은 설명으로 착각하는 학생 — '통일=낡은 제도 청산'이라는 막연한 진보적 서사를 적용.",
+    "lukaExplain": "통일신라 시기에도 골품제는 그대로 유지됐어. 오히려 이 폐쇄적인 신분제 때문에 능력 있는 6두품 출신들이 승진의 한계를 느끼고, 신라 말에는 반신라적 성향(호족과 손잡거나 새 왕조 건국에 참여)을 보이기도 했지. 나라의 규모가 커진다고 낡은 제도가 자동으로 사라지는 건 아니야.",
+    "reframe": "역사적 변화를 '통일=모든 게 개선'이라는 단순한 서사로 보지 않고 사실에 근거해 판단하는 능력."
+  },
+  {
+    "id": "al-hist-061", "subject": "역사", "domain": "중세사", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": false,
+    "stem": "고려의 대외 관계에 대한 설명으로 옳지 않은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "고려는 건국 이후 원(몽골)을 제외한 모든 주변국과 전쟁 없이 지냈다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "거란(요)의 침입을 세 차례 받았고 서희의 외교 담판으로 강동 6주를 획득한 사례도 있었다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "③", "text": "여진(금)이 성장하며 고려에 사대 관계를 요구하기도 했다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "④", "text": "몽골의 침입 이후 오랜 기간 원의 간섭을 받았다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "⑤", "text": "고려 말에는 왜구의 침입이 잦아 최영·이성계 등이 활약했다", "correct": false, "trapNote": "옳은 설명" }
+    ],
+    "hiddenPremise": "주요 침략국(몽골)만 기억하면 충분하다고 생각해 다른 대외 관계(거란·여진·왜구)를 아예 없었던 일로 단정하는 전제.",
+    "commonMistake": "①을 옳은 설명으로 착각하는 학생 — 몽골(원)의 침입만 강하게 기억하고 거란·왜구 등 다른 대외 갈등은 몰랐거나 잊음.",
+    "lukaExplain": "고려는 원 이전에도 거란(3차례 침입, 서희의 외교 담판 유명), 여진(금)의 사대 요구 등 여러 대외 갈등을 겪었어. 고려 말에는 왜구의 침입도 심각한 문제였고, 최영·이성계가 이때 활약하며 성장했지. 몽골만 기억하고 다른 나라와의 관계를 '전쟁 없었다'고 단정하면 안 돼.",
+    "reframe": "고려 대외 관계의 전체 흐름(거란-여진-몽골-왜구)을 빠짐없이 파악하는 능력."
+  },
+  {
+    "id": "al-hist-062", "subject": "역사", "domain": "중세사", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": true,
+    "stem": "조선 전기와 후기의 사회 변화에 대한 설명으로 옳은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "조선 후기에는 상품 화폐 경제가 발달하며 신분제가 점차 동요하는 모습을 보였다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "조선 전기와 후기 모두 신분제에 변화가 전혀 없었다", "correct": false, "trapNote": "역사적 사실과 반대" },
+      { "label": "③", "text": "조선 후기에는 오히려 신분제가 더욱 엄격해져 신분 이동이 완전히 사라졌다", "correct": false, "trapNote": "실제로는 신분 이동이 늘어남(공명첩, 납속 등)" },
+      { "label": "④", "text": "조선 전기에 이미 양반 중심 신분제가 완전히 붕괴되었다", "correct": false, "trapNote": "시기를 잘못 앎(붕괴 조짐은 후기)" },
+      { "label": "⑤", "text": "조선 후기의 경제 발전은 신분제와 아무런 관련이 없었다", "correct": false, "trapNote": "실제로는 경제 발전이 신분제 동요와 밀접히 연결됨" }
+    ],
+    "hiddenPremise": "신분제 같은 오래된 제도는 조선 시대 내내(전기·후기 구분 없이) 똑같이 고정되어 있었을 거라 짐작하는 전제. 실제로는 후기에 상업·화폐 경제 발달과 함께 공명첩·납속 등으로 신분 이동이 늘어남.",
+    "commonMistake": "②를 고르는 학생 — '신분제'라는 단어 자체가 고정불변일 거라 생각해 시기별 변화를 고려하지 않음.",
+    "lukaExplain": "조선 후기에는 상업과 화폐 경제가 발달하면서 돈으로 신분을 사는 방법(공명첩, 납속)이 생기고, 양반 수가 늘어나는 등 신분제가 흔들리기 시작했어. 조선을 '전기'와 '후기'로 나눠서 각 시기의 특징을 다르게 기억하는 게 중요해 — 같은 왕조 안에서도 시대에 따라 사회가 크게 달라질 수 있거든.",
+    "reframe": "같은 왕조 안에서도 전기·후기의 사회 변화를 구분해 이해하는 능력."
+  },
+  {
+    "id": "al-hist-063", "subject": "역사", "domain": "근현대사", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": false,
+    "stem": "실학의 등장 배경으로 가장 적절한 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "임진왜란과 병자호란 이후 기존 성리학 중심 사회의 한계를 극복하고 현실 문제를 해결하려는 움직임이 나타났다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "일본의 식민 통치에 저항하기 위해 등장했다", "correct": false, "trapNote": "시대(조선 후기 vs 일제강점기)를 완전히 착각" },
+      { "label": "③", "text": "고려의 불교 중심 사상을 계승하기 위해 등장했다", "correct": false, "trapNote": "실학은 조선 후기 유학자들의 학문, 불교와 무관" },
+      { "label": "④", "text": "고려시대 몽골의 침입에 대응하기 위해 등장했다", "correct": false, "trapNote": "시대를 완전히 잘못 연결" },
+      { "label": "⑤", "text": "갑오개혁의 결과로 등장했다", "correct": false, "trapNote": "순서가 반대(실학이 갑오개혁보다 훨씬 앞섬)" }
+    ],
+    "hiddenPremise": "실학이라는 이름 때문에 근대(일제강점기)나 개혁(갑오개혁) 이후에 등장했을 거라 짐작하는 전제. 실제로는 조선 후기(양난 이후) 성리학의 한계를 느낀 학자들이 등장시킨 학문.",
+    "commonMistake": "②를 고르는 학생 — '실학'이라는 말이 왠지 근대적으로 느껴져서 일제강점기 저항운동과 연결.",
+    "lukaExplain": "실학은 임진왜란·병자호란을 겪으며 기존의 성리학이 실제 사회 문제(농업, 상공업, 신분제 등)를 해결하는 데 한계가 있다는 걸 느낀 학자들이 조선 후기에 만든 새로운 학문 경향이야. 정약용 등이 대표적이지. '실학'이라는 이름이 현대적으로 들려도, 실제로는 조선 후기(17~19세기)의 학문이라는 걸 기억해둬.",
+    "reframe": "학문·사상의 등장 배경을 정확한 시대적 맥락(양난 이후 조선 후기) 속에서 파악하는 능력."
+  },
+  {
+    "id": "al-hist-064", "subject": "역사", "domain": "근현대사", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": true,
+    "stem": "다음 중 일제강점기 국내외 독립운동의 노선에 대한 설명으로 옳은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "무장투쟁, 외교 활동, 실력 양성 운동 등 다양한 방식이 동시에 존재했다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "모든 독립운동가는 오직 무력 투쟁만을 유일한 방법으로 여겼다", "correct": false, "trapNote": "실력양성론·외교론 등 다른 노선의 존재를 무시" },
+      { "label": "③", "text": "독립운동은 국내에서만 이루어졌고 해외에서는 이루어지지 않았다", "correct": false, "trapNote": "만주·연해주·상하이 등 해외 독립운동 무시" },
+      { "label": "④", "text": "모든 독립운동 세력은 하나의 통일된 조직 아래 일사불란하게 움직였다", "correct": false, "trapNote": "실제로는 노선과 조직이 다양하게 나뉘어 있었음" },
+      { "label": "⑤", "text": "3·1 운동 이후 독립운동은 완전히 중단되었다", "correct": false, "trapNote": "역사적 사실과 반대" }
+    ],
+    "hiddenPremise": "'독립운동'이라는 하나의 이름 아래 모든 활동이 같은 방식·같은 조직으로 이뤄졌을 거라 단순화하는 전제. 실제로는 무장투쟁(독립군), 외교 활동(임시정부의 외교전), 실력 양성 운동(교육·산업) 등 여러 노선이 동시에 존재했음.",
+    "commonMistake": "②나 ④를 고르는 학생 — 독립운동을 하나의 방법이나 하나의 조직으로 단순화해서 기억.",
+    "lukaExplain": "독립운동은 한 가지 방식이 아니라 여러 갈래로 동시에 이루어졌어. 만주·연해주에서는 무장투쟁(독립군), 임시정부는 외교 활동, 국내에서는 물산장려운동 같은 실력 양성 운동도 있었지. '독립운동=하나의 방법'이라고 단순화하지 말고, 여러 노선이 각자의 방식으로 존재했다는 걸 기억해야 해.",
+    "reframe": "복합적인 역사적 운동을 하나의 방식으로 단순화하지 않고 다양한 노선으로 이해하는 능력."
+  },
+  {
+    "id": "al-hist-065", "subject": "역사", "domain": "근현대사", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": false,
+    "stem": "4·19 혁명(1960)에 대한 설명으로 옳은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "3·15 부정선거에 항의하는 시위로 시작되어 이승만 대통령의 하야로 이어졌다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "박정희 정권의 유신 체제에 저항한 운동이었다", "correct": false, "trapNote": "1970년대 유신 체제 저항 운동과 혼동" },
+      { "label": "③", "text": "전두환 정권의 신군부 세력에 저항한 운동이었다", "correct": false, "trapNote": "5·18 민주화운동(1980)과 혼동" },
+      { "label": "④", "text": "일제의 식민 통치에 저항한 독립운동이었다", "correct": false, "trapNote": "시대(일제강점기)를 완전히 착각" },
+      { "label": "⑤", "text": "6·25 전쟁 중에 일어난 사건이다", "correct": false, "trapNote": "6·25 전쟁(1950~1953)과 시기를 혼동" }
+    ],
+    "hiddenPremise": "'민주화 운동'이나 '혁명'이라는 이름이 붙은 사건들을 시대 구분 없이 하나로 뭉뚱그리는 전제. 4·19 혁명(1960, 이승만)·5·18 민주화운동(1980, 전두환 신군부)·6월 민주항쟁(1987) 등은 각기 다른 시기, 다른 대상에 대한 저항.",
+    "commonMistake": "③을 고르는 학생 — 민주화 운동이라 하면 5·18(전두환)을 먼저 떠올려 4·19와 혼동.",
+    "lukaExplain": "4·19 혁명은 1960년, 이승만 정권의 3·15 부정선거에 항의하며 일어난 시위였고, 결국 이승만 대통령이 물러났어(하야). 5·18 민주화운동은 그보다 20년 뒤(1980), 전두환 신군부에 맞선 저항이야. 시대별로 저항 대상이 된 정권을 정확히 짝지어 기억해야 해 — 4·19는 이승만, 5·18은 전두환.",
+    "reframe": "여러 민주화 운동을 정확한 시기와 저항 대상(정권)별로 구분하는 능력."
+  },
+  {
+    "id": "al-hist-066", "subject": "역사", "domain": "근현대사", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": true,
+    "stem": "5·18 민주화운동(1980)에 대한 설명으로 옳은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "신군부의 계엄 확대에 저항한 광주 시민들의 민주화 운동이었다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "이승만 정권의 부정선거에 항의한 운동이었다", "correct": false, "trapNote": "4·19 혁명(1960)과 혼동" },
+      { "label": "③", "text": "6·25 전쟁 중 일어난 지역 전투였다", "correct": false, "trapNote": "시기(1950년대)를 완전히 착각" },
+      { "label": "④", "text": "일제강점기 광주 학생들의 항일 운동이었다", "correct": false, "trapNote": "광주학생항일운동(1929)과 혼동" },
+      { "label": "⑤", "text": "노태우 정권에 대한 저항 운동이었다", "correct": false, "trapNote": "전두환 정권과 혼동(노태우는 이후 정권)" }
+    ],
+    "hiddenPremise": "'광주'와 관련된 역사적 사건이면 시대와 상관없이 다 같은 사건으로 뭉뚱그리는 전제. 광주학생항일운동(1929, 일제강점기)과 5·18 민주화운동(1980, 신군부 시기)은 전혀 다른 시대의 사건.",
+    "commonMistake": "④를 고르는 학생 — '광주'라는 지역명만 보고 일제강점기의 광주학생항일운동과 혼동.",
+    "lukaExplain": "5·18 민주화운동은 1980년, 전두환을 중심으로 한 신군부가 계엄을 전국으로 확대하자 광주 시민들이 이에 맞서 일어난 운동이야. 광주학생항일운동은 이름은 비슷해도 1929년 일제강점기에 일어난 완전히 다른 사건이지. 지역이 같다고 같은 사건이 아니라는 걸 꼭 구분해야 해.",
+    "reframe": "같은 지역에서 일어난 서로 다른 시대의 사건을 정확히 구분하는 능력."
+  },
+  {
+    "id": "al-hist-067", "subject": "역사", "domain": "근현대사", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": false,
+    "stem": "6월 민주항쟁(1987)의 결과로 가장 적절한 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "대통령 직선제를 포함한 6·29 민주화 선언을 이끌어냈다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "이승만 대통령이 하야했다", "correct": false, "trapNote": "4·19 혁명의 결과와 혼동" },
+      { "label": "③", "text": "일본으로부터 독립을 이루었다", "correct": false, "trapNote": "광복(1945)과 시대를 완전히 혼동" },
+      { "label": "④", "text": "6·25 전쟁이 휴전으로 마무리되었다", "correct": false, "trapNote": "1953년 사건과 혼동" },
+      { "label": "⑤", "text": "신분제가 폐지되었다", "correct": false, "trapNote": "갑오개혁(1894)과 완전히 다른 시대" }
+    ],
+    "hiddenPremise": "민주화 운동이라는 공통점 때문에 여러 시대의 사건 결과를 뒤섞어 기억하는 전제. 6월 민주항쟁(1987)의 구체적 결과(대통령 직선제 개헌)를 다른 시대 사건의 결과와 혼동하기 쉬움.",
+    "commonMistake": "②를 고르는 학생 — '민주화 운동=이승만 하야'라는 4·19 혁명의 결과를 6월 민주항쟁에도 그대로 적용.",
+    "lukaExplain": "6월 민주항쟁은 1987년, 전두환 정권의 독재에 맞서 일어난 운동으로, 그 결과 대통령을 국민이 직접 뽑는 직선제 개헌을 약속하는 6·29 선언을 이끌어냈어. 이승만 하야는 그보다 27년 전인 4·19 혁명의 결과야. 각 민주화 운동마다 '누구에 맞서서, 무슨 결과를 냈는지' 짝지어 기억하는 게 중요해.",
+    "reframe": "여러 민주화 운동 각각의 구체적인 결과를 정확히 구분해 기억하는 능력."
+  },
+  {
+    "id": "al-hist-068", "subject": "역사", "domain": "고대사", "track": "고등", "stage": "심화",
+    "difficulty": 4, "finalSparkEligible": false,
+    "stem": "다음 중 가야에 대한 설명으로 옳지 않은 것은?",
+    "passage": "",
+    "choices": [
+      { "label": "①", "text": "가야는 강력한 중앙집권 국가를 이루어 삼국과 대등하게 경쟁하다 끝까지 독립을 유지했다", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "가야는 여러 소국들의 연맹체 형태로 존재했다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "③", "text": "가야는 철기 문화가 발달해 철을 주변국에 수출하기도 했다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "④", "text": "금관가야는 신라 법흥왕 때, 대가야는 진흥왕 때 각각 신라에 병합되었다", "correct": false, "trapNote": "옳은 설명" },
+      { "label": "⑤", "text": "가야는 결국 삼국(신라)에 흡수되며 독자적인 왕조로 남지 못했다", "correct": false, "trapNote": "옳은 설명" }
+    ],
+    "hiddenPremise": "고대 국가라면 다 강력한 중앙집권 체제를 갖췄을 거라 짐작하는 전제. 실제로는 가야는 여러 소국의 연맹 형태에 머물러 중앙집권화에 실패했고, 결국 신라에 흡수됨.",
+    "commonMistake": "①을 옳은 설명으로 착각하는 학생 — 가야가 철기 문화 등으로 강성했다는 인상만으로 '독립을 끝까지 유지'했을 거라 확대 해석.",
+    "lukaExplain": "가야는 철기 문화가 발달하고 한때 융성했지만, 여러 소국이 느슨하게 묶인 연맹체 수준에 머물러서 삼국처럼 강력한 중앙집권 국가로 발전하지 못했어. 결국 금관가야는 법흥왕 때, 대가야는 진흥왕 때 각각 신라에 병합되며 역사 속으로 사라졌지. '한때 강성했다'와 '끝까지 독립을 유지했다'는 다른 이야기야.",
+    "reframe": "국가의 일시적 번성과 최종적인 정치적 결말(독립 유지 여부)을 구분해서 평가하는 능력."
+  }
+];
+APPLICATION_LAB_ITEMS = APPLICATION_LAB_ITEMS.concat(APPLICATION_LAB_ITEMS_HIST_HIGH);
+
+/* 통계: 국어 66문항(완료) / 수학 66문항(완료) / 역사 68문항(완료) = 총 200문항 (200 목표 달성) */
