@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>"넓이는 공식으로만 구한다" — 쪼개면 보이는 것들 | PBS 매거진</title>
+<meta name="description" content="공식 없이도 도형을 쪼개면 넓이가 보인다. '공식=유일한 방법'이라는 전제를 깬다." />
+<meta name="keywords" content="전제학습,수학사고력,초등학생,도형,넓이,메타인지,PBS학습법,수학공부법" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="넓이는 공식으로만 구한다 — 쪼개면 보이는 것들" />
+<meta property="og:site_name" content="PBS 매거진" />
+<meta property="og:locale" content="ko_KR" />
+<link rel="canonical" href="https://korahnchild-cmd.github.io/premise-learning/articles/12-elem-shape-area.html" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "넓이는 공식으로만 구한다 — 쪼개면 보이는 것들",
+  "description": "공식 없이도 도형을 쪼개면 넓이가 보인다. '공식=유일한 방법'이라는 전제를 깬다.",
+  "articleSection": "수학 · 도형의 전제",
+  "inLanguage": "ko-KR",
+  "author": { "@type": "Organization", "name": "PBS 매거진" }
+}
+</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" href="../theme.css" />
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#7A8499", point:"#0A66FF", accent:"#FFB800", line:"#ECEEF1", soft:"#F5F6F4" },
+    fontFamily: { sans:["Pretendard","Inter","sans-serif"] },
+  }}};
+</script>
+<style>
+  .prose-art{ font-size:17px; line-height:1.95; color:#2A3151; word-break:keep-all; }
+  .prose-art p{ margin:1.4em 0; }
+  .prose-art p.lead{ font-size:19px; color:#0A0E17; font-weight:500; }
+  .prose-art h2{ font-size:25px; font-weight:800; color:#0A0E17; margin:2.2em 0 .6em; letter-spacing:-.03em; }
+  .prose-art blockquote{ border-left:4px solid #0A66FF; padding:.4em 0 .4em 1.4em; margin:1.8em 0; font-size:19px; font-weight:700; color:#0A0E17; line-height:1.6; }
+  .prose-art .premise-box{ background:#F4F6FC; border-radius:16px; padding:24px 28px; margin:2em 0; border:1px solid #E4E9F1; }
+  .prose-art .premise-box.new{ background:#FFF6E0; border-color:#FFE6A6; }
+  .prose-art .premise-box .label{ font-size:11px; font-weight:800; letter-spacing:.18em; color:#0A66FF; text-transform:uppercase; margin-bottom:8px; }
+  .prose-art .premise-box.new .label{ color:#A87B00; }
+</style>
+</head>
+<body>
+
+<header class="sticky top-0 z-50 bg-white/85 backdrop-blur border-b border-transparent h-16 flex items-center">
+  <div class="max-w-3xl mx-auto px-5 w-full flex items-center justify-between">
+    <a href="../index.html" class="flex items-center gap-2.5">
+      <span class="logo-mark"><svg style="transform:rotate(-45deg)" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.5 15.5L20 20"/></svg></span>
+      <span class="font-bold text-[15px] text-ink">PBS 매거진</span>
+    </a>
+    <a href="../index.html" class="text-[13px] text-body font-semibold hover:text-ink">← 목록으로</a>
+  </div>
+</header>
+
+<header class="pt-14 md:pt-20 pb-10 bg-white">
+  <div class="max-w-3xl mx-auto px-5">
+    <p class="eyebrow uppercase text-point text-[11px] font-bold en mb-5">수학 · 도형의 전제 · 초등 5–6 · No. 12</p>
+    <h1 class="text-[30px] sm:text-[40px] md:text-[46px] font-extrabold text-ink leading-[1.15]" style="word-break:keep-all">
+      "넓이는 공식으로만 구한다" — 쪼개면 보이는 것들
+    </h1>
+    <p class="mt-5 text-[15px] text-body lede" style="word-break:keep-all; line-height:1.7">
+      공식 없이도 도형을 쪼개면 넓이가 보인다. '공식=유일한 방법'이라는 전제를 깬다.
+    </p>
+    <div class="mt-7 flex items-center gap-3 text-[12.5px] text-faint border-t border-line pt-5">
+      <span class="font-semibold text-body">PBS 매거진 편집팀</span>
+      <span>·</span><span>2026.07.14</span><span>·</span><span>5분 분량</span>
+      <span class="sample-tag ml-auto">SAMPLE</span>
+    </div>
+  </div>
+</header>
+
+<div class="max-w-4xl mx-auto px-5 mb-12">
+  <div class="rounded-2xl overflow-hidden aspect-[16/8] flex items-center justify-center" style="background:linear-gradient(135deg,#5B93F1 0%,#BAD2FB 100%);">
+    <svg viewBox="0 0 400 180" class="w-full max-w-md p-8" fill="none">
+      <rect x="120" y="40" width="160" height="100" fill="none" stroke="#fff" stroke-width="3"/>
+      <line x1="120" y1="90" x2="280" y2="90" stroke="#FFB800" stroke-width="3" stroke-dasharray="8 5"/>
+      <line x1="200" y1="40" x2="200" y2="140" stroke="#FFB800" stroke-width="2" stroke-dasharray="5 4" opacity="0.6"/>
+      <text x="200" y="170" text-anchor="middle" font-family="Pretendard" font-size="14" fill="#fff" font-weight="700">공식 = 유일한 길?</text>
+    </svg>
+  </div>
+  <p class="mt-3 text-[12px] text-faint text-center">쪼개면, 공식 없이도 보인다.</p>
+</div>
+
+<article class="max-w-3xl mx-auto px-5 pb-16">
+  <div class="prose-art">
+
+    <p class="lead">초등 5학년 딸이 도형 문제를 풀고 있었다. "이 도형의 넓이를 구하시오." — 이상한 모양의 도형, 직사각형과 삼각형이 합쳐진 형태였다. 딸은 한참을 들여다보더라 되물었다. <b>"이거 공식이 뭐야?"</b></p>
+
+    <p>"공식이 없어도 풀 수 있어."라고 했더니, 딸은 영문을 모르겠다는 표정이었다. 아이 머릿속에는 이미 하나의 단단한 전제가 자리잡고 있었다.</p>
+
+    <div class="premise-box">
+      <p class="label">📍 숨은 전제</p>
+      <p class="!mb-0 text-[17px] font-bold text-ink" style="line-height:1.6">"도형의 넓이는 반드시 정해진 공식으로만 구할 수 있다. 공식을 모르면, 풀 수 없다."</p>
+    </div>
+
+    <h2>공식은 도구일 뿐, 유일한 길이 아니다</h2>
+
+    <p>학교에서 '직사각형 넓이 = 가로×세로', '삼각형 넓이 = 밑변×높이÷2'를 배운다. 공식은 분명 유용하다. 하지만 아이들은 이 공식을 '유일한 방법'으로 받아들인다. 그래서 처음 보는 형태의 도형을 만나면, "이 도형 공식이 뭐야?"부터 묻는다 — 공식이 없으면 손을 못 대니까.</p>
+
+    <p>그래서 딸에게 물었다. "이 도형을, 네가 아는 도형 두 개로 쪼개볼래?"</p>
+
+    <p>딸은 잠시 보더니, 직사각형 부분과 삼각형 부분으로 나눴다. 그러더니 직사각형 넓이(가로×세로)를 구하고, 삼각형 넓이(밑변×높이÷2)를 구해서 더했다. 30초 만에 답이 나왔다. 공식을 '외우는' 게 아니라, 아는 도형으로 <b>쪼개서</b> 푼 것이다.</p>
+
+    <blockquote>공식은 도구일 뿐이다. 도구가 없으면, 도형을 쪼개서 아는 도구로 풀면 된다. 그게 '생각하는 힘'이다.</blockquote>
+
+    <h2>쪼개기 — 가장 강력한 사고 도구</h2>
+
+    <p>수학에서 '쪼개기(decomposition)'는 공식보다 더 근본적인 사고다. 복잡한 걸 아는 것들로 나누는 힘. 이건 도형에만 해당하지 않는다 — 큰 문제를 작은 문제로, 모르는 걸 아는 걸로 나누는 것. 문장제를 풀 때도, 일상의 큰 고민을 풀 때도 같은 원리가 작동한다.</p>
+
+    <p>딸은 그 뒤로 "이거 공식이 뭐야?" 대신 "이걸 쪼갤 수 있을까?"를 먼저 묻기 시작했다. 그 작은 질문 하나가, 수학에 대한 두려움을 줄였다.</p>
+
+    <div class="premise-box new">
+      <p class="label">💡 전제가 깨진 뒤의 새 틀</p>
+      <p class="!mb-0 text-[17px] font-bold text-ink" style="line-height:1.6">"공식은 여러 방법 중 하나일 뿐. 모르는 도형은 아는 도형으로 쪼개서 푼다. 그게 진짜 수학적 사고다."</p>
+    </div>
+
+    <h2>공식을 가르치기 전에</h2>
+
+    <p>우리는 아이에게 공식을 가르치기 전에, 한 가지를 먼저 물어야 한다. <b>"이걸 네가 아는 걸로 쪼갤 수 있을까?"</b></p>
+
+    <p>이 질문이 아이의 사고를 연다. 공식을 기다리지 않고, 스스로 풀어내는 힘을 기른다. PBS에서 아이들과 하는 훈련도 이것이다 — 매일 도형 하나를 쪼개는 사건. 하루 10분이면 충분하다. 6개월이면, 아이는 어떤 낯선 도형 앞에서도 먼저 쪼개기를 시도하는 습관을 갖게 된다.</p>
+
+    <p>그게 공식을 열 개 외우는 것보다 훨씬 강력한 무기다.</p>
+
+  </div>
+
+  <div class="mt-12 p-7 rounded-2xl bg-soft border border-line">
+    <p class="eyebrow uppercase text-point text-[11px] font-bold en mb-3">PBS 학습법이 궁금하다면</p>
+    <p class="text-[15px] text-body lede" style="line-height:1.7">이 사고법을 매일 10분 훈련하는 방법을 정리해 두었습니다.</p>
+    <div class="mt-5 flex flex-wrap gap-3">
+      <a href="../index.html" class="btn btn-primary btn-3d text-[13px] font-bold px-6 py-3">PBS 매거진 더 보기</a>
+    </div>
+  </div>
+</article>
+
+<!-- SEO: 블로그 포스팅용 해시태그 -->
+<section class="py-8 border-t border-line" style="background:#FAFBFC">
+  <div class="max-w-3xl mx-auto px-5">
+    <p class="eyebrow uppercase text-faint text-[11px] font-bold en mb-3">태그 · TAGS</p>
+    <p class="text-[13px] text-body leading-relaxed" style="word-break:break-all">#전제학습 #수학사고력 #초등학생 #도형 #넓이 #메타인지 #PBS학습법 #수학공부법</p>
+  </div>
+</section>
+
+<footer class="bg-ink text-white/60 py-10">
+  <div class="max-w-3xl mx-auto px-5 flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-2.5">
+      <span class="logo-mark"><svg style="transform:rotate(-45deg)" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.5 15.5L20 20"/></svg></span>
+      <span class="font-bold text-[14px] text-white">PBS 매거진</span>
+    </div>
+    <p class="text-[11.5px]">© 2026 PBS 학습법 · Premise-Break Schema</p>
+  </div>
+</footer>
+
+<script src="../common.js"></script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>"A이면 B이다" — 연역 추론의 숨은 전제 | PBS 매거진</title>
+<meta name="description" content="'모든 사람은 죽는다. 소크라테스는 사람이다. 그러므로 소크라테스는 죽는다' — 이 추론이 성립하려면?" />
+<meta name="keywords" content="전제학습,논리,중학생,비판적사고,메타인지,PBS학습법,연역추론" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content=""A이면 B이다" — 연역 추론의 숨은 전제" />
+<meta property="og:description" content="'모든 사람은 죽는다. 소크라테스는 사람이다. 그러므로 소크라테스는 죽는다' — 이 추론이 성립하려면?" />
+<meta property="og:site_name" content="PBS 매거진" />
+<meta property="og:locale" content="ko_KR" />
+<link rel="canonical" href="https://korahnchild-cmd.github.io/premise-learning/articles/22-midadv-deduction.html" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"&quot;A이면 B이다&quot; — 연역 추론의 숨은 전제","description":"'모든 사람은 죽는다. 소크라테스는 사람이다. 그러므로 소크라테스는 죽는다' — 이 추론이 성립하려면?","url":"https://korahnchild-cmd.github.io/premise-learning/articles/22-midadv-deduction.html","inLanguage":"ko-KR","articleSection":"사고법 · 논리의 전제","author":{"@type":"Organization","name":"PBS 매거진"}}
+</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" href="../theme.css" />
+<script>tailwind.config={theme:{extend:{colors:{ink:"#0A0E17",body:"#525A69",faint:"#7A8499",point:"#0A66FF",accent:"#FFB800",line:"#ECEEF1",soft:"#F5F6F4"}}}};</script>
+<style>
+  .prose-art{font-size:17px;line-height:1.95;color:#2A3151;word-break:keep-all}
+  .prose-art p{margin:1.4em 0}.prose-art p.lead{font-size:19px;color:#0A0E17;font-weight:500}
+  .prose-art h2{font-size:25px;font-weight:800;color:#0A0E17;margin:2.2em 0 .6em;letter-spacing:-.03em}
+  .prose-art blockquote{border-left:4px solid #0A66FF;padding:.4em 0 .4em 1.4em;margin:1.8em 0;font-size:19px;font-weight:700;color:#0A0E17;line-height:1.6}
+  .prose-art .premise-box{background:#F4F6FC;border-radius:16px;padding:24px 28px;margin:2em 0;border:1px solid #E4E9F1}
+  .prose-art .premise-box.new{background:#FFF6E0;border-color:#FFE6A6}
+  .prose-art .premise-box .label{font-size:11px;font-weight:800;letter-spacing:.18em;color:#0A66FF;text-transform:uppercase;margin-bottom:8px}
+  .prose-art .premise-box.new .label{color:#A87B00}
+</style>
+</head>
+<body>
+
+<header class="sticky top-0 z-50 bg-white/85 backdrop-blur border-b border-transparent h-16 flex items-center">
+  <div class="max-w-3xl mx-auto px-5 w-full flex items-center justify-between">
+    <a href="../index.html" class="flex items-center gap-2.5">
+      <span class="logo-mark"><svg style="transform:rotate(-45deg)" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.5 15.5L20 20"/></svg></span>
+      <span class="font-bold text-[15px] text-ink">PBS 매거진</span>
+    </a>
+    <a href="../index.html" class="text-[13px] text-body font-semibold hover:text-ink">← 목록으로</a>
+  </div>
+</header>
+
+<header class="pt-14 md:pt-20 pb-10 bg-white">
+  <div class="max-w-3xl mx-auto px-5">
+    <p class="eyebrow uppercase text-point text-[11px] font-bold en mb-5">사고법 · 논리의 전제 · 중등 1–3 심화 · No. 22</p>
+    <h1 class="text-[30px] sm:text-[40px] md:text-[46px] font-extrabold text-ink leading-[1.15]" style="word-break:keep-all">"A이면 B이다" — 연역 추론의 숨은 전제</h1>
+    <p class="mt-5 text-[15px] text-body lede" style="word-break:keep-all; line-height:1.7">'모든 사람은 죽는다. 소크라테스는 사람이다. 그러므로 소크라테스는 죽는다' — 이 추론이 성립하려면?</p>
+    <div class="mt-7 flex items-center gap-3 text-[12.5px] text-faint border-t border-line pt-5">
+      <span class="font-semibold text-body">PBS 매거진 편집팀</span><span>·</span><span>2026.07.14</span><span>·</span><span>6분 분량</span>
+      <span class="sample-tag ml-auto">SAMPLE</span>
+    </div>
+  </div>
+</header>
+
+<div class="max-w-4xl mx-auto px-5 mb-12">
+  <div class="rounded-2xl overflow-hidden aspect-[16/8] flex items-center justify-center" style="background:linear-gradient(135deg,#0A0E17 0%,#2A3151 100%);">
+    <svg viewBox="0 0 400 180" class="w-full max-w-md p-8" fill="none"><rect x="80" y="35" width="240" height="35" rx="6" fill="rgba(255,255,255,.1)" stroke="#fff" stroke-width="1.5"/>
+<text x="200" y="58" text-anchor="middle" font-family="Pretendard" font-size="13" fill="#fff" font-weight="600">모든 A는 B이다</text>
+<rect x="80" y="80" width="240" height="35" rx="6" fill="rgba(255,255,255,.1)" stroke="#fff" stroke-width="1.5"/>
+<text x="200" y="103" text-anchor="middle" font-family="Pretendard" font-size="13" fill="#fff" font-weight="600">X는 A이다</text>
+<line x1="200" y1="120" x2="200" y2="138" stroke="#FFB800" stroke-width="2.5"/>
+<polygon points="195,138 205,138 200,146" fill="#FFB800"/>
+<rect x="80" y="150" width="240" height="35" rx="6" fill="rgba(255,184,0,.15)" stroke="#FFB800" stroke-width="1.5"/>
+<text x="200" y="173" text-anchor="middle" font-family="Pretendard" font-size="13" fill="#FFB800" font-weight="700">∴ X는 B이다</text></svg>
+  </div>
+</div>
+
+<article class="max-w-3xl mx-auto px-5 pb-16">
+  <div class="prose-art">
+    <p class="lead">국어 시간. 선생님이 칠판에 적었다. <b>&quot;모든 사람은 죽는다. 소크라테스는 사람이다. 그러므로 소크라테스는 죽는다.&quot;</b> 학생들은 고개를 끄덕였다. &quot;맞는 말이지.&quot; 하지만 한 학생이 손을 들었다. <b>'선생님, 모든 사람은 죽는다는 어떻게 알았어요?'</b> — 그 질문이, 연역 추론의 숨은 전제를 드러냈다.</p>
+    <h2>결론이 옳으려면, 전제가 옳아야 한다</h2>
+<p>위 추론은 논리적으로 완벽하다 — 전제가 참이면 결론도 필연적으로 참이 된다. 이걸 '연역 추론(deductive reasoning)'이라고 한다. 하지만 여기서 핵심은, 결론의 참 여부가 <b>전제의 참 여부에 전적으로 의존</b>한다는 것이다.</p>
+<div class="premise-box">
+<p class="label">📍 숨은 전제</p>
+<p class="!mb-0 text-[17px] font-bold text-ink" style="line-height:1.6">"연역 추론에서, 출발하는 전제('모든 A는 B이다')는 검증 없이 참으로 받아들여져야 한다. 전제가 참이면 결론도 참이다."</p>
+</div>
+<p>학생의 질문이 날카로운 이유는, 바로 이 지점을 찌렸기 때문이다. '모든 사람은 죽는다'는 정말 참인가? 지금까지 모든 사람이 죽었으니까 '모든' 사람이 죽는다고 할 수 있을까? 미래에 태어날 사람까지 포함해서? — 전제 자체가 경험적 관찰에서 온 것이라면, 100% 확정이라고 할 수 없다.</p>
+<blockquote>연역 추론은 '전제가 참이라면' 결론이 참이다. 하지만 전제 자체가 참인지는, 추론 바깥의 문제다.</blockquote>
+<h2>논리의 힘과 한계</h2>
+<p>연역 추론은 강력하다 — 전제가 참이면 결론이 100% 참이기 때문이다. 수학 증명이 전부 이 원리로 작동한다. 하지만 동시에 한계가 있다: <b>전제가 틀리면, 아무리 논리적으로 완벽해도 결론이 틀린다</b>. "모든 새는 날 수 있다. 펭귄은 새다. 그러므로 펭귄은 날 수 있다" — 논리 구조는 완벽하지만, 첫 전제가 틀렸으니 결론도 틀리다.</p>
+<div class="premise-box new">
+<p class="label">💡 전제가 깨진 뒤의 새 틀</p>
+<p class="!mb-0 text-[17px] font-bold text-ink" style="line-height:1.6">"결론이 옳으려면 논리 구조뿐 아니라 전제도 옳아야 한다. 추론을 읽을 땐 '이 전제는 정말 참인가?'를 먼저 확인한다."</p>
+</div>
+<h2>비문학·서술형의 핵심 질문</h2>
+<p>중·고등 국어에서 "위 추론의 타당성을 평가하시오"라는 문제가 자주 나온다. 정답의 방향은 거의 항상 같다 — <b>'전제가 성립하지 않는 경우가 있다'</b>. 이걸 스스로 떠올리려면, '전제 = 참'이라는 자동 믿음이 깨져 있어야 한다. PBS 훈련 6개월이면, 아이는 어떤 추론을 만나든 먼저 "이 전제, 정말 항상 성립해?"를 묻게 된다. 그 질문 하나가 서술형 점수를 바꾼다.</p>
+  </div>
+
+  <div class="mt-12 p-7 rounded-2xl bg-soft border border-line">
+    <p class="eyebrow uppercase text-point text-[11px] font-bold en mb-3">PBS 학습법이 궁금하다면</p>
+    <p class="text-[15px] text-body lede" style="line-height:1.7">이 사고법을 매일 10분 훈련하는 방법을 정리해 두었습니다.</p>
+    <div class="mt-5 flex flex-wrap gap-3">
+      <a href="../index.html" class="btn btn-primary btn-3d text-[13px] font-bold px-6 py-3">PBS 매거진 더 보기</a>
+    </div>
+  </div>
+</article>
+
+<!-- SEO: 블로그 포스팅용 해시태그 -->
+<section class="py-8 border-t border-line" style="background:#FAFBFC">
+  <div class="max-w-3xl mx-auto px-5">
+    <p class="eyebrow uppercase text-faint text-[11px] font-bold en mb-3">태그 · TAGS</p>
+    <p class="text-[13px] text-body leading-relaxed" style="word-break:break-all">#전제학습 #논리 #중학생 #비판적사고 #메타인지 #PBS학습법 #연역추론 #사고력훈련</p>
+  </div>
+</section>
+
+<footer class="bg-ink text-white/60 py-10">
+  <div class="max-w-3xl mx-auto px-5 flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-2.5">
+      <span class="logo-mark"><svg style="transform:rotate(-45deg)" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.5 15.5L20 20"/></svg></span>
+      <span class="font-bold text-[14px] text-white">PBS 매거진</span>
+    </div>
+    <p class="text-[11.5px]">© 2026 PBS 학습법 · Premise-Break Schema</p>
+  </div>
+</footer>
+
+<script src="../common.js"></script>
+</body>
+</html>

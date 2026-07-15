@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>오답노트가 작동하지 않을 때 — 틀린 '전제'를 기록해야 한다 | PBS 매거진</title>
+<meta name="description" content="정답을 빨간펜으로 고쳐 쓰는 건 오답노트가 아니다. '내가 어떤 전제 때문에 이 답을 골랐는지'를 적어야 한다." />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="오답노트가 작동하지 않을 때 — 틀린 전제를 기록해야 한다" />
+<link rel="canonical" href="https://korahnchild-cmd.github.io/premise-learning/articles/04-math-wrong-answer.html" />
+<meta name="keywords" content="PBS학습법, 전제학습, 메타인지, 사고력, 비판적사고, 수학사고력, 국어비문학, 학습법, 학부모" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta property="og:site_name" content="PBS 매거진" />
+<meta property="og:locale" content="ko_KR" />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../theme.css" />
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#7A8499", point:"#0A66FF", accent:"#FFB800", line:"#ECEEF1", soft:"#F5F6F4" },
+    fontFamily: { sans:["Pretendard","Inter","sans-serif"], serif:["Noto Serif KR","Pretendard","serif"] },
+  }}};
+</script>
+<style>
+  .prose-art{ font-size:17px; line-height:1.95; color:#2A3151; word-break:keep-all; }
+  .prose-art p{ margin:1.4em 0; }
+  .prose-art p.lead{ font-size:19px; color:#0A0E17; font-weight:500; }
+  .prose-art h2{ font-size:25px; font-weight:800; color:#0A0E17; margin:2.2em 0 .6em; letter-spacing:-.03em; }
+  .prose-art blockquote{ border-left:4px solid #0A66FF; padding:.4em 0 .4em 1.4em; margin:1.8em 0; font-size:19px; font-weight:700; color:#0A0E17; line-height:1.6; }
+  .prose-art .premise-box{ background:#F4F6FC; border-radius:16px; padding:24px 28px; margin:2em 0; border:1px solid #E4E9F1; }
+  .prose-art .premise-box.new{ background:#FFF6E0; border-color:#FFE6A6; }
+  .prose-art .premise-box .label{ font-size:11px; font-weight:800; letter-spacing:.18em; color:#0A66FF; text-transform:uppercase; margin-bottom:8px; }
+  .prose-art .premise-box.new .label{ color:#A87B00; }
+</style>
+<!-- SEO: Article 구조화 데이터 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "오답노트가 작동하지 않을 때 — 틀린 '전제'를 기록해야 한다",
+  "description": "정답을 빨간펜으로 고쳐 쓰는 건 오답노트가 아니다. '내가 어떤 전제 때문에 이 답을 골랐는지'를 적어야 한다.",
+  "url": "https://korahnchild-cmd.github.io/premise-learning/articles/04-math-wrong-answer.html",
+  "inLanguage": "ko-KR",
+  "articleSection": "수학 · 오답의 전제",
+  "keywords": "전제학습,수학사고력,오답노트,중학생,수학공부법",
+  "author": { "@type": "Organization", "name": "PBS 매거진" },
+  "publisher": { "@type": "Organization", "name": "PBS 학습법" },
+  "about": { "@type": "Thing", "name": "중등 1–3학년" }
+}
+</script>
+</head>
+<body>
+
+<header class="sticky top-0 z-50 bg-white/85 backdrop-blur border-b border-transparent h-16 flex items-center">
+  <div class="max-w-3xl mx-auto px-5 w-full flex items-center justify-between">
+    <a href="../index.html" class="flex items-center gap-2.5">
+      <span class="logo-mark"><svg style="transform:rotate(-45deg)" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.5 15.5L20 20"/></svg></span>
+      <span class="font-bold text-[15px] text-ink">PBS 매거진</span>
+    </a>
+    <a href="../index.html" class="text-[13px] text-body font-semibold hover:text-ink">← 목록으로</a>
+  </div>
+</header>
+
+<header class="pt-14 md:pt-20 pb-10 bg-white">
+  <div class="max-w-3xl mx-auto px-5">
+    <p class="eyebrow uppercase text-point text-[11px] font-bold en mb-5">수학 · 오답의 전제 · 중등 1–3 · No. 04</p>
+    <h1 class="text-[30px] sm:text-[40px] md:text-[46px] font-extrabold text-ink leading-[1.15]" style="word-break:keep-all">
+      오답노트가 작동하지 않을 때 — 틀린 '전제'를 기록해야 한다
+    </h1>
+    <p class="mt-5 text-[15px] text-body lede" style="word-break:keep-all; line-height:1.7">
+      정답을 빨간펜으로 고쳐 쓰는 건, 오답노트가 아니다. 왜 틀렸는지 모르면 다시 틀린다.
+    </p>
+    <div class="mt-7 flex items-center gap-3 text-[12.5px] text-faint border-t border-line pt-5">
+      <span class="font-semibold text-body">PBS 매거진 편집팀</span>
+      <span>·</span><span>2026.07.13</span><span>·</span><span>5분 분량</span>
+      <span class="sample-tag ml-auto">SAMPLE</span>
+    </div>
+  </div>
+</header>
+
+<div class="max-w-4xl mx-auto px-5 mb-12">
+  <div class="rounded-2xl overflow-hidden aspect-[16/8] flex items-center justify-center" style="background:linear-gradient(135deg,#0A66FF 0%,#5B93F1 100%);">
+    <svg viewBox="0 0 400 180" class="w-full max-w-md p-8" fill="none">
+      <text x="200" y="80" text-anchor="middle" font-family="Inter" font-size="40" font-weight="800" fill="#fff">✗ 오답</text>
+      <path d="M80 110 Q200 160, 320 110" stroke="#FFB800" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <text x="200" y="155" text-anchor="middle" font-family="Pretendard" font-size="14" fill="#FFB800" font-weight="700">왜 틀렸는지 모르면, 다시 틀린다</text>
+    </svg>
+  </div>
+  <p class="mt-3 text-[12px] text-faint text-center">정답을 아는 것과, 내가 왜 틀렸는지 아는 것은 다르다.</p>
+</div>
+
+<article class="max-w-3xl mx-auto px-5 pb-16">
+  <div class="prose-art">
+
+    <p class="lead">아이가 수학 시험을 치고 왔다. 3번 문제를 틀렸다. 오답노트를 꺼내 빨간펜으로 정답을 받아 적었다. 끝이다. — 이게 대부분의 '오답노트'가 작동하지 않는 이유다.</p>
+
+    <p>정답을 알게 됐다고 해서, 다음에 비슷한 문제를 맞히는 건 아니다. 왜냐하면 아직 <b>'내가 왜 2번을 골랐는지'</b>를 모르기 때문이다. 같은 실수를 부르는 건 '정답을 몰라서'가 아니라 '틀린 전제를 그대로 가지고 있어서'다.</p>
+
+    <h2>'또 틀렸어'가 숨긴 전제</h2>
+
+    <p>어느 날 아이가 한숨을 쉬며 말했다. <b>"또 틀렸어. 난 안 되나 봐."</b></p>
+
+    <p>이 한 줄짜리 문장을 가만히 들여다보자. '틀림'과 '안 된다'를 한 번에 이어붙였다. 그 사이에는 보이지 않는 전제가 있다.</p>
+
+    <div class="premise-box">
+      <p class="label">📍 숨은 전제 — 세 개가 한 줄로 묶임</p>
+      <p class="!mb-2 text-[16px] font-bold text-ink" style="line-height:1.6">틀림 = 실패</p>
+      <p class="!mb-2 text-[16px] font-bold text-ink" style="line-height:1.6">실패 = 나는 재능이 없다</p>
+      <p class="!mb-0 text-[16px] font-bold text-ink" style="line-height:1.6">∴ 틀리면 나는 안 되는 사람이다</p>
+    </div>
+
+    <p>이 세 개가 한 줄로 묶인 거짓 등식이, 아이의 학습 태도를 얼려버린다. "또 틀릴까 봐" 두려워하고, 모르는 문제를 피하고, 결국 같은 유형을 반복해서 틀린다. 전제가 안 바뀌었으니까.</p>
+
+    <blockquote>오답을 '정답'으로 고치는 건 1분이면 된다. 오답을 만든 '전제'를 고치는 데 6개월이 걸린다.</blockquote>
+
+    <h2>진짜 오답노트는 전제를 기록한다</h2>
+
+    <p>PBS에서 아이들과 하는 오답노트는 이렇게 생겼다.</p>
+
+    <p style="font-style:italic; padding-left:1.2em; border-left:3px solid #ECEEF1; color:#525A69;">"이 문제에서 나는 <b>②번</b>을 골랐다. 정답은 <b>③번</b>이었다. 내가 ②번을 고른 이유는, '그래프가 우상향하면 인과관계다'라고 믿었기 때문이다. (→ 실제로는 상관관계일 뿐) 다음엔 '이게 정말 원인일까, 아니면 함께 움직이는 것일까'를 먼저 물어야겠다."</p>
+
+    <p>핵심은 한 가지다 — <b>'내가 어떤 전제 때문에 이 답을 골랐는지'</b>를 적는 것. 정답이 아니라, 오답의 '이유'를. 그 이유 속에 숨은 전제를.</p>
+
+    <div class="premise-box new">
+      <p class="label">💡 전제가 깨진 뒤의 새 틀</p>
+      <p class="!mb-0 text-[17px] font-bold text-ink" style="line-height:1.6">"오답은 실패가 아니라, '내가 어떤 전제에 속았는지'를 알려주는 단서다. 그 단서를 읽으면, 오답은 자산이 된다."</p>
+    </div>
+
+    <h2>틀린 이유를 아는 순간, 오답이 사라진다</h2>
+
+    <p>오답노트의 목적은 '다음에 안 틀리는 것'이다. 그런데 정답만 외우는 오답노트는, 비슷한 유형이 약간 변형돼서 나오면 또 틀린다. 전제를 모르니까.</p>
+
+    <p>반면 전제를 기록한 오답노트는, 아이가 "아, 이런 문제는 'OO하다'는 전제에 속기 쉽구나"를 깨닫게 한다. 그러면 유형이 바뀌어도, 먼저 "여기서 또 그 전제가 숨어있나?"를 의심하게 된다.</p>
+
+    <p>이게 PBS가 말하는 <b>'틀림을 사고의 재료로 쓰는 힘'</b>이다. 틀린 걸 부끄러워하는 아이가 아니라, 틀린 전제를 발견하는 아이. 그 차이가, 6개월 뒤 성적의 차이가 된다.</p>
+
+  </div>
+
+  <div class="mt-12 p-7 rounded-2xl bg-soft border border-line">
+    <p class="eyebrow uppercase text-point text-[11px] font-bold en mb-3">PBS 학습법이 궁금하다면</p>
+    <p class="text-[15px] text-body lede" style="line-height:1.7">이 사고법을 매일 10분 훈련하는 방법을 정리해 두었습니다.</p>
+    <div class="mt-5 flex flex-wrap gap-3">
+      <a href="../index.html" class="btn btn-primary btn-3d text-[13px] font-bold px-6 py-3">PBS 매거진 더 보기</a>
+    </div>
+  </div>
+</article>
+
+<!-- SEO: 블로그 포스팅용 해시태그 -->
+<section class="py-8 border-t border-line" style="background:#FAFBFC">
+  <div class="max-w-3xl mx-auto px-5">
+    <p class="eyebrow uppercase text-faint text-[11px] font-bold en mb-3">태그 · TAGS</p>
+    <p class="text-[13px] text-body leading-relaxed" style="word-break:break-all">#전제학습 #수학사고력 #오답노트 #중학생 #메타인지 #PBS학습법 #수학공부법 #사고력훈련</p>
+  </div>
+</section>
+
+<footer class="bg-ink text-white/60 py-10">
+  <div class="max-w-3xl mx-auto px-5 flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-2.5">
+      <span class="logo-mark"><svg style="transform:rotate(-45deg)" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.5 15.5L20 20"/></svg></span>
+      <span class="font-bold text-[14px] text-white">PBS 매거진</span>
+    </div>
+    <p class="text-[11.5px]">© 2026 PBS 학습법 · Premise-Break Schema</p>
+  </div>
+</footer>
+
+<script src="../common.js"></script>
+</body>
+</html>

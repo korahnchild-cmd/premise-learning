@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>"부등호는 방향이 안 바뀐다" — 부등식의 함정 | PBS 매거진</title>
+<meta name="description" content="양변에 음수를 곱하면 부등호가 바뀐다. 왜? 그 '당연함' 속에 숨은 전제." />
+<meta name="keywords" content="전제학습,수학사고력,중학생,부등식,메타인지,PBS학습법,수학공부법" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content=""부등호는 방향이 안 바뀐다" — 부등식의 함정" />
+<meta property="og:description" content="양변에 음수를 곱하면 부등호가 바뀐다. 왜? 그 '당연함' 속에 숨은 전제." />
+<meta property="og:site_name" content="PBS 매거진" />
+<meta property="og:locale" content="ko_KR" />
+<link rel="canonical" href="https://korahnchild-cmd.github.io/premise-learning/articles/21-midadv-inequality.html" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"&quot;부등호는 방향이 안 바뀐다&quot; — 부등식의 함정","description":"양변에 음수를 곱하면 부등호가 바뀐다. 왜? 그 '당연함' 속에 숨은 전제.","url":"https://korahnchild-cmd.github.io/premise-learning/articles/21-midadv-inequality.html","inLanguage":"ko-KR","articleSection":"수학 · 부등식의 전제","author":{"@type":"Organization","name":"PBS 매거진"}}
+</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" href="../theme.css" />
+<script>tailwind.config={theme:{extend:{colors:{ink:"#0A0E17",body:"#525A69",faint:"#7A8499",point:"#0A66FF",accent:"#FFB800",line:"#ECEEF1",soft:"#F5F6F4"}}}};</script>
+<style>
+  .prose-art{font-size:17px;line-height:1.95;color:#2A3151;word-break:keep-all}
+  .prose-art p{margin:1.4em 0}.prose-art p.lead{font-size:19px;color:#0A0E17;font-weight:500}
+  .prose-art h2{font-size:25px;font-weight:800;color:#0A0E17;margin:2.2em 0 .6em;letter-spacing:-.03em}
+  .prose-art blockquote{border-left:4px solid #0A66FF;padding:.4em 0 .4em 1.4em;margin:1.8em 0;font-size:19px;font-weight:700;color:#0A0E17;line-height:1.6}
+  .prose-art .premise-box{background:#F4F6FC;border-radius:16px;padding:24px 28px;margin:2em 0;border:1px solid #E4E9F1}
+  .prose-art .premise-box.new{background:#FFF6E0;border-color:#FFE6A6}
+  .prose-art .premise-box .label{font-size:11px;font-weight:800;letter-spacing:.18em;color:#0A66FF;text-transform:uppercase;margin-bottom:8px}
+  .prose-art .premise-box.new .label{color:#A87B00}
+</style>
+</head>
+<body>
+
+<header class="sticky top-0 z-50 bg-white/85 backdrop-blur border-b border-transparent h-16 flex items-center">
+  <div class="max-w-3xl mx-auto px-5 w-full flex items-center justify-between">
+    <a href="../index.html" class="flex items-center gap-2.5">
+      <span class="logo-mark"><svg style="transform:rotate(-45deg)" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.5 15.5L20 20"/></svg></span>
+      <span class="font-bold text-[15px] text-ink">PBS 매거진</span>
+    </a>
+    <a href="../index.html" class="text-[13px] text-body font-semibold hover:text-ink">← 목록으로</a>
+  </div>
+</header>
+
+<header class="pt-14 md:pt-20 pb-10 bg-white">
+  <div class="max-w-3xl mx-auto px-5">
+    <p class="eyebrow uppercase text-point text-[11px] font-bold en mb-5">수학 · 부등식의 전제 · 중등 1–3 심화 · No. 21</p>
+    <h1 class="text-[30px] sm:text-[40px] md:text-[46px] font-extrabold text-ink leading-[1.15]" style="word-break:keep-all">"부등호는 방향이 안 바뀐다" — 부등식의 함정</h1>
+    <p class="mt-5 text-[15px] text-body lede" style="word-break:keep-all; line-height:1.7">양변에 음수를 곱하면 부등호가 바뀐다. 왜? 그 '당연함' 속에 숨은 전제.</p>
+    <div class="mt-7 flex items-center gap-3 text-[12.5px] text-faint border-t border-line pt-5">
+      <span class="font-semibold text-body">PBS 매거진 편집팀</span><span>·</span><span>2026.07.14</span><span>·</span><span>5분 분량</span>
+      <span class="sample-tag ml-auto">SAMPLE</span>
+    </div>
+  </div>
+</header>
+
+<div class="max-w-4xl mx-auto px-5 mb-12">
+  <div class="rounded-2xl overflow-hidden aspect-[16/8] flex items-center justify-center" style="background:linear-gradient(135deg,#5B93F1 0%,#0A66FF 100%);">
+    <svg viewBox="0 0 400 180" class="w-full max-w-md p-8" fill="none"><text x="160" y="75" text-anchor="middle" font-family="Inter" font-size="36" font-weight="800" fill="#fff">3 > 1</text>
+<text x="240" y="75" text-anchor="middle" font-family="Inter" font-size="36" font-weight="800" fill="#FFB800">-3 < -1</text>
+<text x="200" y="135" text-anchor="middle" font-family="Pretendard" font-size="13" fill="#fff" font-weight="700">×(−1) 하면 방향이?</text></svg>
+  </div>
+</div>
+
+<article class="max-w-3xl mx-auto px-5 pb-16">
+  <div class="prose-art">
+    <p class="lead">중2 아이가 부등식 시험에서 틀렸다. <b>'×3 하고 ×(−1) 했는데, 왜 답이 다르지?'</b> 아이는 부등호의 방향을 안 바꿨다. '부등호는 부호가 바뀌어도 그대로'라는 믿음 — 이건 단단한 전제로 자리잡고 있었다.</p>
+    <h2>'부등호는 항상 같은 방향이다'</h2>
+<p>부등식을 처음 배울 때, 아이들은 '부등호는 등호처럼 양변에 같은 연산을 하면 유지된다'고 믿는다. 양변에 3을 더하면 부등호가 유지되니까. 그런데 양변에 −1을 <b>곱하면</b> 부등호가 바뀐다. 왜?</p>
+<div class="premise-box">
+<p class="label">📍 숨은 전제</p>
+<p class="!mb-0 text-[17px] font-bold text-ink" style="line-height:1.6">"부등식의 양변에 같은 연산을 하면, 부등호의 방향은 항상 유지된다. 부등호와 등호는 같은 규칙을 따른다."</p>
+</div>
+<p>이 전제는 대부분의 경우 맞다 — 더하기, 빼기, 양수 곱하기에서는. 하지만 <b>음수를 곱하거나 나눌 때</b> 깨진다. 왜 음수를 곱하면 부등호가 바뀔까? 3 > 1인데, −3 < −1이 된다. 수직선을 떠올려보자 — 음수를 곱하는 건, 수직선 위에서 0을 기준으로 '뒤집는' 연산이다. 뒤집히면, 큰 것이 작아지고 작은 것이 커진다.</p>
+<blockquote>규칙이 '왜' 성립하는지를 모르면, 예외에서 무조건 틀린다. 음수 곱하기는 그 예외다.</blockquote>
+<h2>규칙의 근거를 아는 것</h2>
+<p>대부분의 아이는 '음수를 곱하면 부등호 바꿈'을 <b>외운다</b>. 하지만 왜 바뀌는지를 이해하면, 외우지 않아도 된다 — 수직선 뒤집기라는 원리를 알면, '이 연산은 뒤집는가?'를 매번 자연스럽게 묻게 되니까.</p>
+<div class="premise-box new">
+<p class="label">💡 전제가 깨진 뒤의 새 틀</p>
+<p class="!mb-0 text-[17px] font-bold text-ink" style="line-height:1.6">"부등호 규칙은 '외우는 것'이 아니라 '왜 그렇게 되는지 이해하는 것'이다. 수직선을 떠올리면, 예외가 규칙이 된다."</p>
+</div>
+<h2>외움에서 이해로</h2>
+<p>수학 공식과 규칙을 외우는 아이는, 예외에서 무너진다. 반면 규칙의 <b>'근거'</b>를 아는 아이는, 낯선 상황에서도 '이건 왜 이렇게 되지?'를 묫고 스스로 답을 찾아낸다. PBS가 기르는 힘은 바로 이것 — 규칙의 근거를 묻는 습관. 하루 10분, 한 규칙씩 '왜?'를 파헤치는 훈련. 6개월이면, 아이는 수학을 '외우는 과목'이 아니라 '이해하는 과목'으로 만난다.</p>
+  </div>
+
+  <div class="mt-12 p-7 rounded-2xl bg-soft border border-line">
+    <p class="eyebrow uppercase text-point text-[11px] font-bold en mb-3">PBS 학습법이 궁금하다면</p>
+    <p class="text-[15px] text-body lede" style="line-height:1.7">이 사고법을 매일 10분 훈련하는 방법을 정리해 두었습니다.</p>
+    <div class="mt-5 flex flex-wrap gap-3">
+      <a href="../index.html" class="btn btn-primary btn-3d text-[13px] font-bold px-6 py-3">PBS 매거진 더 보기</a>
+    </div>
+  </div>
+</article>
+
+<!-- SEO: 블로그 포스팅용 해시태그 -->
+<section class="py-8 border-t border-line" style="background:#FAFBFC">
+  <div class="max-w-3xl mx-auto px-5">
+    <p class="eyebrow uppercase text-faint text-[11px] font-bold en mb-3">태그 · TAGS</p>
+    <p class="text-[13px] text-body leading-relaxed" style="word-break:break-all">#전제학습 #수학사고력 #중학생 #부등식 #메타인지 #PBS학습법 #수학공부법 #사고력훈련</p>
+  </div>
+</section>
+
+<footer class="bg-ink text-white/60 py-10">
+  <div class="max-w-3xl mx-auto px-5 flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-2.5">
+      <span class="logo-mark"><svg style="transform:rotate(-45deg)" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.5 15.5L20 20"/></svg></span>
+      <span class="font-bold text-[14px] text-white">PBS 매거진</span>
+    </div>
+    <p class="text-[11.5px]">© 2026 PBS 학습법 · Premise-Break Schema</p>
+  </div>
+</footer>
+
+<script src="../common.js"></script>
+</body>
+</html>
