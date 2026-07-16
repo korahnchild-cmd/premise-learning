@@ -65,6 +65,7 @@
   .kw path{ fill:none; stroke:#0A66FF; stroke-width:5; stroke-linecap:round; stroke-dasharray:520; stroke-dashoffset:520; transition:stroke-dashoffset 1.2s cubic-bezier(.65,0,.35,1); }
   .kw.draw path{ stroke-dashoffset:0; }
 
+
   .btn{ display:inline-flex; align-items:center; justify-content:center; gap:.5rem; border-radius:9999px; white-space:nowrap; transition:transform .4s cubic-bezier(.16,1,.3,1), background .3s, color .3s, border-color .3s, box-shadow .3s; }
   .btn-primary{ background:#0A66FF; color:#fff; box-shadow:var(--shadow-md); }
   .btn-primary:hover{ background:#0857db; transform:translateY(-2px); box-shadow:0 12px 30px rgba(10,102,255,.4); }
@@ -372,12 +373,12 @@
 
   <div class="max-w-3xl mx-auto px-5 md:px-8 text-center relative">
     <p class="reveal en eyebrow uppercase text-[11px] font-semibold text-point mb-5" data-d="1">PBS 학습법 · Premise-Break Schema</p>
-    <h1 class="reveal display text-[2.1rem] sm:text-5xl md:text-[3.5rem] font-extrabold" data-d="1">
+    <h1 class="reveal display text-[1.65rem] sm:text-[2.2rem] md:text-[2.9rem] font-extrabold leading-[1.34] md:leading-[1.25]" data-d="1" style="word-break:keep-all">
       상위권 아이들은 문제를 풀기 전에,<br />
       문제의 <span class="kw" id="kw"><span id="splitPremise">전제</span><svg viewBox="0 0 200 24" preserveAspectRatio="none"><path d="M4 15 C 55 6, 145 6, 196 13"/></svg></span>부터 의심합니다.
     </h1>
-    <p class="reveal lede mt-6 text-[16px] md:text-[18px] text-body max-w-lg mx-auto" data-d="2" style="word-break:keep-all">
-      <b class="text-ink">PBS 학습법</b> — 다니는 학원은 그대로 두고,<br class="hidden sm:block" /> 점수로 이어지는 사고 습관만 <b class="text-point whitespace-nowrap">6개월간</b> 더합니다.
+    <p class="reveal lede mt-6 text-[16px] md:text-[18px] text-body max-w-xl mx-auto" data-d="2" style="word-break:keep-all">
+      <b class="text-ink">지금 다니는 학원은 그대로.</b> 하루 <b class="text-ink">10분</b>으로,<br class="hidden sm:block" /> 처음 보는 문제도 스스로 풀어내는 <b class="text-point whitespace-nowrap">사고력</b>을 <b class="text-point whitespace-nowrap">6개월간</b> 키웁니다.
     </p>
 
     <!-- 히어로 핵심 비주얼: 전제 붕괴 맵 (기둥 3개가 무너지고 새 전제로 재구성) -->
@@ -397,12 +398,59 @@
       <a href="onboarding.html" id="heroCta" class="btn btn-primary btn-magnetic text-[15px] font-semibold px-9 py-4">7일 무료 체험 시작하기</a>
     </div>
     <p class="reveal mt-4" data-d="4"><a href="demo.html" class="text-[14px] font-semibold text-point hover:underline">가입 없이 전제 3개 먼저 풀어보기 →</a></p>
-    <!-- ⚠️ PLACEHOLDER — 실제 수치로 교체 필요. 출시 전 임시 문구, 실제 이용자 데이터 확보 즉시 갱신할 것. -->
-    <p class="reveal mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-[12px] text-faint" data-d="4" id="liveStrip">
-      <span class="inline-flex items-center gap-1.5"><span class="inline-block w-1.5 h-1.5 rounded-full bg-point"></span>현재 <b class="text-ink hstat" data-target="132" data-decimals="0">0</b>명의 학부모가 무료 체험 중</span>
-      <span>오늘 등록 <b class="text-ink hstat" data-target="17" data-decimals="0">0</b>건</span>
-      <span>평균 만족도 <b class="text-ink hstat" data-target="4.8" data-decimals="1">0.0</b>/5</span>
-    </p>
+
+    <!-- ================= 특허 신뢰 카드 (웰핏식) =================
+         증명서 발급 시 교체 방법:
+         1) 아래 각 카드의 회색 문서아이콘 span(주석 CERT 표시) 안의 SVG를
+            img 태그로 교체 (예: src=images/patent-cert-1.png, class=w-full h-full object-cover)
+         2) 출원번호 '제2026-XXXXXXX호'의 X 부분을 실제 출원번호로 교체
+         3) (선택) 출원인 표기 필요 시 출원번호 줄 끝에 ' 출원인: 홍길동' 추가
+         ========================================================== -->
+    <div class="reveal mt-9 max-w-xl mx-auto" data-d="4">
+      <p class="text-[12.5px] text-faint leading-relaxed mb-3.5 text-center" style="word-break:keep-all">
+        학원·문제집은 그대로 두고, 숨은 <b class="text-body">전제</b>를 찾아 스스로 생각하는 힘을 키우는 <b class="text-body">독자 기술 2건</b>을 특허 출원했습니다.
+      </p>
+      <div class="space-y-3 text-left">
+
+        <!-- 특허 1 · 방법 특허 -->
+        <div class="flex items-center gap-3 sm:gap-4 bg-white border border-line rounded-2xl p-3.5 sm:p-4 shadow-sm">
+          <div class="shrink-0 w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center" style="background:rgba(10,102,255,.09)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><path d="M9 13.5L8 21l4-2 4 2-1-7.5"/></svg>
+          </div>
+          <div class="min-w-0 flex-1">
+            <p class="text-[10.5px] font-bold text-point tracking-wide">대한민국 특허 출원 중 · 방법 특허</p>
+            <p class="text-[12.5px] sm:text-[13.5px] font-bold text-ink leading-snug mt-0.5" style="word-break:keep-all">적응형 전제 탐지 및 사고 프레임 재구성 시스템</p>
+            <p class="text-[10.5px] text-faint mt-1">출원번호 제2026-XXXXXXX호</p>
+          </div>
+          <div class="shrink-0 flex items-center gap-2">
+            <span class="hidden sm:flex w-11 h-14 rounded-md border border-line bg-soft items-center justify-center overflow-hidden"><!--CERT-->
+              <svg width="20" height="26" viewBox="0 0 24 30" fill="none" stroke="#B9C2D1" stroke-width="1.5"><rect x="2" y="2" width="20" height="26" rx="2"/><path d="M6 9h12M6 13h12M6 17h8" stroke-linecap="round"/><circle cx="12" cy="23" r="2.5" stroke="#0A66FF"/></svg>
+            </span>
+            <span class="shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-full text-white flex flex-col items-center justify-center leading-none" style="background:#0A66FF"><span class="text-[11px] font-extrabold en">KR</span><span class="text-[7.5px] font-bold mt-0.5">특허</span></span>
+          </div>
+        </div>
+
+        <!-- 특허 2 · BM 특허 -->
+        <div class="flex items-center gap-3 sm:gap-4 bg-white border border-line rounded-2xl p-3.5 sm:p-4 shadow-sm">
+          <div class="shrink-0 w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center" style="background:rgba(10,102,255,.09)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/><circle cx="18" cy="18" r="3"/></svg>
+          </div>
+          <div class="min-w-0 flex-1">
+            <p class="text-[10.5px] font-bold text-point tracking-wide">대한민국 특허 출원 중 · BM 특허</p>
+            <p class="text-[12.5px] sm:text-[13.5px] font-bold text-ink leading-snug mt-0.5" style="word-break:keep-all">전제-폭파 기반의 단계적 사고 훈련 콘텐츠 구조 및 제공 방법</p>
+            <p class="text-[10.5px] text-faint mt-1">출원번호 제2026-XXXXXXX호</p>
+          </div>
+          <div class="shrink-0 flex items-center gap-2">
+            <span class="hidden sm:flex w-11 h-14 rounded-md border border-line bg-soft items-center justify-center overflow-hidden"><!--CERT-->
+              <svg width="20" height="26" viewBox="0 0 24 30" fill="none" stroke="#B9C2D1" stroke-width="1.5"><rect x="2" y="2" width="20" height="26" rx="2"/><path d="M6 9h12M6 13h12M6 17h8" stroke-linecap="round"/><circle cx="12" cy="23" r="2.5" stroke="#0A66FF"/></svg>
+            </span>
+            <span class="shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-full text-white flex flex-col items-center justify-center leading-none" style="background:#0A66FF"><span class="text-[11px] font-extrabold en">KR</span><span class="text-[7.5px] font-bold mt-0.5">특허</span></span>
+          </div>
+        </div>
+
+      </div>
+      <p class="text-[11px] text-faint mt-3.5 text-center">7일 전액 무료 · 신용카드 없이 시작 · 위약금 없이 언제든 해지</p>
+    </div>
   </div>
 
   <a href="#problem" class="absolute bottom-8 left-1/2 -translate-x-1/2 text-faint" style="animation:kfloat 2s ease-in-out infinite">
@@ -1066,9 +1114,9 @@
         <p class="text-[12px] text-faint mt-1.5 leading-relaxed">커리큘럼 검수 진행 예정</p>
       </div>
       <div class="reveal card p-7 text-center" data-d="2">
-        <svg class="mx-auto mb-4" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
-        <p class="text-[14px] font-bold text-ink">상표 · 특허 출원 중</p>
-        <p class="text-[12px] text-faint mt-1.5 leading-relaxed">™ 표기, 등록 완료 시 갱신 예정</p>
+        <svg class="mx-auto mb-4" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
+        <p class="text-[14px] font-bold text-ink">특허 2건 출원 중 · 상표 출원</p>
+        <p class="text-[12px] text-faint mt-1.5 leading-relaxed">적응형 전제 탐지·사고 프레임 재구성 시스템(방법특허), 전제-폭파 기반 단계적 사고 훈련 콘텐츠 구조 및 제공 방법(BM특허) — 특허청 출원 중</p>
       </div>
       <div class="reveal card p-7 text-center" data-d="3">
         <svg class="mx-auto mb-4" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
