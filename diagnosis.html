@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PBS 사고력 진단 — 우리 아이는 전제를 의심하고 있을까?</title>
+<meta name="description" content="12문항으로 확인하는 우리 아이의 사고 습관. PBS 사고력 진단으로 사고 유형과 추천 트랙을 무료로 받아보세요." />
+<meta property="og:title" content="PBS 사고력 진단 결과" />
+<meta property="og:description" content="우리 아이의 사고 유형과 추천 학습 트랙을 확인해보세요." />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#7A8499", point:"#0A66FF", pointdeep:"#0B3ACC", accent:"#FFB800", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", night:"#0A0E17" },
+    fontFamily: { sans:["Pretendard","Inter","sans-serif"], en:["Inter","Pretendard","sans-serif"] },
+    borderRadius:{ "4xl":"2rem","5xl":"2.5rem" },
+  }}};
+</script>
+<style>
+  html{ scroll-behavior:smooth; }
+  body{ font-family:"Pretendard","Inter",sans-serif; -webkit-font-smoothing:antialiased; letter-spacing:-.014em; background:#FBFCFE; color:#0A0E17; }
+  .en{ font-family:"Inter","Pretendard",sans-serif; }
+  .eyebrow{ letter-spacing:.2em; }
+  h1,h2,h3{ letter-spacing:-.035em; }
+  .card{ background:#fff; border:1px solid #E4E9F1; border-radius:1.5rem; box-shadow:0 2px 10px rgba(10,14,23,.04); }
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:.5rem; border-radius:9999px; white-space:nowrap; transition:transform .3s cubic-bezier(.16,1,.3,1), background .3s, box-shadow .3s, border-color .3s; }
+  .btn-primary{ background:#0A66FF; color:#fff; box-shadow:0 8px 24px rgba(10,102,255,.24); }
+  .btn-primary:hover{ background:#0857db; transform:translateY(-2px); }
+  .btn-ghost{ background:#fff; color:#0A0E17; border:1px solid #DfE3E8; }
+  .btn-ghost:hover{ border-color:#0A66FF; color:#0A66FF; }
+  .opt{ transition:border-color .2s, background .2s, transform .15s; }
+  .opt:hover{ border-color:#0A66FF; background:rgba(10,102,255,.03); }
+  .opt.sel{ border-color:#0A66FF; background:rgba(10,102,255,.07); }
+  .bar-fill{ height:100%; border-radius:9999px; background:linear-gradient(90deg,#0A66FF,#5B93F1); width:0; transition:width 1s cubic-bezier(.2,.8,.2,1); }
+  .fade{ animation:fade .5s cubic-bezier(.16,1,.3,1); }
+  @keyframes fade{ from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
+  @media (prefers-reduced-motion:reduce){ .fade{animation:none} .bar-fill{transition:none} }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="sticky top-0 z-40 bg-white/85 backdrop-blur border-b border-line">
+  <div class="max-w-3xl mx-auto w-full px-5 h-14 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-2 font-bold text-[15px]">
+      <svg width="26" height="26" viewBox="0 0 40 40" aria-label="PBS 학습법"><defs><clipPath id="lg"><circle cx="20" cy="20" r="18"/></clipPath></defs><circle cx="20" cy="20" r="18" fill="#0A66FF"/><rect x="-8" y="17" width="56" height="6.5" fill="#fff" transform="rotate(-34 20 20)" clip-path="url(#lg)"/></svg>
+      PBS 학습법
+    </a>
+    <a href="onboarding.html" class="btn btn-primary text-[12.5px] font-semibold px-4 py-2">무료 체험</a>
+  </div>
+</header>
+
+<main class="max-w-2xl mx-auto px-5 py-8 md:py-12">
+
+  <!-- ===== INTRO ===== -->
+  <section id="intro" class="text-center fade">
+    <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-4">PBS 사고력 진단 · 무료</p>
+    <h1 class="text-[1.7rem] md:text-[2.3rem] font-extrabold leading-[1.3]" style="word-break:keep-all">우리 아이는 지금,<br/>문제의 <span class="text-point">전제</span>를 의심하고 있을까요?</h1>
+    <p class="mt-5 text-[15px] text-body leading-relaxed max-w-md mx-auto" style="word-break:keep-all">12개의 짧은 질문으로 아이의 사고 습관을 확인해보세요. 사고 유형과 지금 시작하기 좋은 학습 트랙을 알려드립니다. 약 2분 소요.</p>
+    <div class="mt-8">
+      <button id="startBtn" class="btn btn-primary text-[15px] font-semibold px-9 py-4">진단 시작하기</button>
+    </div>
+    <p class="mt-4 text-[12px] text-faint">가입 없이 바로 · 결과는 공유·저장 가능</p>
+  </section>
+
+  <!-- ===== QUIZ ===== -->
+  <section id="quiz" class="hidden">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="flex-1 h-2 rounded-full bg-line overflow-hidden"><div id="qProgress" class="bar-fill" style="transition:width .35s"></div></div>
+      <span class="text-[12px] font-semibold text-faint tabular-nums"><b id="qNow" class="text-ink">1</b>/12</span>
+    </div>
+    <div id="qCard" class="card p-7 md:p-9 fade">
+      <p class="en text-[11px] font-bold text-point eyebrow uppercase mb-3" id="qDim">Detect</p>
+      <h2 class="text-[18px] md:text-[21px] font-extrabold leading-snug" id="qText" style="word-break:keep-all">질문</h2>
+      <div id="qOpts" class="mt-7 space-y-2.5"></div>
+    </div>
+    <div class="mt-5 flex justify-between">
+      <button id="prevBtn" class="btn btn-ghost text-[13px] font-semibold px-5 py-2.5">← 이전</button>
+      <span class="text-[12px] text-faint self-center">답을 고르면 다음으로 넘어가요</span>
+    </div>
+  </section>
+
+  <!-- ===== RESULT ===== -->
+  <section id="result" class="hidden">
+    <div id="resultCard">
+      <div class="text-center fade">
+        <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-3">PBS 사고력 진단 결과</p>
+        <div id="typeEmoji" class="text-[52px] leading-none mb-2">🔍</div>
+        <h1 class="text-[1.7rem] md:text-[2.2rem] font-extrabold" id="typeName">유형</h1>
+        <p class="en text-[12px] text-faint mt-1" id="typeEn">Type</p>
+        <p class="mt-4 text-[14.5px] text-body leading-relaxed max-w-md mx-auto" id="typeDesc" style="word-break:keep-all">설명</p>
+      </div>
+
+      <div class="card p-6 md:p-7 mt-8 fade">
+        <p class="text-[13px] font-bold text-ink mb-4">영역별 사고 성향</p>
+        <div id="bars" class="space-y-4"></div>
+      </div>
+
+      <div class="card p-6 md:p-7 mt-5 fade" style="background:linear-gradient(160deg,#F7FAFF,#fff);border-color:rgba(10,102,255,.2)">
+        <p class="text-[11px] font-bold text-point eyebrow uppercase mb-2">추천 시작 트랙</p>
+        <div class="flex items-center gap-3">
+          <div class="shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center text-[22px]" style="background:rgba(10,102,255,.1)" id="trackEmoji">🌱</div>
+          <div>
+            <p class="text-[17px] font-extrabold text-ink"><span id="trackName">입문</span> 트랙</p>
+            <p class="text-[13px] text-body mt-0.5" id="trackDesc" style="word-break:keep-all">추천 이유</p>
+          </div>
+        </div>
+        <p class="text-[13px] text-body leading-relaxed mt-4" id="nurture" style="word-break:keep-all">키워줄 점</p>
+      </div>
+    </div>
+
+    <div class="mt-7 flex flex-col sm:flex-row gap-3">
+      <a href="onboarding.html" class="btn btn-primary text-[14.5px] font-semibold px-6 py-3.5 flex-1">이 아이에 맞춰 7일 무료로 시작</a>
+      <a href="demo.html" class="btn btn-ghost text-[14.5px] font-semibold px-6 py-3.5 flex-1">전제 3개 먼저 풀어보기</a>
+    </div>
+    <div class="mt-3 flex gap-3">
+      <button id="shareBtn" class="btn btn-ghost text-[13px] font-semibold px-5 py-3 flex-1">🔗 결과 링크 복사</button>
+      <button id="saveBtn" class="btn btn-ghost text-[13px] font-semibold px-5 py-3 flex-1">🖼️ 이미지로 저장</button>
+      <button id="againBtn" class="btn btn-ghost text-[13px] font-semibold px-5 py-3">다시</button>
+    </div>
+    <p id="shareMsg" class="text-center text-[12px] text-point font-semibold mt-3 h-4"></p>
+
+    <p class="text-center text-[11px] text-faint mt-6 leading-relaxed" style="word-break:keep-all">본 진단은 아이의 사고 습관을 함께 돌아보기 위한 참고용 자기점검이며, 전문 검사·진단이 아닙니다.</p>
+  </section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* ===== 문항 (4영역 × 3문항) ===== */
+  var DIMS = {
+    A: { en:"Detect · 전제 감지", label:"전제 감지" },
+    B: { en:"Break · 다르게 시도", label:"다르게 시도" },
+    C: { en:"Rebuild · 관점 전환", label:"관점 전환" },
+    D: { en:"Consolidate · 자기 점검", label:"자기 점검" }
+  };
+  var QUESTIONS = [
+    { dim:"A", text:'"당연한 것"에도 "왜 그럴까?"라고 자주 묻는다.' },
+    { dim:"B", text:'한 방법으로 안 풀리면 다른 방법을 스스로 시도한다.' },
+    { dim:"C", text:'틀렸을 때 "무엇을 잘못 생각했지?"를 떠올린다.' },
+    { dim:"D", text:'왜 맞았는지·틀렸는지 스스로 설명할 수 있다.' },
+    { dim:"A", text:'교과서나 문제의 설명을 그대로 받아들이기보다 한 번 더 따져본다.' },
+    { dim:"B", text:'정답이 있어도 "다른 풀이는 없을까?"를 궁금해한다.' },
+    { dim:"C", text:'처음 보는 유형도 아는 것과 연결해 접근하려 한다.' },
+    { dim:"D", text:'공부한 내용을 자기 말로 정리하거나 기록한다.' },
+    { dim:"A", text:'"원래 그런 거야"라는 말에 쉽게 수긍하지 않는다.' },
+    { dim:"B", text:'틀리는 것을 크게 두려워하지 않고 새로 도전한다.' },
+    { dim:"C", text:'한 문제를 여러 각도에서 바라보려 한다.' },
+    { dim:"D", text:'공부 계획을 스스로 세우고 돌아본다.' }
+  ];
+  var SCALE = [
+    { v:1, t:"전혀 아니다" }, { v:2, t:"아니다" }, { v:3, t:"그렇다" }, { v:4, t:"매우 그렇다" }
+  ];
+
+  /* ===== 유형 정의 ===== */
+  var TYPES = {
+    A: { name:"의심가형", en:"The Questioner", emoji:"🔍", desc:"당연해 보이는 것에도 물음표를 잘 던지는 아이예요. 전제를 발견하는 감각이 이미 살아 있어, 그 질문을 '검증하는 힘'으로 이어주면 크게 자랍니다." },
+    B: { name:"도전가형", en:"The Explorer", emoji:"💥", desc:"막히면 다른 길을 겁 없이 시도하는 아이예요. 시도의 에너지가 강한 만큼, '왜 이 방법인가'를 짚어주면 시행착오가 실력으로 쌓입니다." },
+    C: { name:"연결가형", en:"The Reframer", emoji:"🧩", desc:"관점을 바꿔 다시 보는 데 능한 아이예요. 아는 것과 새로운 것을 잘 잇는 강점을, 전제를 재구성하는 훈련으로 더 단단하게 만들 수 있어요." },
+    D: { name:"성찰가형", en:"The Reflector", emoji:"✅", desc:"스스로 돌아보고 정리하는 습관이 있는 아이예요. 메타인지가 강한 편이라, 전제를 의심하는 '입구'만 열어주면 사고가 빠르게 깊어집니다." },
+    S: { name:"잠재형", en:"The Sprout", emoji:"🌱", desc:"아직 사고 습관이 깨어나는 중이에요. 지금은 '정답 맞히기'에 머물러 있을 수 있지만, 전제를 의심하는 훈련을 더하면 가장 크게 달라질 수 있는 시기입니다." }
+  };
+  var TRACKS = {
+    "입문": { emoji:"🌱", href:"level-intro.html", desc:"일상 문장·짧은 사건에서 숨은 전제를 발견하는 감각부터.", nurture:"먼저 '당연함에 물음표 붙이기'를 짧고 가볍게 반복하며 사고의 입구를 열어주세요." },
+    "기본": { emoji:"🧭", href:"level-basic.html", desc:"국어·수학 소재로 전제 찾기→폭파→기록 루틴을 정착.", nurture:"발견을 넘어 '왜 그런가'를 검증하고 기록하는 루틴으로 습관을 굳혀주세요." },
+    "심화": { emoji:"🚀", href:"level-advanced.html", desc:"수능 지문·시사 소재까지 어떤 소재에도 같은 사고를 적용.", nurture:"이미 강한 사고력을, 낯선 소재에서도 흔들림 없이 적용하도록 확장해주세요." }
+  };
+
+  var answers = new Array(QUESTIONS.length).fill(0);
+  var cur = 0;
+
+  var $ = function(id){ return document.getElementById(id); };
+  var intro = $("intro"), quiz = $("quiz"), result = $("result");
+
+  /* ===== 진행 ===== */
+  function showQuestion(i){
+    cur = i;
+    var q = QUESTIONS[i];
+    $("qDim").textContent = DIMS[q.dim].en;
+    $("qText").textContent = q.text;
+    $("qNow").textContent = (i+1);
+    $("qProgress").style.width = ((i)/QUESTIONS.length*100) + "%";
+    var wrap = $("qOpts"); wrap.innerHTML = "";
+    SCALE.forEach(function(s){
+      var b = document.createElement("button");
+      b.className = "opt w-full text-left border border-line rounded-xl px-4 py-3.5 text-[14.5px] font-medium flex items-center gap-3" + (answers[i]===s.v ? " sel" : "");
+      b.innerHTML = '<span class="shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center" style="border-color:'+(answers[i]===s.v?"#0A66FF":"#CBD5E1")+'">'+(answers[i]===s.v?'<span class="w-2.5 h-2.5 rounded-full bg-point"></span>':'')+'</span>'+s.t;
+      b.addEventListener("click", function(){
+        answers[i] = s.v;
+        if (i < QUESTIONS.length-1){ setTimeout(function(){ transitionTo(i+1); }, 180); }
+        else { setTimeout(finish, 200); }
+      });
+      wrap.appendChild(b);
+    });
+    $("prevBtn").style.visibility = i===0 ? "hidden" : "visible";
+  }
+  function transitionTo(i){
+    var card = $("qCard");
+    card.classList.remove("fade"); void card.offsetWidth; card.classList.add("fade");
+    showQuestion(i);
+  }
+
+  $("startBtn").addEventListener("click", function(){
+    intro.classList.add("hidden"); quiz.classList.remove("hidden");
+    window.scrollTo(0,0); showQuestion(0);
+  });
+  $("prevBtn").addEventListener("click", function(){ if(cur>0) transitionTo(cur-1); });
+
+  /* ===== 결과 계산 ===== */
+  function finish(){
+    var sums = { A:0,B:0,C:0,D:0 };
+    QUESTIONS.forEach(function(q,i){ sums[q.dim] += (answers[i]||1); });
+    renderResult(sums);
+    updateShareUrl(sums);
+  }
+  function pct(sum){ return Math.round((sum-3)/9*100); } // 3→0, 12→100
+  function renderResult(sums){
+    quiz.classList.add("hidden"); intro.classList.add("hidden");
+    result.classList.remove("hidden");
+    var total = sums.A+sums.B+sums.C+sums.D;
+    var totalPct = Math.round((total-12)/36*100);
+
+    // 유형 결정
+    var typeKey;
+    if (totalPct < 40){ typeKey = "S"; }
+    else {
+      var order = ["A","B","C","D"], best = "A";
+      order.forEach(function(k){ if (sums[k] > sums[best]) best = k; });
+      typeKey = best;
+    }
+    var T = TYPES[typeKey];
+    $("typeEmoji").textContent = T.emoji;
+    $("typeName").textContent = T.name;
+    $("typeEn").textContent = T.en;
+    $("typeDesc").textContent = T.desc;
+
+    // 추천 트랙
+    var trackName = totalPct < 50 ? "입문" : (totalPct <= 75 ? "기본" : "심화");
+    var R = TRACKS[trackName];
+    $("trackName").textContent = trackName;
+    $("trackEmoji").textContent = R.emoji;
+    $("trackDesc").textContent = R.desc;
+    $("nurture").textContent = R.nurture;
+
+    // 영역 바
+    var bars = $("bars"); bars.innerHTML = "";
+    ["A","B","C","D"].forEach(function(k){
+      var p = Math.max(4, pct(sums[k]));
+      var row = document.createElement("div");
+      row.innerHTML =
+        '<div class="flex justify-between items-baseline mb-1.5"><span class="text-[13px] font-bold text-ink">'+DIMS[k].label+'</span><span class="text-[12px] font-semibold text-faint tabular-nums">'+pct(sums[k])+'%</span></div>'+
+        '<div class="h-2.5 rounded-full bg-line overflow-hidden"><div class="bar-fill" data-w="'+p+'"></div></div>';
+      bars.appendChild(row);
+    });
+    requestAnimationFrame(function(){ setTimeout(function(){
+      Array.prototype.forEach.call(document.querySelectorAll("#bars .bar-fill"), function(el){ el.style.width = el.getAttribute("data-w")+"%"; });
+    }, 60); });
+    window.scrollTo(0,0);
+  }
+
+  /* ===== 공유 / 저장 ===== */
+  function updateShareUrl(sums){
+    var r = [sums.A,sums.B,sums.C,sums.D].join("-");
+    var url = location.origin + location.pathname + "?r=" + r;
+    history.replaceState(null, "", url);
+  }
+  $("shareBtn").addEventListener("click", function(){
+    var url = location.href;
+    var msg = $("shareMsg");
+    function ok(){ msg.textContent = "링크가 복사됐어요! 붙여넣기로 공유하세요."; setTimeout(function(){ msg.textContent=""; }, 3000); }
+    if (navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(ok, function(){ prompt("아래 링크를 복사하세요", url); }); }
+    else { prompt("아래 링크를 복사하세요", url); }
+  });
+  $("saveBtn").addEventListener("click", function(){
+    var msg = $("shareMsg");
+    if (typeof html2canvas === "undefined"){ msg.textContent = "저장 준비가 안 됐어요. 화면을 캡처해 저장해주세요."; return; }
+    msg.textContent = "이미지 생성 중…";
+    html2canvas(document.getElementById("resultCard"), { backgroundColor:"#FBFCFE", scale:2 }).then(function(canvas){
+      var a = document.createElement("a");
+      a.href = canvas.toDataURL("image/png"); a.download = "PBS_사고력진단_결과.png"; a.click();
+      msg.textContent = "이미지를 저장했어요!"; setTimeout(function(){ msg.textContent=""; }, 3000);
+    }).catch(function(){ msg.textContent = "저장에 실패했어요. 화면을 캡처해 저장해주세요."; });
+  });
+  $("againBtn").addEventListener("click", function(){
+    answers = new Array(QUESTIONS.length).fill(0);
+    history.replaceState(null, "", location.pathname);
+    result.classList.add("hidden"); quiz.classList.remove("hidden");
+    showQuestion(0); window.scrollTo(0,0);
+  });
+
+  /* ===== 공유 링크로 진입 시 결과 바로 표시 ===== */
+  (function initFromUrl(){
+    var m = (location.search.match(/[?&]r=([0-9]{1,2}-[0-9]{1,2}-[0-9]{1,2}-[0-9]{1,2})/));
+    if (!m) return;
+    var p = m[1].split("-").map(Number);
+    if (p.length !== 4 || p.some(function(n){ return isNaN(n)||n<3||n>12; })) return;
+    renderResult({ A:p[0], B:p[1], C:p[2], D:p[3] });
+  })();
+
+})();
+</script>
+</body>
+</html>

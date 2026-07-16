@@ -123,32 +123,6 @@
   .pbs-step:last-child::after{ display:none; }
   @media (max-width:640px){ .pbs-steps{ grid-template-columns:1fr 1fr; row-gap:32px; } .pbs-step::after{ display:none; } }
 
-  /* PBS 4단계 요약 트랙 (구 히어로 영상 자리) */
-  .psum-card{ background:#fff; border:1px solid var(--line,#E4E9F1); border-radius:22px; padding:26px 18px 20px; box-shadow:0 10px 28px -14px rgba(10,14,23,.14); }
-  .psum-track{ width:100%; height:auto; display:block; overflow:visible; }
-  .psum-fill{ stroke-dasharray:300; stroke-dashoffset:300; animation:psumFill 8s linear infinite; }
-  @keyframes psumFill{ 0%{ stroke-dashoffset:300; } 8%{ stroke-dashoffset:300; } 33%{ stroke-dashoffset:200; } 41%{ stroke-dashoffset:200; } 58%{ stroke-dashoffset:100; } 66%{ stroke-dashoffset:100; } 83%{ stroke-dashoffset:0; } 100%{ stroke-dashoffset:0; } }
-  .psum-node{ animation:psumNodePop 8s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
-  .psum-node circle{ transition:none; }
-  @keyframes psumNodePop{ 0%,4%{ transform:scale(1); } 8%,22%{ transform:scale(1.18); } 26%,100%{ transform:scale(1); } }
-  .psum-node:nth-child(3) circle,.psum-node:nth-child(4) circle,.psum-node:nth-child(5) circle,.psum-node:nth-child(6) circle{ animation:psumRing 8s ease-in-out infinite; }
-  .psum-node:nth-child(3) circle{ animation-delay:0s; } .psum-node:nth-child(4) circle{ animation-delay:2s; } .psum-node:nth-child(5) circle{ animation-delay:4s; } .psum-node:nth-child(6) circle{ animation-delay:6s; }
-  @keyframes psumRing{ 0%,4%{ stroke:#E4E9F1; fill:#fff; } 8%,22%{ stroke:#0A66FF; fill:#EAF1FE; } 26%,100%{ stroke:#0A66FF; fill:#fff; } }
-  .psum-caption{ position:relative; height:20px; margin-top:14px; }
-  .psum-caption p{ position:absolute; inset:0; font-size:12.5px; font-weight:600; color:#0A0E17; opacity:0; animation:psumCap 8s ease-in-out infinite; }
-  .psum-caption .pc-0{ animation-delay:0s; } .psum-caption .pc-1{ animation-delay:2s; } .psum-caption .pc-2{ animation-delay:4s; } .psum-caption .pc-3{ animation-delay:6s; }
-  @keyframes psumCap{ 0%,2%{ opacity:0; transform:translateY(4px); } 6%,22%{ opacity:1; transform:translateY(0); } 26%,100%{ opacity:0; } }
-  @media (prefers-reduced-motion:reduce){
-    .psum-fill{ animation:psumFill 8s linear infinite !important; }
-    .psum-node{ animation:psumNodePop 8s ease-in-out infinite !important; }
-    .psum-node:nth-child(3) circle{ animation:psumRing 8s ease-in-out infinite !important; animation-delay:0s !important; }
-    .psum-node:nth-child(4) circle{ animation:psumRing 8s ease-in-out infinite !important; animation-delay:2s !important; }
-    .psum-node:nth-child(5) circle{ animation:psumRing 8s ease-in-out infinite !important; animation-delay:4s !important; }
-    .psum-node:nth-child(6) circle{ animation:psumRing 8s ease-in-out infinite !important; animation-delay:6s !important; }
-    .psum-caption p{ animation:psumCap 8s ease-in-out infinite !important; }
-    .psum-caption .pc-0{ animation-delay:0s !important; } .psum-caption .pc-1{ animation-delay:2s !important; } .psum-caption .pc-2{ animation-delay:4s !important; } .psum-caption .pc-3{ animation-delay:6s !important; }
-  }
-
   /* 과목 관통 쇼케이스 탭 (brilliant.org 탭 전환형 참고) — JS 클래스 토글 방식(딜레이 동기화 오류 방지) */
   .stx-pills{ display:flex; justify-content:center; gap:8px; margin-bottom:14px; }
   .stx-pill{ padding:6px 16px; border-radius:9999px; font-size:12.5px; font-weight:700; background:#EDEFF2; color:#7A8499; transition:background .3s, color .3s; }
@@ -249,22 +223,6 @@
     .cf4{ animation:chaosFrag4 5.2s ease-in-out infinite !important; }
     .chaosNum{ animation:chaosNumFade 5.2s ease-in-out infinite !important; }
     .chaosCap{ animation:chaosCapFade 5.2s ease-in-out infinite !important; }
-  }
-
-  /* #compare 4카드 아이콘 마이크로 루프 */
-  .cmp-ico-1{ transform-origin:center; animation:cmpFlip 3s ease-in-out infinite; }
-  @keyframes cmpFlip{ 0%,60%{ transform:scaleX(1); } 75%{ transform:scaleX(.15); } 90%,100%{ transform:scaleX(1); } }
-  .cmp-ico-2{ transform-origin:center; animation:cmpWiggle 3.4s ease-in-out infinite; }
-  @keyframes cmpWiggle{ 0%,100%{ transform:rotate(0deg); } 25%{ transform:rotate(-10deg); } 75%{ transform:rotate(10deg); } }
-  .cmp-ico-3{ transform-origin:center; animation:cmpScan 2.6s ease-in-out infinite; }
-  @keyframes cmpScan{ 0%,100%{ transform:translateX(0); } 50%{ transform:translateX(6px); } }
-  .cmp-ico-4{ transform-origin:center; animation:cmpPulse 2.2s ease-in-out infinite; }
-  @keyframes cmpPulse{ 0%,100%{ transform:scale(1); opacity:1; } 50%{ transform:scale(1.15); opacity:.75; } }
-  @media (prefers-reduced-motion:reduce){
-    .cmp-ico-1{ animation:cmpFlip 3s ease-in-out infinite !important; }
-    .cmp-ico-2{ animation:cmpWiggle 3.4s ease-in-out infinite !important; }
-    .cmp-ico-3{ animation:cmpScan 2.6s ease-in-out infinite !important; }
-    .cmp-ico-4{ animation:cmpPulse 2.2s ease-in-out infinite !important; }
   }
 
   /* comparison cards v2 */
@@ -397,7 +355,8 @@
     <div class="reveal mt-8" data-d="3">
       <a href="onboarding.html" id="heroCta" class="btn btn-primary btn-magnetic text-[15px] font-semibold px-9 py-4">7일 무료 체험 시작하기</a>
     </div>
-    <p class="reveal mt-4" data-d="4"><a href="demo.html" class="text-[14px] font-semibold text-point hover:underline">가입 없이 전제 3개 먼저 풀어보기 →</a></p>
+    <p class="reveal mt-3.5 text-[12.5px] font-semibold text-point" data-d="3"><span class="mr-0.5">🔥</span> 얼리버드 선착순 100명 · 첫 6개월 30% 할인</p>
+    <p class="reveal mt-2.5" data-d="4"><a href="demo.html" class="text-[14px] font-semibold text-point hover:underline">가입 없이 전제 3개 먼저 풀어보기 →</a></p>
 
     <!-- ================= 특허 신뢰 카드 (웰핏식) =================
          증명서 발급 시 교체 방법:
@@ -780,47 +739,6 @@
   </div>
 </section>
 
-<!-- PBS 4단계 요약 트랙 (구 '1분 소개영상' 자리 — 영상 준비 전까지 4단계 사고훈련 요약 애니메이션) -->
-<section class="py-10 md:py-14 bg-white">
-  <div class="max-w-xl mx-auto px-5 md:px-8 reveal text-center">
-    <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-2">Product Intro</p>
-    <h3 class="text-[16px] md:text-[18px] font-bold text-ink mb-1">전제를 깨는 4단계 사고 훈련</h3>
-    <p class="text-[12px] text-faint mb-6">PBS 학습법은 이 4단계를 매일 사건 1개로 반복합니다</p>
-    <div class="psum-card">
-      <svg class="psum-track" viewBox="0 0 400 92" role="img" aria-label="감지, 폭파, 재구성, 정착 4단계가 순서대로 강조되는 진행 트랙">
-        <line x1="50" y1="30" x2="350" y2="30" stroke="#E4E9F1" stroke-width="4" stroke-linecap="round"/>
-        <line class="psum-fill" x1="50" y1="30" x2="350" y2="30" stroke="#0A66FF" stroke-width="4" stroke-linecap="round"/>
-        <g class="psum-node" style="animation-delay:0s">
-          <circle cx="50" cy="30" r="20" fill="#fff" stroke="#E4E9F1" stroke-width="2"/>
-          <text x="50" y="37" text-anchor="middle" font-size="17">🔍</text>
-        </g>
-        <g class="psum-node" style="animation-delay:2s">
-          <circle cx="150" cy="30" r="20" fill="#fff" stroke="#E4E9F1" stroke-width="2"/>
-          <text x="150" y="37" text-anchor="middle" font-size="17">💥</text>
-        </g>
-        <g class="psum-node" style="animation-delay:4s">
-          <circle cx="250" cy="30" r="20" fill="#fff" stroke="#E4E9F1" stroke-width="2"/>
-          <text x="250" y="37" text-anchor="middle" font-size="17">🧩</text>
-        </g>
-        <g class="psum-node" style="animation-delay:6s">
-          <circle cx="350" cy="30" r="20" fill="#fff" stroke="#E4E9F1" stroke-width="2"/>
-          <text x="350" y="37" text-anchor="middle" font-size="17">✅</text>
-        </g>
-        <text x="50" y="72" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0A0E17">감지</text>
-        <text x="150" y="72" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0A0E17">폭파</text>
-        <text x="250" y="72" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0A0E17">재구성</text>
-        <text x="350" y="72" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0A0E17">정착</text>
-      </svg>
-      <div class="psum-caption">
-        <p class="pc-0">"당연하다"는 말 속 숨은 전제를 찾아냅니다</p>
-        <p class="pc-1">그 전제가 항상 참인지 흔들어 봅니다</p>
-        <p class="pc-2">깨진 자리에 더 정확한 생각을 다시 짭니다</p>
-        <p class="pc-3">파트너 노트에 기록해 습관으로 정착시킵니다</p>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- HOW — scrollytelling -->
 <section id="how" class="relative bg-white">
   <div class="text-center max-w-3xl mx-auto px-5 md:px-8 pt-16 md:pt-24 reveal">
@@ -897,76 +815,6 @@
 
     <div class="text-center mt-14 reveal">
       <a href="course.html" class="btn btn-white btn-magnetic text-[15px] font-semibold px-9 py-4">전제 경로 둘러보기 →</a>
-    </div>
-  </div>
-</section>
-
-<!-- COMPARISON vs other learning methods -->
-<section class="py-16 md:py-24 bg-white" id="compare">
-  <div class="max-w-5xl mx-auto px-5 md:px-8">
-    <div class="text-center max-w-2xl mx-auto reveal">
-      <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">Where PBS fits</p>
-      <h2 class="display text-[1.8rem] md:text-[2.7rem] font-extrabold">다른 학습법과는, 어떻게 다를까요?</h2>
-      <p class="lede mt-5 text-[15px] text-body max-w-xl mx-auto">PBS는 기존 학습법을 대체하지 않습니다. 어떻게 공부하든, 그 밑바탕에 깔린 <b class="text-ink">'전제'를 의심하는 습관</b>을 더하는 훈련입니다.</p>
-    </div>
-
-    <div class="mt-14 grid md:grid-cols-2 gap-5 md:gap-6 reveal">
-      <div class="card p-0 overflow-hidden flex flex-col">
-        <div class="p-6 pb-4 flex items-start gap-3">
-          <div class="shrink-0 w-10 h-10 rounded-xl bg-body/10 flex items-center justify-center"><svg class="cmp-ico-1" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#525A69" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
-          <div><p class="text-[15px] font-bold text-ink">암기 전략</p><p class="text-[12px] text-faint mt-0.5">반복 암기 · 요약노트 · 회독</p></div>
-        </div>
-        <div class="px-6 py-4 bg-soft border-t border-line">
-          <p class="text-[10px] font-bold text-faint uppercase tracking-wider mb-1.5">강점</p>
-          <p class="text-[13px] text-body leading-relaxed">시험 범위가 명확할 때, 정보를 빠르고 정확하게 저장하는 데 효율적입니다.</p>
-        </div>
-        <div class="px-6 py-4 bg-point/5 border-t border-point/15 border-l-4 border-l-point flex-1">
-          <p class="text-[10px] font-bold text-point uppercase tracking-wider mb-1.5">PBS와 다른 점</p>
-          <p class="text-[13px] text-ink leading-relaxed">PBS는 외운 지식을 <b class="text-point">대체하지 않고</b>, 그 지식이 맞는가를 검증하는 습관을 더합니다.</p>
-        </div>
-      </div>
-      <div class="card p-0 overflow-hidden flex flex-col">
-        <div class="p-6 pb-4 flex items-start gap-3">
-          <div class="shrink-0 w-10 h-10 rounded-xl bg-body/10 flex items-center justify-center"><svg class="cmp-ico-2" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#525A69" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.5-3.5a5 5 0 01-6.8 6.8L4.7 22.3l-3-3L12.3 8.6a5 5 0 016.8-6.8l-3.5 3.5z"/></svg></div>
-          <div><p class="text-[15px] font-bold text-ink">PBL · 프로젝트 기반 학습</p><p class="text-[12px] text-faint mt-0.5">실제 문제를 만들고 해결하기</p></div>
-        </div>
-        <div class="px-6 py-4 bg-soft border-t border-line">
-          <p class="text-[10px] font-bold text-faint uppercase tracking-wider mb-1.5">강점</p>
-          <p class="text-[13px] text-body leading-relaxed">협업과 실행력, 배운 것을 실제로 응용하는 힘을 키웁니다.</p>
-        </div>
-        <div class="px-6 py-4 bg-point/5 border-t border-point/15 border-l-4 border-l-point flex-1">
-          <p class="text-[10px] font-bold text-point uppercase tracking-wider mb-1.5">PBS와 다른 점</p>
-          <p class="text-[13px] text-ink leading-relaxed">PBL이 '무엇을 만드는가'에 집중한다면, PBS는 그 설계의 <b class="text-point">바탕이 되는 사고 전제</b>를 다룹니다.</p>
-        </div>
-      </div>
-      <div class="card p-0 overflow-hidden flex flex-col">
-        <div class="p-6 pb-4 flex items-start gap-3">
-          <div class="shrink-0 w-10 h-10 rounded-xl bg-body/10 flex items-center justify-center"><svg class="cmp-ico-3" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#525A69" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
-          <div><p class="text-[15px] font-bold text-ink">IBL · 탐구 기반 학습</p><p class="text-[12px] text-faint mt-0.5">스스로 질문을 세우고 탐구하기</p></div>
-        </div>
-        <div class="px-6 py-4 bg-soft border-t border-line">
-          <p class="text-[10px] font-bold text-faint uppercase tracking-wider mb-1.5">강점</p>
-          <p class="text-[13px] text-body leading-relaxed">호기심과 주도적인 학습 태도를 키우는 데 강합니다.</p>
-        </div>
-        <div class="px-6 py-4 bg-point/5 border-t border-point/15 border-l-4 border-l-point flex-1">
-          <p class="text-[10px] font-bold text-point uppercase tracking-wider mb-1.5">PBS와 다른 점</p>
-          <p class="text-[13px] text-ink leading-relaxed">IBL의 폭넓은 질문 만들기 중에서, PBS는 전제를 발견하고 깨는 <b class="text-point">한 지점을 좁고 깊게</b> 훈련합니다.</p>
-        </div>
-      </div>
-      <div class="card p-0 overflow-hidden flex flex-col">
-        <div class="p-6 pb-4 flex items-start gap-3">
-          <div class="shrink-0 w-10 h-10 rounded-xl bg-body/10 flex items-center justify-center"><svg class="cmp-ico-4" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#525A69" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 015 5c0 1.5-.7 2.4-1.5 3.3-.6.7-1.2 1.4-1.5 2.4v1.3H10v-1.3c-.3-1-.9-1.7-1.5-2.4C7.7 9.4 7 8.5 7 7a5 5 0 015-5z"/><path d="M9.5 18h5M10 21h4"/></svg></div>
-          <div><p class="text-[15px] font-bold text-ink">메타인지 훈련</p><p class="text-[12px] text-faint mt-0.5">자신의 사고 과정을 점검하기</p></div>
-        </div>
-        <div class="px-6 py-4 bg-soft border-t border-line">
-          <p class="text-[10px] font-bold text-faint uppercase tracking-wider mb-1.5">강점</p>
-          <p class="text-[13px] text-body leading-relaxed">스스로 학습 전략을 돌아보고 조절하는 힘을 기릅니다.</p>
-        </div>
-        <div class="px-6 py-4 bg-point/5 border-t border-point/15 border-l-4 border-l-point flex-1">
-          <p class="text-[10px] font-bold text-point uppercase tracking-wider mb-1.5">PBS와 다른 점</p>
-          <p class="text-[13px] text-ink leading-relaxed">메타인지가 '어떻게 생각하는가' 전반을 본다면, PBS는 <b class="text-point">어떤 전제를 깔고 있는가</b> 한 가지를 정조준합니다.</p>
-        </div>
-      </div>
     </div>
   </div>
 </section>
@@ -1094,7 +942,7 @@
 
       <div class="text-center mt-12 reveal">
         <p class="text-[15px] text-white/70 mb-5">아이의 사고 습관이 지금 어디에 있는지부터 확인해 보세요.</p>
-        <a href="onboarding.html" class="btn btn-white btn-magnetic text-[15px] font-semibold px-10 py-4">무료 진단으로 시작하기 →</a>
+        <a href="diagnosis.html" class="btn btn-white btn-magnetic text-[15px] font-semibold px-10 py-4">무료 진단으로 시작하기 →</a>
       </div>
     </div>
   </div>
@@ -1140,7 +988,28 @@
       <h2 class="display text-[1.8rem] md:text-[2.8rem] font-extrabold">학원 하나 줄이는 값으로,<br class="hidden md:block" /> 공부의 근본을 바꾸세요</h2>
       <p class="lede mt-5 text-[15px] text-body">6개월 약정 기준. 약정 없이 월 단위로도 시작할 수 있어요.</p>
     </div>
-    <div class="mt-14 grid md:grid-cols-2 gap-5 max-w-3xl mx-auto items-stretch">
+
+    <!-- 얼리버드 배너 — ⚠️ 선착순 인원/할인율은 실제 값으로, 마감일은 아래 EARLYBIRD_DEADLINE 상수로 교체 -->
+    <div class="reveal max-w-3xl mx-auto mt-9">
+      <div class="rounded-2xl px-5 py-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-center" style="background:linear-gradient(100deg,rgba(10,102,255,.08),rgba(255,184,0,.13));border:1px solid rgba(10,102,255,.22)">
+        <span class="inline-flex items-center gap-1.5 text-[12.5px] font-extrabold text-point"><span class="text-[15px]">🔥</span> 얼리버드 한정</span>
+        <span class="text-[14px] text-ink font-semibold">선착순 <b class="text-point">100명</b> · 첫 6개월 <b class="text-point">30%</b> 할인</span>
+        <span class="inline-flex items-center gap-1.5 text-[12.5px] text-faint">마감까지 <b class="text-ink tabular-nums" id="ebDday">D-—</b></span>
+      </div>
+    </div>
+    <script>
+    (function(){
+      // ⚠️ 실제 얼리버드 마감일로 교체 (KST). 미설정 시 배너의 D-day만 숨김 처리됨.
+      var EARLYBIRD_DEADLINE = "2026-09-15T23:59:59+09:00";
+      var el = document.getElementById("ebDday"); if(!el) return;
+      var end = new Date(EARLYBIRD_DEADLINE).getTime();
+      if (isNaN(end)){ el.style.display = "none"; return; }
+      var days = Math.ceil((end - Date.now()) / 86400000);
+      el.textContent = days > 0 ? ("D-" + days) : "마감 임박";
+    })();
+    </script>
+
+    <div class="mt-10 grid md:grid-cols-2 gap-5 max-w-3xl mx-auto items-stretch">
       <div class="reveal card p-9 md:p-11 flex flex-col" data-d="1">
         <p class="en text-[11px] eyebrow uppercase text-faint">Basic</p>
         <div class="mt-4 mb-8"><span class="display text-[2.8rem] font-extrabold">39,000</span><span class="text-body text-[15px]">원 / 월</span></div>
@@ -1323,6 +1192,7 @@
           <a href="course.html" class="hover:text-white transition">코스 소개</a>
           <a href="pricing.html" class="hover:text-white transition">요금 안내</a>
           <a href="demo.html" class="hover:text-white transition">무료로 풀어보기</a>
+          <a href="diagnosis.html" class="hover:text-white transition">사고력 무료 진단</a>
           <a href="onboarding.html" class="hover:text-white transition">7일 무료 체험</a>
           <a href="faq.html" class="hover:text-white transition">자주 묻는 질문</a>
         </nav>
@@ -1353,6 +1223,32 @@
     </div>
   </div>
 </footer>
+
+<!-- ===== 모바일 sticky CTA (스크롤 시 노출, 하단 근처에선 숨김) ===== -->
+<div id="mobileCta" class="md:hidden fixed inset-x-0 bottom-0 z-40 translate-y-full transition-transform" style="transition-duration:.34s;transition-timing-function:cubic-bezier(.16,1,.3,1)">
+  <div class="mx-3 mb-3 rounded-2xl bg-white/95 backdrop-blur border border-line px-4 py-3 flex items-center gap-3" style="box-shadow:0 8px 30px rgba(10,14,23,.16)">
+    <div class="min-w-0 flex-1">
+      <p class="text-[11px] text-faint leading-tight">7일 전액 무료 · 위약금 없음</p>
+      <p class="text-[13.5px] font-bold text-ink leading-tight">지금 무료로 시작해보세요</p>
+    </div>
+    <a href="onboarding.html" class="btn btn-primary shrink-0 text-[13.5px] font-semibold px-5 py-3">무료 체험</a>
+  </div>
+</div>
+<script>
+(function(){
+  var el = document.getElementById("mobileCta"); if(!el) return;
+  var shown = false;
+  function onScroll(){
+    var y = window.scrollY || document.documentElement.scrollTop;
+    var nearBottom = (window.innerHeight + y) > (document.body.scrollHeight - 720);
+    var show = y > window.innerHeight * 0.7 && !nearBottom;
+    if (show !== shown){ shown = show; el.classList.toggle("translate-y-full", !show); }
+  }
+  window.addEventListener("scroll", onScroll, { passive:true });
+  window.addEventListener("resize", onScroll, { passive:true });
+  onScroll();
+})();
+</script>
 
 <script>
 (function(){
