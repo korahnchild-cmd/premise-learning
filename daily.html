@@ -198,7 +198,7 @@
       ] },
   ];
 
-  let li = 0, si = 0, answered = false;
+  let li = 0, si = 0, answered = false, qLoggedThisLesson = false;
   const streakBase = (window.PremiseStore ? PremiseStore.get().streak : 12);
   $("streak").textContent = streakBase;
 
@@ -209,7 +209,7 @@
 
   function loadLesson(){
     const L = LESSONS[li];
-    si = 0; answered = false;
+    si = 0; answered = false; qLoggedThisLesson = false;
     $("caseTag").textContent = L.tag;
     $("caseCount").textContent = `${li+1} / ${LESSONS.length}`;
     $("material").innerHTML = L.material;
@@ -243,7 +243,12 @@
     }
     else if(S.t === "insight"){
       setKozy("st-discover"); setTimeout(()=>setKozy("st-octa"), 1800);
-      html = `<div class="bg-point/5 border border-point/25 rounded-2xl p-5"><p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-1.5">전제 폭파 — 이렇게 바뀐다</p><p class="text-[16px] font-semibold text-ink leading-relaxed">${S.reframe}</p></div>`;
+      html = `<div class="bg-point/5 border border-point/25 rounded-2xl p-5"><p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-1.5">전제 폭파 — 이렇게 바뀐다</p><p class="text-[16px] font-semibold text-ink leading-relaxed">${S.reframe}</p></div>
+        <div class="mt-4">
+          <label for="qInput" class="block text-[12.5px] font-semibold text-body mb-1.5">이 사건에서 네가 던지고 싶은 질문을 한 줄로 적어봐 <span class="text-faint font-normal">(선택)</span></label>
+          <input id="qInput" type="text" maxlength="120" autocomplete="off" placeholder="예: 이 문제는 왜 이걸 당연하게 여기지?" class="w-full rounded-2xl border border-line bg-white px-4 py-3 text-[14px] text-ink placeholder:text-faint focus:outline-none focus:border-point" />
+          <p class="text-[11.5px] text-faint mt-1.5">적어두면 파트너 노트 리포트에 네 질문이 그대로 남아, 몇 주 뒤 얼마나 깊어졌는지 볼 수 있어.</p>
+        </div>`;
       cont.textContent = "파트너 노트에 기록";
     }
     else if(S.t === "wrap"){
@@ -255,6 +260,7 @@
         <p class="text-[17px] font-bold text-ink">${L.badgeName}</p>
         <div class="mt-5 bg-soft border border-line rounded-2xl p-4 text-left"><p class="text-[11px] font-semibold tracking-widest uppercase text-faint mb-1">파트너 노트 적립</p><p class="text-[15px] font-semibold text-ink">“${L.note}”</p></div>
         <p class="mt-4 text-[13px] text-point font-semibold">🔥 연속 학습 ${st.streak}일 · 파트너 노트에 저장됐어요</p>
+        ${qLoggedThisLesson ? `<div class="mt-3 flex items-center justify-center gap-1.5 text-[12.5px] text-body"><span>💬</span> 이번 주 리포트에 <b class="text-ink">네 질문</b>이 담겼어 — <a href="report.html" class="text-point font-semibold underline decoration-point/30 underline-offset-2">리포트에서 보기</a></div>` : ``}
       </div>`;
       cont.textContent = (li < LESSONS.length-1) ? "다음 사건 →" : "오늘의 사건 마치기";
     }
@@ -301,6 +307,12 @@
         window.scrollTo({top:0,behavior:"smooth"});
       }
       return;
+    }
+    // insight 단계를 떠날 때: 아이가 남긴 질문 한 줄을 기록 (선택)
+    const cur = L.steps[si];
+    if(cur && cur.t === "insight"){
+      const qi = document.getElementById("qInput");
+      if(qi && qi.value.trim() && window.PremiseStore && PremiseStore.logQuestion){ PremiseStore.logQuestion(L.subject, qi.value, L.note); qLoggedThisLesson = true; }
     }
     si++; renderStep();
   });

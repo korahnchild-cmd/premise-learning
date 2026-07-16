@@ -31,7 +31,9 @@
         { subject: "언어", note: "'조차'가 심은 전제를 포착", badge: "🕵️", badgeName: "문장파트너", date: "2일 전" },
         { subject: "상식", note: "'배웠으니 안다'는 전제를 의심", badge: "🔍", badgeName: "구조파트너", date: "3일 전" },
         { subject: "일상", note: "'열심히=성과' 전제를 알아차림", badge: "🎯", badgeName: "알아차림파트너", date: "4일 전" }
-      ]
+      ],
+      // 아이가 데일리 미션에서 직접 남긴 질문 로그 (report.html before/after 소스)
+      questionLog: []
     };
   }
 
@@ -43,6 +45,7 @@
       // 기존 localStorage에 신규 필드(user/subscription)가 없던 사용자를 위한 마이그레이션
       if (!parsed.user) parsed.user = { loggedIn: false, name: "", email: "", provider: "" };
       if (!parsed.subscription) parsed.subscription = { status: "none", plan: parsed.plan || "basic", cycle: "m6", method: "", trialEndsAt: "", nextBillingAt: "" };
+      if (!parsed.questionLog) parsed.questionLog = [];
       return parsed;
     } catch (e) { return seed(); }
   }
@@ -60,6 +63,16 @@
       if (c.badge && !s.badges.includes(c.badge)) s.badges.push(c.badge);
       s.premises.unshift({ subject: c.subject, note: c.note, badge: c.badge, badgeName: c.badgeName, date: "방금" });
       if (s.lastActive !== today()) { s.streak += 1; s.lastActive = today(); }
+      save(s);
+      return s;
+    },
+    /* 데일리 미션에서 아이가 남긴 질문 한 줄 기록 (report.html before/after 소스) */
+    logQuestion: (subject, q, premise) => {
+      const text = (q || "").trim();
+      if (!text) return s;
+      if (!s.questionLog) s.questionLog = [];
+      s.questionLog.push({ subject: subject || "", q: text, premise: premise || "", date: today() });
+      if (s.questionLog.length > 60) s.questionLog = s.questionLog.slice(-60);
       save(s);
       return s;
     },
