@@ -57,58 +57,67 @@
       <p class="text-[13px] text-body mt-2 max-w-lg">학교·모의고사 일정을 등록하면 D-Day와 그날까지의 맞춤 미션을 알려드려요. 시험 직전(D-5~D-1)엔 <b class="text-ink">파이널 스파크</b>가 자동으로 열려, 자주 틀린 유형을 마지막으로 점검합니다.</p>
     </div>
     <div class="flex flex-col items-end gap-2">
-      <p class="text-[11px] text-faint">데모: 플랜 전환해보기</p>
-      <div class="plan-toggle" id="planToggle">
-        <button data-plan="basic">베이직</button>
-        <button data-plan="premium">프리미엄</button>
-      </div>
+      <span class="lock-badge" id="planBadge">-</span>
     </div>
   </div>
   <p class="text-[11px] text-faint mt-3 max-w-lg leading-relaxed">파이널 스파크란? 등록한 시험 직전(D-5~D-1)에, 그동안 자주 틀린 유형만 짧게 골라 다시 점검하는 마무리 세션이에요. 프리미엄 전용입니다. · 참고로 <b class="text-ink">실전 적용 랩(Application Lab)</b>은 시험 일정과 무관하게, 심화까지 마치면 열리는 커리큘럼의 마지막 단계예요.</p>
 
-  <!-- exam registration -->
-  <div class="card p-6 md:p-7 mt-6 fadein">
-    <div class="flex items-center justify-between mb-4">
-      <p class="text-[15px] font-bold text-ink">시험 등록</p>
-      <span class="lock-badge" id="limitBadge">베이직 · 0/3개 등록</span>
+  <!-- 구독 게이트 (미구독 시) -->
+  <div id="calGateCard" class="card p-8 md:p-10 text-center mt-6" style="display:none">
+    <p class="text-[11px] font-bold tracking-[.2em] uppercase text-point mb-3">구독 전용 기능</p>
+    <p class="text-[18px] md:text-[20px] font-extrabold text-ink mb-2" style="word-break:keep-all">PBS 캘린더는 구독 후에 이용할 수 있어요</p>
+    <p class="text-[13.5px] text-body leading-relaxed max-w-sm mx-auto mb-6" style="word-break:keep-all">시험 일정을 등록하면 D-Day 미션과 파이널 스파크가 자동으로 열려요. 카드 없이 7일 무료체험으로 지금 바로 시작할 수 있어요.</p>
+    <div class="flex flex-wrap items-center justify-center gap-3">
+      <a href="onboarding.html" class="btn btn-primary px-6 py-3 text-[13px] font-semibold">7일 무료체험 시작하기 →</a>
+      <a href="pricing.html" class="btn btn-ghost px-6 py-3 text-[13px] font-semibold">요금제 보기</a>
     </div>
-    <form id="examForm" class="grid sm:grid-cols-5 gap-3">
-      <input type="text" id="examName" placeholder="시험 이름 (예: 중간고사)" class="sm:col-span-2" required />
-      <select id="examSubject" class="sm:col-span-1">
-        <option value="국어">국어</option>
-        <option value="수학">수학</option>
-        <option value="전과목">전과목</option>
-      </select>
-      <input type="date" id="examDate" class="sm:col-span-1" required />
-      <button type="submit" class="btn btn-primary sm:col-span-1 py-2.5 text-[13px] font-semibold">＋ 등록</button>
-    </form>
-    <p class="text-[12px] text-point mt-3 hidden" id="limitMsg">베이직 플랜은 시험 3개까지 등록할 수 있어요. 프리미엄으로 전환하면 무제한으로 등록할 수 있습니다.</p>
   </div>
 
-  <div class="grid lg:grid-cols-5 gap-4 mt-4">
-    <!-- D-Day list -->
-    <div class="lg:col-span-2 space-y-4" id="examList"></div>
+  <div id="calContent">
+    <!-- exam registration -->
+    <div class="card p-6 md:p-7 mt-6 fadein">
+      <div class="flex items-center justify-between mb-4">
+        <p class="text-[15px] font-bold text-ink">시험 등록</p>
+        <span class="lock-badge" id="limitBadge">베이직 · 0/3개 등록</span>
+      </div>
+      <form id="examForm" class="grid sm:grid-cols-5 gap-3">
+        <input type="text" id="examName" placeholder="시험 이름 (예: 중간고사)" class="sm:col-span-2" required />
+        <select id="examSubject" class="sm:col-span-1">
+          <option value="국어">국어</option>
+          <option value="수학">수학</option>
+          <option value="전과목">전과목</option>
+        </select>
+        <input type="date" id="examDate" class="sm:col-span-1" required />
+        <button type="submit" class="btn btn-primary sm:col-span-1 py-2.5 text-[13px] font-semibold">＋ 등록</button>
+      </form>
+      <p class="text-[12px] text-point mt-3 hidden" id="limitMsg">베이직 플랜은 시험 3개까지 등록할 수 있어요. <a href="checkout.html?plan=premium" class="underline font-semibold">프리미엄으로 업그레이드</a>하면 무제한으로 등록할 수 있습니다.</p>
+    </div>
 
-    <!-- monthly grid -->
-    <div class="card p-6 lg:col-span-3 fadein">
-      <div class="flex items-center justify-between mb-5">
-        <div>
-          <p class="text-[15px] font-bold text-ink" id="monthLabel">이번 달 미션 현황</p>
-          <p class="text-[12px] text-body mt-0.5">파란 칸 = 완료한 날 · 노란 칸 = 등록된 시험일</p>
+    <div class="grid lg:grid-cols-5 gap-4 mt-4">
+      <!-- D-Day list -->
+      <div class="lg:col-span-2 space-y-4" id="examList"></div>
+
+      <!-- monthly grid -->
+      <div class="card p-6 lg:col-span-3 fadein">
+        <div class="flex items-center justify-between mb-5">
+          <div>
+            <p class="text-[15px] font-bold text-ink" id="monthLabel">이번 달 미션 현황</p>
+            <p class="text-[12px] text-body mt-0.5">파란 칸 = 완료한 날 · 노란 칸 = 등록된 시험일</p>
+          </div>
         </div>
+        <div class="grid grid-cols-7 gap-1.5 text-center text-[10px] text-faint mb-1.5">
+          <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+        </div>
+        <div class="grid grid-cols-7 gap-1.5" id="monthGrid"></div>
       </div>
-      <div class="grid grid-cols-7 gap-1.5 text-center text-[10px] text-faint mb-1.5">
-        <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
-      </div>
-      <div class="grid grid-cols-7 gap-1.5" id="monthGrid"></div>
     </div>
-  </div>
 
-  <!-- notification preview -->
-  <div class="card p-6 md:p-7 mt-4 fadein">
-    <p class="text-[15px] font-bold text-ink mb-1">알림 미리보기</p>
-    <p class="text-[12px] text-body mb-4">등록한 시험을 기준으로, 이런 알림을 받게 돼요. (데모 화면 — 실제 알림은 발송되지 않아요)</p>
-    <div class="grid sm:grid-cols-2 gap-3" id="notifPreview"></div>
+    <!-- notification preview -->
+    <div class="card p-6 md:p-7 mt-4 fadein">
+      <p class="text-[15px] font-bold text-ink mb-1">알림 미리보기</p>
+      <p class="text-[12px] text-body mb-4">등록한 시험을 기준으로, 이런 알림을 받게 돼요. (데모 화면 — 실제 알림은 발송되지 않아요)</p>
+      <div class="grid sm:grid-cols-2 gap-3" id="notifPreview"></div>
+    </div>
   </div>
 
 </main>
@@ -130,13 +139,15 @@ const dDay = (dateStr) => {
   return Math.ceil((d2 - d1) / 86400000);
 };
 
-function renderPlanToggle() {
-  const plan = store.getPlan();
-  document.querySelectorAll("#planToggle button").forEach(b => b.classList.toggle("on", b.dataset.plan === plan));
+function isSubscribed() {
+  const sub = store.getSubscription();
+  return sub.status === "trial" || sub.status === "active";
 }
-document.querySelectorAll("#planToggle button").forEach(b => {
-  b.addEventListener("click", () => { store.setPlan(b.dataset.plan); renderAll(); });
-});
+
+function renderPlanBadge() {
+  const plan = store.getPlan();
+  $("planBadge").textContent = plan === "premium" ? "프리미엄 구독 중" : "베이직 구독 중";
+}
 
 function renderLimitBadge() {
   const plan = store.getPlan();
@@ -240,13 +251,22 @@ $("examForm").addEventListener("submit", (ev) => {
 });
 
 function renderAll() {
-  renderPlanToggle();
+  renderPlanBadge();
   renderLimitBadge();
   renderExamList();
   renderMonthGrid();
   renderNotifPreview();
 }
-renderAll();
+
+if (isSubscribed()) {
+  $("calGateCard").style.display = "none";
+  $("calContent").style.display = "block";
+  renderAll();
+} else {
+  $("calGateCard").style.display = "block";
+  $("calContent").style.display = "none";
+  $("planBadge").textContent = "미구독";
+}
 </script>
 
 </body>

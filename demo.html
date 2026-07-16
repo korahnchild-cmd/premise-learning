@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>PBS 학습법 · 가입 없이 3개 풀어보기</title>
+<title>PBS 학습법 · 6개월 이상 훈련하면 이렇게 보입니다</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -79,11 +79,12 @@
 
 <!-- top: progress + close -->
 <header class="px-5 py-4">
-  <div class="max-w-xl mx-auto flex items-center gap-4">
-    <p class="text-[12px] font-semibold text-faint shrink-0">가입 없이 체험 중</p>
+  <div class="max-w-xl mx-auto flex items-center gap-3">
+    <p class="text-[12px] font-semibold text-faint shrink-0 hidden sm:block">가입 없이 체험 중</p>
     <div class="flex-1 h-1.5 rounded-full bg-line overflow-hidden">
-      <div id="prog" class="h-full bg-point rounded-full transition-all duration-500" style="width:8%"></div>
+      <div id="prog" class="h-full bg-point rounded-full transition-all duration-500" style="width:3%"></div>
     </div>
+    <a href="checkout.html" id="subBtn" class="btn btn-primary text-[12.5px] font-bold px-4 py-2 shrink-0" style="display:none; box-shadow:0 3px 10px rgba(10,102,255,.35)">구독하기 →</a>
     <a href="index.html" class="text-[13px] text-faint hover:text-ink transition shrink-0">닫기</a>
   </div>
 </header>
@@ -91,8 +92,31 @@
 <main class="flex-1 flex items-center justify-center px-5 pb-10">
   <div class="w-full max-w-xl">
 
+    <!-- SUBJECT PICK · 증명에 쓸 과목 선택 -->
+    <section class="step show text-center" id="s-subject">
+      <p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-3">실전 적용 랩 · 심화 문항</p>
+      <h1 class="text-[1.7rem] md:text-[2.1rem] font-extrabold leading-tight" style="word-break:keep-all">6개월 이상 훈련하면,<br>문제가 <span class="text-point">이렇게</span> 보입니다</h1>
+      <p class="mt-4 text-[14px] text-body leading-relaxed max-w-md mx-auto">과목을 골라봐. 실제 심화 문항 3개로, 전제를 깨는 순간 문제가 얼마나 빨리 풀리는지 직접 보여줄게.</p>
+      <div class="grid gap-3 mt-8 max-w-sm mx-auto text-left" id="subjectPick"></div>
+    </section>
+
+    <!-- PROOF · 선택한 과목의 심화 문항 2개로 증명 -->
+    <section class="step text-center" id="s-proof">
+      <p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-3" id="proofEyebrow"></p>
+      <div class="flex justify-center gap-1.5 mb-5" id="proofDots"></div>
+
+      <div class="bg-white border border-line rounded-4xl px-6 py-8 text-left" id="proofCard">
+        <p class="text-[11px] font-semibold tracking-widest uppercase text-faint mb-3" id="proofLabel"></p>
+        <p class="text-[14.5px] md:text-[15.5px] leading-relaxed whitespace-pre-line text-ink" id="proofStem"></p>
+        <div class="mt-5 space-y-2" id="proofOpts"></div>
+        <div id="proofReveal" class="hidden mt-5"></div>
+      </div>
+
+      <button id="proofBtn" class="btn btn-primary w-full py-3.5 text-[15px] font-semibold mt-6" style="display:none">계속</button>
+    </section>
+
     <!-- INTRO -->
-    <section class="step show text-center" id="s-intro">
+    <section class="step text-center" id="s-intro">
       <div class="kozy st-idle mx-auto mb-8" style="width:120px;height:120px" id="k-intro"></div>
       <h1 class="text-[1.9rem] md:text-[2.4rem] font-extrabold leading-tight">전제 3개, <span class="text-point">가입 없이</span> 풀어볼래?</h1>
       <p class="mt-5 text-[16px] text-body leading-relaxed max-w-md mx-auto">난 사고분석관 루카야. 당연해 보이는 문장 속에 숨은 전제를 찾아 깨는 게 우리가 할 일이야. 딱 3개만 같이 해보자.</p>
@@ -164,6 +188,293 @@
   ["k-intro","k-case","k-done"].forEach(id=>{ document.getElementById(id).innerHTML = kozySVG(); });
 
   const $ = id => document.getElementById(id);
+
+  // ===== 증명 단계 — 실전 적용 랩 문항 뱅크 (과목당 3문항, 탐지→폭파→재구성 단계로 풀이) =====
+  const PROOF_BANK = {
+    "국어": [
+      {
+        stem: "다음 글을 읽고 물음에 답하시오.\n\n지난달 실시된 설문조사 결과, 매일 아침 식사를 하는 학생의 평균 성적이 그렇지 않은 학생보다 0.5점 더 높게 나타났다. 이에 따라 한 교육 전문가는 '아침 식사가 학업 성취도를 향상시킨다'는 결론을 내리고, 모든 학교에서 아침 식사를 의무화할 것을 제안했다.\n\n위 글에서 전문가의 결론이 성립하기 위해 반드시 전제되어야 하는 것은?",
+        choices: [
+          { label:"①", text:"아침 식사를 하는 학생 수가 그렇지 않은 학생 수보다 많다.", correct:false },
+          { label:"②", text:"아침 식사와 성적 사이에 상관관계가 있으면 인과관계도 성립한다.", correct:true },
+          { label:"③", text:"성적이 높은 학생일수록 아침 식사를 선호한다.", correct:false },
+          { label:"④", text:"설문조사에 참여한 학생 수가 통계적으로 의미 있는 규모다.", correct:false, trap:true },
+          { label:"⑤", text:"아침 식사의 종류에 따라 성적 향상 효과가 다르다.", correct:false },
+        ],
+        commonMistake: "④번(표본 크기)을 고르는 학생이 많아요. 통계 얘기가 나오면 반사적으로 '표본이 충분한가'부터 의심하는 습관 때문이에요.",
+        hiddenPremise: "'함께 나타난 두 가지 일'을 '한쪽이 다른 쪽을 만들었다'고 착각하는 전제 — 상관관계를 인과관계로 바꿔치기하고 있어.",
+        lukaExplain: "표본 크기 얘기가 나오면 반사적으로 ④를 고르고 싶어지지? 그런데 이 글의 진짜 구멍은 '몇 명을 조사했는지'가 아니야. '같이 일어난 일'을 '한쪽이 다른 쪽을 만들었다'고 착각한 거야. 아침 식사와 성적은 함께 나타났을 뿐, 식사가 성적을 '올렸다'는 증거는 이 글 어디에도 없어.",
+        reframe: "'상관관계는 인과관계를 보장하지 않는다' — 이 구조를 알아채는 게 실전 적용 랩에서 훈련하는 힘이야.",
+        fastSolve: "상관관계 ≠ 인과관계라는 것만 보이면 끝이야. '함께 나타났다'와 '원인이다'는 완전히 다른 이야기거든."
+      },
+      {
+        stem: "다음은 과학 기사의 일부다.\n\n'본 실험에서 새로운 약물 X를 투여한 환자군의 회복 속도가 기존 약물보다 20% 빨랐다. 따라서 약물 X는 기존 약물보다 우수하다.'\n\n이 글의 추론이 타당하지 않은 이유로 가장 적절한 것은?",
+        choices: [
+          { label:"①", text:"약물 X의 가격이 비싸서 환자가 부담할 수 없다.", correct:false },
+          { label:"②", text:"회복 속도만으로 약물의 우수성을 단정할 수 없다. 부작용, 안전성 등 다른 기준이 고려되지 않았다.", correct:true },
+          { label:"③", text:"환자군의 수가 너무 적어 통계적 의미가 없다.", correct:false, trap:true },
+          { label:"④", text:"기존 약물의 회복 속도를 잘못 측정했을 수 있다.", correct:false },
+          { label:"⑤", text:"약물 X의 특허가 아직 등록되지 않았다.", correct:false },
+        ],
+        commonMistake: "③번(표본 크기)을 고르는 학생이 많아요. 통계 문제 → 표본 크기라는 반사 작용이 작동하기 때문이에요.",
+        hiddenPremise: "'한 가지 기준(속도)에서 앞선다'를 '전체적으로 우수하다'로 그냥 넘겨버리는 전제.",
+        lukaExplain: "표본 크기? 그것도 중요하지. 근데 이 글이 진짜로 문제인 건, '회복이 빨랐다'는 것 하나만 보고 '무조건 우수하다'고 결론 내렸다는 거야. 부작용은? 안전성은? 우수하다는 건 한 가지 기준으로 판단할 수 없어.",
+        reframe: "'A가 B보다 한 가지 면에서 낫다'가 'A가 B보다 우수하다'로 이어지는 논리적 비약을 잡아내는 훈련.",
+        fastSolve: "'한 가지 기준만으로 전체가 우수하다'고 넘어갈 수 없다는 것만 보이면 끝이야."
+      },
+      {
+        stem: "다음 문장에서 '조차'가 숨기고 있는 전제를 고르시오.\n\n'너조차 이걸 몰랐어?'",
+        choices: [
+          { label:"①", text:"'너'를 칭찬하는 표현이다.", correct:false },
+          { label:"②", text:"다른 사람들은 다 알고, 너도 당연히 알 거라고 여겼다.", correct:true },
+          { label:"③", text:"'너'가 원래 잘 모르는 사람이라는 뜻이다.", correct:false, trap:true },
+          { label:"④", text:"질문하는 사람도 몰랐다는 뜻이다.", correct:false },
+          { label:"⑤", text:"단순히 놀라움을 표현할 뿐 전제는 없다.", correct:false },
+        ],
+        commonMistake: "①을 고르는 학생이 많아요. '조차'가 칭찬처럼 들려서 긍정적인 뜻으로 오해하기 때문이에요.",
+        hiddenPremise: "'조차'라는 조사 하나가 '기본적으로 알아야 할 것도 모른다'는 부정적 전제를 문장 속에 몰래 심어놓고 있어.",
+        lukaExplain: "'조차'는 그냥 강조 표현이 아니야. '너조차'라는 말 속엔 '다른 사람은 당연히 알고, 너도 당연히 알아야 하는데'라는 전제가 이미 깔려 있어. 단어 하나가 문장 전체의 전제를 결정할 수 있다는 걸 보여주는 예시야.",
+        reframe: "조사 하나에 숨어있는 전제를 읽어내는 것도 국어 독해의 핵심 기술이야.",
+        fastSolve: "'조차'가 보이면 바로 '다들 아는데 너만 몰랐다'는 부정적 전제부터 의심하면 끝."
+      }
+    ],
+    "수학": [
+      {
+        stem: "등차수열 {aₙ}에서 a₁ = 3, 공차 d = 4일 때, a₁₀의 값은?",
+        choices: [
+          { label:"①", text:"39", correct:true },
+          { label:"②", text:"43", correct:false, trap:true },
+          { label:"③", text:"40", correct:false },
+          { label:"④", text:"33", correct:false },
+          { label:"⑤", text:"36", correct:false },
+        ],
+        commonMistake: "②번을 고르는 학생이 많아요. a₁₀=a₁+10d로 계산해서, (n-1) 대신 n=10을 그대로 곱하는 실수예요.",
+        hiddenPremise: "'n번째 항은 공차를 n번 더한 것'이라는 잘못된 전제 — 첫 항 자체가 이미 '0번 이동'한 상태라는 걸 놓치고 있어.",
+        lukaExplain: "등차수열 공식은 aₙ=a₁+(n-1)d야. a₁₀을 구할 땐 (10-1)=9번만 공차를 더해. a₁₀=3+9×4=3+36=39. n번째 항은 처음 항에서 (n-1)번 이동한다는 걸 기억해 — 첫 항 자체는 이미 0번 이동한 상태니까.",
+        reframe: "등차수열 일반항 공식에서 (n-1) 항을 정확히 적용하는 능력.",
+        fastSolve: "aₙ=a₁+(n-1)d 공식만 정확히 적용하면 3+9×4=39, 끝."
+      },
+      {
+        stem: "직선 y = 2x + 3에 평행하고 점 (0, 5)를 지나는 직선의 방정식은?",
+        choices: [
+          { label:"①", text:"y = 2x + 5", correct:true },
+          { label:"②", text:"y = 2x + 3", correct:false, trap:true },
+          { label:"③", text:"y = -1/2 x + 5", correct:false },
+          { label:"④", text:"y = 2x - 5", correct:false },
+          { label:"⑤", text:"y = 5x + 2", correct:false },
+        ],
+        commonMistake: "②번을 고르는 학생이 많아요. 기울기만 맞으면 된다고 생각해 절편을 다시 구하지 않고 원래 식을 그대로 답으로 쓰는 실수예요.",
+        hiddenPremise: "'기울기가 같으면 절편도 같다'는 잘못된 전제 — 평행은 기울기만 같을 뿐, 절편은 새로 구해야 해.",
+        lukaExplain: "평행하니까 기울기는 그대로 2, 그래서 y=2x+b 꼴이 돼. 여기에 점 (0,5)를 대입하면 5=2×0+b, b=5. 그래서 y=2x+5. 기울기가 같다고 절편까지 같은 건 아니야 — 새 점을 대입해서 절편을 다시 구해야 해.",
+        reframe: "평행선 조건(기울기 동일)에서 주어진 점을 대입해 새로운 절편을 구하는 능력.",
+        fastSolve: "기울기 2는 그대로 두고, 점 (0,5)만 대입해서 절편을 다시 구하면 y=2x+5, 끝."
+      },
+      {
+        stem: "다음 로그를 계산하시오.\n\nlog₂ 8 = ?",
+        choices: [
+          { label:"①", text:"3", correct:true },
+          { label:"②", text:"4", correct:false, trap:true },
+          { label:"③", text:"2", correct:false },
+          { label:"④", text:"6", correct:false },
+          { label:"⑤", text:"16", correct:false },
+        ],
+        commonMistake: "②번을 고르는 학생이 많아요. log를 나눗셈처럼 착각해서 8÷2=4로 계산하는 실수예요.",
+        hiddenPremise: "'로그는 나눗셈이나 곱셈이다'라고 착각하는 전제 — log₂8은 '2를 몇 번 곱해야 8이 되는가'를 묻는 질문이야.",
+        lukaExplain: "로그를 나눗셈처럼 8÷2=4로 계산하면 틀려. log₂8은 '2를 몇 번 곱해야 8이 되는가'를 묻는 거야. 2¹=2, 2²=4, 2³=8이니까 답은 3. 로그는 지수의 역연산이라는 정의부터 다시 붙잡아야 해.",
+        reframe: "로그의 정의(지수의 역연산)를 정확히 이해하고 적용하는 능력.",
+        fastSolve: "log₂8 = '2를 몇 번 곱해야 8이 되는가' → 2³=8이니까 답은 3, 끝."
+      }
+    ],
+    "역사": [
+      {
+        stem: "신라의 삼국통일에 대한 평가로 다음 자료가 뒷받침하는 주장으로 가장 적절한 것은?\n\n'신라는 통일 과정에서 당나라를 끌어들였으나, 이후 당의 한반도 지배 야욕에 맞서 나당전쟁을 벌여 실질적인 자주적 통일을 이루었다.'",
+        choices: [
+          { label:"①", text:"신라의 통일은 외세를 이용했지만 이후 그 외세를 몰아낸 자주적 성격도 함께 지닌다", correct:true },
+          { label:"②", text:"신라의 통일은 처음부터 끝까지 완전히 자주적으로 이루어졌다", correct:false },
+          { label:"③", text:"신라의 통일은 당나라에 의해 이루어진 것이므로 의미가 없다", correct:false, trap:true },
+          { label:"④", text:"신라는 삼국통일에 실패했다", correct:false },
+          { label:"⑤", text:"당나라가 삼국통일의 주체였다", correct:false },
+        ],
+        commonMistake: "②나 ③처럼 외세 이용 또는 자주성, 한쪽 측면만 보고 극단적으로 판단하는 학생이 많아요.",
+        hiddenPremise: "역사적 사건을 '외세에 의한 것' 아니면 '완전히 자주적인 것', 둘 중 하나로만 봐야 한다는 이분법적 전제.",
+        lukaExplain: "자료를 잘 보면 '당을 끌어들였으나(외세 이용) → 이후 당과 싸워 몰아냈다(자주적 통일)'는 두 단계를 다 말하고 있어. 역사적 사건은 한 단어로 딱 잘라 평가하기보다, 과정 전체를 봐야 정확한 이해가 가능해.",
+        reframe: "역사적 사건의 복합적 성격을 자료에 근거해 균형 있게 평가하는 능력.",
+        fastSolve: "외세 이용과 자주적 극복, 둘 다 맞다는 것만 보이면 끝 — 이분법에서 벗어나면 바로 보여."
+      },
+      {
+        stem: "다음 중 무신정변(1170) 이후 고려 사회에 대한 설명으로 옳지 않은 것은?",
+        choices: [
+          { label:"①", text:"무신정변 이후에도 국왕이 실질적인 통치권을 그대로 유지했다", correct:true, trap:true },
+          { label:"②", text:"무신들이 정권을 장악하며 문신 중심 사회 질서가 크게 흔들렸다", correct:false },
+          { label:"③", text:"최씨 무신정권이 오랜 기간 권력을 독점했다", correct:false },
+          { label:"④", text:"무신정권기에 하층민의 봉기(망이·망소이의 난 등)가 여러 차례 일어났다", correct:false },
+          { label:"⑤", text:"무신정변으로 문벌귀족 중심의 지배 질서가 무너지는 계기가 되었다", correct:false },
+        ],
+        commonMistake: "①을 옳은 설명으로 착각하는 학생이 많아요. 왕이 폐위되지 않고 자리를 지켰다는 사실만 보고 실권도 유지했다고 판단하기 때문이에요.",
+        hiddenPremise: "'왕좌에 앉아 있다'와 '실제로 나라를 다스린다'를 같은 것으로 여기는 전제 — 명목상 지위와 실질 권력을 구분하지 못하고 있어.",
+        lukaExplain: "무신정변 이후 왕은 자리는 지켰지만 실제 권력은 무신들, 특히 나중에는 최씨 정권에게 완전히 넘어갔어. '왕좌에 앉아 있다'와 '실제로 다스린다'는 다른 이야기야 — 명목상의 지위와 실질적 권력을 구분해서 봐야 해.",
+        reframe: "정치적 지위와 실질적 권력을 구분해서 역사적 상황을 판단하는 능력.",
+        fastSolve: "왕좌를 지켰다 ≠ 실권을 지켰다, 이 둘을 분리해서 보면 바로 ①이 틀렸다는 게 보여."
+      },
+      {
+        stem: "고구려가 수나라의 대군을 물리친 전투로 알려진 것은?",
+        choices: [
+          { label:"①", text:"살수대첩", correct:true },
+          { label:"②", text:"귀주대첩", correct:false, trap:true },
+          { label:"③", text:"한산도대첩", correct:false },
+          { label:"④", text:"진주대첩", correct:false },
+          { label:"⑤", text:"명량대첩", correct:false },
+        ],
+        commonMistake: "②번(귀주대첩)을 고르는 학생이 많아요. '대첩'이라는 이름만 보고 비슷한 시기·상대의 전투라고 뭉뚱그리는 실수예요.",
+        hiddenPremise: "'대첩'이라는 단어가 붙으면 다 비슷한 시기·상대의 전투라고 뭉뚱그리는 전제 — 이름의 유사성이 사건의 유사성을 보장하지 않아.",
+        lukaExplain: "귀주대첩은 고려가 거란(요)을 물리친 전투야. 시대도, 나라도, 상대도 완전히 달라. '대첩'은 그냥 '큰 승리'라는 뜻일 뿐, 사건을 구분해주는 정보가 아니야. 시대·주체·상대국을 각각 따로 확인해야 정확히 짝지을 수 있어.",
+        reframe: "이름의 유사성에 의존하지 않고 시대·주체·상대를 각각 확인하는 역사 학습 습관.",
+        fastSolve: "'대첩'이라는 이름 말고 시대·상대국만 짝지으면 끝 — 고구려·수나라 조합은 살수대첩뿐."
+      }
+    ]
+  };
+
+  const SUBJECTS = [
+    { key:"국어", d:"비문학 지문 속 논리적 비약 찾기" },
+    { key:"수학", d:"공식을 정확히 적용하는지 확인하기" },
+    { key:"역사", d:"사건의 진짜 배경과 구조 파악하기" },
+  ];
+
+  let proofSubject = null;
+  let proofIdx = 0;   // 0~2 (과목당 3문항)
+  let proofPhase = 0; // 0:choice 1:check 2:detect 3:break 4:fast
+  let proofPicked = null;
+  const PROOF_PHASES = ["choice","check","detect","break","fast"];
+
+  function renderSubjectPick(){
+    const w = $("subjectPick"); w.innerHTML = "";
+    SUBJECTS.forEach(s=>{
+      const b = document.createElement("button");
+      b.className = "w-full text-left border border-line bg-white rounded-2xl px-5 py-4 hover:border-point transition";
+      b.innerHTML = `<span class="block text-[15px] font-bold text-ink">${s.key}</span><span class="block text-[13px] text-body mt-0.5">${s.d}</span>`;
+      b.onclick = () => {
+        proofSubject = s.key; proofIdx = 0;
+        $("s-subject").classList.remove("show");
+        $("s-proof").classList.add("show");
+        $("subBtn").style.display = "inline-flex";
+        renderProof();
+      };
+      w.appendChild(b);
+    });
+  }
+  renderSubjectPick();
+
+  function currentProofItem(){ return PROOF_BANK[proofSubject][proofIdx]; }
+
+  function renderProof(){
+    const item = currentProofItem();
+    proofPhase = 0; proofPicked = null;
+    $("proofEyebrow").textContent = "실전 적용 랩 · " + proofSubject + " 심화 문항";
+    $("proofLabel").textContent = "함께 풀어볼 사건 · " + (proofIdx+1) + " / 3";
+    $("proofDots").innerHTML = [0,1,2].map(i=>`<span class="inline-block w-2.5 h-2.5 rounded-full ${i<proofIdx?'bg-point':i===proofIdx?'bg-point/50':'bg-line'}"></span>`).join("");
+    $("proofStem").textContent = item.stem;
+    $("proofReveal").classList.add("hidden");
+    $("proofReveal").innerHTML = "";
+    $("proofBtn").style.display = "none";
+    updateProofProgress();
+
+    const w = $("proofOpts"); w.innerHTML = "";
+    let answered = false;
+    item.choices.forEach(c=>{
+      const b = document.createElement("button");
+      b.className = "opt block w-full text-left";
+      b.innerHTML = `<span class="font-bold mr-1.5">${c.label}</span>${c.text}`;
+      b.addEventListener("click", ()=>{
+        if(answered) return; answered = true;
+        const opts = Array.from(w.children);
+        opts.forEach((el, i)=>{
+          el.disabled = true;
+          const cc = item.choices[i];
+          if(cc.correct) el.classList.add("ok");
+          else if(el===b) el.classList.add("no");
+          else el.classList.add("dim");
+        });
+        proofPicked = c;
+        proofPhase = 1;
+        updateProofProgress();
+        renderProofPhase();
+      });
+      w.appendChild(b);
+    });
+  }
+
+  function updateProofProgress(){
+    const pct = 3 + ((proofIdx*5 + proofPhase + 1) / 15) * 27;
+    $("prog").style.width = Math.round(pct) + "%";
+  }
+
+  function renderProofPhase(){
+    const item = currentProofItem();
+    const box = $("proofReveal");
+    const btn = $("proofBtn");
+    const phase = PROOF_PHASES[proofPhase];
+    box.classList.remove("hidden");
+
+    if(phase === "check"){
+      const wrong = !proofPicked.correct;
+      box.innerHTML = wrong
+        ? `<div class="rounded-2xl bg-soft border border-line p-4">
+            <p class="text-[11px] font-semibold tracking-widest uppercase text-faint mb-1.5">⚠ 실수 체크</p>
+            <p class="text-[13.5px] text-body leading-relaxed">${item.commonMistake}</p>
+          </div>`
+        : `<div class="rounded-2xl bg-point/5 border border-point/25 p-4">
+            <p class="text-[13.5px] text-ink font-semibold leading-relaxed">정답이야! 근데 왜 정답인지, 숨은 전제까지 짚고 넘어가야 진짜 실력이 돼.</p>
+          </div>`;
+      btn.textContent = "왜 그런지 볼까? →";
+      btn.style.display = "block";
+      btn.onclick = ()=>{ proofPhase = 2; updateProofProgress(); renderProofPhase(); };
+
+    } else if(phase === "detect"){
+      box.innerHTML = `<div class="rounded-2xl bg-soft border border-line p-4">
+        <p class="text-[11px] font-semibold tracking-widest uppercase text-faint mb-1.5">🔍 탐지 · 숨은 전제</p>
+        <p class="text-[15px] font-semibold text-ink leading-relaxed">${item.hiddenPremise}</p>
+      </div>`;
+      btn.textContent = "이 전제, 폭파하러 가기 →";
+      btn.style.display = "block";
+      btn.onclick = ()=>{ proofPhase = 3; updateProofProgress(); renderProofPhase(); };
+
+    } else if(phase === "break"){
+      box.innerHTML = `<div class="rounded-2xl bg-soft border border-line p-4">
+        <p class="text-[11px] font-semibold tracking-widest uppercase text-faint mb-1.5">🔍 탐지 · 숨은 전제</p>
+        <p class="text-[15px] font-semibold text-ink leading-relaxed">${item.hiddenPremise}</p>
+      </div>
+      <button id="proofBlast" class="btn btn-primary w-full py-3.5 text-[15px] font-semibold mt-3">전제 폭파하기 💥</button>`;
+      btn.style.display = "none";
+      $("proofBlast").addEventListener("click", ()=>{
+        $("proofBlast").disabled = true;
+        $("proofBlast").textContent = "폭파 중...";
+        setTimeout(()=>{ proofPhase = 4; updateProofProgress(); renderProofPhase(); }, 550);
+      });
+
+    } else if(phase === "fast"){
+      box.innerHTML = `<div class="rounded-2xl bg-point/5 border border-point/25 p-4 mb-3">
+        <p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-1.5">💥 재구성 · 루카의 설명</p>
+        <p class="text-[14px] text-ink leading-relaxed">${item.lukaExplain}</p>
+        <p class="text-[12.5px] text-body mt-3 pt-3 border-t border-line leading-relaxed">${item.reframe}</p>
+      </div>
+      <div class="rounded-2xl bg-ink text-white p-4">
+        <p class="text-[11px] font-semibold tracking-widest uppercase text-white/50 mb-1.5">⚡ 전제를 깨면, 이렇게 빨리 풀립니다</p>
+        <p class="text-[14.5px] font-semibold leading-relaxed">${item.fastSolve}</p>
+      </div>`;
+      btn.textContent = (proofIdx < 2) ? "다음 문제 →" : "나도 직접 3개 풀어볼래 →";
+      btn.style.display = "block";
+      btn.onclick = (proofIdx < 2) ? nextProof : goIntro;
+    }
+  }
+
+  function nextProof(){ proofIdx += 1; renderProof(); }
+
+  function goIntro(){
+    $("s-proof").classList.remove("show");
+    $("subBtn").style.display = "none";
+    $("s-intro").classList.add("show");
+    $("prog").style.width = "32%";
+  }
 
   // 학년군 선택 → 학년에 맞는 교과 소재 3개(입문→기본→심화), 톤도 학년별로 분화
   const GRADES = [

@@ -63,15 +63,12 @@
     <p class="mt-2 text-[14px] text-body lede" style="word-break:keep-all">정답을 맞히는 게 목적이 아니에요. "이 문제, 어떤 전제를 의심해야 하는 문제였지?"를 매 문항 뒤에 짚어내는 게 핵심입니다.</p>
   </div>
 
-  <!-- 베이직 플랜 게이트 (프리미엄 전용) -->
+  <!-- 접근 게이트 (미구독 / 베이직 구독 시) -->
   <div id="planGateCard" class="card p-8 md:p-10 text-center mb-8" style="display:none">
-    <p class="text-[11px] font-bold tracking-[.2em] uppercase text-accent mb-3" style="color:#9A6A00">프리미엄 전용 기능</p>
-    <p class="text-[18px] md:text-[20px] font-extrabold text-ink mb-2" style="word-break:keep-all">실전 적용 랩은 프리미엄에서 열려요</p>
-    <p class="text-[13.5px] text-body leading-relaxed max-w-sm mx-auto mb-6" style="word-break:keep-all">입문·기본·심화를 모두 마치면 열리는 <b class="text-ink">커리큘럼의 마지막 단계</b>예요. 쌓은 전제 사고력을 실제 기출·시험 유형 문제에 직접 적용하는 훈련실이고, 심화 완료 시 오픈됩니다. 프리미엄 전용입니다.</p>
-    <div class="flex flex-wrap items-center justify-center gap-3">
-      <a href="pricing.html" class="btn-primary px-6 py-3 rounded-full text-[13px] font-semibold">프리미엄 자세히 보기</a>
-      <button class="btn-ghost px-6 py-3 rounded-full text-[13px] font-semibold" onclick="PremiseStore.setPlan('premium');location.reload()">데모로 프리미엄 체험하기</button>
-    </div>
+    <p class="text-[11px] font-bold tracking-[.2em] uppercase text-accent mb-3" style="color:#9A6A00" id="gateEyebrow">프리미엄 전용 기능</p>
+    <p class="text-[18px] md:text-[20px] font-extrabold text-ink mb-2" style="word-break:keep-all" id="gateTitle">실전 적용 랩은 프리미엄에서 열려요</p>
+    <p class="text-[13.5px] text-body leading-relaxed max-w-sm mx-auto mb-6" style="word-break:keep-all" id="gateBody">입문·기본·심화를 모두 마치면 열리는 <b class="text-ink">커리큘럼의 마지막 단계</b>예요. 쌓은 전제 사고력을 실제 기출·시험 유형 문제에 직접 적용하는 훈련실이고, 심화 완료 시 오픈됩니다. 프리미엄 전용입니다.</p>
+    <div class="flex flex-wrap items-center justify-center gap-3" id="gateActions"></div>
   </div>
 
   <!-- 필터 -->
@@ -321,11 +318,41 @@ document.querySelectorAll(".tbtn").forEach(function(btn) {
   });
 });
 
-/* 베이직 플랜은 게이트만 보여주고 문항은 렌더링하지 않음 */
-if (window.PremiseStore && PremiseStore.getPlan() !== "premium") {
-  document.getElementById("planGateCard").style.display = "block";
+/* ===== 접근 게이팅 =====
+   - 미구독(none/canceled): 실전 적용 랩 전체가 잠김 → 구독 유도
+   - 베이직 구독(trial/active + basic): 프리미엄 업그레이드 유도
+   - 프리미엄 구독(trial/active + premium): 정상 접근 */
+function labAccess() {
+  if (!window.PremiseStore) return "none";
+  var sub = PremiseStore.getSubscription();
+  var subscribed = sub.status === "trial" || sub.status === "active";
+  if (!subscribed) return "none";
+  return sub.plan === "premium" ? "premium" : "basic";
+}
+
+var access = labAccess();
+if (access !== "premium") {
+  var gate = document.getElementById("planGateCard");
+  var actions = document.getElementById("gateActions");
+  gate.style.display = "block";
   document.getElementById("filters").style.display = "none";
   document.getElementById("trackFilters").style.display = "none";
+
+  if (access === "none") {
+    document.getElementById("gateEyebrow").textContent = "구독 전용 기능";
+    document.getElementById("gateTitle").textContent = "실전 적용 랩은 구독 후에 열려요";
+    document.getElementById("gateBody").innerHTML = '입문·기본·심화를 모두 마치면 열리는 <b class="text-ink">커리큘럼의 마지막 단계</b>예요. 카드 없이 7일 무료체험으로 지금 바로 시작할 수 있어요.';
+    actions.innerHTML =
+      '<a href="onboarding.html" class="btn-primary px-6 py-3 rounded-full text-[13px] font-semibold">7일 무료체험 시작하기 →</a>'
+      + '<a href="pricing.html" class="btn-ghost px-6 py-3 rounded-full text-[13px] font-semibold">요금제 보기</a>';
+  } else {
+    document.getElementById("gateEyebrow").textContent = "프리미엄 전용 기능";
+    document.getElementById("gateTitle").textContent = "실전 적용 랩은 프리미엄에서 열려요";
+    document.getElementById("gateBody").innerHTML = '입문·기본·심화를 모두 마치면 열리는 <b class="text-ink">커리큘럼의 마지막 단계</b>예요. 쌓은 전제 사고력을 실제 기출·시험 유형 문제에 직접 적용하는 훈련실이고, 프리미엄 전용입니다.';
+    actions.innerHTML =
+      '<a href="checkout.html?plan=premium" class="btn-primary px-6 py-3 rounded-full text-[13px] font-semibold">프리미엄으로 업그레이드 →</a>'
+      + '<a href="pricing.html" class="btn-ghost px-6 py-3 rounded-full text-[13px] font-semibold">프리미엄 자세히 보기</a>';
+  }
 } else {
   filtered = getFiltered();
   renderItem();

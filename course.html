@@ -417,6 +417,14 @@
     document.querySelectorAll(".conste-svg").forEach(el => costeObserver.observe(el));
   }
 
+  // ===== 구독 게이팅 =====
+  // 입문(Level 1)은 누구나 무료로 체험. 기본·심화(Level 2·3)는 구독(체험 포함) 시에만 잠금 해제.
+  function isSubscribed(){
+    if (!window.PremiseStore) return false;
+    const sub = PremiseStore.getSubscription();
+    return sub.status === "trial" || sub.status === "active";
+  }
+
   function render(){
     const store = PremiseStore.get();
     const all = allMissions();
@@ -426,14 +434,17 @@
     $("progressBar").style.width = Math.round((doneCount / all.length) * 100) + "%";
 
     const currentId = firstIncompleteId();
+    const subscribed = isSubscribed();
     const inner = $("pathInner");
     inner.innerHTML = "";
 
     STAGES.forEach((stage, stageIdx) => {
+      const gated = stageIdx > 0 && !subscribed; // 기본·심화는 구독 필요
       const stageWrap = document.createElement("div");
       stageWrap.className = "mb-10";
 
       const statuses = stage.missions.map(m => {
+        if (gated) return "locked";
         const isDone = store.completed.includes(m.id);
         const isCurrent = m.id === currentId;
         return isDone ? "done" : (isCurrent ? "current" : "locked");
@@ -442,7 +453,14 @@
       stageWrap.innerHTML = `${buildConstellation(stageIdx, statuses)}
         <p class="en text-[11px] eyebrow uppercase text-point font-semibold mb-1 ml-[76px]">${stage.en}</p>
         <h2 class="text-[16px] font-bold text-ink mb-1 ml-[76px]">${stage.stage}</h2>
-        <p class="text-[13px] text-body mb-5 ml-[76px]">${stage.impact}</p>`;
+        <p class="text-[13px] text-body mb-5 ml-[76px]">${stage.impact}</p>
+        ${gated ? `<div class="ml-[76px] mb-5 rounded-2xl bg-point/5 border border-point/25 p-4 flex items-center justify-between gap-3 flex-wrap">
+          <div>
+            <p class="text-[13px] font-bold text-ink">이 단계부터는 구독이 필요해요</p>
+            <p class="text-[12px] text-body mt-0.5">카드 없이 7일 무료체험으로 바로 이어서 진행할 수 있어요.</p>
+          </div>
+          <a href="checkout.html" class="btn btn-primary text-[12.5px] font-semibold px-4 py-2.5 shrink-0">구독하기 →</a>
+        </div>` : ""}`;
 
       stage.missions.forEach((m, mi) => {
         const nodeState = statuses[mi];
@@ -460,6 +478,7 @@
           </div>`;
 
         row.querySelector(".mcard").addEventListener("click", () => {
+          if (gated){ location.href = "checkout.html"; return; }
           if (isLocked){
             const node = row.querySelector(".node");
             node.classList.add("shake");
