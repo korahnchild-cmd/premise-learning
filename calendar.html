@@ -54,7 +54,7 @@
     <div>
       <p class="text-[11px] font-semibold tracking-widest uppercase text-point">PBS 캘린더</p>
       <h1 class="text-[1.8rem] md:text-[2.2rem] font-extrabold mt-1">시험 일정을 등록하면, 루카가 미리 챙겨요</h1>
-      <p class="text-[13px] text-body mt-2 max-w-lg">학교·모의고사 일정을 등록하면 D-Day와 그날까지의 맞춤 미션을 알려드려요. 시험 4주 전엔 <b class="text-ink">실전 적용 랩(Application Lab)</b>이, 막판엔 <b class="text-ink">파이널 스파크</b>가 자동으로 열립니다.<sup class="text-faint">†</sup></p>
+      <p class="text-[13px] text-body mt-2 max-w-lg">학교·모의고사 일정을 등록하면 D-Day와 그날까지의 맞춤 미션을 알려드려요. 시험 직전(D-5~D-1)엔 <b class="text-ink">파이널 스파크</b>가 자동으로 열려, 자주 틀린 유형을 마지막으로 점검합니다.</p>
     </div>
     <div class="flex flex-col items-end gap-2">
       <p class="text-[11px] text-faint">데모: 플랜 전환해보기</p>
@@ -64,7 +64,7 @@
       </div>
     </div>
   </div>
-  <p class="text-[11px] text-faint mt-3 max-w-lg leading-relaxed">† 실전 적용 기간(D-28~D-1)이란? 그동안 훈련한 전제 감각을 실전에 적용하는 집중 기간이에요. 이 기간 중 D-28~D-6엔 실전 적용 랩(기출·모의고사 유형 문제 훈련), D-5~D-1엔 파이널 스파크(자주 틀린 유형만 짧게 재점검)가 열려요. 연 4회, 프리미엄 전용입니다.</p>
+  <p class="text-[11px] text-faint mt-3 max-w-lg leading-relaxed">파이널 스파크란? 등록한 시험 직전(D-5~D-1)에, 그동안 자주 틀린 유형만 짧게 골라 다시 점검하는 마무리 세션이에요. 프리미엄 전용입니다. · 참고로 <b class="text-ink">실전 적용 랩(Application Lab)</b>은 시험 일정과 무관하게, 심화까지 마치면 열리는 커리큘럼의 마지막 단계예요.</p>
 
   <!-- exam registration -->
   <div class="card p-6 md:p-7 mt-6 fadein">
@@ -213,7 +213,7 @@ function renderNotifPreview() {
   }
   const e = exams[0];
   const cards = [
-    { d: 28, msg: `실전 적용 기간이 시작됐어요. ${e.name} 대비, 기출 유형으로 감각을 다져볼까요?` },
+    { d: 28, msg: `${e.name}까지 4주 남았어요. 지금까지 쌓은 전제 감각을 실전 감각으로 다듬어가요.` },
     { d: 14, msg: `${e.name}까지 2주 남았어요. 이번 주는 자주 틀리던 전제를 다시 점검해봐요.` },
     { d: 7, msg: `일주일 남았어요. 무리한 진도보다 확실히 아는 것부터 다시 챙겨요.` },
     { d: 1, msg: `내일이 ${e.name}이에요. 오늘은 새로운 걸 배우기보다 푹 쉬는 게 좋아요.` },
