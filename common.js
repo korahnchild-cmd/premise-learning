@@ -16,6 +16,15 @@
       badges: ["🎯", "🔍", "🕵️", "🧩", "🐢"],
       plan: "basic", // "basic" | "premium" — 데모용 플랜 시뮬레이션
       exams: [], // PBS 캘린더: { id, name, date(YYYY-MM-DD), subject }
+      user: { loggedIn: false, name: "", email: "", provider: "" }, // provider: "google" | "kakao" | "naver"
+      subscription: {
+        status: "none", // "none" | "trial" | "active" | "canceled"
+        plan: "basic", // "basic" | "premium"
+        cycle: "m6", // "m6" | "m1"
+        method: "", // "naverpay" | "kakaopay" | "card"
+        trialEndsAt: "", // YYYY-MM-DD
+        nextBillingAt: "" // YYYY-MM-DD
+      },
       premises: [
         { subject: "수학", note: "속도 대신 깊이로 전환", badge: "🐢", badgeName: "깊이파트너", date: "오늘" },
         { subject: "일상", note: "'수 = 행복' 전제를 흔듦", badge: "🧩", badgeName: "행간파트너", date: "어제" },
@@ -27,8 +36,15 @@
   }
 
   function load() {
-    try { const raw = localStorage.getItem(KEY); return raw ? JSON.parse(raw) : seed(); }
-    catch (e) { return seed(); }
+    try {
+      const raw = localStorage.getItem(KEY);
+      if (!raw) return seed();
+      const parsed = JSON.parse(raw);
+      // 기존 localStorage에 신규 필드(user/subscription)가 없던 사용자를 위한 마이그레이션
+      if (!parsed.user) parsed.user = { loggedIn: false, name: "", email: "", provider: "" };
+      if (!parsed.subscription) parsed.subscription = { status: "none", plan: parsed.plan || "basic", cycle: "m6", method: "", trialEndsAt: "", nextBillingAt: "" };
+      return parsed;
+    } catch (e) { return seed(); }
   }
   function save(s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} }
 
@@ -50,6 +66,61 @@
     /* ===== PBS 캘린더 ===== */
     getPlan: () => s.plan || "basic",
     setPlan: (p) => { s.plan = p === "premium" ? "premium" : "basic"; save(s); return s; },
+
+    /* ===== 계정 / 구독 (D단계 · 프론트 데모, 실연동 전) ===== */
+    isLoggedIn: () => !!(s.user && s.user.loggedIn),
+    getUser: () => s.user || { loggedIn: false, name: "", email: "", provider: "" },
+    login: (provider, name) => {
+      if (!s.user) s.user = {};
+      s.user.loggedIn = true;
+      s.user.provider = provider || "google";
+      s.user.name = name || (provider === "kakao" ? "카카오 파트너" : provider === "naver" ? "네이버 파트너" : "구글 파트너");
+      s.user.email = s.user.email || (s.user.name.replace(/\s/g, "").toLowerCase() + "@example.com");
+      save(s);
+      return s.user;
+    },
+    logout: () => {
+      s.user = { loggedIn: false, name: "", email: "", provider: "" };
+      save(s);
+      return s.user;
+    },
+    getSubscription: () => s.subscription || { status: "none", plan: "basic", cycle: "m6", method: "", trialEndsAt: "", nextBillingAt: "" },
+    /* 카드 없이 7일 무료체험 시작 — 로그인 필요 */
+    startTrial: (plan, cycle) => {
+      if (!s.user || !s.user.loggedIn) return { ok: false, reason: "login_required" };
+      if (!s.subscription) s.subscription = {};
+      const end = new Date(); end.setDate(end.getDate() + 7);
+      s.subscription.status = "trial";
+      s.subscription.plan = plan === "premium" ? "premium" : "basic";
+      s.subscription.cycle = cycle === "m1" ? "m1" : "m6";
+      s.subscription.trialEndsAt = end.toISOString().slice(0, 10);
+      s.subscription.nextBillingAt = end.toISOString().slice(0, 10);
+      s.plan = s.subscription.plan;
+      save(s);
+      return { ok: true, subscription: s.subscription };
+    },
+    /* 바로 결제(유료 시작) — 결제수단: naverpay | kakaopay | card */
+    subscribe: (plan, cycle, method) => {
+      if (!s.user || !s.user.loggedIn) return { ok: false, reason: "login_required" };
+      if (!s.subscription) s.subscription = {};
+      const next = new Date();
+      next.setMonth(next.getMonth() + (cycle === "m1" ? 1 : 6));
+      s.subscription.status = "active";
+      s.subscription.plan = plan === "premium" ? "premium" : "basic";
+      s.subscription.cycle = cycle === "m1" ? "m1" : "m6";
+      s.subscription.method = method || "card";
+      s.subscription.trialEndsAt = "";
+      s.subscription.nextBillingAt = next.toISOString().slice(0, 10);
+      s.plan = s.subscription.plan;
+      save(s);
+      return { ok: true, subscription: s.subscription };
+    },
+    cancelSubscription: () => {
+      if (!s.subscription) s.subscription = {};
+      s.subscription.status = "canceled";
+      save(s);
+      return s.subscription;
+    },
     getExams: () => (s.exams || []).slice().sort((a, b) => a.date < b.date ? -1 : 1),
     examLimit: () => (s.plan === "premium" ? Infinity : 3),
     addExam: (exam) => {
@@ -83,6 +154,12 @@
       const links = items.map(([k, href, label]) =>
         `<a href="${href}" class="pn-link${active === k ? " pn-active" : ""}">${label}</a>`
       ).join("");
+      const logged = window.PremiseStore && PremiseStore.isLoggedIn();
+      const accountLink = logged
+        ? `<a href="mypage.html" class="pn-account${active === "mypage" ? " pn-active" : ""}" title="마이페이지">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 10-16 0"/><circle cx="12" cy="8" r="4.5"/></svg>
+          </a>`
+        : `<a href="login.html" class="pn-link" title="로그인">로그인</a>`;
       el.innerHTML =
         `<style>
           .pn-bar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.82);backdrop-filter:blur(14px);border-bottom:1px solid #ECEEF1}
@@ -94,6 +171,8 @@
           .pn-link:hover{color:#0A0E17;background:#F2F4F1}
           .pn-active{background:#0A0E17;color:#fff}
           .pn-active:hover{background:#0A0E17;color:#fff}
+          .pn-account{margin-left:6px;width:34px;height:34px;border-radius:9999px;display:inline-flex;align-items:center;justify-content:center;color:#525A69;background:#F2F4F1;text-decoration:none;transition:background .2s,color .2s}
+          .pn-account:hover{color:#0A0E17;background:#E4E8EC}
           .pn-reset{margin-left:2px;padding:8px 10px;border-radius:9999px;font-size:13px;color:#9AA4B2;background:none;border:none;cursor:pointer}
           .pn-reset:hover{color:#0A0E17}
           @media (max-width:520px){ .pn-link{padding:7px 10px;font-size:12px} }
@@ -103,7 +182,7 @@
             <span class="pn-mark"><svg style="transform:rotate(-45deg)" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.5 15.5L20 20"/></svg></span>
             PBS 학습법
           </a>
-          <nav class="pn-nav">${links}<button class="pn-reset" title="데모 초기화" onclick="PremiseStore.reset();location.reload()">↻</button></nav>
+          <nav class="pn-nav">${links}${accountLink}<button class="pn-reset" title="데모 초기화" onclick="PremiseStore.reset();location.reload()">↻</button></nav>
         </div></header>`;
     }
   };

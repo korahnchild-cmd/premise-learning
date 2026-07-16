@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PBS 학습법 · 마이페이지</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", night:"#0A0E17" },
+    fontFamily: { sans:["Pretendard","Inter","sans-serif"] }, borderRadius:{ "4xl":"2rem","5xl":"2.5rem" },
+  }}};
+</script>
+<style>
+  body{ font-family:"Pretendard","Inter",sans-serif; -webkit-font-smoothing:antialiased; letter-spacing:-.012em; background:#F5F6F4; color:#0A0E17; }
+  h1,h2{ letter-spacing:-.03em; }
+  ::selection{ background:rgba(10,102,255,.14); }
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:.5rem; border-radius:9999px; transition:transform .3s cubic-bezier(.16,1,.3,1), background .25s, border-color .25s; }
+  .btn-primary{ background:#0A66FF; color:#fff; box-shadow:0 4px 14px rgba(10,102,255,.28); } .btn-primary:hover{ background:#0857db; transform:translateY(-2px); }
+  .btn-ghost{ background:#fff; color:#0A0E17; border:1px solid #DFE3E8; } .btn-ghost:hover{ border-color:#0A66FF; color:#0A66FF; }
+  .btn-danger{ background:#fff; color:#C24444; border:1px solid #EFCFCF; } .btn-danger:hover{ background:#FBF2F2; }
+  .card{ background:#fff; border:1px solid #ECEEF1; border-radius:1.5rem; }
+  .badge{ display:inline-flex; align-items:center; gap:.35rem; font-size:11.5px; font-weight:700; padding:.3rem .7rem; border-radius:9999px; }
+  .badge-trial{ background:rgba(10,102,255,.1); color:#0A66FF; }
+  .badge-active{ background:rgba(20,160,90,.1); color:#128a4e; }
+  .badge-canceled{ background:rgba(154,164,178,.15); color:#525A69; }
+  .badge-none{ background:rgba(154,164,178,.15); color:#525A69; }
+</style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+<div id="topnav"></div>
+<script src="common.js"></script>
+
+<main class="flex-1 px-5 py-10">
+  <div class="max-w-lg mx-auto">
+
+    <div class="text-center mb-8">
+      <p class="text-[11px] font-semibold tracking-[.2em] uppercase text-point mb-2">My Page</p>
+      <h1 class="text-[1.9rem] md:text-[2.2rem] font-extrabold leading-tight">마이페이지</h1>
+    </div>
+
+    <!-- 계정 정보 -->
+    <div class="card p-6 md:p-7 mb-4 flex items-center gap-4">
+      <div class="w-14 h-14 rounded-full bg-point/10 flex items-center justify-center shrink-0">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 10-16 0"/><circle cx="12" cy="8" r="4.5"/></svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-[16px] font-bold text-ink" id="uName">-</p>
+        <p class="text-[13px] text-faint mt-0.5" id="uEmail">-</p>
+      </div>
+      <span class="text-[11px] font-semibold text-faint bg-panel rounded-full px-3 py-1.5" id="uProvider">-</span>
+    </div>
+
+    <!-- 구독 상태 -->
+    <div class="card p-6 md:p-7 mb-4">
+      <div class="flex items-center justify-between mb-4">
+        <p class="text-[12px] font-semibold text-faint uppercase tracking-wide">구독 상태</p>
+        <span class="badge" id="subBadge">-</span>
+      </div>
+      <p class="text-[1.4rem] font-extrabold text-ink" id="subPlan">-</p>
+      <p class="text-[13px] text-body mt-1" id="subDetail">-</p>
+
+      <div class="mt-6 flex flex-col sm:flex-row gap-2.5" id="subActions"></div>
+    </div>
+
+    <!-- 결제 수단 -->
+    <div class="card p-6 md:p-7 mb-4" id="methodCard">
+      <p class="text-[12px] font-semibold text-faint uppercase tracking-wide mb-3">결제 수단</p>
+      <div class="flex items-center gap-3">
+        <span class="w-2.5 h-2.5 rounded-full" id="methodDot"></span>
+        <p class="text-[14px] font-semibold text-ink" id="methodLabel">-</p>
+      </div>
+    </div>
+
+    <div class="text-center mt-8">
+      <button class="text-[13px] text-faint hover:text-ink transition" onclick="doLogout()">로그아웃</button>
+    </div>
+
+  </div>
+</main>
+
+<footer class="pt-16 pb-10 bg-night text-white/65 border-t border-white/10">
+  <div class="max-w-6xl mx-auto px-5 md:px-8">
+    <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+      <p class="text-[12px] text-white/35">© 2026 PBS 학습법. All rights reserved.</p>
+      <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[12px] text-white/45">
+        <a href="terms.html" class="hover:text-white transition">이용약관</a>
+        <a href="privacy.html" class="hover:text-white transition">개인정보처리방침</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const $ = id => document.getElementById(id);
+
+  if (!window.PremiseStore || !PremiseStore.isLoggedIn()){
+    location.href = "login.html?next=" + encodeURIComponent("mypage.html");
+  }
+
+  function providerLabel(p){ return p==="kakao" ? "카카오 계정" : p==="naver" ? "네이버 계정" : "구글 계정"; }
+  function planLabel(p){ return p==="premium" ? "프리미엄" : "베이직"; }
+  function methodLabel(m){ return m==="naverpay" ? "네이버페이" : m==="kakaopay" ? "카카오페이" : m==="card" ? "카드" : "미등록"; }
+  function methodColor(m){ return m==="naverpay" ? "#03C75A" : m==="kakaopay" ? "#FEE500" : "#0A0E17"; }
+
+  function render(){
+    const u = PremiseStore.getUser();
+    const sub = PremiseStore.getSubscription();
+    $("uName").textContent = u.name || "-";
+    $("uEmail").textContent = u.email || "-";
+    $("uProvider").textContent = providerLabel(u.provider);
+
+    const badge = $("subBadge");
+    const actions = $("subActions");
+    actions.innerHTML = "";
+
+    if (sub.status === "trial"){
+      badge.className = "badge badge-trial"; badge.textContent = "무료체험 중";
+      $("subPlan").textContent = planLabel(sub.plan) + " · " + (sub.cycle==="m6" ? "6개월 코스" : "월 단위");
+      $("subDetail").textContent = sub.trialEndsAt + "까지 무료. 체험이 끝나면 자동으로 결제가 시작돼요.";
+      const btn = document.createElement("a");
+      btn.href = "checkout.html?plan=" + sub.plan + "&cycle=" + sub.cycle;
+      btn.className = "btn btn-primary flex-1 py-3.5 text-[14px] font-semibold";
+      btn.textContent = "지금 바로 결제로 전환";
+      actions.appendChild(btn);
+      const cancel = document.createElement("button");
+      cancel.className = "btn btn-danger flex-1 py-3.5 text-[14px] font-semibold";
+      cancel.textContent = "체험 해지";
+      cancel.onclick = ()=>{ PremiseStore.cancelSubscription(); render(); };
+      actions.appendChild(cancel);
+      $("methodCard").style.display = "none";
+    } else if (sub.status === "active"){
+      badge.className = "badge badge-active"; badge.textContent = "구독 중";
+      $("subPlan").textContent = planLabel(sub.plan) + " · " + (sub.cycle==="m6" ? "6개월 코스" : "월 단위");
+      $("subDetail").textContent = "다음 결제일 " + sub.nextBillingAt;
+      const change = document.createElement("a");
+      change.href = "checkout.html?plan=" + sub.plan + "&cycle=" + sub.cycle;
+      change.className = "btn btn-ghost flex-1 py-3.5 text-[14px] font-semibold";
+      change.textContent = "플랜 변경";
+      actions.appendChild(change);
+      const cancel = document.createElement("button");
+      cancel.className = "btn btn-danger flex-1 py-3.5 text-[14px] font-semibold";
+      cancel.textContent = "구독 해지";
+      cancel.onclick = ()=>{ PremiseStore.cancelSubscription(); render(); };
+      actions.appendChild(cancel);
+      $("methodCard").style.display = "";
+      $("methodDot").style.background = methodColor(sub.method);
+      $("methodLabel").textContent = methodLabel(sub.method);
+    } else if (sub.status === "canceled"){
+      badge.className = "badge badge-canceled"; badge.textContent = "해지됨";
+      $("subPlan").textContent = planLabel(sub.plan) + " · " + (sub.cycle==="m6" ? "6개월 코스" : "월 단위");
+      $("subDetail").textContent = "구독이 해지됐어요. 언제든 다시 시작할 수 있어요.";
+      const resub = document.createElement("a");
+      resub.href = "checkout.html?plan=" + sub.plan + "&cycle=" + sub.cycle;
+      resub.className = "btn btn-primary flex-1 py-3.5 text-[14px] font-semibold";
+      resub.textContent = "다시 시작하기";
+      actions.appendChild(resub);
+      $("methodCard").style.display = "none";
+    } else {
+      badge.className = "badge badge-none"; badge.textContent = "미구독";
+      $("subPlan").textContent = "아직 구독 중인 플랜이 없어요";
+      $("subDetail").textContent = "7일 무료체험이나 바로 결제로 시작해보세요.";
+      const trial = document.createElement("a");
+      trial.href = "onboarding.html";
+      trial.className = "btn btn-primary flex-1 py-3.5 text-[14px] font-semibold";
+      trial.textContent = "7일 무료체험 시작";
+      actions.appendChild(trial);
+      const buy = document.createElement("a");
+      buy.href = "checkout.html";
+      buy.className = "btn btn-ghost flex-1 py-3.5 text-[14px] font-semibold";
+      buy.textContent = "바로 결제하기";
+      actions.appendChild(buy);
+      $("methodCard").style.display = "none";
+    }
+  }
+
+  function doLogout(){
+    PremiseStore.logout();
+    location.href = "index.html";
+  }
+
+  if (window.PremiseStore && PremiseStore.isLoggedIn()) render();
+  if (window.PremiseNav) PremiseNav.render("mypage");
+</script>
+</body>
+</html>

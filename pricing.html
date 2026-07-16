@@ -84,6 +84,7 @@
         <li class="flex gap-3 items-start"><span class="text-point shrink-0">✓</span><span>PBS 캘린더 <span class="font-semibold">(시험 3개까지)</span></span></li>
       </ul>
       <a href="onboarding.html" class="btn btn-ghost mt-9 py-3.5 text-[14px] font-semibold">7일 무료로 시작</a>
+      <a href="checkout.html?plan=basic&cycle=m6" id="buyBasic" class="text-[12.5px] text-body hover:text-point transition underline underline-offset-2 mt-3 text-center">카드 없이 말고, 바로 결제하고 시작할게요 →</a>
     </div>
 
     <!-- premium -->
@@ -105,6 +106,7 @@
         <li class="flex gap-3 items-start"><span class="text-point shrink-0">✓</span><span><span class="font-semibold">PBS 캘린더</span> 무제한 연동</span></li>
       </ul>
       <a href="onboarding.html" class="btn btn-primary mt-9 py-3.5 text-[14px] font-semibold">7일 무료로 시작</a>
+      <a href="checkout.html?plan=premium&cycle=m6" id="buyPremium" class="text-[12.5px] text-body hover:text-point transition underline underline-offset-2 mt-3 text-center">카드 없이 말고, 바로 결제하고 시작할게요 →</a>
     </div>
   </div>
 
@@ -235,6 +237,8 @@
     $('[data-plan="premium"]').textContent = p.premium;
     $('[data-sub="basic"]').textContent = p.subBasic;
     $('[data-sub="premium"]').textContent = p.subPremium;
+    $('#buyBasic').href = "checkout.html?plan=basic&cycle=" + mode;
+    $('#buyPremium').href = "checkout.html?plan=premium&cycle=" + mode;
   }
   document.querySelectorAll(".seg").forEach(b=>{
     b.addEventListener("click", ()=>{
@@ -313,6 +317,7 @@
           <a href="pricing.html" class="hover:text-white transition">요금 안내</a>
           <a href="demo.html" class="hover:text-white transition">무료로 풀어보기</a>
           <a href="onboarding.html" class="hover:text-white transition">7일 무료 체험</a>
+          <a href="checkout.html" class="hover:text-white transition">바로 결제하기</a>
           <a href="faq.html" class="hover:text-white transition">자주 묻는 질문</a>
         </nav>
       </div>
