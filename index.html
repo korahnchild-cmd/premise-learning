@@ -6,6 +6,7 @@
 <title>PBS 학습법 (Premise-Break Schema) — 전제를 깨고 사고의 틀을 다시 짜다</title>
 <meta name="description" content="상위권 아이들은 문제를 풀기 전에, 문제의 전제부터 의심합니다. 진짜 성적을 만드는 메타공부, PBS 학습법." />
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="analytics.js" data-ga="1"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -311,7 +312,7 @@
     </a>
     <nav class="hidden md:flex items-center gap-8 text-[13px] text-body font-medium">
       <a href="#problem" class="hover:text-ink transition">문제</a>
-      <a href="#how" class="hover:text-ink transition">원리</a>
+      <a href="#what-pbs" class="hover:text-ink transition">원리</a>
       <a href="#pricing" class="hover:text-ink transition">요금</a>
       <a href="faq.html" class="hover:text-ink transition">FAQ</a>
     </nav>
@@ -447,19 +448,14 @@
   </div>
 </section>
 
-<!-- 핵심 약속 배너 — 히어로 직후, 점수보다 근본을 바꾼다는 브랜드 원칙 (CURRICULUM 섹션과 동일한 다크 톤으로 크게) -->
-<section class="reveal py-20 md:py-32 text-white relative overflow-hidden" style="background:linear-gradient(175deg,#0B1730,#0A0E17 65%)">
+<!-- PBS 매거진 promo -->
+<section class="reveal py-16 md:py-24 text-white relative overflow-hidden" style="background:linear-gradient(175deg,#0B1730,#0A0E17 65%)">
   <div class="absolute top-0 left-0 right-0 h-px bg-white/10"></div>
   <div class="max-w-2xl mx-auto px-5 md:px-8 text-center relative">
-    <p class="text-[26px] md:text-[36px] font-extrabold text-white">점수보다 <span style="color:#5B93F1">근본</span>을 바꿉니다</p>
-    <p class="mt-4 text-[15px] md:text-[17px] text-white/70 leading-relaxed max-w-lg mx-auto">근본이 바뀌면 점수는 저절로 따라옵니다 — 저희가 매주 보여드리는 건 점수가 아니라, 생각하는 방식이 자라는 과정입니다.</p>
-
-    <div class="mt-14 pt-10 border-t border-white/10">
-      <p class="en eyebrow uppercase text-[11px] font-semibold text-white/50 mb-4">PBS 매거진</p>
-      <p class="text-[16px] md:text-[19px] font-bold text-white leading-snug">전제를 의심하는 법, 아티클로도 만나보세요</p>
-      <p class="mt-3 text-[13.5px] md:text-[14.5px] text-white/65 leading-relaxed max-w-md mx-auto">아이의 공부 습관을 바꾸고 싶은 부모님을 위해, PBS식 사고법을 실생활 사례로 풀어낸 글을 연재합니다.</p>
-      <a href="magazine/index.html" class="inline-block mt-6 text-[13px] font-semibold text-white border-b border-white/40 hover:border-white transition pb-0.5">PBS 매거진 보러가기 →</a>
-    </div>
+    <p class="en eyebrow uppercase text-[11px] font-semibold text-white/50 mb-4">PBS 매거진</p>
+    <p class="text-[22px] md:text-[30px] font-extrabold text-white leading-snug">전제를 의심하는 법,<br class="hidden sm:block" /> 아티클로도 만나보세요</p>
+    <p class="mt-4 text-[13.5px] md:text-[15px] text-white/65 leading-relaxed max-w-md mx-auto">아이의 공부 습관을 바꾸고 싶은 부모님을 위해, PBS식 사고법을 실생활 사례로 풀어낸 글을 매주 연재합니다.</p>
+    <a href="magazine/index.html" class="inline-block mt-6 text-[13px] font-semibold text-white border-b border-white/40 hover:border-white transition pb-0.5">PBS 매거진 보러가기 →</a>
   </div>
 </section>
 
@@ -469,22 +465,36 @@
     <div class="text-center max-w-2xl mx-auto reveal">
       <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">Exam-ready, not just knowledge-ready</p>
       <h2 class="display text-[1.8rem] md:text-[2.8rem] font-extrabold">평소엔 사고 습관을,<br class="hidden md:block" /> 시험 앞두고는 실전 감각까지</h2>
-      <p class="lede mt-5 text-[15px] text-body max-w-lg mx-auto">매일의 전제 훈련은 베이직도 프리미엄도 똑같습니다. 시험이 다가오면, 프리미엄은 이 두 가지로 실전을 챙깁니다.</p>
+      <p class="lede mt-5 text-[15px] text-body max-w-lg mx-auto">매일의 전제 훈련은 베이직도 프리미엄도 똑같습니다. 시험이 다가오면, <b class="text-ink">프리미엄</b>은 이렇게 실전 감각까지 챙깁니다.</p>
     </div>
-    <div class="mt-12 grid md:grid-cols-2 gap-5 max-w-3xl mx-auto">
-      <div class="reveal card p-7 md:p-8" data-d="1">
-        <p class="en text-[15px] md:text-[17px] font-extrabold uppercase text-point mb-4 tracking-tight">01 · 파이널 스파크</p>
-        <h3 class="text-[16px] font-extrabold text-ink mb-2">시험 막판엔, 자주 틀린 것만 다시 확인해요</h3>
-        <p class="text-[13.5px] text-body leading-relaxed">시험 D-5~D-1엔 새로 배우지 않아요. 그동안 자주 걸렸던 전제 함정만 짧게 골라 마지막으로 점검하는 마무리 세션이에요. 등록한 시험 일정에 맞춰 열려요. (프리미엄 전용)</p>
+    <div class="mt-12 grid sm:grid-cols-3 gap-5 max-w-4xl mx-auto">
+      <div class="reveal card p-7 flex flex-col" data-d="1">
+        <div class="mb-4 w-12 h-12 rounded-2xl flex items-center justify-center" style="background:rgba(184,134,11,.1)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B8860B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.4 5.6 5.6 2.4-5.6 2.4L12 18.5l-2.4-5.6L4 10.5l5.6-2.4z"/></svg>
+        </div>
+        <p class="en text-[11px] font-bold uppercase tracking-wide" style="color:#B8860B">Final Spark</p>
+        <h3 class="text-[16px] font-extrabold text-ink mt-1 mb-2">파이널 스파크</h3>
+        <p class="text-[13px] text-body leading-relaxed flex-1">시험 D-5~D-1, 새로 배우지 않아요. 자주 걸렸던 <b class="text-ink">전제 함정만</b> 짧게 골라 마지막으로 점검하는 마무리 세션.</p>
         <a href="final-spark.html" class="inline-block mt-4 text-[13px] font-semibold text-point hover:underline">둘러보기 →</a>
       </div>
-      <div class="reveal card p-7 md:p-8" data-d="2">
-        <p class="en text-[15px] md:text-[17px] font-extrabold uppercase text-point mb-4 tracking-tight">02 · PBS 캘린더</p>
-        <h3 class="text-[16px] font-extrabold text-ink mb-2">시험일 등록하면 D-Day부터 챙겨드려요</h3>
-        <p class="text-[13.5px] text-body leading-relaxed">학교·모의고사 일정을 등록하면 D-Day 카운트다운과 이번 달 미션 완료 현황을 한눈에 볼 수 있어요. 베이직은 3개, 프리미엄은 무제한 등록됩니다.</p>
+      <div class="reveal card p-7 flex flex-col" data-d="2">
+        <div class="mb-4 w-12 h-12 rounded-2xl flex items-center justify-center" style="background:rgba(184,134,11,.1)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B8860B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 3v5.5L5.7 17a2 2 0 001.8 3h9a2 2 0 001.8-3L14 8.5V3"/><path d="M8 14h8"/></svg>
+        </div>
+        <p class="en text-[11px] font-bold uppercase tracking-wide" style="color:#B8860B">Application Lab</p>
+        <h3 class="text-[16px] font-extrabold text-ink mt-1 mb-2">실전 적용 랩</h3>
+        <p class="text-[13px] text-body leading-relaxed flex-1">입문·기본·<b class="text-ink">심화까지 모두 마치면</b> 열리는 커리큘럼의 마지막 단계. 쌓은 사고력을 실제 기출·시험 유형 문제에 직접 적용해요.</p>
+        <a href="application-lab.html" class="inline-block mt-4 text-[13px] font-semibold text-point hover:underline">둘러보기 →</a>
+      </div>
+      <div class="reveal card p-7 flex flex-col" data-d="3">
+        <div class="mb-4 w-12 h-12 rounded-2xl flex items-center justify-center" style="background:rgba(184,134,11,.1)">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B8860B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
+        </div>
+        <p class="en text-[11px] font-bold uppercase tracking-wide" style="color:#B8860B">Calendar</p>
+        <h3 class="text-[16px] font-extrabold text-ink mt-1 mb-2">PBS 캘린더</h3>
+        <p class="text-[13px] text-body leading-relaxed flex-1">시험일을 등록하면 D-Day 카운트다운과 이번 달 미션 현황을 한눈에. 베이직 3개, <b class="text-ink">프리미엄 무제한</b>.</p>
       </div>
     </div>
-    <p class="reveal text-center text-[13.5px] text-body mt-8 max-w-xl mx-auto leading-relaxed" style="word-break:keep-all">그리고 <b class="text-ink">심화까지 모두 마치면</b>, 커리큘럼의 마지막 단계인 <b class="text-ink">실전 적용 랩(Application Lab)</b>이 열려 그동안 쌓은 사고력을 실제 시험 유형 문제에 직접 적용합니다. <a href="application-lab.html" class="text-point font-semibold hover:underline whitespace-nowrap">둘러보기 →</a></p>
     <div class="reveal text-center mt-10 flex flex-wrap items-center justify-center gap-4">
       <a href="calendar.html" class="btn btn-primary text-[14px] font-semibold px-7 py-3.5">PBS 캘린더 미리 써보기</a>
       <a href="pricing.html" class="text-[13px] font-semibold text-point hover:underline">프리미엄 자세히 보기 →</a>
@@ -759,37 +769,6 @@
   </div>
 </section>
 
-<!-- HOW — scrollytelling -->
-<section id="how" class="relative bg-white">
-  <div class="text-center max-w-3xl mx-auto px-5 md:px-8 pt-16 md:pt-24 reveal">
-    <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">How it works</p>
-    <h2 class="display text-[1.8rem] md:text-[2.8rem] font-extrabold">아이가 직접 '전제'를 찾는 순간,<br class="hidden md:block" /> 공부의 태도가 바뀝니다.</h2>
-  </div>
-
-  <div class="relative" id="scrolly" style="height:220vh">
-    <div class="sticky top-16 md:top-20 h-[64svh] md:h-[68svh] flex items-center">
-      <div class="max-w-5xl mx-auto w-full px-5 md:px-8 grid md:grid-cols-2 gap-10 md:gap-16 items-center">
-        <!-- pinned visual -->
-        <div class="order-2 md:order-1">
-          <div class="card p-8 md:p-12 text-center relative overflow-hidden" id="scVisual">
-            <canvas id="scBrain" width="120" height="90" class="absolute top-5 right-5 opacity-80 pointer-events-none hidden md:block" aria-hidden="true"></canvas>
-            <div class="kozy st-idle mx-auto mb-8" style="width:88px;height:88px" id="scKozy"></div>
-            <p class="text-[22px] md:text-[27px] font-bold leading-relaxed">"수학 문제는 반드시 <span class="trig" id="scTrig">식으로 풀어야</span> 한다"</p>
-            <p class="mt-7 text-point font-semibold text-[15px] opacity-0 transition-opacity duration-500" id="scLabel">발견한 전제 — "식 = 유일한 방법"</p>
-            <p class="mt-3 text-ink font-semibold text-[14px] opacity-0 transition-opacity duration-500" id="scReframe">그림으로 접근하면 10초 만에 풀리는 문제도 있다</p>
-          </div>
-        </div>
-        <!-- steps -->
-        <div class="order-1 md:order-2 space-y-5">
-          <div class="stepcard flex gap-4" data-step="0"><div class="shrink-0 w-11 h-11 rounded-2xl bg-point/10 flex items-center justify-center text-point"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg></div><div><p class="en text-[11px] eyebrow uppercase text-point">Step 1</p><h3 class="text-[19px] font-bold">전제 찾기</h3><p class="text-body text-[14px] lede mt-1">문장 속에 숨어 있는 가정을 발견합니다.</p></div></div>
-          <div class="stepcard flex gap-4" data-step="1"><div class="shrink-0 w-11 h-11 rounded-2xl bg-point/10 flex items-center justify-center text-point"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.4 5.6 5.6 2.4-5.6 2.4L12 18.5l-2.4-5.6L4 10.5l5.6-2.4z"/></svg></div><div><p class="en text-[11px] eyebrow uppercase text-point">Step 2</p><h3 class="text-[19px] font-bold">전제 폭파</h3><p class="text-body text-[14px] lede mt-1">전제를 깨면 어떤 변화가 생길까 상상합니다.</p></div></div>
-          <div class="stepcard flex gap-4" data-step="2"><div class="shrink-0 w-11 h-11 rounded-2xl bg-point/10 flex items-center justify-center text-point"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="16" rx="2"/><path d="M6 8H4M6 12H4M6 16H4M9.5 9h5M9.5 12.5h5"/></svg></div><div><p class="en text-[11px] eyebrow uppercase text-point">Step 3</p><h3 class="text-[19px] font-bold">파트너 노트</h3><p class="text-body text-[14px] lede mt-1">발견한 전제를 기록해 성장 리포트로 남깁니다.</p></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- CURRICULUM teaser -->
 <section class="spotlight py-16 md:py-24 text-white relative overflow-hidden" style="background:linear-gradient(175deg,#0B1730,#0A0E17 55%)">
   <div class="absolute top-0 left-0 right-0 h-px bg-white/10"></div>
@@ -855,36 +834,6 @@
       </div>
     </div>
 
-    <div class="mt-14 grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6">
-      <div class="tilt reveal card p-8" data-d="1">
-        <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 icon-float" style="animation-delay:0s; background:rgba(10,102,255,.08)">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>
-        </div>
-        <p class="text-[17px] font-extrabold text-ink">같은 학원 시간, 다른 흡수력</p>
-        <p class="mt-3 text-body lede text-[14.5px]">공식을 외우는 도구로만 배우면 강의를 들어도 그때뿐입니다. 왜 그렇게 성립하는지 전제부터 이해하고 있으면, 같은 강의에서 흡수되는 것 자체가 달라집니다.</p>
-      </div>
-      <div class="tilt reveal card p-8" data-d="2">
-        <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 icon-float" style="animation-delay:.3s; background:rgba(10,102,255,.08)">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 6v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V6l-8-4z"/></svg>
-        </div>
-        <p class="text-[17px] font-extrabold text-ink">암기가 한계에 부딪히기 전에</p>
-        <p class="mt-3 text-body lede text-[14.5px]">학년이 올라갈수록 암기만으로 버티기 어려워지는 시점이 옵니다. PBS는 그 전에, 새로운 유형을 만나도 스스로 질문을 던지는 사고 회로를 미리 만들어 둡니다.</p>
-      </div>
-      <div class="tilt reveal card p-8" data-d="3">
-        <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 icon-float" style="animation-delay:.6s; background:rgba(255,184,0,.14)">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8a6200" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/><path d="M9 11h4"/></svg>
-        </div>
-        <p class="text-[17px] font-extrabold text-ink">"안 풀린다"가 아니라 "다르게 볼 줄 몰랐다"</p>
-        <p class="mt-3 text-body lede text-[14.5px]">정답을 못 찾는 게 아니라, "이렇게 풀어야 한다"는 전제에 갇혀 있는 것일 수 있습니다. 그 전제를 흔들면, 처음 보는 유형 앞에서도 스스로 질문을 만들어냅니다.</p>
-      </div>
-      <div class="tilt reveal card p-8" data-d="4">
-        <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-5 icon-float" style="animation-delay:.9s; background:rgba(10,102,255,.08)">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
-        </div>
-        <p class="text-[17px] font-extrabold text-ink">하루 10분, 지금 문제집 그대로</p>
-        <p class="mt-3 text-body lede text-[14.5px]">새로 시간을 내야 하는 게 아닙니다. 지금 풀고 있는 문제 하나를 다르게 바라보는 연습, 하루 10분이면 충분합니다.</p>
-      </div>
-    </div>
 
     <div class="reveal mt-14 max-w-2xl mx-auto text-center">
       <p class="display text-[1.4rem] md:text-[1.9rem] font-bold leading-[1.35]">학원은 <span class="text-point">'어떻게(How)'</span>를 가르치고,<br class="hidden sm:block" /> PBS는 <span class="text-point">'왜(Why)'</span>를 묻게 합니다.</p>
@@ -981,26 +930,34 @@
       <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">Trust</p>
       <h2 class="display text-[1.6rem] md:text-[2.3rem] font-extrabold">확인할 수 있는 것만, 정직하게 말씀드립니다</h2>
     </div>
-    <div class="mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-      <div class="reveal card p-7 text-center" data-d="1">
-        <svg class="mx-auto mb-4" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-        <p class="text-[14px] font-bold text-ink">현직 교사 감수 (예정)</p>
-        <p class="text-[12px] text-faint mt-1.5 leading-relaxed">커리큘럼 검수 진행 예정</p>
+    <div class="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+      <div class="reveal rounded-2xl border border-line p-6 text-center" data-d="1">
+        <div class="mx-auto mb-3 w-12 h-12 rounded-2xl bg-point/10 flex items-center justify-center">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+        </div>
+        <p class="text-[13.5px] font-bold text-ink">현직 교사 감수</p>
+        <p class="text-[11.5px] text-body mt-1 leading-relaxed">커리큘럼 검수 예정</p>
       </div>
-      <div class="reveal card p-7 text-center" data-d="2">
-        <svg class="mx-auto mb-4" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
-        <p class="text-[14px] font-bold text-ink">특허 2건 출원 중 · 상표 출원</p>
-        <p class="text-[12px] text-faint mt-1.5 leading-relaxed">적응형 전제 탐지·사고 프레임 재구성 시스템(방법특허), 전제-폭파 기반 단계적 사고 훈련 콘텐츠 구조 및 제공 방법(BM특허) — 특허청 출원 중</p>
+      <div class="reveal rounded-2xl border border-line p-6 text-center" data-d="2">
+        <div class="mx-auto mb-3 w-12 h-12 rounded-2xl bg-point/10 flex items-center justify-center">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+        <p class="text-[13.5px] font-bold text-ink">특허 2건 출원 중</p>
+        <p class="text-[11.5px] text-body mt-1 leading-relaxed">방법·BM 특허 + 상표 (특허청 출원)</p>
       </div>
-      <div class="reveal card p-7 text-center" data-d="3">
-        <svg class="mx-auto mb-4" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
-        <p class="text-[14px] font-bold text-ink">개인정보 안전 취급</p>
-        <p class="text-[12px] text-faint mt-1.5 leading-relaxed">최소 정보만 수집·보관</p>
+      <div class="reveal rounded-2xl border border-line p-6 text-center" data-d="3">
+        <div class="mx-auto mb-3 w-12 h-12 rounded-2xl bg-point/10 flex items-center justify-center">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
+        </div>
+        <p class="text-[13.5px] font-bold text-ink">개인정보 안전 취급</p>
+        <p class="text-[11.5px] text-body mt-1 leading-relaxed">최소 정보만 수집·보관</p>
       </div>
-      <div class="reveal card p-7 text-center" data-d="4">
-        <svg class="mx-auto mb-4" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg>
-        <p class="text-[14px] font-bold text-ink">위약금 없는 해지</p>
-        <p class="text-[12px] text-faint mt-1.5 leading-relaxed">언제든 월 단위로 정리 가능</p>
+      <div class="reveal rounded-2xl border border-line p-6 text-center" data-d="4">
+        <div class="mx-auto mb-3 w-12 h-12 rounded-2xl bg-point/10 flex items-center justify-center">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5z"/></svg>
+        </div>
+        <p class="text-[13.5px] font-bold text-ink">위약금 없는 해지</p>
+        <p class="text-[11.5px] text-body mt-1 leading-relaxed">언제든 월 단위 정리</p>
       </div>
     </div>
   </div>
@@ -1042,7 +999,14 @@
         <p class="en text-[11px] eyebrow uppercase text-faint">Basic</p>
         <div class="mt-4 mb-8"><span class="display text-[2.8rem] font-extrabold">39,000</span><span class="text-body text-[15px]">원 / 월</span></div>
         <ul class="space-y-3.5 text-[14px] flex-1"><li class="flex gap-3"><span class="text-point">✓</span> 무제한 전제 미션 · 전 과목 · 입문→기본 (심화 전 단계)</li><li class="flex gap-3"><span class="text-point">✓</span> 주간 성장 리포트 + 학년별 맞춤 톤</li><li class="flex gap-3"><span class="text-point">✓</span> PBS 캘린더 (시험 3개까지)</li></ul>
-        <a href="pricing.html" class="btn btn-ghost mt-9 py-3.5 text-[14px] font-semibold">7일 무료로 시작</a>
+        <div class="mt-6 rounded-2xl border border-dashed border-point/40 bg-point/[.04] px-4 py-3.5">
+          <div class="flex items-baseline justify-between gap-2">
+            <span class="text-[13px] font-bold text-ink">＋ 파이널 스파크 <span class="text-[11px] font-semibold text-point">단건 추가</span></span>
+            <span class="text-[15px] font-extrabold text-point">19,900원</span>
+          </div>
+          <p class="text-[12px] text-body mt-1.5 leading-relaxed">시험 직전 마무리 세션을, 베이직에서도 <b class="text-ink">필요한 시험에만</b> 건별로.</p>
+        </div>
+        <a href="pricing.html" class="btn btn-ghost mt-6 py-3.5 text-[14px] font-semibold">7일 무료로 시작</a>
       </div>
       <div class="reveal card p-9 md:p-11 flex flex-col relative" style="border-color:#0A66FF" data-d="2">
         <span class="absolute -top-3 left-9 bg-point text-white text-[11px] font-semibold px-3 py-1 rounded-full">추천</span>
@@ -1051,7 +1015,8 @@
         <ul class="space-y-3.5 text-[14px] flex-1">
           <li class="flex gap-3"><span class="text-point">✓</span> 무제한 전제 미션 · 전 과목 · 입문→기본→심화까지 전 단계</li>
           <li class="flex gap-3"><span class="text-point">✓</span> 주간 성장 리포트 + 학년별 맞춤 톤</li>
-          <li class="flex gap-3"><span class="text-point">✓</span> 파이널 스파크 + 실전 적용 랩(Application Lab)</li>
+          <li class="flex gap-3"><span style="color:#B8860B">★</span> <span><b>파이널 스파크</b> — 시험 직전 마무리 세션</span></li>
+          <li class="flex gap-3"><span style="color:#B8860B">★</span> <span><b>실전 적용 랩</b> — 심화 완료 후 실제 기출 적용 단계</span></li>
           <li class="flex gap-3"><span class="text-point">✓</span> PBS 캘린더 무제한</li>
         </ul>
         <a href="pricing.html" class="btn btn-primary mt-9 py-3.5 text-[14px] font-semibold">7일 무료로 시작</a>
@@ -1082,7 +1047,7 @@
     <div class="text-center max-w-2xl mx-auto reveal">
       <p class="en eyebrow uppercase text-[11px] font-semibold text-point mb-5">In short</p>
       <h2 class="display text-[1.8rem] md:text-[2.7rem] font-extrabold">한눈에 보는 PBS 학습법</h2>
-      <p class="lede mt-5 text-[15px] text-body max-w-xl mx-auto">지금까지 살펴본 내용을 5장으로 정리했습니다. 옆으로 넘겨보세요.</p>
+      <p class="lede mt-5 text-[15px] text-body max-w-xl mx-auto">지금까지의 핵심을 3가지로 정리했습니다. 옆으로 넘겨보세요.</p>
     </div>
 
     <div class="mt-12 reveal">
@@ -1104,18 +1069,6 @@
           <p class="relative text-[11px] font-bold tracking-widest uppercase mb-4" style="color:#FFB800">Adaptive</p>
           <h3 class="relative text-[19px] font-extrabold text-white leading-snug">아이마다 다르게,<br/>적응형으로</h3>
           <p class="relative mt-3 text-[13.5px] text-white/80 leading-relaxed">같은 학년이라도 막히는 지점은 다릅니다. 특허 출원 중인 적응형 전제탐지 시스템이 아이의 반응을 보고 다음 사건을 조정합니다.</p>
-        </div>
-        <div class="cn-card snap-center shrink-0 w-[78%] sm:w-[46%] md:w-[29%] rounded-[1.75rem] p-8" style="background:linear-gradient(160deg,#0B3ACC,#0A66FF)">
-          <span class="cn-num">04</span>
-          <p class="relative text-[11px] font-bold tracking-widest uppercase text-white/70 mb-4">How we measure</p>
-          <h3 class="relative text-[19px] font-extrabold text-white leading-snug">점수가 아니라<br/>태도로 확인합니다</h3>
-          <p class="relative mt-3 text-[13.5px] text-white/80 leading-relaxed">PBS는 점수보다 근본을 바꿉니다. 근본이 바뀌면 점수는 저절로 따라옵니다 — 파트너 노트가 "질문의 질", "스스로 세운 계획"이 어떻게 자라는지 매주 보여줍니다.</p>
-        </div>
-        <div class="cn-card snap-center shrink-0 w-[78%] sm:w-[46%] md:w-[29%] rounded-[1.75rem] p-8" style="background:linear-gradient(160deg,#0A0E17,#0B3ACC)">
-          <span class="cn-num">05</span>
-          <p class="relative text-[11px] font-bold tracking-widest uppercase text-white/70 mb-4">For high schoolers</p>
-          <h3 class="relative text-[19px] font-extrabold text-white leading-snug">고등학생도,<br/>지금이 적기입니다</h3>
-          <p class="relative mt-3 text-[13.5px] text-white/80 leading-relaxed">사고의 습관은 나이가 아니라 방향의 문제입니다. 암기만으로 버티기 어려워지는 지금이, 방향을 바꾸기 가장 좋은 시점입니다.</p>
         </div>
       </div>
       <div class="flex justify-center gap-2 mt-7" id="cnDots"></div>
@@ -1237,6 +1190,7 @@
         <p class="text-[11px] font-semibold tracking-widest uppercase text-white/35 mb-4">비하인드</p>
         <nav class="flex flex-col gap-3 text-[13px]">
           <a href="tech.html" class="hover:text-white transition">적응형 전제탐지 시스템</a>
+          <a href="masterpiece.html" class="hover:text-white transition">PBS 마스터피스</a>
           <a href="evals.html" class="hover:text-white transition">문항은 어떻게 검증되나요</a>
           <a href="magazine/index.html" class="hover:text-white transition">PBS 매거진</a>
         </nav>

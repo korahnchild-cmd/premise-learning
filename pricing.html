@@ -81,10 +81,16 @@
         <li class="flex gap-3 items-start"><span class="text-point shrink-0">✓</span><span><span class="font-semibold">무제한</span> 전제 미션</span></li>
         <li class="flex gap-3 items-start"><span class="text-point shrink-0">✓</span><span><span class="font-semibold">전 과목</span> · 입문→기본 <span class="font-semibold">(심화 전 단계)</span></span></li>
         <li class="flex gap-3 items-start"><span class="text-point shrink-0">✓</span><span>주 1회 리포트 + <span class="font-semibold">학년별 맞춤 톤</span>으로 대화</span></li>
-        <li class="flex gap-3 items-start"><span class="text-point shrink-0">✓</span><span><span class="font-semibold">무제한</span> 배틀모드</span></li>
         <li class="flex gap-3 items-start"><span class="text-point shrink-0">✓</span><span>PBS 캘린더 <span class="font-semibold">(시험 3개까지)</span></span></li>
       </ul>
-      <a href="onboarding.html" class="btn btn-ghost mt-9 py-3.5 text-[14px] font-semibold">7일 무료로 시작</a>
+      <div class="mt-6 rounded-2xl border border-dashed border-point/40 bg-point/[.04] px-4 py-3.5">
+        <div class="flex items-baseline justify-between gap-2">
+          <span class="text-[13px] font-bold text-ink">＋ 파이널 스파크 <span class="text-[11px] font-semibold text-point">단건 추가</span></span>
+          <span class="text-[15px] font-extrabold text-point">19,900원</span>
+        </div>
+        <p class="text-[12px] text-body mt-1.5 leading-relaxed">시험 직전 마무리 세션을, 베이직에서도 <b class="text-ink">필요한 시험에만</b> 건별로 이용할 수 있어요.</p>
+      </div>
+      <a href="onboarding.html" class="btn btn-ghost mt-6 py-3.5 text-[14px] font-semibold">7일 무료로 시작</a>
       <a href="checkout.html?plan=basic&cycle=m6" id="buyBasic" class="btn btn-ghost mt-3 py-3 text-[13px] font-semibold" style="border-color:transparent;background:#F2F4F1">바로 결제하기 →</a>
     </div>
 
@@ -102,7 +108,6 @@
         <li class="flex gap-3 items-start"><span class="text-point shrink-0">✓</span><span><span class="font-semibold">무제한</span> 전제 미션</span></li>
         <li class="flex gap-3 items-start"><span class="text-point shrink-0">✓</span><span><span class="font-semibold">전 과목</span> · 입문→기본→심화, 그리고 <span class="font-semibold">실전 적용 랩(Application Lab)</span>까지</span></li>
         <li class="flex gap-3 items-start"><span class="text-point shrink-0">✓</span><span>주 1회 리포트 + <span class="font-semibold">학년별 맞춤 톤</span>으로 대화</span></li>
-        <li class="flex gap-3 items-start"><span class="text-point shrink-0">✓</span><span><span class="font-semibold">무제한</span> 배틀모드</span></li>
         <li class="flex gap-3 items-start"><span class="text-point shrink-0">✓</span><span><span class="font-semibold">파이널 스파크</span> · 시험 직전 마무리 세션 <a href="final-spark.html" class="text-point font-semibold hover:underline whitespace-nowrap">둘러보기 →</a></span></li>
         <li class="flex gap-3 items-start"><span class="text-point shrink-0">✓</span><span><span class="font-semibold">PBS 캘린더</span> 무제한 연동</span></li>
       </ul>
@@ -112,10 +117,6 @@
   </div>
 
   <p class="text-center text-[13px] text-faint mt-6">모든 플랜 · 신용카드 없이 7일 무료 · 언제든 해지 가능</p>
-  <p class="text-center text-[12px] text-faint mt-2 max-w-lg mx-auto leading-relaxed">배틀모드란? 같은 반 친구와 이번 주 정답률로 겨루는 미니 챌린지예요.</p>
-  <p class="text-center text-[12px] text-faint mt-2 max-w-lg mx-auto leading-relaxed">실전 적용 랩(Application Lab)이란? 입문·기본·심화를 <b class="text-body">모두 마치면 열리는 커리큘럼의 마지막 단계</b>예요. 그동안 쌓은 전제 사고력을 실제 기출·시험 유형 문제에 직접 적용하는 과정으로, 심화 완료 시 오픈됩니다. (시험 일정과 무관)</p>
-  <p class="text-center text-[12px] text-faint mt-2 max-w-lg mx-auto leading-relaxed">파이널 스파크란? 이와 별개로, 등록한 <b class="text-body">시험 직전(D-5~D-1)</b>에 자주 틀린 유형만 짧게 재점검하는 마무리 세션이에요. 둘 다 프리미엄 전용입니다.</p>
-  <p class="text-center text-[12px] text-faint mt-2 max-w-lg mx-auto leading-relaxed">PBS 캘린더란? 학교·모의고사 일정을 등록하면 D-Day와 맞춤 미션을 알려주는 기능이에요. 베이직은 시험 3개까지, 프리미엄은 무제한 등록할 수 있어요.</p>
 
   <!-- 파트너 노트 미리보기 -->
   <div class="card p-7 md:p-9 mt-10 max-w-lg mx-auto" id="pnCard">
@@ -131,36 +132,6 @@
       </div>
       <p class="text-[13px] text-body mt-4 pt-4 border-t border-line leading-relaxed">"이번 주엔 '빠름 = 잘함'이라는 전제를 제일 잘 깼어. 다음 주엔 심화 단계로 가보자!" <span class="text-faint">— 루카</span></p>
     </div>
-  </div>
-
-  <!-- value anchor vs 사교육비 -->
-  <div class="card p-7 md:p-9 mt-12">
-    <div class="text-center max-w-xl mx-auto">
-      <p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-2">왜 이 가격인가요?</p>
-      <h2 class="text-[1.4rem] md:text-[1.8rem] font-extrabold">사교육비의 일부로, 학원이 못 하는 걸 합니다</h2>
-    </div>
-    <div class="mt-8 max-w-sm mx-auto" id="costChart">
-      <div class="flex items-end justify-center gap-14" style="height:160px">
-        <div class="w-16 h-full flex items-end">
-          <div class="w-full bg-line rounded-t-xl transition-all ease-out" id="barAcademy" style="height:0%;transition-duration:1100ms"></div>
-        </div>
-        <div class="w-16 h-full flex items-end">
-          <div class="w-full bg-point rounded-t-xl transition-all ease-out" id="barPBS" style="height:0%;transition-duration:1100ms"></div>
-        </div>
-      </div>
-      <div class="flex justify-center gap-14 mt-3 text-center">
-        <div class="w-16">
-          <p class="text-[13px] font-extrabold text-ink">20–50만</p>
-          <p class="text-[11px] text-faint mt-0.5">일반 학원</p>
-        </div>
-        <div class="w-16">
-          <p class="text-[13px] font-extrabold text-point"><span id="costNumPBS">0</span>원</p>
-          <p class="text-[11px] text-faint mt-0.5">PBS 프리미엄</p>
-        </div>
-      </div>
-      <p class="text-center text-[12px] text-faint mt-4">약 1/5 비용 · 학원 하나 줄인 값 (표시 금액은 실제 요금 기준)</p>
-    </div>
-    <p class="text-center text-[13px] text-body mt-6 max-w-xl mx-auto leading-relaxed">학원은 '무엇을 아는가'를 늘립니다. PBS 학습법은 '어떻게 생각하는가'를 바꿉니다. 둘은 경쟁이 아니라, 아이가 스스로 공부하게 만드는 <b class="text-ink">근본 한 축</b>을 채웁니다.</p>
   </div>
 
   <!-- 성장 타임라인 -->
@@ -184,7 +155,7 @@
       <div class="rounded-2xl bg-soft border border-line p-5">
         <p class="text-[11px] font-bold text-point tracking-wide">6개월~1년</p>
         <p class="text-[13px] font-bold text-ink mt-1 mb-2">사고 확장기</p>
-        <p class="text-[12px] text-body leading-relaxed">새로운 유형의 문제도 기존 틀에 갇히지 않고 유연하게 접근해요. 많은 전문가들은 이 시점을 '성적 향상의 임계점'으로 봅니다.</p>
+        <p class="text-[12px] text-body leading-relaxed">새로운 유형의 문제도 기존 틀에 갇히지 않고, 스스로 질문을 만들어 접근해요. 처음 보는 문제 앞에서 덜 막히는 게 눈에 보이기 시작합니다.</p>
       </div>
       <div class="rounded-2xl bg-soft border border-line p-5">
         <p class="text-[11px] font-bold text-point tracking-wide">1~3년</p>
@@ -195,32 +166,46 @@
   </div>
 
   <!-- trust stack (환불 보증 대체) -->
-  <div class="mt-14">
-    <p class="text-center text-[11px] font-semibold tracking-widest uppercase text-faint mb-6">믿고 맡기셔도 되는 이유</p>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
-      <div class="card p-6 text-center">
-        <svg class="mx-auto mb-3" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v12a1 1 0 01-1 1H7a1 1 0 01-1-1V4a1 1 0 011-1z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 16.5h4"/></svg>
-        <p class="text-[14px] font-bold text-ink">특허 출원</p>
-        <p class="text-[12px] text-body mt-1.5 leading-relaxed">‘전제 폭파’ 적응형 학습 시스템, 특허 출원 중</p>
+  <div class="card p-7 md:p-10 mt-14">
+    <div class="text-center max-w-xl mx-auto">
+      <p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-2">믿고 맡기셔도 되는 이유</p>
+      <h2 class="text-[1.4rem] md:text-[1.8rem] font-extrabold">환불 보장 대신,<br class="hidden sm:block"> 믿을 이유를 앞에 뒀습니다</h2>
+      <p class="mt-3 text-[13px] md:text-[14px] text-body leading-relaxed">사후 보상으로 안심시키는 대신, 시작하기 전에 <b class="text-ink">직접 확인할 수 있는 것</b>으로 신뢰를 드립니다.</p>
+    </div>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-9">
+      <div class="rounded-2xl border border-line p-5 text-center">
+        <div class="mx-auto mb-3 w-12 h-12 rounded-2xl bg-point/10 flex items-center justify-center">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v12a1 1 0 01-1 1H7a1 1 0 01-1-1V4a1 1 0 011-1z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 16.5h4"/></svg>
+        </div>
+        <p class="text-[13.5px] font-bold text-ink">특허 출원 중</p>
+        <p class="text-[11.5px] text-body mt-1 leading-relaxed">전제 폭파 적응형 시스템 (방법·BM 2건)</p>
       </div>
-      <div class="card p-6 text-center">
-        <svg class="mx-auto mb-3" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9.5" r="6"/><path d="M8.5 15l-1 6 4.5-2.5L16.5 21l-1-6"/></svg>
-        <p class="text-[14px] font-bold text-ink">상표 · 저작권</p>
-        <p class="text-[12px] text-body mt-1.5 leading-relaxed">PBS 학습법·루카 상표(™) 및 콘텐츠 저작권 보호</p>
+      <div class="rounded-2xl border border-line p-5 text-center">
+        <div class="mx-auto mb-3 w-12 h-12 rounded-2xl bg-point/10 flex items-center justify-center">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9.5" r="6"/><path d="M8.5 15l-1 6 4.5-2.5L16.5 21l-1-6"/></svg>
+        </div>
+        <p class="text-[13.5px] font-bold text-ink">상표 · 저작권</p>
+        <p class="text-[11.5px] text-body mt-1 leading-relaxed">PBS 학습법·루카 상표(™) 보호</p>
       </div>
-      <div class="card p-6 text-center">
-        <svg class="mx-auto mb-3" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4.5"/></svg>
-        <p class="text-[14px] font-bold text-ink">전문가 감수</p>
-        <p class="text-[12px] text-body mt-1.5 leading-relaxed">현직 교사 감수를 거칠 예정인 콘텐츠</p>
+      <div class="rounded-2xl border border-line p-5 text-center">
+        <div class="mx-auto mb-3 w-12 h-12 rounded-2xl bg-point/10 flex items-center justify-center">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4.5"/></svg>
+        </div>
+        <p class="text-[13.5px] font-bold text-ink">전문가 감수</p>
+        <p class="text-[11.5px] text-body mt-1 leading-relaxed">현직 교사 감수 예정</p>
       </div>
-      <div class="card p-6 text-center">
-        <svg class="mx-auto mb-3" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 017-2.6"/></svg>
-        <p class="text-[14px] font-bold text-ink">약정에 가두지 않음</p>
-        <p class="text-[12px] text-body mt-1.5 leading-relaxed">월 단위로도 시작 · 언제든 1분이면 해지</p>
+      <div class="rounded-2xl border border-line p-5 text-center">
+        <div class="mx-auto mb-3 w-12 h-12 rounded-2xl bg-point/10 flex items-center justify-center">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 017-2.6"/></svg>
+        </div>
+        <p class="text-[13.5px] font-bold text-ink">약정에 안 가둠</p>
+        <p class="text-[11.5px] text-body mt-1 leading-relaxed">월 단위 시작 · 1분이면 해지</p>
       </div>
     </div>
-    <p class="text-center text-[14px] text-body mt-7 max-w-xl mx-auto leading-relaxed">우리는 <b class="text-ink">점수보다 근본을 바꿉니다.</b> 근본이 바뀌면 점수는 저절로 따라옵니다 — 매주 성장 리포트로 아이의 변화를 투명하게 보여드리고, 마음에 들지 않으면 언제든 멈출 수 있게 했습니다.</p>
-    <div class="text-center mt-5"><a href="faq.html" class="text-[14px] text-body hover:text-ink transition font-medium">요금·해지 관련 자주 묻는 질문 →</a></div>
+    <div class="mt-8 rounded-2xl bg-ink text-white px-6 py-5 text-center max-w-2xl mx-auto">
+      <p class="text-[14px] md:text-[15px] leading-relaxed">우리는 <b>점수보다 근본을 바꿉니다.</b> 매주 성장 리포트로 아이의 변화를 투명하게 보여드리고, 마음에 들지 않으면 언제든 1분이면 멈출 수 있게 했어요.</p>
+    </div>
+    <div class="text-center mt-6"><a href="faq.html" class="btn btn-ghost px-5 py-2.5 text-[13px] font-semibold">요금·해지 관련 자주 묻는 질문 →</a></div>
   </div>
 
   <p class="text-center text-[12px] text-faint mt-10 pb-4">표시 금액은 부가세 포함 기준입니다.</p>
@@ -250,29 +235,6 @@
   });
   setMode("m6");
   if(window.PremiseNav) PremiseNav.render("price");
-
-  // 학원비 대비 막대그래프 — 실제 요금(20~50만원 vs 59,000원)만 사용, 가공된 효율 수치 없음
-  (function(){
-    const chart = document.getElementById("costChart");
-    if(!chart) return;
-    let done = false;
-    function run(){
-      if(done) return; done = true;
-      $("#barAcademy").style.height = "100%";
-      $("#barPBS").style.height = "20%";
-      const numEl = $("#costNumPBS");
-      const target = 59000; const dur = 1100; const t0 = performance.now();
-      function step(t){
-        const p = Math.min(1, (t - t0) / dur);
-        numEl.textContent = Math.round(target * p).toLocaleString("ko-KR");
-        if(p < 1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-    }
-    if("IntersectionObserver" in window){
-      new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting) run(); }); }, {threshold:.4}).observe(chart);
-    } else { run(); }
-  })();
 
   // 파트너 노트 미리보기 — 화면에 들어오면 숫자 카운트업 + 배지 팝인
   (function(){
@@ -334,6 +296,7 @@
         <p class="text-[11px] font-semibold tracking-widest uppercase text-white/35 mb-4">비하인드</p>
         <nav class="flex flex-col gap-3 text-[13px]">
           <a href="tech.html" class="hover:text-white transition">적응형 전제탐지 시스템</a>
+          <a href="masterpiece.html" class="hover:text-white transition">PBS 마스터피스</a>
           <a href="evals.html" class="hover:text-white transition">문항은 어떻게 검증되나요</a>
           <a href="magazine/index.html" class="hover:text-white transition">PBS 매거진</a>
         </nav>

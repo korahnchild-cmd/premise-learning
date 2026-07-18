@@ -4,6 +4,9 @@
    미션 id 규칙: 국어 k-m1..k-m9 (순서대로), 수학 m-ma1..m-ma8 (순서대로)
 */
 (function () {
+  /* GA4 로더(analytics.js) 주입 — common.js 로드하는 모든 페이지 커버 */
+  if (!document.querySelector('script[data-ga]')) { var _ga = document.createElement('script'); _ga.src = 'analytics.js'; _ga.setAttribute('data-ga', '1'); document.head.appendChild(_ga); }
+
   const KEY = "premise_state_v2";
   const today = () => new Date().toISOString().slice(0, 10);
 
