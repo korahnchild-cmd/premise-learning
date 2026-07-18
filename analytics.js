@@ -3,7 +3,7 @@
    ID 미설정(G-XXXXXXXXXX) 상태면 아무 것도 로드하지 않음(배포해도 안전).
 */
 (function () {
-  var GA_ID = "G-XXXXXXXXXX"; // ← 여기에 GA4 측정 ID 입력 (예: G-ABCD1234EF)
+  var GA_ID = "G-NTED8TQD50"; // GA4 측정 ID (2026-07-18)
   if (!GA_ID || GA_ID === "G-XXXXXXXXXX") return;
 
   var s = document.createElement("script");
