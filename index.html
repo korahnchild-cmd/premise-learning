@@ -252,8 +252,8 @@
   .gbar .gname{ font-size:10px; letter-spacing:.1em; color:#0A66FF; font-weight:700; text-transform:uppercase; margin-bottom:4px; }
   .gbar .gko{ font-size:14px; font-weight:700; color:#0A0E17; margin-bottom:14px; }
   .gbar .glevel{ height:8px; background:#ECEEF1; border-radius:100px; overflow:hidden; position:relative; margin-bottom:8px; }
-  .gbar .glevel-fill{ height:100%; background:linear-gradient(90deg,#0A66FF,#FFB800); border-radius:100px; width:0%; transition:width 1.4s cubic-bezier(.2,.8,.2,1); position:relative; }
-  .gbar .glevel-fill::after{ content:""; position:absolute; top:0; right:0; bottom:0; width:20px; background:linear-gradient(90deg,transparent,rgba(255,255,255,.7)); animation:shine 2s infinite; }
+  .gbar .glevel-fill{ height:100%; background:linear-gradient(90deg,#DC2626,#F97316); border-radius:100px; width:6%; opacity:.45; position:relative; }
+  .gbar .glevel-fill::after{ content:none; }
   @keyframes shine{ 0%{ transform:translateX(-40px); } 100%{ transform:translateX(20px); } }
   .gbar .gpct{ font-size:10px; color:#7A8499; text-align:right; }
 
@@ -1425,7 +1425,15 @@
         var el = en.target, pct = parseFloat(el.getAttribute("data-pct")) || 0;
         var fill = el.querySelector(".glevel-fill");
         var num = el.querySelector(".gnum");
-        if (fill) fill.style.width = pct + "%";
+        if (fill){
+          if (reduced){ fill.style.width = pct + "%"; fill.style.opacity = .5; }
+          else fill.animate([
+            { width:"6%", opacity:.12 },
+            { width:pct+"%", opacity:.55, offset:.78 },
+            { width:pct+"%", opacity:.55, offset:.9 },
+            { width:pct+"%", opacity:0, offset:1 }
+          ], { duration:3200, iterations:Infinity, easing:"ease-out" });
+        }
         if (num){
           if (reduced){ num.textContent = pct; }
           else {
