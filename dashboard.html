@@ -114,13 +114,12 @@
 
     <!-- 2.6 목표 달성 예상 기간 -->
     <div class="card p-5 md:p-7 mb-5">
-      <span class="text-[11px] font-bold rounded-full px-2.5 py-1" style="color:#C2410C;background:rgba(234,88,12,.1)">6개월의 변화</span>
-      <h2 class="text-[1.15rem] md:text-[1.35rem] font-extrabold mt-3">6개월이면, 생각의 방식이 달라집니다</h2>
+      <span class="text-[11px] font-bold rounded-full px-2.5 py-1" style="color:#C2410C;background:rgba(234,88,12,.1)">최상위권까지</span>
+      <h2 class="text-[1.15rem] md:text-[1.35rem] font-extrabold mt-3">지금 속도라면, 최상위권까지</h2>
       <div class="flex items-baseline gap-2 mt-2 flex-wrap">
-        <span class="text-[30px] font-extrabold" style="color:#EA580C" id="etaValue">약 6개월</span>
-        <span class="text-[13px] text-body">이면 사고 습관이 눈에 띄게 바뀌는 시점</span>
+        <span class="text-[26px] md:text-[30px] font-extrabold" style="color:#EA580C" id="etaValue">측정 중</span>
       </div>
-      <p class="text-[12px] text-body mt-1.5 leading-relaxed" id="etaBasis">최상위권까지는 그 이후로도 꾸준히 좁혀가는 목표예요. 6개월은, <b class="text-ink">‘아이가 정말 달라졌구나’</b> 느끼시게 되는 지점입니다.</p>
+      <p class="text-[12px] text-body mt-1.5 leading-relaxed" id="etaBasis"></p>
       <div class="mt-4">
         <div id="etaTrack" style="position:relative;height:18px;border-radius:9999px;background:#F1EFE8;overflow:hidden">
           <div id="etaFill" style="position:absolute;left:0;top:0;height:100%;width:8%;border-radius:9999px;background:linear-gradient(90deg,#DC2626,#F97316);opacity:.4"></div>
@@ -128,13 +127,14 @@
         </div>
         <div class="flex justify-between mt-1.5">
           <span class="text-[10.5px] text-faint">지금</span>
-          <span class="text-[10.5px] text-faint">3개월 · 질문이 깊어짐</span>
-          <span class="text-[10.5px] font-bold" style="color:#EA580C">6개월 · 사고 전환</span>
+          <span class="text-[10.5px] text-faint">데이터로 계속 업데이트</span>
+          <span class="text-[10.5px] font-bold" style="color:#EA580C">최상위권</span>
         </div>
       </div>
       <p class="text-[12.5px] text-body mt-4 leading-relaxed rounded-2xl bg-soft border border-line px-4 py-3">
-        <b class="text-ink">시간이 걸려도 괜찮아요.</b> 매일 조금씩, 꾸준히만 하면 최상위권은 반드시 도달하는 목표예요. 빠른 게 아니라 <b class="text-ink">멈추지 않는 것</b>이 이깁니다.
+        그 전에 — <b class="text-ink">약 6개월</b>이면 점수와 상관없이 <b class="text-ink">사고 습관이 눈에 띄게 달라지는 걸</b> 느끼시게 돼요. 최상위권은 그 뒤로도 꾸준히 좁혀가는 목표 — 빠른 게 아니라 <b class="text-ink">멈추지 않는 것</b>이 이깁니다.
       </p>
+      <p class="text-[11px] text-faint mt-2.5 leading-relaxed">처음 몇 주 동안은 예측 대신 <b class="text-body">‘측정 중’</b>으로만 표시해요. 아이 데이터가 충분히 쌓이기 전엔, 근거 없는 숫자로 기대를 부풀리지 않기 위해서예요.</p>
     </div>
 
     <!-- 3. 성장 곡선 -->
@@ -320,9 +320,25 @@
     $("gapMsg").innerHTML = `지금은 <b class="text-ink">${tier}</b>이에요. 최상위권과의 차이는 대부분 ${top2} 두 곳에서 벌어집니다. 여기를 좁히면 다음 단계로 올라섭니다 — 목표는 하나, 최상위권.`;
   })();
 
-  /* ---- 6개월의 변화 바 (무한 루프 WAAPI) ---- */
+  /* ---- 최상위권까지 예상 (데이터 성숙도 기반) ----
+     원칙: 데이터가 부족하면 예측하지 않고 '측정 중'. 충분하면 단일값이 아닌 '범위'로,
+     상위 구간 둔화까지 넉넉히 반영해 정직하게. 실제 연동 시 weeksTracked는 store의 활동 주차로 교체. */
+  const weeksTracked = 6; // 샘플: 6주 히스토리(6주 전 기준선 존재). 6주 미만이면 '측정 중'.
   (function renderEta(){
-    const fill = $("etaFill"); if(!fill) return;
+    const elV=$("etaValue"), elB=$("etaBasis"), fill=$("etaFill");
+    const fmt = m => m>=12 ? (Math.floor(m/12)+"년"+((m%12)?(" "+(m%12)+"개월"):"")) : (m+"개월");
+    if (weeksTracked < 6){
+      if(elV){ elV.textContent="측정 중"; elV.style.color="#525A69"; }
+      if(elB) elB.textContent="최상위권까지 걸리는 시간은 아이마다 크게 달라요. 지금은 예측하지 않아요 — 몇 주 더 쌓이면, 지금 속도로 얼마나 걸릴지 정직하게 알려드릴게요.";
+    } else {
+      const gap = Math.max(1, scoreTop - scoreNow);
+      const weekly = Math.max(0.3, (scoreNow - scorePrev) / 6); // 주당 향상(기준선 scorePrev=6주 전 고정)
+      const optM  = Math.max(1, Math.round((gap/(weekly*0.25))/4.345));   // 낙관: 향후 속도 = 관측의 25%
+      const consM = Math.max(optM+1, Math.round((gap/(weekly*0.125))/4.345)); // 보수: 12.5%(상위 구간 둔화)
+      if(elV) elV.textContent = "약 " + fmt(optM) + " ~ " + fmt(consM);
+      if(elB) elB.textContent = "지금까지의 향상 속도로 추정한 범위예요. 최상위권은 위로 갈수록 천천히 좁혀지기에 넉넉히 잡았어요. 데이터가 쌓일수록 더 정확해집니다.";
+    }
+    if(!fill) return;
     fill.animate([
       { width:'6%',  opacity:.12 },
       { width:'100%', opacity:.5, offset:.78 },
