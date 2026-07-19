@@ -114,13 +114,13 @@
 
     <!-- 2.6 목표 달성 예상 기간 -->
     <div class="card p-5 md:p-7 mb-5">
-      <span class="text-[11px] font-bold rounded-full px-2.5 py-1" style="color:#C2410C;background:rgba(234,88,12,.1)">목표 달성까지 · 예상 기간</span>
-      <h2 class="text-[1.15rem] md:text-[1.35rem] font-extrabold mt-3">꾸준히 가면, 최상위권까지</h2>
-      <div class="flex items-baseline gap-2 mt-2">
+      <span class="text-[11px] font-bold rounded-full px-2.5 py-1" style="color:#C2410C;background:rgba(234,88,12,.1)">6개월의 변화</span>
+      <h2 class="text-[1.15rem] md:text-[1.35rem] font-extrabold mt-3">6개월이면, 생각의 방식이 달라집니다</h2>
+      <div class="flex items-baseline gap-2 mt-2 flex-wrap">
         <span class="text-[30px] font-extrabold" style="color:#EA580C" id="etaValue">약 6개월</span>
-        <span class="text-[13px] text-body">후 도달 예상</span>
+        <span class="text-[13px] text-body">이면 사고 습관이 눈에 띄게 바뀌는 시점</span>
       </div>
-      <p class="text-[11px] text-faint mt-1 leading-relaxed" id="etaBasis"></p>
+      <p class="text-[12px] text-body mt-1.5 leading-relaxed" id="etaBasis">최상위권까지는 그 이후로도 꾸준히 좁혀가는 목표예요. 6개월은, <b class="text-ink">‘아이가 정말 달라졌구나’</b> 느끼시게 되는 지점입니다.</p>
       <div class="mt-4">
         <div id="etaTrack" style="position:relative;height:18px;border-radius:9999px;background:#F1EFE8;overflow:hidden">
           <div id="etaFill" style="position:absolute;left:0;top:0;height:100%;width:8%;border-radius:9999px;background:linear-gradient(90deg,#DC2626,#F97316);opacity:.4"></div>
@@ -128,8 +128,8 @@
         </div>
         <div class="flex justify-between mt-1.5">
           <span class="text-[10.5px] text-faint">지금</span>
-          <span class="text-[10.5px] text-faint">3개월</span>
-          <span class="text-[10.5px] font-bold" style="color:#EA580C">최상위권</span>
+          <span class="text-[10.5px] text-faint">3개월 · 질문이 깊어짐</span>
+          <span class="text-[10.5px] font-bold" style="color:#EA580C">6개월 · 사고 전환</span>
         </div>
       </div>
       <p class="text-[12.5px] text-body mt-4 leading-relaxed rounded-2xl bg-soft border border-line px-4 py-3">
@@ -320,15 +320,8 @@
     $("gapMsg").innerHTML = `지금은 <b class="text-ink">${tier}</b>이에요. 최상위권과의 차이는 대부분 ${top2} 두 곳에서 벌어집니다. 여기를 좁히면 다음 단계로 올라섭니다 — 목표는 하나, 최상위권.`;
   })();
 
-  /* ---- 예상 기간 바 (데이터 기반 보수적 추정 + 무한 루프 WAAPI) ---- */
+  /* ---- 6개월의 변화 바 (무한 루프 WAAPI) ---- */
   (function renderEta(){
-    const gap = Math.max(0, scoreTop - scoreNow);
-    const weeklyGain = Math.max(0.5, (scoreNow - scorePrev) / 6);   // 최근 6주 관측 향상(주당)
-    const conservativeWeekly = weeklyGain * 0.3;                    // 상위 구간 둔화 반영(관측의 30%)
-    const months = Math.max(1, Math.round((gap / conservativeWeekly) / 4.345));
-    if($("etaValue")) $("etaValue").textContent = "약 " + months + "개월";
-    if($("etaBasis")) $("etaBasis").textContent =
-      "최근 6주 향상 속도(주 " + weeklyGain.toFixed(1) + "점)를 기준으로, 상위 구간 둔화를 반영한 보수적 추정입니다 · 실측 검증 전";
     const fill = $("etaFill"); if(!fill) return;
     fill.animate([
       { width:'6%',  opacity:.12 },
