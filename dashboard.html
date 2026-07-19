@@ -115,26 +115,21 @@
     <!-- 2.6 목표 달성 예상 기간 -->
     <div class="card p-5 md:p-7 mb-5">
       <span class="text-[11px] font-bold rounded-full px-2.5 py-1" style="color:#C2410C;background:rgba(234,88,12,.1)">최상위권까지</span>
-      <h2 class="text-[1.15rem] md:text-[1.35rem] font-extrabold mt-3">지금 속도라면, 최상위권까지</h2>
+      <h2 id="etaTitle" class="text-[1.15rem] md:text-[1.35rem] font-extrabold mt-3">지금 속도라면, 최상위권까지</h2>
       <div class="flex items-baseline gap-2 mt-2 flex-wrap">
         <span class="text-[26px] md:text-[30px] font-extrabold" style="color:#EA580C" id="etaValue">측정 중</span>
       </div>
       <p class="text-[12px] text-body mt-1.5 leading-relaxed" id="etaBasis"></p>
-      <div class="mt-4">
-        <div id="etaTrack" style="position:relative;height:18px;border-radius:9999px;background:#F1EFE8;overflow:hidden">
-          <div id="etaFill" style="position:absolute;left:0;top:0;height:100%;width:8%;border-radius:9999px;background:linear-gradient(90deg,#DC2626,#F97316);opacity:.4"></div>
-          <div style="position:absolute;right:0;top:0;height:100%;width:2px;background:#EA580C"></div>
-        </div>
-        <div class="flex justify-between mt-1.5">
-          <span class="text-[10.5px] text-faint">지금</span>
-          <span class="text-[10.5px] text-faint">데이터로 계속 업데이트</span>
-          <span class="text-[10.5px] font-bold" style="color:#EA580C">최상위권</span>
+      <div id="etaVisual" class="mt-4"></div>
+      <div class="mt-4 rounded-2xl bg-soft border border-line px-4 py-3.5">
+        <p class="text-[11px] font-bold text-faint mb-2.5">꾸준히 하면, 이렇게 달라져요</p>
+        <div class="space-y-2">
+          <div class="flex items-center gap-3 text-[13px]"><span class="font-extrabold text-point w-12 shrink-0">6개월</span><span class="text-body">사고 습관이 눈에 띄게 달라짐</span></div>
+          <div class="flex items-center gap-3 text-[13px]"><span class="font-extrabold text-point w-12 shrink-0">8개월</span><span class="text-body">문제 푸는 시간이 줄어듦</span></div>
+          <div class="flex items-center gap-3 text-[13px]"><span class="font-extrabold text-point w-12 shrink-0">10개월</span><span class="text-body">새 유형에도 스스로 전제를 의심</span></div>
+          <div class="flex items-center gap-3 text-[13px]"><span class="font-extrabold text-point w-12 shrink-0">1년+</span><span class="text-body">최상위권 사고 습관 정착</span></div>
         </div>
       </div>
-      <p class="text-[12.5px] text-body mt-4 leading-relaxed rounded-2xl bg-soft border border-line px-4 py-3">
-        그 전에 — <b class="text-ink">약 6개월</b>이면 점수와 상관없이 <b class="text-ink">사고 습관이 눈에 띄게 달라지는 걸</b> 느끼시게 돼요. 최상위권은 그 뒤로도 꾸준히 좁혀가는 목표 — 빠른 게 아니라 <b class="text-ink">멈추지 않는 것</b>이 이깁니다.
-      </p>
-      <p class="text-[11px] text-faint mt-2.5 leading-relaxed">처음 몇 주 동안은 예측 대신 <b class="text-body">‘측정 중’</b>으로만 표시해요. 아이 데이터가 충분히 쌓이기 전엔, 근거 없는 숫자로 기대를 부풀리지 않기 위해서예요.</p>
     </div>
 
     <!-- 3. 성장 곡선 -->
@@ -232,8 +227,10 @@
     { key:"상관→인과", now:78, prev:40 }, { key:"숨은 전제", now:66, prev:28 },
     { key:"단일 기준", now:58, prev:35 }, { key:"과잉 일반화", now:47, prev:30 },
     { key:"권위 전제", now:38, prev:15 }, { key:"이분법", now:52, prev:33 },
+    { key:"순환 논리", now:44, prev:24 }, { key:"감정 전제", now:61, prev:36 },
+    { key:"표본 편향", now:35, prev:18 },
   ];
-  const BENCH = { "상관→인과":96, "숨은 전제":94, "단일 기준":92, "과잉 일반화":90, "권위 전제":89, "이분법":91 };
+  const BENCH = { "상관→인과":96, "숨은 전제":94, "단일 기준":92, "과잉 일반화":90, "권위 전제":89, "이분법":91, "순환 논리":90, "감정 전제":88, "표본 편향":87 };
   const scoreNow  = Math.round(traps.reduce((s,t)=>s+t.now,0)/traps.length);
   const scorePrev = Math.round(traps.reduce((s,t)=>s+t.prev,0)/traps.length);
   const scoreTop  = Math.round(Object.values(BENCH).reduce((a,b)=>a+b,0)/traps.length);
@@ -251,7 +248,7 @@
     traps.forEach((t,i)=>{ const [x,y]=pt(i,R*t.now/100); const on=t.now>=55; nowG += `<circle class="rr-dot${on?' rr-dot-on':''}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${on?4.5:3}" fill="${on?'#0A66FF':'#9AA4B2'}"/>`; });
     g += `<g class="rr-now-grp">${nowG}</g>`;
     traps.forEach((t,i)=>{ const [x,y]=pt(i,R+22); const a = x<cx-8?"end":(x>cx+8?"start":"middle"); const on=t.now>=55;
-      g += `<text x="${x.toFixed(1)}" y="${(y+4).toFixed(1)}" text-anchor="${a}" font-size="${on?11.5:11}" font-weight="${on?700:600}" fill="${on?'#0A0E17':'#9AA4B2'}">${t.key}</text>`; });
+      g += `<text x="${x.toFixed(1)}" y="${(y+4).toFixed(1)}" text-anchor="${a}" font-size="${on?11:10.5}" font-weight="${on?700:600}" fill="${on?'#0A0E17':'#9AA4B2'}">${t.key}</text>`; });
     svg.innerHTML = g;
     const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
     svg.querySelectorAll('.rr-dot-on').forEach((el,idx)=> el.animate([{opacity:.25},{opacity:1},{opacity:.25}], {duration:1500, iterations:Infinity, easing:'ease-in-out', delay:idx*180}) );
@@ -323,28 +320,51 @@
   /* ---- 최상위권까지 예상 (데이터 성숙도 기반) ----
      원칙: 데이터가 부족하면 예측하지 않고 '측정 중'. 충분하면 단일값이 아닌 '범위'로,
      상위 구간 둔화까지 넉넉히 반영해 정직하게. 실제 연동 시 weeksTracked는 store의 활동 주차로 교체. */
-  const weeksTracked = 6; // 샘플: 6주 히스토리(6주 전 기준선 존재). 6주 미만이면 '측정 중'.
+  const THRESHOLD_WEEKS = 8; // 매일 사건 해결 기준 8주가 지나야 예측 그래프화(초반 '새것 효과' 거품 제거)
+  const _qw = parseInt(new URLSearchParams(location.search).get("weeks"), 10);
+  const weeksTracked = Number.isFinite(_qw) ? _qw : 12; // 샘플: established(성장곡선 12주와 일치). ?weeks=N 로 초기 상태 미리보기
   (function renderEta(){
-    const elV=$("etaValue"), elB=$("etaBasis"), fill=$("etaFill");
+    const elT=$("etaTitle"), elV=$("etaValue"), elB=$("etaBasis"), vis=$("etaVisual");
     const fmt = m => m>=12 ? (Math.floor(m/12)+"년"+((m%12)?(" "+(m%12)+"개월"):"")) : (m+"개월");
-    if (weeksTracked < 6){
-      if(elV){ elV.textContent="측정 중"; elV.style.color="#525A69"; }
-      if(elB) elB.textContent="최상위권까지 걸리는 시간은 아이마다 크게 달라요. 지금은 예측하지 않아요 — 몇 주 더 쌓이면, 지금 속도로 얼마나 걸릴지 정직하게 알려드릴게요.";
+
+    if (weeksTracked < THRESHOLD_WEEKS){
+      /* 데이터 부족 — 예측 대신 진행 도식만 */
+      if(elT) elT.textContent = "최상위권까지, 얼마나 걸릴까";
+      if(elV){ elV.textContent = "측정 중"; elV.style.color = "#525A69"; }
+      if(elB) elB.textContent = "아이마다 도달 시점이 크게 달라, 지금은 예측하지 않아요.";
+      const done = Math.max(0, Math.min(THRESHOLD_WEEKS, weeksTracked));
+      let seg = "";
+      for(let i=0;i<THRESHOLD_WEEKS;i++) seg += `<div style="flex:1;height:11px;border-radius:3px;background:${i<done?'#0A66FF':'#E6E9ED'}"></div>`;
+      if(vis) vis.innerHTML =
+        `<div style="display:flex;align-items:center;gap:8px">
+           <div style="flex:1;display:flex;gap:4px">${seg}</div>
+           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EA580C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 13l3 3 7-8"/></svg>
+         </div>
+         <div class="flex justify-between mt-2"><span class="text-[10.5px] text-point font-bold">현재 ${done}주</span><span class="text-[10.5px] font-bold" style="color:#EA580C">8주 · 그래프 완성</span></div>
+         <p class="text-[12.5px] text-body mt-3 leading-relaxed rounded-2xl bg-soft border border-line px-4 py-3"><b class="text-ink">매일 사건을 풀면 8주째</b>부터, 지금 속도로 최상위권까지 얼마나 남았는지 <b class="text-ink">그래프로</b> 보여드려요.</p>`;
     } else {
+      /* 데이터 충분 — 범위로 추정 */
       const gap = Math.max(1, scoreTop - scoreNow);
       const weekly = Math.max(0.3, (scoreNow - scorePrev) / 6); // 주당 향상(기준선 scorePrev=6주 전 고정)
       const optM  = Math.max(1, Math.round((gap/(weekly*0.25))/4.345));   // 낙관: 향후 속도 = 관측의 25%
       const consM = Math.max(optM+1, Math.round((gap/(weekly*0.125))/4.345)); // 보수: 12.5%(상위 구간 둔화)
-      if(elV) elV.textContent = "약 " + fmt(optM) + " ~ " + fmt(consM);
-      if(elB) elB.textContent = "지금까지의 향상 속도로 추정한 범위예요. 최상위권은 위로 갈수록 천천히 좁혀지기에 넉넉히 잡았어요. 데이터가 쌓일수록 더 정확해집니다.";
+      if(elT) elT.textContent = "지금 속도라면, 최상위권까지";
+      if(elV){ elV.textContent = "약 " + fmt(optM) + " ~ " + fmt(consM); elV.style.color = "#EA580C"; }
+      if(elB) elB.textContent = "지금까지의 향상 속도로 추정한 범위예요. 상위 구간은 천천히 좁혀지기에 넉넉히 잡았고, 데이터가 쌓일수록 더 정확해집니다.";
+      if(vis){
+        vis.innerHTML =
+          `<div style="position:relative;height:18px;border-radius:9999px;background:#F1EFE8;overflow:hidden">
+             <div id="etaFill" style="position:absolute;left:0;top:0;height:100%;width:8%;border-radius:9999px;background:linear-gradient(90deg,#DC2626,#F97316);opacity:.4"></div>
+             <div style="position:absolute;right:0;top:0;height:100%;width:2px;background:#EA580C"></div>
+           </div>
+           <div class="flex justify-between mt-1.5"><span class="text-[10.5px] text-faint">지금</span><span class="text-[10.5px] text-faint">데이터로 계속 업데이트</span><span class="text-[10.5px] font-bold" style="color:#EA580C">최상위권</span></div>`;
+        const fill = $("etaFill");
+        if(fill) fill.animate([
+          { width:'6%', opacity:.12 }, { width:'100%', opacity:.5, offset:.78 },
+          { width:'100%', opacity:.5, offset:.9 }, { width:'100%', opacity:0, offset:1 }
+        ], { duration:3200, iterations:Infinity, easing:'ease-out' });
+      }
     }
-    if(!fill) return;
-    fill.animate([
-      { width:'6%',  opacity:.12 },
-      { width:'100%', opacity:.5, offset:.78 },
-      { width:'100%', opacity:.5, offset:.9 },
-      { width:'100%', opacity:0,  offset:1 }
-    ], { duration:3200, iterations:Infinity, easing:'ease-out' });
   })();
 
   /* ---- 성장 곡선 ---- */
