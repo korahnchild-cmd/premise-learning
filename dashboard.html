@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PBS 학습법 · 우리 아이 사고 지도</title>
+<meta name="description" content="아이의 사고가 어떻게 자라는지 — 전제 함정 지도와 성장 곡선. 이 기록은 학년이 바뀌어도 이어집니다." />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", gold:"#FFB800", night:"#0A0E17" },
+    fontFamily: { sans:["Pretendard","Inter","sans-serif"] }, borderRadius:{ "4xl":"2rem","5xl":"2.5rem" },
+  }}};
+</script>
+<style>
+  body{ font-family:"Pretendard","Inter",sans-serif; -webkit-font-smoothing:antialiased; letter-spacing:-.012em; background:#F5F6F4; color:#0A0E17; }
+  h1,h2,h3{ letter-spacing:-.03em; }
+  ::selection{ background:rgba(10,102,255,.14); }
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:.45rem; border-radius:9999px; transition:transform .3s cubic-bezier(.16,1,.3,1), background .25s, border-color .25s, color .25s; cursor:pointer; }
+  .btn-primary{ background:#0A66FF; color:#fff; box-shadow:0 4px 14px rgba(10,102,255,.28); } .btn-primary:hover{ background:#0857db; transform:translateY(-2px); }
+  .btn-ghost{ background:#fff; color:#0A0E17; border:1px solid #DFE3E8; } .btn-ghost:hover{ border-color:#0A66FF; color:#0A66FF; }
+  .card{ background:#fff; border:1px solid #ECEEF1; border-radius:1.5rem; }
+  .badge{ display:inline-flex; align-items:center; gap:.35rem; font-size:11.5px; font-weight:700; padding:.3rem .7rem; border-radius:9999px; }
+  .badge-active{ background:rgba(20,160,90,.1); color:#128a4e; }
+  .badge-paused{ background:rgba(10,102,255,.1); color:#0A66FF; }
+  .badge-none{ background:rgba(154,164,178,.15); color:#525A69; }
+
+  .kozy svg{ width:100%; height:100%; overflow:visible; }
+  .k-edge{ fill:none; stroke:#0A66FF; stroke-width:2.4; stroke-linejoin:round; stroke-linecap:round; }
+  .k-face{ fill:rgba(10,102,255,.10); } .k-face.top{ fill:rgba(10,102,255,.16); }
+  .k-core{ fill:#0A66FF; filter:drop-shadow(0 0 4px rgba(10,102,255,.85)); }
+  .kozy .kw{ transform-origin:50% 55%; animation:kfloat 4s ease-in-out infinite; }
+  @keyframes kfloat{ 0%,100%{transform:translateY(0) rotate(-6deg)} 50%{transform:translateY(-6px) rotate(6deg)} }
+  .rr-now-grp, .rr-ring{ transform-box:fill-box; transform-origin:center; }
+  @media (prefers-reduced-motion:reduce){ .kw{ animation:none!important } }
+</style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+<div id="topnav"></div>
+<script src="common.js"></script>
+
+<main class="flex-1">
+  <div class="max-w-3xl mx-auto px-4 md:px-6 py-8 md:py-10">
+
+    <!-- 1. 상단 요약 -->
+    <div class="mb-6">
+      <span class="text-[11px] font-bold text-point bg-point/10 rounded-full px-2.5 py-1">우리 아이 사고 지도</span>
+      <h1 class="text-[1.8rem] md:text-[2.3rem] font-extrabold mt-3 leading-tight"><span id="hName">지호</span>의 사고가 <span class="text-point">자라는 중</span>입니다</h1>
+      <div class="mt-4 flex flex-wrap items-center gap-2.5">
+        <div class="rounded-2xl bg-white border border-line px-4 py-2.5"><p class="text-[19px] font-extrabold text-ink" id="hEvents">247</p><p class="text-[10.5px] text-body">함께 분석한 사건</p></div>
+        <div class="rounded-2xl bg-white border border-line px-4 py-2.5"><p class="text-[19px] font-extrabold text-point" id="hPremise">58</p><p class="text-[10.5px] text-body">발견한 전제</p></div>
+        <div class="rounded-2xl bg-white border border-line px-4 py-2.5"><p class="text-[19px] font-extrabold text-ink">🔥<span id="hStreak">15</span></p><p class="text-[10.5px] text-body">연속일</p></div>
+        <span class="text-[11.5px] text-faint ml-1">매주 갱신 · 마지막 3일 전</span>
+      </div>
+    </div>
+
+    <!-- 2. 사고 지도 레이더 -->
+    <div class="card p-5 md:p-7 mb-5">
+      <h2 class="text-[1.15rem] md:text-[1.35rem] font-extrabold">지금 <span id="rName">지호</span>가 보는 것, 아직 못 보는 것</h2>
+      <p class="text-[13px] text-body mt-1.5 leading-relaxed">전제 함정 유형별로 <b class="text-ink">스스로 잡아내는 정도</b>예요. 쓸수록 또렷해지고, <b class="text-ink">학년이 바뀌어도 이어집니다</b>.</p>
+      <div class="mt-4 flex flex-col md:flex-row items-center gap-5">
+        <div class="w-full max-w-[330px] mx-auto shrink-0"><svg id="trapRadar" viewBox="0 0 320 250" class="w-full" aria-label="전제 함정 지도"></svg></div>
+        <div class="flex-1 w-full min-w-0">
+          <div class="flex items-center gap-4 mb-3 flex-wrap">
+            <span class="inline-flex items-center gap-1.5 text-[12px] text-ink font-semibold"><span style="width:12px;height:12px;border-radius:3px;background:#0A66FF;display:inline-block"></span>지금 스스로 잡아냄</span>
+            <span class="inline-flex items-center gap-1.5 text-[12px] text-faint"><span style="width:12px;height:12px;border-radius:3px;border:1.5px dashed #9AA4B2;display:inline-block"></span>6주 전</span>
+          </div>
+          <div id="trapList" class="space-y-1.5"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2.5 최상위권 비교 -->
+    <div class="card p-5 md:p-7 mb-5">
+      <span class="text-[11px] font-bold text-point bg-point/10 rounded-full px-2.5 py-1">목표는 하나 · 최상위권</span>
+      <h2 class="text-[1.15rem] md:text-[1.35rem] font-extrabold mt-3">최상위권까지, 지금 어디쯤 왔나</h2>
+      <p class="text-[13px] text-body mt-1.5 leading-relaxed">점수가 아니라 <b class="text-ink">전제를 스스로 잡아내는 힘</b>으로 위치를 봅니다. 냉정하게, 그리고 좁혀갈 수 있게.</p>
+
+      <div class="mt-5">
+        <div class="flex items-end justify-between flex-wrap gap-2 mb-2">
+          <div>
+            <span class="text-[30px] font-extrabold text-ink" id="scoreNow">57</span><span class="text-[13px] text-body"> / 100</span>
+            <span id="tierLabel" class="ml-2 badge badge-paused">중위권</span>
+          </div>
+          <p class="text-[12px] text-body">최상위권 기준 <b class="text-ink" id="scoreTop">88</b> · <b class="text-point" id="scoreGap">31</b>점 남음</p>
+        </div>
+        <svg id="gauge" viewBox="0 0 620 76" class="w-full" aria-label="최상위권 대비 현재 위치"></svg>
+      </div>
+
+      <div class="mt-5">
+        <p class="text-[12.5px] font-bold text-ink mb-2.5">최상위권과 가장 벌어진 곳부터</p>
+        <div id="gapList" class="space-y-2.5"></div>
+      </div>
+
+      <div class="mt-4 flex items-start gap-3 rounded-2xl bg-point/[.05] border border-point/15 px-4 py-3.5">
+        <div class="kozy shrink-0" style="width:38px;height:38px">
+          <svg viewBox="0 0 100 100" aria-label="루카"><g class="kw">
+            <polygon class="k-face top" points="50,15 82,33 50,50 18,33"/><polygon class="k-face right" points="82,33 82,67 50,85 50,50"/>
+            <polygon class="k-face left" points="18,33 50,50 50,85 18,67"/><polygon class="k-edge" points="50,15 82,33 82,67 50,85 18,67 18,33"/>
+            <path class="k-edge" d="M50,50 L82,33 M50,50 L18,33 M50,50 L50,85"/><circle class="k-core" cx="50" cy="50" r="4.5"/>
+          </g></svg>
+        </div>
+        <div class="min-w-0">
+          <p class="text-[11px] font-semibold text-point mb-0.5">루카</p>
+          <p class="text-[12.5px] md:text-[13px] text-body leading-relaxed" id="gapMsg"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2.6 목표 달성 예상 기간 -->
+    <div class="card p-5 md:p-7 mb-5">
+      <span class="text-[11px] font-bold rounded-full px-2.5 py-1" style="color:#C2410C;background:rgba(234,88,12,.1)">목표 달성까지 · 예상 기간</span>
+      <h2 class="text-[1.15rem] md:text-[1.35rem] font-extrabold mt-3">꾸준히 가면, 최상위권까지</h2>
+      <div class="flex items-baseline gap-2 mt-2">
+        <span class="text-[30px] font-extrabold" style="color:#EA580C" id="etaValue">약 6개월</span>
+        <span class="text-[13px] text-body">후 도달 예상</span>
+      </div>
+      <p class="text-[11px] text-faint mt-1 leading-relaxed" id="etaBasis"></p>
+      <div class="mt-4">
+        <div id="etaTrack" style="position:relative;height:18px;border-radius:9999px;background:#F1EFE8;overflow:hidden">
+          <div id="etaFill" style="position:absolute;left:0;top:0;height:100%;width:8%;border-radius:9999px;background:linear-gradient(90deg,#DC2626,#F97316);opacity:.4"></div>
+          <div style="position:absolute;right:0;top:0;height:100%;width:2px;background:#EA580C"></div>
+        </div>
+        <div class="flex justify-between mt-1.5">
+          <span class="text-[10.5px] text-faint">지금</span>
+          <span class="text-[10.5px] text-faint">3개월</span>
+          <span class="text-[10.5px] font-bold" style="color:#EA580C">최상위권</span>
+        </div>
+      </div>
+      <p class="text-[12.5px] text-body mt-4 leading-relaxed rounded-2xl bg-soft border border-line px-4 py-3">
+        <b class="text-ink">시간이 걸려도 괜찮아요.</b> 매일 조금씩, 꾸준히만 하면 최상위권은 반드시 도달하는 목표예요. 빠른 게 아니라 <b class="text-ink">멈추지 않는 것</b>이 이깁니다.
+      </p>
+    </div>
+
+    <!-- 3. 성장 곡선 -->
+    <div class="card p-5 md:p-7 mb-5">
+      <h2 class="text-[1.15rem] md:text-[1.35rem] font-extrabold">질문의 질이 달라진 궤적</h2>
+      <p class="text-[13px] text-body mt-1.5 leading-relaxed">답을 먼저 찾던 아이가, 문제의 전제부터 되묻기 시작한 흐름이에요.</p>
+      <svg id="growth" viewBox="0 0 620 200" class="w-full mt-4" aria-label="사고 성장 곡선"></svg>
+      <div id="milestones" class="mt-3 space-y-1.5"></div>
+    </div>
+
+    <!-- 4. 루카 메시지 -->
+    <div class="card p-5 md:p-6 mb-5" style="background:rgba(10,102,255,.035);border-color:rgba(10,102,255,.18)">
+      <div class="flex items-start gap-3.5">
+        <div class="kozy shrink-0" style="width:46px;height:46px">
+          <svg viewBox="0 0 100 100" aria-label="루카"><g class="kw">
+            <polygon class="k-face top" points="50,15 82,33 50,50 18,33"/><polygon class="k-face right" points="82,33 82,67 50,85 50,50"/>
+            <polygon class="k-face left" points="18,33 50,50 50,85 18,67"/><polygon class="k-edge" points="50,15 82,33 82,67 50,85 18,67 18,33"/>
+            <path class="k-edge" d="M50,50 L82,33 M50,50 L18,33 M50,50 L50,85"/><circle class="k-core" cx="50" cy="50" r="4.5"/>
+          </g></svg>
+        </div>
+        <div class="min-w-0">
+          <p class="text-[11.5px] font-semibold text-point mb-1">사고분석관 루카</p>
+          <p class="text-[13.5px] md:text-[14.5px] text-ink leading-relaxed"><b id="lName">지호</b>는 3개월 전만 해도 ‘조차’ 같은 말이 심어둔 전제를 지나쳤어요. 지금은 그 말이 뭘 당연하게 깔고 있는지 스스로 되묻습니다. 다음엔 <b class="text-point">‘필자는 중립적이다’</b>라는 전제를 함께 흔들어 볼게요.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. 학년 승계 배너 -->
+    <div class="rounded-3xl px-5 py-5 md:px-6 md:py-6 mb-5" style="background:linear-gradient(105deg,rgba(10,102,255,.07),rgba(255,184,0,.09));border:1px solid rgba(10,102,255,.2)">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+        <div class="flex-1">
+          <p class="text-[11px] font-bold text-point mb-1">학년이 바뀌어도, 처음이 아닙니다</p>
+          <p class="text-[15px] md:text-[16px] font-extrabold text-ink leading-snug"><span id="gName">지호</span>가 쌓아온 사고 지도는 다음 학년으로 그대로 이어집니다.</p>
+          <p class="text-[12.5px] text-body mt-1.5 leading-relaxed">작년에 여기까지 자랐어요. 올해는 <b class="text-ink">바로 이 지점에서</b> 이어서 시작합니다.</p>
+        </div>
+        <div class="shrink-0 text-center rounded-2xl bg-white/70 border border-point/20 px-4 py-3">
+          <p class="text-[12px] text-body">이어지는 기록</p>
+          <p class="text-[15px] font-extrabold text-ink mt-0.5"><span id="gFrom">중1</span> <span class="text-point">→</span> <span id="gTo">중2</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. 구독 상태 -->
+    <div class="card p-5 md:p-6 mb-4">
+      <div class="flex items-center justify-between gap-3 mb-2">
+        <p class="text-[12px] font-semibold text-faint uppercase tracking-wide">구독 상태</p>
+        <span id="subBadge" class="badge badge-active">구독 중</span>
+      </div>
+      <p id="subTitle" class="text-[15px] font-bold text-ink">사고 지도가 매주 자라고 있어요</p>
+      <p id="subDetail" class="text-[12.5px] text-body mt-1 leading-relaxed">지도는 계정에 안전하게 보관됩니다. 멈추면 성장만 멈출 뿐, 기록은 사라지지 않아요.</p>
+      <div id="subActions" class="mt-4 flex flex-col sm:flex-row gap-2.5"></div>
+    </div>
+
+    <p class="text-center text-[11.5px] text-faint mt-6 leading-relaxed">
+      본 화면은 런칭 전 <b>샘플 예시</b>입니다. 실제 데이터가 쌓이면 아이의 실제 기록으로 채워집니다.<br>© 2026 PBS 학습법 · Premise-Break Schema
+    </p>
+  </div>
+</main>
+
+<script>
+  const $ = id => document.getElementById(id);
+
+  /* ---- 접근 게이팅: 로그인·구독 확인 (붙여둠 · 결제 실연동 전) ---- */
+  (function guard(){
+    if (new URLSearchParams(location.search).has("preview")) return; // 런칭 전 UI 검토용 우회
+    try{
+      if(!(window.PremiseStore && PremiseStore.isLoggedIn && PremiseStore.isLoggedIn())){ location.replace("login.html"); return; }
+      const st = (PremiseStore.getSubscription && PremiseStore.getSubscription().status) || "none";
+      if(st === "none"){ location.replace("onboarding.html"); return; } // 구독 이력 없으면 결제 유도
+      // 일시정지·해지(paused/canceled)는 '동결된 지도'를 계속 열람 허용 — 이탈 방어 전략
+    }catch(e){}
+  })();
+
+  if (window.PremiseNav) PremiseNav.render("dash");
+
+  /* ---- 이름 / 카운트 ---- */
+  let name = "지호", streak = 15, events = 247, premise = 58;
+  try {
+    const u = PremiseStore.getUser && PremiseStore.getUser();
+    if (u && u.name) name = u.name;
+    const p = JSON.parse(localStorage.getItem("premise_profile") || "null");
+    if (p && p.name) name = p.name;
+    const S = PremiseStore.get();
+    if (S) {
+      streak = S.streak ?? streak;
+      if (Array.isArray(S.premises) && S.premises.length) premise = Math.max(premise, S.premises.length);
+      if (Array.isArray(S.completed) && S.completed.length) events = Math.max(events, S.completed.length);
+    }
+  } catch (e) {}
+  ["hName","rName","lName","gName"].forEach(id => $(id) && ($(id).textContent = name));
+  $("hEvents").textContent = events; $("hPremise").textContent = premise; $("hStreak").textContent = streak;
+
+  /* ---- 전제 함정 지도 (report.html과 동일 로직) ---- */
+  const traps = [
+    { key:"상관→인과", now:78, prev:40 }, { key:"숨은 전제", now:66, prev:28 },
+    { key:"단일 기준", now:58, prev:35 }, { key:"과잉 일반화", now:47, prev:30 },
+    { key:"권위 전제", now:38, prev:15 }, { key:"이분법", now:52, prev:33 },
+  ];
+  const BENCH = { "상관→인과":96, "숨은 전제":94, "단일 기준":92, "과잉 일반화":90, "권위 전제":89, "이분법":91 };
+  const scoreNow  = Math.round(traps.reduce((s,t)=>s+t.now,0)/traps.length);
+  const scorePrev = Math.round(traps.reduce((s,t)=>s+t.prev,0)/traps.length);
+  const scoreTop  = Math.round(Object.values(BENCH).reduce((a,b)=>a+b,0)/traps.length);
+  (function renderRadar(){
+    const svg = $("trapRadar"); if(!svg) return;
+    const cx=160, cy=120, R=86, n=traps.length;
+    const ang = i => (-90 + i*(360/n)) * Math.PI/180;
+    const pt = (i,r) => [cx + Math.cos(ang(i))*r, cy + Math.sin(ang(i))*r];
+    const poly = (r) => traps.map((t,i)=>pt(i, typeof r==="function"?r(t):r).map(v=>v.toFixed(1)).join(",")).join(" ");
+    let g = "";
+    [0.25,0.5,0.75,1].forEach((f,ri)=>{ const outer=ri===3; g += `<polygon class="rr-ring" points="${poly(R*f)}" fill="none" stroke="${outer?'#AEB6C1':'#CFD5DC'}" stroke-width="${outer?1.6:1}"/>`; });
+    traps.forEach((_,i)=>{ const [x,y]=pt(i,R); g += `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#CFD5DC" stroke-width="1"/>`; });
+    g += `<polygon points="${poly(t=>R*t.prev/100)}" fill="none" stroke="#9AA4B2" stroke-width="1.6" stroke-dasharray="4 3" stroke-linejoin="round"/>`;
+    let nowG = `<polygon class="rr-now" points="${poly(t=>R*t.now/100)}" fill="rgba(10,102,255,.14)" stroke="#0A66FF" stroke-width="2.2" stroke-linejoin="round"/>`;
+    traps.forEach((t,i)=>{ const [x,y]=pt(i,R*t.now/100); const on=t.now>=55; nowG += `<circle class="rr-dot${on?' rr-dot-on':''}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${on?4.5:3}" fill="${on?'#0A66FF':'#9AA4B2'}"/>`; });
+    g += `<g class="rr-now-grp">${nowG}</g>`;
+    traps.forEach((t,i)=>{ const [x,y]=pt(i,R+22); const a = x<cx-8?"end":(x>cx+8?"start":"middle"); const on=t.now>=55;
+      g += `<text x="${x.toFixed(1)}" y="${(y+4).toFixed(1)}" text-anchor="${a}" font-size="${on?11.5:11}" font-weight="${on?700:600}" fill="${on?'#0A0E17':'#9AA4B2'}">${t.key}</text>`; });
+    svg.innerHTML = g;
+    const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    svg.querySelectorAll('.rr-dot-on').forEach((el,idx)=> el.animate([{opacity:.25},{opacity:1},{opacity:.25}], {duration:1500, iterations:Infinity, easing:'ease-in-out', delay:idx*180}) );
+    if(!reduce){
+      const grp = svg.querySelector('.rr-now-grp');
+      if(grp) grp.animate([{transform:'scale(1)'},{transform:'scale(1.05)'},{transform:'scale(1)'}], {duration:3000, iterations:Infinity, easing:'ease-in-out'});
+      svg.querySelectorAll('.rr-ring').forEach((el,idx)=> el.animate([{opacity:.8},{opacity:1},{opacity:.8}], {duration:5000, iterations:Infinity, delay:idx*350, easing:'ease-in-out'}) );
+    }
+  })();
+  (function renderTrapList(){
+    const el = $("trapList"); if(!el) return;
+    el.innerHTML = [...traps].sort((a,b)=>b.now-a.now).map(t=>{
+      const caught = t.now>=55, delta = t.now - t.prev;
+      return `<div class="flex items-center gap-2.5">
+        <span style="width:9px;height:9px;border-radius:50%;background:${caught?'#0A66FF':'#CBD3DC'};display:inline-block;flex:none"></span>
+        <span class="text-[12.5px] ${caught?'text-ink font-semibold':'text-body'} flex-1 min-w-0">${t.key}</span>
+        <span class="text-[11px] ${caught?'text-point':'text-faint'} font-semibold whitespace-nowrap">${caught?'스스로 잡아냄':'함께 흔드는 중'}</span>
+        <span class="text-[10.5px] text-faint w-8 text-right">+${delta}</span></div>`;
+    }).join("");
+  })();
+
+  /* ---- 최상위권 비교 ---- */
+  (function renderTopCompare(){
+    const bench = BENCH, now = scoreNow, top = scoreTop;
+    const gap = Math.max(0, top-now);
+    const tier = now>=80?"최상위권": now>=65?"상위권": now>=45?"중위권":"기초 단계";
+    $("scoreNow").textContent = now; $("scoreTop").textContent = top; $("scoreGap").textContent = gap;
+    const tl=$("tierLabel"); tl.textContent = tier;
+    tl.className = "ml-2 badge " + (now>=80?"badge-active": now>=45?"badge-paused":"badge-none");
+
+    /* 게이지 */
+    (function(){
+      const svg=$("gauge"); if(!svg) return;
+      const W=620,H=76, x0=8,x1=W-8, barY=26, barH=14;
+      const px=v=> x0 + v/100*(x1-x0);
+      const zones=[[0,45,'#EEF0F2'],[45,65,'#E3ECFA'],[65,80,'#CFE0FA'],[80,100,'#B7D2F7']];
+      let g="";
+      zones.forEach(z=>{ g+=`<rect x="${px(z[0]).toFixed(1)}" y="${barY}" width="${(px(z[1])-px(z[0])).toFixed(1)}" height="${barH}" fill="${z[2]}"/>`; });
+      [[22.5,'기초'],[55,'중위권'],[72.5,'상위권'],[90,'최상위권']].forEach(l=>{ g+=`<text x="${px(l[0]).toFixed(1)}" y="${barY+barH+16}" text-anchor="middle" font-size="10.5" fill="#9AA4B2">${l[1]}</text>`; });
+      const tx=px(top); g+=`<line x1="${tx.toFixed(1)}" y1="${barY-7}" x2="${tx.toFixed(1)}" y2="${barY+barH+2}" stroke="#0A0E17" stroke-width="1.5" stroke-dasharray="3 2"/>`;
+      g+=`<text x="${tx.toFixed(1)}" y="${barY-11}" text-anchor="middle" font-size="10" font-weight="700" fill="#0A0E17">목표 ${top}</text>`;
+      const nx=px(now); g+=`<circle cx="${nx.toFixed(1)}" cy="${(barY+barH/2).toFixed(1)}" r="8" fill="#0A66FF" stroke="#fff" stroke-width="2.5"/>`;
+      g+=`<text x="${nx.toFixed(1)}" y="${barY-11}" text-anchor="middle" font-size="10.5" font-weight="800" fill="#0A66FF">지금 ${now}</text>`;
+      svg.innerHTML=g;
+    })();
+
+    /* 축별 격차 (가장 벌어진 곳부터) */
+    const rows = traps.map(t=>({key:t.key, now:t.now, top:bench[t.key]||88, gap:(bench[t.key]||88)-t.now})).sort((a,b)=>b.gap-a.gap);
+    $("gapList").innerHTML = rows.map(r=>{
+      const w=Math.max(4, Math.min(100, r.now));
+      return `<div>
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-[12.5px] font-semibold text-ink">${r.key}</span>
+          <span class="text-[11px] text-body">${r.now}<span class="text-faint"> / 최상위 ${r.top}</span> · <b class="${r.gap>=30?'text-point':'text-faint'}">-${r.gap}</b></span>
+        </div>
+        <div style="position:relative;height:8px;border-radius:9999px;background:#EEF0F2">
+          <div style="position:absolute;left:0;top:0;height:100%;width:${w}%;background:#0A66FF;border-radius:9999px"></div>
+          <div style="position:absolute;left:calc(${r.top}% - 1px);top:-3px;width:2px;height:14px;background:#0A0E17" title="최상위권"></div>
+        </div>
+      </div>`;
+    }).join("");
+
+    const josaWa = w => { const c=w.charCodeAt(w.length-1); return (c<0xAC00||c>0xD7A3) ? '와' : ((c-0xAC00)%28===0 ? '와':'과'); };
+    const a1=rows[0].key, a2=rows[1].key;
+    const top2 = `‘${a1}’${josaWa(a1)} ‘${a2}’`;
+    $("gapMsg").innerHTML = `지금은 <b class="text-ink">${tier}</b>이에요. 최상위권과의 차이는 대부분 ${top2} 두 곳에서 벌어집니다. 여기를 좁히면 다음 단계로 올라섭니다 — 목표는 하나, 최상위권.`;
+  })();
+
+  /* ---- 예상 기간 바 (데이터 기반 보수적 추정 + 무한 루프 WAAPI) ---- */
+  (function renderEta(){
+    const gap = Math.max(0, scoreTop - scoreNow);
+    const weeklyGain = Math.max(0.5, (scoreNow - scorePrev) / 6);   // 최근 6주 관측 향상(주당)
+    const conservativeWeekly = weeklyGain * 0.3;                    // 상위 구간 둔화 반영(관측의 30%)
+    const months = Math.max(1, Math.round((gap / conservativeWeekly) / 4.345));
+    if($("etaValue")) $("etaValue").textContent = "약 " + months + "개월";
+    if($("etaBasis")) $("etaBasis").textContent =
+      "최근 6주 향상 속도(주 " + weeklyGain.toFixed(1) + "점)를 기준으로, 상위 구간 둔화를 반영한 보수적 추정입니다 · 실측 검증 전";
+    const fill = $("etaFill"); if(!fill) return;
+    fill.animate([
+      { width:'6%',  opacity:.12 },
+      { width:'100%', opacity:.5, offset:.78 },
+      { width:'100%', opacity:.5, offset:.9 },
+      { width:'100%', opacity:0,  offset:1 }
+    ], { duration:3200, iterations:Infinity, easing:'ease-out' });
+  })();
+
+  /* ---- 성장 곡선 ---- */
+  (function renderGrowth(){
+    const svg = $("growth"); if(!svg) return;
+    const W=620,H=200, padL=12,padR=16,padT=18,padB=30;
+    const data=[4,9,15,19,24,29,35,40,45,50,54,premise>=58?premise:58];
+    const n=data.length, maxV=Math.max(...data);
+    const x=i=> padL + i*(W-padL-padR)/(n-1);
+    const y=v=> (H-padB) - v/maxV*(H-padT-padB);
+    const pts=data.map((v,i)=>[x(i),y(v)]);
+    const line=pts.map((p,i)=>`${i?'L':'M'}${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(' ');
+    const area=`${line} L${x(n-1).toFixed(1)} ${H-padB} L${padL} ${H-padB} Z`;
+    let g=`<line x1="${padL}" y1="${H-padB}" x2="${W-padR}" y2="${H-padB}" stroke="#ECEEF1" stroke-width="1"/>`;
+    g+=`<path d="${area}" fill="rgba(10,102,255,.08)"/>`;
+    g+=`<path d="${line}" fill="none" stroke="#0A66FF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>`;
+    g+=`<circle cx="${x(n-1).toFixed(1)}" cy="${y(data[n-1]).toFixed(1)}" r="4.6" fill="#0A66FF"/>`;
+    [{i:2},{i:7}].forEach(m=>{ g+=`<circle cx="${x(m.i).toFixed(1)}" cy="${y(data[m.i]).toFixed(1)}" r="3.6" fill="#fff" stroke="#0A66FF" stroke-width="2"/>`; });
+    [0,3,6,9,11].forEach(i=>{ g+=`<text x="${x(i).toFixed(1)}" y="${H-10}" text-anchor="middle" font-size="10.5" fill="#9AA4B2">${i+1}주</text>`; });
+    svg.innerHTML=g;
+    $("milestones").innerHTML = [
+      { d:"3주차", t:"“빨리 푸는 게 잘하는 것”이라는 전제를 내려놓음" },
+      { d:"8주차", t:"“숨은 전제”를 스스로 보기 시작" },
+    ].map(m=>`<div class="flex items-start gap-2.5">
+        <span style="width:8px;height:8px;border-radius:50%;background:#0A66FF;display:inline-block;flex:none;margin-top:6px"></span>
+        <p class="text-[12.5px] text-body leading-snug"><b class="text-ink">${m.d}</b> · ${m.t}</p></div>`).join("");
+  })();
+
+  /* ---- 구독 상태 (해지→일시정지 유도) ---- */
+  (function renderSub(){
+    let sub = { status:"active" };
+    try { const s = PremiseStore.getSubscription && PremiseStore.getSubscription(); if (s) sub = s; } catch(e){}
+    const badge=$("subBadge"), title=$("subTitle"), detail=$("subDetail"), act=$("subActions");
+    const btn=(cls,label,href)=>`<a href="${href||'#'}" class="btn ${cls} flex-1 py-3 text-[13.5px] font-semibold">${label}</a>`;
+    if (sub.status==="active" || sub.status==="trial"){
+      badge.className="badge badge-active"; badge.textContent = sub.status==="trial"?"무료체험 중":"구독 중";
+      title.textContent = "사고 지도가 매주 자라고 있어요";
+      detail.textContent = "지도는 계정에 안전하게 보관됩니다. 멈추면 성장만 멈출 뿐, 기록은 사라지지 않아요.";
+      act.innerHTML = btn("btn-ghost","일시정지로 두기","mypage.html") + btn("btn-primary","리포트 보기","report.html");
+    } else if (sub.status==="paused" || sub.status==="canceled"){
+      badge.className="badge badge-paused"; badge.textContent="일시정지 중";
+      title.textContent = "지도는 그대로 보관돼 있어요";
+      detail.textContent = "멈춘 지점에서 언제든 이어집니다. 또래가 자라는 동안 곡선만 잠시 멈춰 있어요.";
+      act.innerHTML = btn("btn-primary","멈춘 지점에서 이어가기","pricing.html");
+    } else {
+      badge.className="badge badge-none"; badge.textContent="미구독";
+      title.textContent = "아직 지도가 시작되지 않았어요";
+      detail.textContent = "첫 사건부터 지도가 그려지기 시작해요.";
+      act.innerHTML = btn("btn-primary","지도 시작하기","onboarding.html") + btn("btn-ghost","요금제 보기","pricing.html");
+    }
+  })();
+</script>
+</body>
+</html>
