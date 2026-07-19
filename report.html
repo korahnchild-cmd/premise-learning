@@ -159,6 +159,32 @@
       <div class="grid sm:grid-cols-3 gap-3.5" id="metrics"></div>
     </div>
 
+    <!-- ★ 전제 함정 지도 (사고 지도) -->
+    <div class="px-6 md:px-9 pb-8">
+      <div class="flex items-center gap-2 mb-1.5">
+        <span class="text-[11px] font-bold text-point bg-point/10 rounded-full px-2.5 py-1">우리 아이 사고 지도</span>
+      </div>
+      <h3 class="text-[1.35rem] md:text-[1.6rem] font-extrabold">지금 <span id="mapName">지호</span>가 보는 것, 아직 못 보는 것</h3>
+      <p class="text-[13.5px] text-body mt-2 leading-relaxed">전제 함정 유형별로, <b class="text-ink">스스로 잡아내는 정도</b>예요. 이 지도는 PBS 학습법을 쓸수록 또렷해지고, <b class="text-ink">학년이 바뀌어도 이어집니다</b>.</p>
+
+      <div class="mt-5 rounded-2xl border border-line bg-soft px-4 py-5 md:px-6 flex flex-col md:flex-row items-center gap-5">
+        <div class="w-full max-w-[330px] mx-auto shrink-0">
+          <svg id="trapRadar" viewBox="0 0 320 250" class="w-full" aria-label="전제 함정 지도"></svg>
+        </div>
+        <div class="flex-1 w-full min-w-0">
+          <div class="flex items-center gap-4 mb-3 flex-wrap">
+            <span class="inline-flex items-center gap-1.5 text-[12px] text-ink font-semibold"><span style="width:12px;height:12px;border-radius:3px;background:#0A66FF;display:inline-block"></span>지금 스스로 잡아냄</span>
+            <span class="inline-flex items-center gap-1.5 text-[12px] text-faint"><span style="width:12px;height:12px;border-radius:3px;border:1.5px dashed #9AA4B2;display:inline-block"></span>6주 전</span>
+          </div>
+          <div id="trapList" class="space-y-1.5"></div>
+        </div>
+      </div>
+
+      <p class="text-[12.5px] text-body mt-4 rounded-2xl bg-point/[.05] border border-point/15 px-4 py-3 leading-relaxed">
+        <b class="text-point">루카 —</b> 지금까지 <b class="text-ink" id="mapPremiseCount">58</b>개의 전제가 이 지도를 그렸어요. 이번 주엔 <b class="text-ink">‘숨은 전제’</b>를 보는 눈이 한 칸 또렷해졌습니다. 이 기록은 지워지지 않고 계속 쌓여요.
+      </p>
+    </div>
+
     <!-- 이번 주 발견한 전제 -->
     <div class="px-6 md:px-9 pb-8">
       <h3 class="text-[15px] font-bold text-ink mb-4">이번 주 발견한 전제</h3>
@@ -293,6 +319,47 @@
         <p class="text-[11px] text-point font-semibold">${m.sub}</p>
       </div>${spark(m.series)}
     </div>`).join("");
+
+  /* ---- ★ 전제 함정 지도 (레이더) ---- */
+  $("mapName") && ($("mapName").textContent = name);
+  const traps = [
+    { key:"상관→인과",  now:78, prev:40 },
+    { key:"숨은 전제",   now:66, prev:28 },
+    { key:"단일 기준",   now:58, prev:35 },
+    { key:"과잉 일반화", now:47, prev:30 },
+    { key:"권위 전제",   now:38, prev:15 },
+    { key:"이분법",      now:52, prev:33 },
+  ];
+  (function renderRadar(){
+    const svg = $("trapRadar"); if(!svg) return;
+    const cx=160, cy=120, R=86, n=traps.length;
+    const ang = i => (-90 + i*(360/n)) * Math.PI/180;
+    const pt = (i,r) => [cx + Math.cos(ang(i))*r, cy + Math.sin(ang(i))*r];
+    const poly = (r) => traps.map((t,i)=>pt(i, typeof r==="function"?r(t):r).map(v=>v.toFixed(1)).join(",")).join(" ");
+    let g = "";
+    [0.25,0.5,0.75,1].forEach(f=>{ g += `<polygon points="${poly(R*f)}" fill="none" stroke="#ECEEF1" stroke-width="1"/>`; });
+    traps.forEach((_,i)=>{ const [x,y]=pt(i,R); g += `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#ECEEF1" stroke-width="1"/>`; });
+    g += `<polygon points="${poly(t=>R*t.prev/100)}" fill="none" stroke="#9AA4B2" stroke-width="1.6" stroke-dasharray="4 3" stroke-linejoin="round"/>`;
+    g += `<polygon points="${poly(t=>R*t.now/100)}" fill="rgba(10,102,255,.14)" stroke="#0A66FF" stroke-width="2.2" stroke-linejoin="round"/>`;
+    traps.forEach((t,i)=>{ const [x,y]=pt(i,R*t.now/100); g += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3" fill="#0A66FF"/>`; });
+    traps.forEach((t,i)=>{ const [x,y]=pt(i,R+22); const a = x<cx-8?"end":(x>cx+8?"start":"middle");
+      g += `<text x="${x.toFixed(1)}" y="${(y+4).toFixed(1)}" text-anchor="${a}" font-size="11.5" font-weight="700" fill="#525A69">${t.key}</text>`; });
+    svg.innerHTML = g;
+  })();
+  (function renderTrapList(){
+    const el = $("trapList"); if(!el) return;
+    el.innerHTML = [...traps].sort((a,b)=>b.now-a.now).map(t=>{
+      const caught = t.now>=55, delta = t.now - t.prev;
+      return `<div class="flex items-center gap-2.5">
+        <span style="width:9px;height:9px;border-radius:50%;background:${caught?'#0A66FF':'#CBD3DC'};display:inline-block;flex:none"></span>
+        <span class="text-[12.5px] ${caught?'text-ink font-semibold':'text-body'} flex-1 min-w-0">${t.key}</span>
+        <span class="text-[11px] ${caught?'text-point':'text-faint'} font-semibold whitespace-nowrap">${caught?'스스로 잡아냄':'함께 흔드는 중'}</span>
+        <span class="text-[10.5px] text-faint w-8 text-right">+${delta}</span>
+      </div>`;
+    }).join("");
+  })();
+  // 누적 전제 수 동기화
+  try { const tp=$("totalPremise"), mp=$("mapPremiseCount"); if(tp&&mp) mp.textContent = tp.textContent; } catch(e){}
 
   /* ---- 타임라인 (스토어 premises 있으면 사용) ---- */
   const demoNotes = [
