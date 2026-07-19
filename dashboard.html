@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>PBS 학습법 · 우리 아이 사고 지도</title>
+<title>PBS 학습법 · PBS 마인드맵</title>
 <meta name="description" content="아이의 사고가 어떻게 자라는지 — 전제 함정 지도와 성장 곡선. 이 기록은 학년이 바뀌어도 이어집니다." />
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -49,7 +49,7 @@
 
     <!-- 1. 상단 요약 -->
     <div class="mb-6">
-      <span class="text-[11px] font-bold text-point bg-point/10 rounded-full px-2.5 py-1">우리 아이 사고 지도</span>
+      <span class="text-[11px] font-bold text-point bg-point/10 rounded-full px-2.5 py-1">PBS 마인드맵</span>
       <h1 class="text-[1.8rem] md:text-[2.3rem] font-extrabold mt-3 leading-tight"><span id="hName">지호</span>의 사고가 <span class="text-point">자라는 중</span>입니다</h1>
       <div class="mt-4 flex flex-wrap items-center gap-2.5">
         <div class="rounded-2xl bg-white border border-line px-4 py-2.5"><p class="text-[19px] font-extrabold text-ink" id="hEvents">247</p><p class="text-[10.5px] text-body">함께 분석한 사건</p></div>
@@ -167,7 +167,7 @@
       <div class="flex flex-col sm:flex-row sm:items-center gap-4">
         <div class="flex-1">
           <p class="text-[11px] font-bold text-point mb-1">학년이 바뀌어도, 처음이 아닙니다</p>
-          <p class="text-[15px] md:text-[16px] font-extrabold text-ink leading-snug"><span id="gName">지호</span>가 쌓아온 사고 지도는 다음 학년으로 그대로 이어집니다.</p>
+          <p class="text-[15px] md:text-[16px] font-extrabold text-ink leading-snug"><span id="gName">지호</span>가 쌓아온 마인드맵은 다음 학년으로 그대로 이어집니다.</p>
           <p class="text-[12.5px] text-body mt-1.5 leading-relaxed">작년에 여기까지 자랐어요. 올해는 <b class="text-ink">바로 이 지점에서</b> 이어서 시작합니다.</p>
         </div>
         <div class="shrink-0 text-center rounded-2xl bg-white/70 border border-point/20 px-4 py-3">
@@ -183,7 +183,7 @@
         <p class="text-[12px] font-semibold text-faint uppercase tracking-wide">구독 상태</p>
         <span id="subBadge" class="badge badge-active">구독 중</span>
       </div>
-      <p id="subTitle" class="text-[15px] font-bold text-ink">사고 지도가 매주 자라고 있어요</p>
+      <p id="subTitle" class="text-[15px] font-bold text-ink">마인드맵이 매주 자라고 있어요</p>
       <p id="subDetail" class="text-[12.5px] text-body mt-1 leading-relaxed">지도는 계정에 안전하게 보관됩니다. 멈추면 성장만 멈출 뿐, 기록은 사라지지 않아요.</p>
       <div id="subActions" class="mt-4 flex flex-col sm:flex-row gap-2.5"></div>
     </div>
@@ -372,7 +372,7 @@
     const btn=(cls,label,href)=>`<a href="${href||'#'}" class="btn ${cls} flex-1 py-3 text-[13.5px] font-semibold">${label}</a>`;
     if (sub.status==="active" || sub.status==="trial"){
       badge.className="badge badge-active"; badge.textContent = sub.status==="trial"?"무료체험 중":"구독 중";
-      title.textContent = "사고 지도가 매주 자라고 있어요";
+      title.textContent = "마인드맵이 매주 자라고 있어요";
       detail.textContent = "지도는 계정에 안전하게 보관됩니다. 멈추면 성장만 멈출 뿐, 기록은 사라지지 않아요.";
       act.innerHTML = btn("btn-ghost","일시정지로 두기","mypage.html") + btn("btn-primary","리포트 보기","report.html");
     } else if (sub.status==="paused" || sub.status==="canceled"){
