@@ -36,7 +36,10 @@
   .kozy .kw{ transform-origin:50% 55%; animation:kfloat 4s ease-in-out infinite; }
   @keyframes kfloat{ 0%,100%{transform:translateY(0) rotate(-6deg)} 50%{transform:translateY(-6px) rotate(6deg)} }
   .rr-now-grp, .rr-ring{ transform-box:fill-box; transform-origin:center; }
-  @media (prefers-reduced-motion:reduce){ .kw{ animation:none!important } }
+  .eta-fill{ position:absolute; left:0; top:0; height:100%; border-radius:9999px; background:linear-gradient(90deg,#0A66FF,#FFB800); width:6%; transition:width 1.2s cubic-bezier(.2,.8,.2,1); overflow:hidden; }
+  .eta-fill::after{ content:""; position:absolute; top:0; right:0; bottom:0; width:22px; background:linear-gradient(90deg,transparent,rgba(255,255,255,.75)); animation:etaShine 2s infinite; }
+  @keyframes etaShine{ 0%{ transform:translateX(-40px) } 100%{ transform:translateX(26px) } }
+  @media (prefers-reduced-motion:reduce){ .kw, .eta-fill::after{ animation:none!important } .eta-fill{ transition:none!important } }
 </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -366,18 +369,16 @@
       if(elT) elT.textContent = "지금 속도라면, 최상위권까지";
       if(elV){ elV.textContent = "약 " + fmt(optM) + " ~ " + fmt(consM); elV.style.color = "#EA580C"; }
       if(elB) elB.textContent = "지금까지의 향상 속도로 추정한 범위예요. 상위 구간은 천천히 좁혀지기에 넉넉히 잡았고, 데이터가 쌓일수록 더 정확해집니다.";
+      const prog = Math.max(6, Math.min(100, Math.round(scoreNow/scoreTop*100)));
       if(vis){
         vis.innerHTML =
-          `<div style="position:relative;height:18px;border-radius:9999px;background:#F1EFE8;overflow:hidden">
-             <div id="etaFill" style="position:absolute;left:0;top:0;height:100%;width:8%;border-radius:9999px;background:linear-gradient(90deg,#DC2626,#F97316);opacity:.4"></div>
+          `<div style="position:relative;height:14px;border-radius:9999px;background:#ECEEF1;overflow:hidden">
+             <div class="eta-fill" style="width:6%"></div>
              <div style="position:absolute;right:0;top:0;height:100%;width:2px;background:#EA580C"></div>
            </div>
-           <div class="flex justify-between mt-1.5"><span class="text-[10.5px] text-faint">지금</span><span class="text-[10.5px] text-faint">데이터로 계속 업데이트</span><span class="text-[10.5px] font-bold" style="color:#EA580C">최상위권</span></div>`;
-        const fill = $("etaFill");
-        if(fill) fill.animate([
-          { width:'6%', opacity:.12 }, { width:'100%', opacity:.5, offset:.78 },
-          { width:'100%', opacity:.5, offset:.9 }, { width:'100%', opacity:0, offset:1 }
-        ], { duration:3200, iterations:Infinity, easing:'ease-out' });
+           <div class="flex justify-between mt-1.5"><span class="text-[10.5px] text-point font-bold">지금</span><span class="text-[10.5px] text-faint">데이터로 계속 업데이트</span><span class="text-[10.5px] font-bold" style="color:#EA580C">최상위권</span></div>`;
+        const ef = vis.querySelector(".eta-fill");
+        if(ef){ const setW = ()=>{ ef.style.width = prog + "%"; }; (typeof requestAnimationFrame==="function") ? requestAnimationFrame(setW) : setW(); }
       }
     }
   })();

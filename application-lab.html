@@ -72,14 +72,14 @@
   </div>
 
   <!-- 필터 -->
-  <p class="text-[11px] font-bold text-faint uppercase tracking-wide mb-2">과목</p>
+  <p id="subjLabel" class="text-[11px] font-bold text-faint uppercase tracking-wide mb-2">과목</p>
   <div class="flex flex-wrap gap-2 mb-5" id="filters">
     <button class="fbtn active px-5 py-2.5 rounded-full text-[13px] font-bold bg-ink text-white transition-all" data-subject="all">전체</button>
     <button class="fbtn px-5 py-2.5 rounded-full text-[13px] font-bold bg-white border border-line text-body transition-all" data-subject="국어">국어</button>
     <button class="fbtn px-5 py-2.5 rounded-full text-[13px] font-bold bg-white border border-line text-body transition-all" data-subject="수학">수학</button>
     <button class="fbtn px-5 py-2.5 rounded-full text-[13px] font-bold bg-white border border-line text-body transition-all" data-subject="역사">역사</button>
   </div>
-  <p class="text-[11px] font-bold text-faint uppercase tracking-wide mb-2">학년</p>
+  <p id="trackLabel" class="text-[11px] font-bold text-faint uppercase tracking-wide mb-2">학년</p>
   <div class="flex flex-wrap gap-2 mb-8" id="trackFilters">
     <button class="tbtn active px-5 py-2.5 rounded-full text-[13px] font-bold bg-ink text-white transition-all" data-track="all">전체</button>
     <button class="tbtn px-5 py-2.5 rounded-full text-[13px] font-bold bg-white border border-line text-body transition-all" data-track="초등">초등</button>
@@ -337,6 +337,9 @@ if (access !== "premium") {
   gate.style.display = "block";
   document.getElementById("filters").style.display = "none";
   document.getElementById("trackFilters").style.display = "none";
+  document.getElementById("subjLabel").style.display = "none";
+  document.getElementById("trackLabel").style.display = "none";
+  document.getElementById("labHost").style.display = "none";
 
   if (access === "none") {
     document.getElementById("gateEyebrow").textContent = "구독 전용 기능";
