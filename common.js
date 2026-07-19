@@ -49,6 +49,16 @@
       if (!parsed.user) parsed.user = { loggedIn: false, name: "", email: "", provider: "" };
       if (!parsed.subscription) parsed.subscription = { status: "none", plan: parsed.plan || "basic", cycle: "m6", method: "", trialEndsAt: "", nextBillingAt: "" };
       if (!parsed.questionLog) parsed.questionLog = [];
+      // 자가치유: 구버전 빌드에서 긴 리프레임 문장이 note로 잘못 저장돼 잘려 보이는 데이터 정리
+      if (Array.isArray(parsed.premises)) {
+        parsed.premises.forEach(p => {
+          if (p && typeof p.note === "string" && p.note.length > 22) {
+            let t = p.note.split(/[.!?…·—]/)[0].trim();          // 첫 문장만
+            if (t.length > 24) t = t.slice(0, 24).replace(/\s\S*$/, ""); // 마지막 온전한 단어까지
+            p.note = t;
+          }
+        });
+      }
       return parsed;
     } catch (e) { return seed(); }
   }
