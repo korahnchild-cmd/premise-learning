@@ -130,7 +130,8 @@
   function setKozy(s){ $("kozy").className = "kozy shrink-0 "+s; $("kozy").style.width="54px"; $("kozy").style.height="54px"; }
 
   // ===== LESSONS (다단계) =====
-  const LESSONS = [
+  const LESSON_SETS = {};
+  LESSON_SETS["중등"] = [
     { missionId:"in-3", subject:"언어", tag:"Case 1 · 입문", badge:"🕵️", badgeName:"문장파트너 획득!", note:"'조차'가 심은 전제를 포착",
       material:'"너<span class="trig" data-t>조차</span> 그걸 몰랐어."', trigGlow:true,
       steps:[
@@ -197,6 +198,149 @@
         { t:"wrap" },
       ] },
   ];
+
+  LESSON_SETS["초등"] = [
+    { missionId:"el-in-3", subject:"관계", tag:"Case 1 · 입문", badge:"🌧️", badgeName:"관점파트너 획득!", note:"'엄마 기분 = 내 탓' 전제를 알아차림",
+      material:'"엄마가 아침부터 화나 있으면 <span class="trig" data-t>내 잘못</span>이야."', trigGlow:true,
+      steps:[
+        { t:"intro", kozy:"이 말, 마음이 콕 아프지? 근데 여기 몰래 숨은 생각이 하나 있어. 같이 찾아보자." },
+        { t:"choice", kozy:"이 말은 엄마 기분을 무엇과 곧바로 이어붙였을까?",
+          q:"엄마 기분과 이어붙인 걸 골라봐", opts:[
+            { label:"내 탓", ok:true, fb:"맞아. 엄마 기분을 곧장 '내 탓'으로 이어붙였어. 여기가 숨은 생각이야." },
+            { label:"날씨", ok:false, fb:"날씨 얘긴 없어. 이 말은 '나' 때문이라고 하고 있어." },
+            { label:"아침밥", ok:false, fb:"아침밥도 아니야. '내가 원인'이라고 정해버린 게 핵심이야." },
+          ] },
+        { t:"reveal", kozy:"그 이어붙임이 이런 전제야.", premise:"'주변 사람의 기분 = 내 탓' — 남의 감정을 전부 내 책임으로 여기는 전제" },
+        { t:"choice", kozy:"그럼 엄마가 화난 이유는 정말 나 하나뿐일까?",
+          q:"더 맞는 생각을 골라봐", opts:[
+            { label:"내가 모르는 이유가 많을 수 있다", ok:true, fb:"그렇지! 잠, 일, 컨디션… 내가 모르는 이유가 많아." },
+            { label:"무조건 내가 잘못했다", ok:false, fb:"그건 방금 찾은 전제가 만든 느낌이야." },
+            { label:"엄마는 늘 화나 있다", ok:false, fb:"'늘'은 너무 세게 단정한 말이야." },
+          ] },
+        { t:"blast", kozy:"'다 내 탓'이라는 전제, 폭파하자. 눌러봐!" },
+        { t:"insight", kozy:"마음이 조금 가벼워졌지?", reframe:"남의 기분에는 내가 모르는 이유가 많아. 다 내 탓이 아니야 — 먼저 '왜 그럴까?'를 물어보면 돼." },
+        { t:"wrap" },
+      ] },
+    { missionId:"el-ba-1", subject:"규칙", tag:"Case 2 · 기본", badge:"🛝", badgeName:"구분파트너 획득!", note:"행동과 사람을 구분",
+      material:'"놀이터 규칙을 안 지키면 <span class="trig" data-t>나쁜 애</span>야."', trigGlow:true,
+      steps:[
+        { t:"intro", kozy:"규칙은 중요하지. 근데 이 말은 한 걸음을 너무 크게 건너뛰었어. 같이 볼까?" },
+        { t:"choice", kozy:"이 말은 '규칙을 안 지킨 것'을 무엇과 곧바로 이어붙였지?",
+          q:"이어붙인 걸 골라봐", opts:[
+            { label:"나쁜 사람", ok:true, fb:"맞아. '행동 하나'를 곧장 '나쁜 사람'으로 이어붙였어." },
+            { label:"용감한 사람", ok:false, fb:"그런 얘긴 없어. '나쁜 애'라고 했지." },
+            { label:"똑똑한 사람", ok:false, fb:"똑똑함도 아니야. 행동을 사람 전체로 넘겨버린 게 핵심이야." },
+          ] },
+        { t:"reveal", kozy:"이렇게 한 걸음을 건너뛴 전제야.", premise:"'행동 하나 = 그 사람 전체' — 한 번의 행동으로 사람을 통째로 판단하는 전제" },
+        { t:"choice", kozy:"그럼 규칙을 한 번 어긴 친구를 어떻게 보는 게 더 맞을까?",
+          q:"더 나은 생각을 골라봐", opts:[
+            { label:"행동은 아쉬워도, 사람이 나쁜 건 아니다", ok:true, fb:"바로 그거야. 행동과 사람을 나눠서 봐야 해." },
+            { label:"영원히 나쁜 애다", ok:false, fb:"'영원히'는 전제가 만든 과장이야." },
+            { label:"규칙은 안 지켜도 된다", ok:false, fb:"규칙이 필요없다는 게 아니야. 사람을 통째로 판단하지 말자는 거지." },
+          ] },
+        { t:"blast", kozy:"'행동 하나 = 사람 전체' 전제, 폭파!" },
+        { t:"insight", kozy:"사람을 다시 보게 됐지?", reframe:"한 번의 실수가 사람을 정하지 않아. 행동과 사람은 다르게 봐야 해 — 다음엔 어떻게 할지가 더 중요하지." },
+        { t:"wrap" },
+      ] },
+    { missionId:"el-sim-2", subject:"학습", tag:"Case 3 · 심화", badge:"📚", badgeName:"재정의파트너 획득!", note:"'공부'의 정의를 다시 세움",
+      material:'"만화책은 <span class="trig" data-t>공부에 도움이 안 돼</span>."', trigGlow:true,
+      steps:[
+        { t:"intro", kozy:"어른들이 자주 하는 말이지? 근데 여기 '공부'라는 말을 아주 좁게 쓰고 있어." },
+        { t:"choice", kozy:"이 말은 '재미있는 것'을 무엇이라고 몰래 정하고 있을까?",
+          q:"숨은 생각을 골라봐", opts:[
+            { label:"재미있으면 공부가 아니다", ok:true, fb:"맞아. '재미 = 공부 아님'이라고 몰래 정해버렸어." },
+            { label:"만화는 비싸다", ok:false, fb:"가격 얘긴 없어. '도움이 안 된다'에 집중해봐." },
+            { label:"만화는 어렵다", ok:false, fb:"어렵다는 얘기도 아니야. '재미=공부 아님'이 핵심이야." },
+          ] },
+        { t:"reveal", kozy:"그 좁은 생각이 이런 전제야.", premise:"'재미있는 것 = 공부가 아니다' — 공부를 '재미없는 것'으로만 좁게 정한 전제" },
+        { t:"choice", kozy:"'공부'를 다시 정의해보자. 만화로 배울 수 있는 건?",
+          q:"더 넓은 생각을 골라봐", opts:[
+            { label:"이야기 구조·표현·새 낱말도 배운다", ok:true, fb:"그렇지! '공부'를 넓게 보면 만화도 배움이 돼." },
+            { label:"아무것도 못 배운다", ok:false, fb:"그건 좁은 정의가 만든 결론이야." },
+            { label:"교과서만 공부다", ok:false, fb:"'공부 = 교과서'라는 것도 또 하나의 전제야." },
+          ] },
+        { t:"blast", kozy:"'재미 = 공부 아님' 전제, 폭파!" },
+        { t:"insight", kozy:"'공부'가 넓어졌지?", reframe:"'공부'가 무엇인지 다시 정하면, 만화도 배움이 될 수 있어. 무엇을 배웠는지를 물어보면 돼." },
+        { t:"wrap" },
+      ] },
+  ];
+
+  LESSON_SETS["고등"] = [
+    { missionId:"hi-in-2", subject:"미디어", tag:"Case 1 · 입문", badge:"👍", badgeName:"근거파트너 획득!", note:"인기와 신뢰를 분리",
+      material:'"조회수가 높은 정보가 <span class="trig" data-t>더 믿을 만하다</span>."', trigGlow:true,
+      steps:[
+        { t:"intro", kozy:"타임라인에서 매일 마주치는 판단이지. 그런데 여기 조용한 도약이 하나 있어." },
+        { t:"choice", kozy:"이 말은 '인기'를 무엇의 증거로 삼고 있지?",
+          q:"인기와 이어붙인 걸 골라봐", opts:[
+            { label:"사실 여부", ok:true, fb:"정확해. '많이 봤다'를 '사실이다'의 증거로 삼았어." },
+            { label:"글의 길이", ok:false, fb:"길이 얘긴 없어. '믿을 만하다'에 집중해봐." },
+            { label:"작성 시간", ok:false, fb:"시간도 아니야. 인기를 신뢰의 근거로 삼은 게 핵심이야." },
+          ] },
+        { t:"reveal", kozy:"그 연결이 이 전제야.", premise:"'인기 = 신뢰도' — 많이 본 것을 곧 사실로 여기는 전제" },
+        { t:"choice", kozy:"그럼 조회수가 높은 정보를 대할 때 뭘 먼저 봐야 할까?",
+          q:"더 나은 태도를 골라봐", opts:[
+            { label:"출처와 근거를 따로 확인한다", ok:true, fb:"맞아. 인기와 사실은 다른 축이야." },
+            { label:"조회수만 보면 된다", ok:false, fb:"그게 방금 찾은 전제야." },
+            { label:"조회수가 낮으면 다 거짓이다", ok:false, fb:"반대로 뒤집은 것도 같은 함정이야." },
+          ] },
+        { t:"blast", kozy:"'인기 = 신뢰' 전제, 폭파하자." },
+        { t:"insight", kozy:"판단 기준이 또렷해졌지?", reframe:"많이 본 것과 맞는 것은 다른 축이야. 인기 대신 출처·근거를 따로 확인하면 돼." },
+        { t:"wrap" },
+      ] },
+    { missionId:"hi-ba-1", subject:"통계", tag:"Case 2 · 기본", badge:"🔗", badgeName:"인과파트너 획득!", note:"상관과 인과를 분리",
+      material:'"둘이 <span class="trig" data-t>함께 변했으니</span> 원인과 결과다."', trigGlow:true,
+      steps:[
+        { t:"intro", kozy:"통계·기사에서 가장 많이 숨는 도약이야. 오늘 이걸 잡아내면 눈이 트일 거야." },
+        { t:"choice", kozy:"이 말은 '함께 변한 것'을 곧바로 무엇으로 결론지었지?",
+          q:"결론지은 걸 골라봐", opts:[
+            { label:"원인과 결과", ok:true, fb:"그래. '같이 움직였다'를 곧장 '인과'로 결론냈어." },
+            { label:"우연의 일치", ok:false, fb:"오히려 반대야. 이 말은 우연 가능성을 지웠지." },
+            { label:"서로 무관", ok:false, fb:"무관이라고 한 게 아니라, 인과라고 단정한 게 문제야." },
+          ] },
+        { t:"reveal", kozy:"이게 통계에서 가장 흔한 전제야.", premise:"'상관 = 인과' — 함께 변했다는 이유만으로 원인·결과로 단정하는 전제" },
+        { t:"choice", kozy:"그럼 함께 변해도 인과가 아닐 수 있는 이유는?",
+          q:"가장 강한 반례를 골라봐", opts:[
+            { label:"둘 다 바꾸는 제3의 요인이 있을 수 있다", ok:true, fb:"정확해. 숨은 제3의 원인이 둘을 함께 움직였을 수 있어." },
+            { label:"숫자가 크기 때문이다", ok:false, fb:"크기의 문제가 아니야. 관계의 '방향'이 핵심이지." },
+            { label:"그래프가 예쁘기 때문이다", ok:false, fb:"모양이 아니라 인과의 근거가 있느냐가 문제야." },
+          ] },
+        { t:"blast", kozy:"'상관 = 인과' 전제, 폭파!" },
+        { t:"insight", kozy:"이제 통계가 다르게 보이지?", reframe:"함께 움직여도 인과는 아닐 수 있어. 제3의 요인·역방향·우연을 배제했는지부터 물어야 해." },
+        { t:"wrap" },
+      ] },
+    { missionId:"hi-sim-3", subject:"논증", tag:"Case 3 · 심화", badge:"🎓", badgeName:"권위해체파트너 획득!", note:"권위와 진리를 분리",
+      material:'"전문가 의견이니 <span class="trig" data-t>반론의 여지가 없다</span>."', trigGlow:true,
+      steps:[
+        { t:"intro", kozy:"권위 앞에서 생각을 멈추기 쉬워. 근데 전문가도 '전제' 위에서 말해." },
+        { t:"choice", kozy:"이 말은 '전문가'를 무엇과 같다고 놓았지?",
+          q:"동일시한 걸 골라봐", opts:[
+            { label:"진리(반박 불가)", ok:true, fb:"맞아. '전문가 = 진리'로 놓고 검증을 닫아버렸어." },
+            { label:"거짓말쟁이", ok:false, fb:"깎아내린 게 아니라, 무조건 옳다고 올려놓은 게 문제야." },
+            { label:"초보자", ok:false, fb:"반대야. 이 말은 전문가를 절대적으로 봤어." },
+          ] },
+        { t:"reveal", kozy:"검증을 닫아버린 이 전제야.", premise:"'권위 = 진리' — 전문가라는 이유만으로 검증을 멈추는 전제" },
+        { t:"choice", kozy:"그럼 전문가 의견을 존중하면서도 사고를 여는 방법은?",
+          q:"가장 좋은 방법을 골라봐", opts:[
+            { label:"그 의견이 딛고 선 전제·근거를 확인한다", ok:true, fb:"그거야. 전제를 검증하면 반론이 열려." },
+            { label:"전문가 말은 무시한다", ok:false, fb:"무시가 아니라 검증이야. 존중과 의심은 함께 가." },
+            { label:"더 유명한 전문가를 찾는다", ok:false, fb:"권위를 권위로 덮는 건 같은 함정이야." },
+          ] },
+        { t:"blast", kozy:"'권위 = 진리' 전제, 폭파!" },
+        { t:"insight", kozy:"존중하되 멈추지 않게 됐지?", reframe:"전문가도 전제 위에서 말해. 그 전제와 근거를 검증하면, 존중하면서도 반론의 문이 열려." },
+        { t:"wrap" },
+      ] },
+  ];
+
+  function pickTrack(){
+    try{
+      const q = new URLSearchParams(location.search).get("track");
+      if(q && LESSON_SETS[q]) return q;
+      const p = JSON.parse(localStorage.getItem("premise_profile")||"{}");
+      if(p.grade){ if(p.grade.includes("초등")) return "초등"; if(p.grade.includes("고등")) return "고등"; }
+    }catch(e){}
+    return "중등";
+  }
+  const LESSONS = LESSON_SETS[pickTrack()] || LESSON_SETS["중등"];
 
   let li = 0, si = 0, answered = false, qLoggedThisLesson = false;
   const streakBase = (window.PremiseStore ? PremiseStore.get().streak : 12);
