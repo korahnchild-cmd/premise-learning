@@ -291,56 +291,54 @@
     "초등": {
       label: "초등 5–6",
       flavor: "동네사건 — 우리 동네·학교에서 일어나는 일로 전제를 찾아요.",
-      built: false,
-      previews: {
-        "입문 · 전제 알아차리기": [
-          { title:"떡볶이집 이모가 나만 더 많이 줘", myth:"편애해서 그런 거다" },
-          { title:"제일 빨리 뛰는 애가 제일 멋있다", myth:"빠르면 멋지다" },
-          { title:"엄마가 아침부터 화나 있으면 내 잘못이다", myth:"엄마 기분은 나 때문이다" },
-          { title:"게임을 좋아하면 공부를 못한다", myth:"게임 = 공부 방해" },
-        ],
-        "기본 · 전제를 흔들어 생각 확장": [
-          { title:"놀이터 규칙을 안 지키면 나쁜 애다", myth:"규칙 위반 = 나쁜 사람" },
-          { title:"숙제를 안 하면 선생님이 날 싫어할 거다", myth:"실수 = 미움받음" },
-          { title:"동생이 울면 항상 내 탓이다", myth:"동생 울음 = 내 잘못" },
-          { title:"칭찬을 많이 받는 애가 착한 애다", myth:"칭찬 = 착함" },
-        ],
-        "심화 · 다층적 전제 분석·재구성": [
-          { title:"우리 동네가 옆 동네보다 살기 좋다", myth:"내가 사는 곳이 늘 더 낫다" },
-          { title:"만화책은 공부에 도움이 안 된다", myth:"재밌으면 공부가 아니다" },
-          { title:"일찍 자는 애가 늘 건강하다", myth:"이른 시간 = 무조건 좋음" },
-          { title:"새로 나온 장난감이 더 좋은 장난감이다", myth:"새것 = 더 좋음" },
-          { title:"목소리 큰 친구 말이 맞는 말이다", myth:"큰 목소리 = 옳음" },
-        ],
-      }
+      stages: [
+        { stage:"입문 · 전제 알아차리기", en:"Level 1", impact:"완료하면 — 일상 속 '당연한 말'에 자동으로 물음표가 붙기 시작해요", missions:[
+          { id:"el-in-1", icon:"🍢", src:"일상", title:"떡볶이집 이모가 나만 더 많이 줘", myth:"편애해서 그런 거다", premise:"'더 준다 = 나를 특별히 여긴다'는 전제", reframe:"양이 많은 데는 여러 이유가 있다 — '왜'를 물으면 성급한 결론이 풀린다", badge:"🍢", badgeName:"알아차림파트너" },
+          { id:"el-in-2", icon:"🏃", src:"일상", title:"제일 빨리 뛰는 애가 제일 멋있다", myth:"빠르면 멋지다", premise:"'속도 = 멋짐'이라는 전제", reframe:"멋짐의 기준은 하나가 아니다 — 무엇을 멋지다고 볼지 스스로 정할 수 있다", badge:"🏃", badgeName:"기준파트너" },
+          { id:"el-in-3", icon:"🌧️", src:"관계", title:"엄마가 아침부터 화나 있으면 내 잘못이다", myth:"엄마 기분은 나 때문이다", premise:"'주변의 감정 = 내 탓'이라는 전제", reframe:"남의 기분에는 내가 모르는 이유가 많다 — 다 내 탓은 아니다", badge:"🌧️", badgeName:"관점파트너" },
+          { id:"el-in-4", icon:"🎮", src:"학습", title:"게임을 좋아하면 공부를 못한다", myth:"게임 = 공부 방해", premise:"'좋아하는 것 = 방해되는 것'이라는 전제", reframe:"좋아함과 못함은 자동으로 이어지지 않는다 — 둘을 떼어놓고 보자", badge:"🎮", badgeName:"분리파트너" },
+        ]},
+        { stage:"기본 · 전제를 흔들어 생각 확장", en:"Level 2", impact:"완료하면 — 사건을 볼 때 '왜 그렇게 보이지?'부터 스스로 묻는 습관이 붙어요", missions:[
+          { id:"el-ba-1", icon:"🛝", src:"규칙", title:"놀이터 규칙을 안 지키면 나쁜 애다", myth:"규칙 위반 = 나쁜 사람", premise:"'행동 하나 = 사람 전체'라는 전제", reframe:"한 번의 실수가 사람을 규정하지 않는다 — 행동과 사람은 다르다", badge:"🛝", badgeName:"구분파트너" },
+          { id:"el-ba-2", icon:"📝", src:"학교", title:"숙제를 안 하면 선생님이 날 싫어할 거다", myth:"실수 = 미움받음", premise:"'잘못 = 미움'이라는 전제", reframe:"실수해도 관계는 쉽게 무너지지 않는다 — 결과를 미리 단정하지 말자", badge:"📝", badgeName:"근거파트너" },
+          { id:"el-ba-3", icon:"👶", src:"가족", title:"동생이 울면 항상 내 탓이다", myth:"동생 울음 = 내 잘못", premise:"'가까이 있음 = 원인'이라는 전제", reframe:"곁에 있다고 원인은 아니다 — 진짜 이유를 따로 찾아보자", badge:"👶", badgeName:"원인파트너" },
+          { id:"el-ba-4", icon:"👏", src:"관계", title:"칭찬을 많이 받는 애가 착한 애다", myth:"칭찬 = 착함", premise:"'칭찬받음 = 좋은 사람'이라는 전제", reframe:"칭찬은 상황에 따라 다르게 나온다 — 착함의 기준은 더 넓다", badge:"👏", badgeName:"기준파트너" },
+        ]},
+        { stage:"심화 · 다층적 전제 분석·재구성", en:"Level 3", impact:"완료하면 — 익숙한 상황도 여러 전제를 찾아 다르게 볼 수 있어요", missions:[
+          { id:"el-sim-1", icon:"🏘️", src:"생각", title:"우리 동네가 옆 동네보다 살기 좋다", myth:"내가 사는 곳이 늘 더 낫다", premise:"'익숙함 = 더 좋음'이라는 전제", reframe:"익숙함을 걷어내고 여러 기준으로 비교하면, 판단이 달라진다", badge:"🏘️", badgeName:"구조도파트너" },
+          { id:"el-sim-2", icon:"📚", src:"학습", title:"만화책은 공부에 도움이 안 된다", myth:"재밌으면 공부가 아니다", premise:"'재미 = 비학습'이라는 전제", reframe:"'공부'가 무엇인지 다시 정의하면, 도움의 범위가 넓어진다", badge:"📚", badgeName:"재정의파트너" },
+          { id:"el-sim-3", icon:"🌙", src:"상식", title:"일찍 자는 애가 늘 건강하다", myth:"이른 시간 = 무조건 좋음", premise:"'한 요인 = 전체 결과'라는 전제", reframe:"건강은 여러 조건이 얽혀 있다 — 하나로 단정할 수 없다", badge:"🌙", badgeName:"조건파트너" },
+          { id:"el-sim-4", icon:"🧸", src:"소비", title:"새로 나온 장난감이 더 좋은 장난감이다", myth:"새것 = 더 좋음", premise:"'새로움 = 우수함'이라는 전제", reframe:"'좋다'의 기준을 세우면, 새것이 늘 답은 아님이 보인다", badge:"🧸", badgeName:"기준파트너" },
+          { id:"el-sim-5", icon:"📣", src:"관계", title:"목소리 큰 친구 말이 맞는 말이다", myth:"큰 목소리 = 옳음", premise:"'세기 = 옳음'이라는 전제", reframe:"목소리 크기와 근거는 다르다 — 무엇을 근거로 드는지 보자", badge:"📣", badgeName:"논증파트너" },
+        ]},
+      ]
     },
-    "중등": { label:"중등 1–3", flavor:"학교·일상 — 지금 정식으로 열려 있는 트랙이에요.", built:true },
+    "중등": { label:"중등 1–3", flavor:"학교·일상 — 지금 정식으로 열려 있는 트랙이에요.", stages: STAGES },
     "고등": {
       label:"고등 1–2",
       flavor:"기사 해부 — 뉴스·통계·논증 속 전제를 분석해요.",
-      built: false,
-      previews: {
-        "입문 · 전제 알아차리기": [
-          { title:"글의 첫 문장이 곧 필자의 주장이다", myth:"첫 문장 = 결론" },
-          { title:"조회수가 높은 정보가 더 믿을 만하다", myth:"인기 = 신뢰도" },
-          { title:"적성은 타고나는 것이라 바꿀 수 없다", myth:"적성 = 고정" },
-          { title:"평균만 보면 전체를 알 수 있다", myth:"평균 = 전체 대표" },
-        ],
-        "기본 · 전제를 흔들어 생각 확장": [
-          { title:"함께 변하면 원인과 결과다", myth:"상관 = 인과" },
-          { title:"사례가 많으면 주장이 증명된다", myth:"사례 수 = 증명" },
-          { title:"실험이 성공했으니 이론은 참이다", myth:"결과 = 증명" },
-          { title:"다수가 지지하면 옳은 정책이다", myth:"다수 = 정당성" },
-          { title:"역사적 인물 평가는 시대를 초월해 고정돼 있다", myth:"평가 = 불변의 사실" },
-        ],
-        "심화 · 다층적 전제 분석·재구성": [
-          { title:"이 사설의 주장은 중립적 분석이다", myth:"사설 = 중립" },
-          { title:"이 통계 그래프는 있는 그대로의 사실을 보여준다", myth:"그래프 = 중립적 사실" },
-          { title:"전문가 의견이니 반론의 여지가 없다", myth:"전문가 = 반박 불가" },
-          { title:"정책 뒤에 효과가 나타났으니 그 정책 덕분이다", myth:"이후 = 때문" },
-          { title:"수치가 인용됐으니 이 기사는 정확하다", myth:"수치 인용 = 정확" },
-        ],
-      }
+      stages: [
+        { stage:"입문 · 전제 알아차리기", en:"Level 1", impact:"완료하면 — 뉴스·글 속 '당연해 보이는 말'에 물음표가 붙기 시작해요", missions:[
+          { id:"hi-in-1", icon:"📰", src:"언어", title:"글의 첫 문장이 곧 필자의 주장이다", myth:"첫 문장 = 결론", premise:"'첫 문장 = 핵심'이라는 전제", reframe:"주장은 글 전체에서 드러난다 — 첫 문장은 도입일 수도 있다", badge:"📰", badgeName:"구조파트너" },
+          { id:"hi-in-2", icon:"👍", src:"미디어", title:"조회수가 높은 정보가 더 믿을 만하다", myth:"인기 = 신뢰도", premise:"'인기 = 사실'이라는 전제", reframe:"많이 본 것과 맞는 것은 다르다 — 출처와 근거를 따로 확인하자", badge:"👍", badgeName:"근거파트너" },
+          { id:"hi-in-3", icon:"🧭", src:"진로", title:"적성은 타고나는 것이라 바꿀 수 없다", myth:"적성 = 고정", premise:"'타고남 = 불변'이라는 전제", reframe:"적성은 경험으로 자란다 — 고정된 것으로 단정할 필요가 없다", badge:"🧭", badgeName:"관점파트너" },
+          { id:"hi-in-4", icon:"📊", src:"통계", title:"평균만 보면 전체를 알 수 있다", myth:"평균 = 전체 대표", premise:"'평균 = 전부'라는 전제", reframe:"평균은 분포를 숨긴다 — 흩어짐까지 봐야 전체가 보인다", badge:"📊", badgeName:"자료파트너" },
+        ]},
+        { stage:"기본 · 전제를 흔들어 생각 확장", en:"Level 2", impact:"완료하면 — 통계·주장을 볼 때 '이게 근거가 되나?'부터 스스로 따져요", missions:[
+          { id:"hi-ba-1", icon:"🔗", src:"통계", title:"함께 변하면 원인과 결과다", myth:"상관 = 인과", premise:"'같이 변함 = 원인'이라는 전제", reframe:"함께 움직여도 인과는 아닐 수 있다 — 제3의 요인을 의심하자", badge:"🔗", badgeName:"인과파트너" },
+          { id:"hi-ba-2", icon:"🧾", src:"국어", title:"사례가 많으면 주장이 증명된다", myth:"사례 수 = 증명", premise:"'많음 = 참'이라는 전제", reframe:"고르지 않은 사례는 수가 많아도 증명이 아니다 — 반례를 찾자", badge:"🧾", badgeName:"표본파트너" },
+          { id:"hi-ba-3", icon:"🔬", src:"과학", title:"실험이 성공했으니 이론은 참이다", myth:"결과 = 증명", premise:"'한 결과 = 전체 증명'이라는 전제", reframe:"한 번의 성공은 조건 안의 결과다 — 재현과 범위를 따지자", badge:"🔬", badgeName:"조건파트너" },
+          { id:"hi-ba-4", icon:"🗳️", src:"사회", title:"다수가 지지하면 옳은 정책이다", myth:"다수 = 정당성", premise:"'많은 지지 = 옳음'이라는 전제", reframe:"지지의 수와 옳음은 다르다 — 근거와 결과로 따로 판단하자", badge:"🗳️", badgeName:"논증파트너" },
+          { id:"hi-ba-5", icon:"🏛️", src:"역사", title:"역사적 인물 평가는 시대를 초월해 고정돼 있다", myth:"평가 = 불변", premise:"'평가 = 고정'이라는 전제", reframe:"평가는 시대의 기준에 따라 바뀐다 — 어떤 잣대인지 물어야 한다", badge:"🏛️", badgeName:"관점파트너" },
+        ]},
+        { stage:"심화 · 다층적 전제 분석·재구성", en:"Level 3", impact:"완료하면 — 낯선 자료·논증도 숨은 전제를 찾아 재구성해 읽어내요", missions:[
+          { id:"hi-sim-1", icon:"🗞️", src:"독해", title:"이 사설의 주장은 중립적 분석이다", myth:"사설 = 중립", premise:"'사설 = 객관'이라는 전제", reframe:"사설의 프레임을 걷어내고 대안 전제로 재구성하면 관점이 드러난다", badge:"🗞️", badgeName:"재정의파트너" },
+          { id:"hi-sim-2", icon:"📈", src:"통계", title:"이 통계 그래프는 있는 그대로의 사실을 보여준다", myth:"그래프 = 중립적 사실", premise:"'그래프 = 사실'이라는 전제", reframe:"축·범위·표본을 뜯어보면, 같은 데이터도 다른 이야기를 한다", badge:"📈", badgeName:"자료파트너" },
+          { id:"hi-sim-3", icon:"🎓", src:"논증", title:"전문가 의견이니 반론의 여지가 없다", myth:"전문가 = 반박 불가", premise:"'권위 = 진리'라는 전제", reframe:"전문가도 전제 위에서 말한다 — 그 전제를 검증하면 반론이 열린다", badge:"🎓", badgeName:"권위해체파트너" },
+          { id:"hi-sim-4", icon:"🔄", src:"논증", title:"정책 뒤에 효과가 나타났으니 그 정책 덕분이다", myth:"이후 = 때문", premise:"'순서 = 인과'라는 전제", reframe:"뒤에 왔다고 원인은 아니다 — 다른 원인과 우연을 배제했는지 보자", badge:"🔄", badgeName:"인과파트너" },
+          { id:"hi-sim-5", icon:"🔎", src:"시사", title:"수치가 인용됐으니 이 기사는 정확하다", myth:"수치 인용 = 정확", premise:"'숫자 = 정확'이라는 전제", reframe:"인용된 숫자도 출처·정의·맥락에 따라 흔들린다 — 그 뿌리를 캐자", badge:"🔎", badgeName:"검증파트너" },
+        ]},
+      ]
     }
   };
 
@@ -361,7 +359,7 @@
       const b = document.createElement("button");
       b.className = "px-4 py-2 rounded-full text-[13px] font-semibold whitespace-nowrap transition border "
         + (key === activeTrack ? "bg-ink text-white border-ink" : "bg-white text-body border-line hover:border-point hover:text-point");
-      b.textContent = t.label + (t.built ? "" : " · 준비중");
+      b.textContent = t.label;
       b.onclick = () => { activeTrack = key; renderTabs(); renderTrack(); };
       wrap.appendChild(b);
     });
@@ -370,19 +368,14 @@
   function renderTrack(){
     const t = TRACKS[activeTrack];
     $("trackFlavor").textContent = t.flavor;
-    if (t.built){
-      $("builtView").classList.remove("hidden");
-      $("previewView").classList.add("hidden");
-      render();
-    } else {
-      $("builtView").classList.add("hidden");
-      $("previewView").classList.remove("hidden");
-      renderPreview(t);
-    }
+    $("builtView").classList.remove("hidden");
+    $("previewView").classList.add("hidden");
+    render();
   }
 
-  // ===== 중등(정식) 트랙 렌더 =====
-  function allMissions(){ return STAGES.flatMap(s => s.missions); }
+  // ===== 트랙 렌더 (현재 선택된 트랙의 stages) =====
+  function currentStages(){ return TRACKS[activeTrack].stages; }
+  function allMissions(){ return currentStages().flatMap(s => s.missions); }
 
   function firstIncompleteId(){
     const done = PremiseStore.get().completed;
@@ -391,14 +384,14 @@
     return next ? next.id : null;
   }
 
-  // 별자리 좌표 — 미션 수가 같아도 단계별로 다른 모양(입문=마름모, 기본=연 모양, 심화=오각형)
-  const CONSTELLATIONS = [
-    [[100,10],[180,45],[100,80],[20,45]],
-    [[30,15],[170,25],[140,75],[50,60]],
-    [[100,12],[178,42],[150,82],[50,82],[22,42]],
-  ];
-  function buildConstellation(stageIdx, statuses){
-    const pts = CONSTELLATIONS[stageIdx] || CONSTELLATIONS[0];
+  // 별자리 좌표 — 미션 수에 따라 도형 결정(3=삼각형, 4=마름모, 5=오각형)
+  const SHAPE_BY_N = {
+    3: [[100,15],[180,75],[20,75]],
+    4: [[100,10],[180,45],[100,80],[20,45]],
+    5: [[100,12],[178,42],[150,82],[50,82],[22,42]],
+  };
+  function buildConstellation(count, statuses){
+    const pts = SHAPE_BY_N[count] || SHAPE_BY_N[4];
     const n = Math.min(pts.length, statuses.length);
     let d = "M" + pts[0][0] + "," + pts[0][1];
     for (let i=1; i<n; i++) d += " L" + pts[i][0] + "," + pts[i][1];
@@ -449,7 +442,7 @@
     const inner = $("pathInner");
     inner.innerHTML = "";
 
-    STAGES.forEach((stage, stageIdx) => {
+    currentStages().forEach((stage, stageIdx) => {
       const gated = stageIdx > 0 && !subscribed; // 기본·심화는 구독 필요
       const stageWrap = document.createElement("div");
       stageWrap.className = "mb-10";
@@ -461,7 +454,7 @@
         return isDone ? "done" : (isCurrent ? "current" : "locked");
       });
 
-      stageWrap.innerHTML = `${buildConstellation(stageIdx, statuses)}
+      stageWrap.innerHTML = `${buildConstellation(stage.missions.length, statuses)}
         <p class="en text-[11px] eyebrow uppercase text-point font-semibold mb-1 ml-[76px]">${stage.en}</p>
         <h2 class="text-[16px] font-bold text-ink mb-1 ml-[76px]">${stage.stage}</h2>
         <p class="text-[13px] text-body mb-5 ml-[76px]">${stage.impact}</p>
