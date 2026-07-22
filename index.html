@@ -319,7 +319,9 @@
     </nav>
     <div class="flex items-center gap-2.5">
       <a href="magazine/index.html" class="hidden sm:inline-flex btn btn-ghost text-[13px] font-semibold px-4 py-2.5">PBS 매거진</a>
-      <a href="onboarding.html" class="btn btn-primary text-[13px] font-semibold px-5 py-2.5">무료 체험</a>
+      <a id="navLogin" href="login.html" class="hidden sm:inline-flex items-center text-[13px] text-body font-medium hover:text-ink transition px-1.5">로그인</a>
+      <a id="navTrial" href="onboarding.html" class="btn btn-primary text-[13px] font-semibold px-5 py-2.5">무료 체험</a>
+      <a id="navDash" href="dashboard.html" class="btn btn-primary text-[13px] font-semibold px-5 py-2.5" style="display:none">내 대시보드 →</a>
     </div>
   </div>
 </header>
@@ -1799,6 +1801,16 @@
     btn.dataset.state = "old";
     layout();
     drawPillars(1, false);
+  })();
+</script>
+<script src="common.js"></script>
+<script>
+  /* 로그인 인식 네비 — 로그인 시 '내 대시보드' 노출 */
+  (function(){
+    if(!window.PremiseStore) return;
+    var logged=false; try{ logged=PremiseStore.isLoggedIn(); }catch(e){}
+    var dash=document.getElementById("navDash"), trial=document.getElementById("navTrial"), login=document.getElementById("navLogin");
+    if(logged){ if(dash)dash.style.display=""; if(trial)trial.style.display="none"; if(login)login.style.display="none"; }
   })();
 </script>
 </body>

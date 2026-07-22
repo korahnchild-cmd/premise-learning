@@ -110,6 +110,24 @@
       save(s);
       return s.user;
     },
+    /* ===== 임시 QA: 회원 상태 강제 설정 (런칭 전 · 제거 예정) ===== */
+    __setMembership: (kind) => {
+      if (kind === "guest"){
+        s.user = { loggedIn: false, name: "", email: "", provider: "" };
+        s.subscription = { status: "none", plan: "basic", cycle: "m6", method: "", trialEndsAt: "", nextBillingAt: "" };
+        save(s); return s;
+      }
+      if (!s.user) s.user = {};
+      s.user.loggedIn = true;
+      s.user.provider = s.user.provider || "google";
+      s.user.name = s.user.name || "구글 파트너";
+      s.user.email = s.user.email || "google@example.com";
+      if (!s.subscription) s.subscription = { status:"none", plan:"basic", cycle:"m6", method:"", trialEndsAt:"", nextBillingAt:"" };
+      if (kind === "free"){ s.subscription.status = "none"; }
+      else if (kind === "basic"){ s.subscription.status = "active"; s.subscription.plan = "basic"; s.plan = "basic"; }
+      else if (kind === "premium"){ s.subscription.status = "active"; s.subscription.plan = "premium"; s.plan = "premium"; }
+      save(s); return s;
+    },
     getSubscription: () => s.subscription || { status: "none", plan: "basic", cycle: "m6", method: "", trialEndsAt: "", nextBillingAt: "" },
     /* 카드 없이 7일 무료체험 시작 — 로그인 필요 */
     startTrial: (plan, cycle) => {
@@ -212,4 +230,36 @@
         </div></header>`;
     }
   };
+
+  /* ===== 임시 QA 회원상태 스위처 (런칭 전 · 상단 고정, 제거 예정) ===== */
+  function mountQaBar(){
+    if (!document.body || document.getElementById("qaBar")) return;
+    var cur = "guest";
+    try {
+      var st = window.PremiseStore && PremiseStore.get();
+      if (st && st.user && st.user.loggedIn){
+        cur = (st.subscription && st.subscription.status === "active")
+          ? (st.subscription.plan === "premium" ? "premium" : "basic")
+          : "free";
+      }
+    } catch(e){}
+    var items = [["guest","비로그인"],["free","무료회원"],["basic","베이직"],["premium","프리미엄"]];
+    var bar = document.createElement("div");
+    bar.id = "qaBar";
+    bar.style.cssText = "position:fixed;top:74px;right:10px;z-index:99999;display:flex;gap:3px;align-items:center;background:rgba(10,14,23,.92);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.16);border-radius:9999px;padding:4px 6px;box-shadow:0 6px 18px rgba(0,0,0,.28);font-family:Pretendard,Inter,sans-serif";
+    bar.innerHTML = '<span style="color:#9AA4B2;font-size:10px;font-weight:800;letter-spacing:.06em;padding:0 5px">QA</span>' +
+      items.map(function(b){
+        var on = b[0] === cur;
+        return '<button data-k="'+b[0]+'" style="cursor:pointer;border:none;border-radius:9999px;padding:5px 9px;font-size:11px;font-weight:700;color:'+(on?"#0A0E17":"#fff")+';background:'+(on?"#FFB800":"rgba(255,255,255,.12)")+'">'+b[1]+'</button>';
+      }).join("");
+    document.body.appendChild(bar);
+    bar.querySelectorAll("button").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        try { PremiseStore.__setMembership(btn.getAttribute("data-k")); } catch(e){}
+        location.reload();
+      });
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mountQaBar);
+  else mountQaBar();
 })();
