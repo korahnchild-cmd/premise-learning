@@ -99,10 +99,17 @@
 
       <!-- monthly grid -->
       <div class="card p-6 lg:col-span-3 fadein">
-        <div class="flex items-center justify-between mb-5">
+        <div class="flex items-start justify-between gap-3 mb-5 flex-wrap">
           <div>
             <p class="text-[15px] font-bold text-ink" id="monthLabel">이번 달 미션 현황</p>
             <p class="text-[12px] text-body mt-0.5">파란 칸 = 완료한 날 · 노란 칸 = 등록된 시험일</p>
+          </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button type="button" id="prevYear" title="이전 해" class="w-8 h-8 rounded-lg border border-line bg-white text-body hover:border-point hover:text-point transition text-[13px]">«</button>
+            <button type="button" id="prevMonth" title="이전 달" class="w-8 h-8 rounded-lg border border-line bg-white text-body hover:border-point hover:text-point transition text-[15px]">‹</button>
+            <button type="button" id="todayBtn" title="오늘로" class="px-3 h-8 rounded-lg border border-line bg-white text-[12px] font-semibold text-body hover:border-point hover:text-point transition">오늘</button>
+            <button type="button" id="nextMonth" title="다음 달" class="w-8 h-8 rounded-lg border border-line bg-white text-body hover:border-point hover:text-point transition text-[15px]">›</button>
+            <button type="button" id="nextYear" title="다음 해" class="w-8 h-8 rounded-lg border border-line bg-white text-body hover:border-point hover:text-point transition text-[13px]">»</button>
           </div>
         </div>
         <div class="grid grid-cols-7 gap-1.5 text-center text-[10px] text-faint mb-1.5">
@@ -189,24 +196,25 @@ function renderExamList() {
   }).join("");
 }
 
+let viewY = new Date().getFullYear(), viewM = new Date().getMonth();
 function renderMonthGrid() {
-  const now = new Date();
-  const y = now.getFullYear(), m = now.getMonth();
-  $("monthLabel").textContent = `${y}년 ${m+1}월 미션 현황`;
-  const firstDay = new Date(y, m, 1).getDay();
-  const daysInMonth = new Date(y, m+1, 0).getDate();
+  const today = new Date();
+  const isCur = (viewY === today.getFullYear() && viewM === today.getMonth());
+  $("monthLabel").textContent = `${viewY}년 ${viewM+1}월 미션 현황`;
+  const firstDay = new Date(viewY, viewM, 1).getDay();
+  const daysInMonth = new Date(viewY, viewM+1, 0).getDate();
   const exams = store.getExams();
   const examDates = new Set(exams.map(e => e.date));
-  const todayD = now.getDate();
-  // 데모용: streak 값 기준으로 최근 N일을 '완료'로 표시
+  const todayD = today.getDate();
+  // 데모용: 현재 달에서만 streak 기준 '완료'를 표시
   const streak = store.get().streak || 0;
   let html = "";
   for (let i = 0; i < firstDay; i++) html += `<div></div>`;
   for (let d = 1; d <= daysInMonth; d++) {
-    const dateStr = `${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
-    const isToday = d === todayD;
+    const dateStr = `${viewY}-${String(viewM+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+    const isToday = isCur && d === todayD;
     const isExam = examDates.has(dateStr);
-    const isDone = d <= todayD && (todayD - d) < streak;
+    const isDone = isCur && d <= todayD && (todayD - d) < streak;
     const cls = ["day-cell"];
     if (isExam) cls.push("exam"); else if (isDone) cls.push("done");
     if (isToday) cls.push("today");
@@ -214,6 +222,20 @@ function renderMonthGrid() {
   }
   $("monthGrid").innerHTML = html;
 }
+function calShift(deltaMonths, deltaYears) {
+  if (deltaYears) viewY += deltaYears;
+  if (deltaMonths) { const dt = new Date(viewY, viewM + deltaMonths, 1); viewY = dt.getFullYear(); viewM = dt.getMonth(); }
+  renderMonthGrid();
+}
+function calToday() { const t = new Date(); viewY = t.getFullYear(); viewM = t.getMonth(); renderMonthGrid(); }
+(function wireCalNav(){
+  const bind = (id, fn) => { const el = $(id); if (el) el.addEventListener("click", fn); };
+  bind("prevYear", () => calShift(0,-1));
+  bind("prevMonth", () => calShift(-1,0));
+  bind("nextMonth", () => calShift(1,0));
+  bind("nextYear", () => calShift(0,1));
+  bind("todayBtn", calToday);
+})();
 
 function renderNotifPreview() {
   const exams = store.getExams();
