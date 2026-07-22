@@ -38,6 +38,13 @@
   .plan-toggle button{ padding:6px 14px; border-radius:9999px; font-size:12px; font-weight:600; color:#9AA4B2; transition:background .2s,color .2s; }
   .plan-toggle button.on{ background:#0A0E17; color:#fff; }
   .lock-badge{ display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:600; color:#9AA4B2; background:#F2F4F1; padding:3px 9px; border-radius:9999px; }
+  .day-cell{ cursor:pointer; }
+  .day-cell.sel{ box-shadow:0 0 0 2px #0A0E17 inset; }
+  .cell-dots{ position:absolute; bottom:2px; left:0; right:0; display:flex; gap:2px; justify-content:center; pointer-events:none; }
+  .cell-dots i{ width:4px; height:4px; border-radius:50%; display:inline-block; }
+  .dot-prep{ background:#EA580C; } .dot-report{ background:#9AA4B2; } .dot-plan{ background:#0A66FF; }
+  .preset-chip{ font-size:12px; font-weight:600; color:#525A69; background:#fff; border:1px solid #ECEEF1; border-radius:9999px; padding:6px 12px; cursor:pointer; transition:border-color .2s,color .2s; }
+  .preset-chip:hover{ border-color:#0A66FF; color:#0A66FF; }
   @media (prefers-reduced-motion:reduce){ *{animation:none!important} }
 </style>
 </head>
@@ -53,8 +60,8 @@
   <div class="flex items-center justify-between flex-wrap gap-4">
     <div>
       <p class="text-[11px] font-semibold tracking-widest uppercase text-point">PBS 캘린더</p>
-      <h1 class="text-[1.8rem] md:text-[2.2rem] font-extrabold mt-1">시험 일정을 등록하면, 루카가 미리 챙겨요</h1>
-      <p class="text-[13px] text-body mt-2 max-w-lg">학교·모의고사 일정을 등록하면 D-Day와 그날까지의 맞춤 미션을 알려드려요. 시험 직전(D-5~D-1)엔 <b class="text-ink">파이널 스파크</b>가 자동으로 열려, 자주 틀린 유형을 마지막으로 점검합니다.</p>
+      <h1 class="text-[1.8rem] md:text-[2.2rem] font-extrabold mt-1">매일의 사고 플랜부터 시험 대비까지, 한 화면에서</h1>
+      <p class="text-[13px] text-body mt-2 max-w-lg">매일 그날의 <b class="text-ink">전제 미션</b>이 자동으로 배치되고, 시험을 등록하면 <b class="text-ink">D-14부터 역산한 대비 로드맵</b>이 채워집니다. 이번 주 전제 테마와 파트너 노트 발행일까지 캘린더 하나로 챙겨요.</p>
     </div>
     <div class="flex flex-col items-end gap-2">
       <span class="lock-badge" id="planBadge">-</span>
@@ -74,6 +81,15 @@
   </div>
 
   <div id="calContent">
+    <!-- 이번 주 전제 테마 -->
+    <div class="mt-6 rounded-2xl px-5 py-4 flex items-center gap-4" style="background:linear-gradient(100deg,rgba(10,102,255,.07),rgba(255,184,0,.08));border:1px solid rgba(10,102,255,.18)">
+      <div class="shrink-0 w-11 h-11 rounded-2xl bg-white/70 border border-point/20 flex items-center justify-center text-[18px]">🎯</div>
+      <div class="min-w-0">
+        <p class="text-[11px] font-bold text-point">이번 주 전제 테마</p>
+        <p class="text-[15px] font-extrabold text-ink leading-tight mt-0.5"><span id="weekTheme">—</span> <span class="text-body font-medium text-[13px]" id="weekThemeDesc"></span></p>
+      </div>
+    </div>
+
     <!-- exam registration -->
     <div class="card p-6 md:p-7 mt-6 fadein">
       <div class="flex items-center justify-between mb-4">
@@ -91,6 +107,10 @@
         <button type="submit" class="btn btn-primary sm:col-span-1 py-2.5 text-[13px] font-semibold">＋ 등록</button>
       </form>
       <p class="text-[12px] text-point mt-3 hidden" id="limitMsg">베이직 플랜은 시험 3개까지 등록할 수 있어요. <a href="checkout.html?plan=premium" class="underline font-semibold">프리미엄으로 업그레이드</a>하면 무제한으로 등록할 수 있습니다.</p>
+      <div class="mt-4 pt-4 border-t border-line">
+        <p class="text-[11px] font-bold text-faint mb-2">학사일정 빠른 등록 <span class="font-medium">· 클릭 한 번으로 (날짜는 예시, 등록 후 수정 가능)</span></p>
+        <div class="flex flex-wrap gap-2" id="presetRow"></div>
+      </div>
     </div>
 
     <div class="grid lg:grid-cols-5 gap-4 mt-4">
@@ -102,7 +122,7 @@
         <div class="flex items-start justify-between gap-3 mb-5 flex-wrap">
           <div>
             <p class="text-[15px] font-bold text-ink" id="monthLabel">이번 달 미션 현황</p>
-            <p class="text-[12px] text-body mt-0.5">파란 칸 = 완료한 날 · 노란 칸 = 등록된 시험일</p>
+            <p class="text-[12px] text-body mt-0.5 leading-relaxed">파란 = 완료 · 노란 = 시험일 · <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#EA580C;vertical-align:middle"></span> 시험 대비 · <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#9AA4B2;vertical-align:middle"></span> 리포트(화) — <b class="text-ink">날짜를 누르면 그날 플랜</b></p>
           </div>
           <div class="flex items-center gap-1.5 shrink-0">
             <button type="button" id="prevYear" title="이전 해" class="w-8 h-8 rounded-lg border border-line bg-white text-body hover:border-point hover:text-point transition text-[13px]">«</button>
@@ -116,6 +136,7 @@
           <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
         </div>
         <div class="grid grid-cols-7 gap-1.5" id="monthGrid"></div>
+        <div id="dayDetail" class="mt-4 rounded-2xl bg-soft border border-line p-4 text-[13px] text-body">날짜를 눌러 그날의 플랜을 확인하세요.</div>
       </div>
     </div>
 
@@ -192,10 +213,99 @@ function renderExamList() {
       </div>
       ${inFinalSpark ? `<div class="mt-3 pt-3 border-t border-line"><p class="text-[11px] font-semibold text-point mb-2">⚡ 파이널 스파크 진행 중 — 자주 틀린 유형만 짧게 다시 확인하는 마무리 세션이에요.</p><a href="final-spark.html" class="btn btn-primary inline-flex px-4 py-2 text-[12px] font-semibold">파이널 스파크 시작하기 →</a></div>` : ""}
       ${inAppLab ? `<div class="mt-3 pt-3 border-t border-line"><p class="text-[11px] font-semibold text-point mb-2">🔥 실전 적용 랩 진행 중 — 기출·모의고사 유형 문제로 감각을 다지는 시기예요.</p><a href="application-lab.html" class="btn btn-primary inline-flex px-4 py-2 text-[12px] font-semibold">실전 적용 랩 시작하기 →</a></div>` : ""}
+      ${roadmapHtml(e)}
     </div>`;
   }).join("");
 }
 
+/* ===== PBS 캘린더 콘텐츠 엔진 ===== */
+const PREMISE_THEMES = ["상관→인과","숨은 전제","단일 기준","과잉 일반화","권위 전제","이분법","순환 논리","감정 전제","표본 편향"];
+const THEME_DESC = {
+  "상관→인과":"함께 변한다고 원인은 아니에요",
+  "숨은 전제":"말이 몰래 깔아둔 가정을 찾아요",
+  "단일 기준":"하나의 잣대로 전체를 재지 않아요",
+  "과잉 일반화":"일부를 전체로 넓히지 않아요",
+  "권위 전제":"전문가도 전제 위에서 말해요",
+  "이분법":"둘 중 하나만은 아니에요",
+  "순환 논리":"결론으로 결론을 증명하지 않아요",
+  "감정 전제":"감정을 근거로 삼지 않아요",
+  "표본 편향":"고르지 않은 사례는 증명이 아니에요",
+};
+const CYCLE = { 1:"탐지 — 전제를 알아차리기", 2:"폭파 — 전제를 흔들기", 3:"재구성 — 새 틀로 다시 세우기", 4:"정착 — 오늘의 사건으로 굳히기", 5:"복습 — 이번 주 전제 되짚기", 6:"자유 탐구", 0:"자유 탐구" };
+const WD = ["일","월","화","수","목","금","토"];
+function fmtDate(dt){ return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,"0")}-${String(dt.getDate()).padStart(2,"0")}`; }
+function parseDate(s){ const p=(s||"").split("-"); return new Date(+p[0], (+p[1])-1, +p[2]); }
+function weekIndexOf(dt){ const base=new Date(2026,0,4); return Math.floor((dt - base)/(7*864e5)); }
+function themeOf(dt){ const wi=weekIndexOf(dt); return PREMISE_THEMES[((wi%9)+9)%9]; }
+function dailyPlan(dt){ return { theme: themeOf(dt), step: CYCLE[dt.getDay()] }; }
+
+const PREP_PLAN = [
+  { off:14, label:"개념 전제 점검" },
+  { off:10, label:"오답 전제 복습" },
+  { off:7,  label:"실전 적용 랩", href:"application-lab.html" },
+  { off:5,  label:"파이널 스파크 시작", href:"final-spark.html" },
+  { off:3,  label:"약점 유형 재점검" },
+  { off:1,  label:"최종 점검" },
+];
+function examPrepMap(){
+  const m={};
+  store.getExams().forEach(function(e){
+    const ed=parseDate(e.date);
+    PREP_PLAN.forEach(function(p){ const d=new Date(ed); d.setDate(d.getDate()-p.off); const ds=fmtDate(d); (m[ds]=m[ds]||[]).push({ exam:e.name, dday:p.off, label:p.label, href:p.href }); });
+  });
+  return m;
+}
+function roadmapHtml(e){
+  const ed=parseDate(e.date); const today=new Date(); today.setHours(0,0,0,0);
+  const items = PREP_PLAN.map(function(p){ const d=new Date(ed); d.setDate(d.getDate()-p.off); return { d:d, past:d<today, off:p.off, label:p.label }; });
+  return `<div class="mt-3 pt-3 border-t border-line">
+    <p class="text-[11px] font-bold text-faint mb-2">시험 대비 로드맵 (D-14 → D-1)</p>
+    <div class="space-y-1">${items.map(function(it){return `<div class="flex items-center gap-2 text-[12px] ${it.past?'text-faint':'text-body'}">
+      <span class="shrink-0 w-9 font-bold ${it.past?'text-faint':'text-point'}">D-${it.off}</span>
+      <span class="${it.past?'line-through':''}">${it.label}</span></div>`;}).join("")}</div>
+  </div>`;
+}
+
+function themeLabel(t){ return /전제$/.test(t) ? t : t + " 전제"; }
+function renderWeekTheme(){
+  const t = themeOf(new Date());
+  if($("weekTheme")) $("weekTheme").textContent = themeLabel(t);
+  if($("weekThemeDesc")) $("weekThemeDesc").textContent = "— " + (THEME_DESC[t]||"");
+}
+function renderDayDetail(dateStr){
+  const wrap=$("dayDetail"); if(!wrap) return;
+  if(!dateStr){ wrap.innerHTML = "날짜를 눌러 그날의 플랜을 확인하세요."; return; }
+  const dt=parseDate(dateStr), plan=dailyPlan(dt), prep=examPrepMap()[dateStr]||[];
+  const examList=store.getExams(), examDates=new Set(examList.map(function(e){return e.date;}));
+  let h=`<p class="text-[13px] font-bold text-ink mb-2">${dt.getFullYear()}년 ${dt.getMonth()+1}월 ${dt.getDate()}일 (${WD[dt.getDay()]})</p>`;
+  if(examDates.has(dateStr)){ const ex=examList.find(function(e){return e.date===dateStr;}); h+=`<p class="text-[12.5px] mb-1"><span class="font-bold" style="color:#B8860B">📌 시험일</span> · ${ex?ex.name:""}</p>`; }
+  h+=`<p class="text-[12.5px] mb-1"><span class="font-bold text-point">오늘의 플랜</span> · <b class="text-ink">${themeLabel(plan.theme)}</b> — ${plan.step}</p>`;
+  prep.forEach(function(p){ h+=`<p class="text-[12.5px] mb-1"><span class="font-bold" style="color:#EA580C">시험 대비</span> · ${p.exam} D-${p.dday} — ${p.label}${p.href?` <a href="${p.href}" class="text-point underline">바로가기 →</a>`:""}</p>`; });
+  if(dt.getDay()===2){ h+=`<p class="text-[12.5px] mb-1"><span class="font-bold text-faint">📋 파트너 노트 리포트 발행일</span> · <a href="report.html" class="text-point underline">리포트 보기 →</a></p>`; }
+  h+=`<a href="daily.html" class="btn btn-primary inline-flex mt-3 px-4 py-2 text-[12px] font-semibold">오늘의 사건 하러 가기 →</a>`;
+  wrap.innerHTML=h;
+}
+
+const PRESETS_2026 = [
+  { name:"1학기 중간고사", date:"2026-04-28" },
+  { name:"1학기 기말고사", date:"2026-07-08" },
+  { name:"2학기 중간고사", date:"2026-10-13" },
+  { name:"2학기 기말고사", date:"2026-12-16" },
+  { name:"6월 모의고사", date:"2026-06-04" },
+  { name:"9월 모의고사", date:"2026-09-03" },
+];
+function renderPresets(){
+  const row=$("presetRow"); if(!row) return;
+  row.innerHTML = PRESETS_2026.map(function(p,i){return `<button type="button" class="preset-chip" data-i="${i}">＋ ${p.name}</button>`;}).join("");
+  row.querySelectorAll("button").forEach(function(b){ b.addEventListener("click", function(){
+    const p=PRESETS_2026[+b.getAttribute("data-i")];
+    const r=store.addExam({ name:p.name, date:p.date, subject:"전과목" });
+    if(r && r.ok===false){ $("limitMsg").classList.remove("hidden"); }
+    renderAll();
+  }); });
+}
+
+let selectedDate = null;
 let viewY = new Date().getFullYear(), viewM = new Date().getMonth();
 function renderMonthGrid() {
   const today = new Date();
@@ -208,19 +318,28 @@ function renderMonthGrid() {
   const todayD = today.getDate();
   // 데모용: 현재 달에서만 streak 기준 '완료'를 표시
   const streak = store.get().streak || 0;
+  const prepMap = examPrepMap();
   let html = "";
   for (let i = 0; i < firstDay; i++) html += `<div></div>`;
   for (let d = 1; d <= daysInMonth; d++) {
     const dateStr = `${viewY}-${String(viewM+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+    const dow = new Date(viewY, viewM, d).getDay();
     const isToday = isCur && d === todayD;
     const isExam = examDates.has(dateStr);
     const isDone = isCur && d <= todayD && (todayD - d) < streak;
     const cls = ["day-cell"];
     if (isExam) cls.push("exam"); else if (isDone) cls.push("done");
     if (isToday) cls.push("today");
-    html += `<div class="${cls.join(" ")}">${d}</div>`;
+    if (dateStr === selectedDate) cls.push("sel");
+    let dots = "";
+    if (prepMap[dateStr]) dots += '<i class="dot-prep"></i>';
+    if (dow === 2) dots += '<i class="dot-report"></i>';
+    html += `<div class="${cls.join(" ")}" data-date="${dateStr}">${d}${dots?`<span class="cell-dots">${dots}</span>`:""}</div>`;
   }
   $("monthGrid").innerHTML = html;
+  $("monthGrid").querySelectorAll(".day-cell[data-date]").forEach(function(el){
+    el.addEventListener("click", function(){ selectedDate = el.getAttribute("data-date"); renderMonthGrid(); renderDayDetail(selectedDate); });
+  });
 }
 function calShift(deltaMonths, deltaYears) {
   if (deltaYears) viewY += deltaYears;
@@ -275,8 +394,11 @@ $("examForm").addEventListener("submit", (ev) => {
 function renderAll() {
   renderPlanBadge();
   renderLimitBadge();
+  renderWeekTheme();
+  renderPresets();
   renderExamList();
   renderMonthGrid();
+  renderDayDetail(selectedDate);
   renderNotifPreview();
 }
 
