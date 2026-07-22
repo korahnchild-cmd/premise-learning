@@ -408,10 +408,24 @@ function renderAll() {
   renderNotifPreview();
 }
 
+const calPreview = new URLSearchParams(location.search).get("preview") === "1";
 if (isSubscribed()) {
   $("calGateCard").style.display = "none";
   $("calContent").style.display = "block";
   renderAll();
+} else if (calPreview) {
+  // 읽기 전용 미리보기 — index '미리 써보기' 약속과 도착 화면 일치
+  $("calGateCard").style.display = "none";
+  $("calContent").style.display = "block";
+  $("planBadge").textContent = "미리보기";
+  renderAll();
+  const banner = document.createElement("div");
+  banner.className = "mt-6 rounded-2xl px-5 py-4 flex flex-wrap items-center justify-between gap-3";
+  banner.style.cssText = "background:linear-gradient(100deg,rgba(10,102,255,.08),rgba(255,184,0,.10));border:1px solid rgba(10,102,255,.22)";
+  banner.innerHTML = '<p class="text-[13px] text-body" style="word-break:keep-all"><b class="text-ink">미리보기 모드예요.</b> 실제 등록·D-Day 로드맵은 구독하면 바로 열려요.</p>'
+    + '<a href="onboarding.html" class="btn btn-primary px-5 py-2.5 text-[12.5px] font-semibold shrink-0">카드 없이 7일 무료로 시작 →</a>';
+  const content = $("calContent");
+  content.insertBefore(banner, content.firstChild);
 } else {
   $("calGateCard").style.display = "block";
   $("calContent").style.display = "none";

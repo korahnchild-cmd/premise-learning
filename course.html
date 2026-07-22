@@ -528,6 +528,8 @@
     $("modal").classList.add("open");
   }
   function closeModal(){ $("modal").classList.remove("open"); }
+  // 접근성: ESC로 모달 닫기
+  document.addEventListener("keydown", (e)=>{ if (e.key === "Escape" && $("modal").classList.contains("open")) closeModal(); });
 
   // ===== init =====
   PremiseNav.render("coz");
