@@ -96,6 +96,24 @@
     </div>
   </div>
 
+  <!-- [NEW 2] 마인드맵 요약 -->
+  <div class="card p-6 md:p-7 mt-4 fadein">
+    <div class="flex items-start justify-between gap-3 flex-wrap">
+      <div>
+        <p class="text-[15px] font-bold text-ink">이 기록이 만든 사고 지도</p>
+        <p class="text-[12px] text-body mt-0.5">매일의 전제 폭파가 쌓여, 전제 함정을 스스로 잡아내는 지도가 그려졌어요.</p>
+      </div>
+      <a href="dashboard.html" class="text-[12.5px] font-semibold text-point hover:underline shrink-0">PBS 마인드맵 전체 보기 →</a>
+    </div>
+    <div class="mt-4 flex flex-col sm:flex-row items-center gap-5">
+      <svg id="nbRadar" viewBox="0 0 300 240" class="w-full max-w-[280px] shrink-0" aria-label="전제 함정 지도 요약"></svg>
+      <div class="flex-1 w-full min-w-0">
+        <p class="text-[12.5px] text-body mb-2">전제 함정별 <b class="text-ink">스스로 잡아내는 정도</b> (진할수록 강함)</p>
+        <div id="nbTrapList" class="flex flex-wrap gap-2"></div>
+      </div>
+    </div>
+  </div>
+
   <div class="grid lg:grid-cols-5 gap-4 mt-4">
     <!-- heatmap -->
     <div class="card p-6 lg:col-span-3 fadein">
@@ -133,10 +151,27 @@
     <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4" id="badges"></div>
   </div>
 
+  <!-- [NEW 3] 성장 마일스톤 -->
+  <div class="card p-6 mt-4 fadein">
+    <p class="text-[15px] font-bold text-ink mb-1">성장 마일스톤</p>
+    <p class="text-[12px] text-body mb-5">낱개 기록이 아니라, 생각이 달라진 변곡점들이에요.</p>
+    <div id="milestones"></div>
+  </div>
+
   <!-- timeline -->
   <div class="card p-6 mt-4 fadein">
     <p class="text-[15px] font-bold text-ink mb-5">최근 발견한 전제</p>
     <div class="space-y-3" id="timeline"></div>
+  </div>
+
+  <!-- [NEW 1] 질문 아카이브 -->
+  <div class="card p-6 mt-4 fadein">
+    <div class="flex items-center justify-between mb-1 gap-2">
+      <p class="text-[15px] font-bold text-ink">우리 아이가 던진 질문들</p>
+      <span class="text-[12px] text-faint" id="qCount"></span>
+    </div>
+    <p class="text-[12px] text-body mb-5">성적표엔 없는, 이 아이만의 기록 — 질문이 어떻게 깊어졌는지 그대로 남겼어요.</p>
+    <div id="qArchive" class="space-y-2.5"></div>
   </div>
 
   <p class="text-center text-[12px] text-faint mt-8 pb-6">태도 지표는 점수가 아니라 <b>생각의 습관</b>을 봅니다 — 6개월의 변화를 기록해요.</p>
@@ -226,6 +261,65 @@
       <p class="text-[14px] font-semibold text-ink flex-1">${n.t}</p>
       <span class="text-[12px] text-faint">${n.d}</span>
     </div>`).join("");
+  /* ---- [NEW 2] 마인드맵 요약 레이더 ---- */
+  const NB_TRAPS = [
+    {k:"상관→인과",now:78},{k:"숨은 전제",now:66},{k:"단일 기준",now:58},
+    {k:"과잉 일반화",now:47},{k:"권위 전제",now:38},{k:"이분법",now:52},
+    {k:"순환 논리",now:44},{k:"감정 전제",now:61},{k:"표본 편향",now:35},
+  ];
+  (function nbRadar(){
+    const svg=$("nbRadar"); if(!svg) return;
+    const cx=150,cy=112,R=80,n=NB_TRAPS.length;
+    const ang=i=>(-90+i*(360/n))*Math.PI/180;
+    const pt=(i,r)=>[cx+Math.cos(ang(i))*r, cy+Math.sin(ang(i))*r];
+    const poly=(fn)=>NB_TRAPS.map((t,i)=>pt(i,fn(t)).map(v=>v.toFixed(1)).join(",")).join(" ");
+    let g="";
+    [0.33,0.66,1].forEach(f=>{ g+=`<polygon points="${poly(()=>R*f)}" fill="none" stroke="#ECEEF1" stroke-width="1"/>`; });
+    NB_TRAPS.forEach((_,i)=>{ const p=pt(i,R); g+=`<line x1="${cx}" y1="${cy}" x2="${p[0].toFixed(1)}" y2="${p[1].toFixed(1)}" stroke="#ECEEF1" stroke-width="1"/>`; });
+    g+=`<polygon points="${poly(t=>R*t.now/100)}" fill="rgba(10,102,255,.14)" stroke="#0A66FF" stroke-width="2" stroke-linejoin="round"/>`;
+    NB_TRAPS.forEach((t,i)=>{ const on=t.now>=55; const p=pt(i,R*t.now/100); g+=`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${on?3:2.4}" fill="${on?'#0A66FF':'#9AA4B2'}"/>`; });
+    NB_TRAPS.forEach((t,i)=>{ const p=pt(i,R+18); const a=p[0]<cx-6?"end":(p[0]>cx+6?"start":"middle"); const on=t.now>=55; g+=`<text x="${p[0].toFixed(1)}" y="${(p[1]+3).toFixed(1)}" text-anchor="${a}" font-size="9.5" font-weight="${on?700:600}" fill="${on?'#0A0E17':'#9AA4B2'}">${t.k}</text>`; });
+    svg.innerHTML=g;
+    $("nbTrapList").innerHTML = NB_TRAPS.slice().sort((a,b)=>b.now-a.now).map(t=>{const on=t.now>=55; return `<span class="text-[12px] font-semibold rounded-full px-2.5 py-1 ${on?'text-point bg-point/10':'text-faint bg-soft'}">${t.k}</span>`;}).join("");
+  })();
+
+  /* ---- [NEW 3] 성장 마일스톤 ---- */
+  const NB_MILESTONES = [
+    { wk:"3주차", t:"‘빨리 푸는 게 잘하는 것’이라는 전제를 내려놓음" },
+    { wk:"6주차", t:"질문이 ‘답이 뭐예요?’에서 ‘왜 이렇게 봐야 하죠?’로 바뀜" },
+    { wk:"8주차", t:"‘숨은 전제’를 스스로 보기 시작" },
+    { wk:"지금", t:"낯선 지문에서도 전제를 찾아 다르게 읽는 중" },
+  ];
+  if($("milestones")) $("milestones").innerHTML = NB_MILESTONES.map((m,i)=>{
+    const last=i===NB_MILESTONES.length-1;
+    return `<div class="flex gap-4 ${last?'':'pb-5'}" style="position:relative">
+      ${last?'':'<span style="position:absolute;left:7px;top:18px;bottom:-2px;width:2px;background:#ECEEF1"></span>'}
+      <span class="shrink-0 mt-1 w-4 h-4 rounded-full ${last?'bg-point':'bg-white'} border-2 border-point" style="z-index:1"></span>
+      <div><p class="text-[12px] font-bold ${last?'text-point':'text-faint'}">${m.wk}</p><p class="text-[14px] font-semibold text-ink leading-snug mt-0.5">${m.t}</p></div>
+    </div>`;
+  }).join("");
+
+  /* ---- [NEW 1] 질문 아카이브 ---- */
+  const NB_DEMO_Q = [
+    { subject:"수학", q:"이 식은 왜 ‘=’를 정답으로 봐요? 균형으로 보면 다르지 않아요?", date:"오늘" },
+    { subject:"국어", q:"글쓴이가 ‘조차’로 뭘 당연하게 깔아둔 거죠?", date:"2일 전" },
+    { subject:"학습", q:"틀린 게 왜 실패예요? 다음 단서일 수도 있잖아요.", date:"4일 전" },
+    { subject:"일상", q:"열심히 전에 ‘어떻게’부터 정해야 하는 거 아니에요?", date:"6일 전" },
+    { subject:"상식", q:"‘배웠으니까 안다’는 건 진짜 아는 거예요?", date:"8일 전" },
+  ];
+  const qLog = (S.questionLog && S.questionLog.length)
+    ? S.questionLog.slice().reverse().map(e=>({ subject:e.subject||"질문", q:e.q, date:e.date }))
+    : NB_DEMO_Q;
+  if($("qCount")) $("qCount").textContent = `누적 ${qLog.length}개`;
+  if($("qArchive")) $("qArchive").innerHTML = qLog.map(e=>`
+    <div class="rounded-2xl bg-soft border border-line px-4 py-3">
+      <div class="flex items-center justify-between gap-2 mb-1">
+        <span class="text-[11px] font-bold text-point bg-point/10 rounded-full px-2.5 py-0.5">${e.subject}</span>
+        <span class="text-[11.5px] text-faint">${e.date}</span>
+      </div>
+      <p class="text-[13.5px] text-ink leading-snug" style="word-break:keep-all">“${e.q}”</p>
+    </div>`).join("");
+
   PremiseNav.render("note");
 
   // animate progress bar of heatmap total done later if needed
