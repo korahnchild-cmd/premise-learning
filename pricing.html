@@ -11,7 +11,7 @@
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <script>
   tailwind.config = { theme: { extend: {
-    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", night:"#0A0E17" },
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#6B7688", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", night:"#0A0E17" },
     fontFamily: { sans:["Pretendard","Inter","sans-serif"] }, borderRadius:{ "4xl":"2rem","5xl":"2.5rem" },
   }}};
 </script>
@@ -54,7 +54,7 @@
     <p class="text-[11px] font-semibold tracking-[.2em] uppercase text-point mb-3">Pricing</p>
     <h1 class="text-[2rem] md:text-[2.8rem] font-extrabold leading-tight">이번 시험이 끝나면 사라지는 것에 쓰시겠어요,<br>3년 뒤에도 남아 있을 것에 쓰시겠어요?</h1>
     <p class="mt-5 text-[15px] md:text-[16px] text-body leading-relaxed">PBS 학습법은 성적을 급조하지 않습니다. 매달 치르는 공부는 이번 시험과 함께 사라지지만, 여기서 바뀐 사고 습관은 결제를 멈춘 뒤에도 아이에게 남습니다. 그 변화를 6개월 뒤에 확인하시게 하지 않고, 아이의 질문이 어떻게 달라지는지 매주 파트너 노트로 보여드립니다. 생각의 습관은 6개월에 걸쳐 자라기에 6개월 코스를 추천하지만, 약정 없이 월 단위로 먼저 시작하셔도 됩니다.</p>
-    <p class="mt-4 inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-point bg-point/8 rounded-full px-4 py-2"><span>🔥</span> 얼리버드 선착순 100명 · 첫 6개월 30% 할인</p>
+    <p class="mt-4 inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-point bg-point/8 rounded-full px-4 py-2"><span>🔥</span> 얼리버드 선착순 100명 · 첫 6개월 30% 할인 <span class="text-faint font-normal">(결제 시 자동 적용)</span></p>
   </div>
 
   <!-- billing toggle -->
@@ -113,7 +113,7 @@
         <li class="flex gap-3 items-start"><span class="text-point shrink-0">✓</span><span><span class="font-semibold">PBS 캘린더</span> 무제한 · 시험 역산 대비 로드맵</span></li>
         <li class="flex gap-3 items-start"><span class="text-point shrink-0">✓</span><span><span class="font-semibold">PBS 마인드맵</span> · 전제 함정 지도 · 성장 궤적 · 최상위권까지의 거리 <a href="dashboard.html?preview=1" class="text-point font-semibold hover:underline whitespace-nowrap">둘러보기 →</a></span></li>
       </ul>
-      <a href="onboarding.html" class="btn btn-primary mt-9 py-3.5 text-[14px] font-semibold">7일 무료로 시작</a>
+      <a href="onboarding.html?plan=premium" class="btn btn-primary mt-9 py-3.5 text-[14px] font-semibold">7일 무료로 시작</a>
       <a href="checkout.html?plan=premium&cycle=m6" id="buyPremium" class="btn btn-ghost mt-3 py-3 text-[13px] font-semibold" style="border-color:transparent;background:rgba(10,102,255,.08);color:#0A66FF">바로 결제하기 →</a>
     </div>
   </div>
@@ -125,15 +125,16 @@
     <p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-4 text-center">이런 걸 받아요 — 파트너 노트 미리보기</p>
     <div class="rounded-2xl bg-soft border border-line p-5">
       <div class="flex items-center justify-between">
-        <p class="text-[14px] font-bold text-ink">지우 파트너의 이번 주</p>
+        <p class="text-[14px] font-bold text-ink">지호 파트너의 이번 주</p>
         <span class="pn-streak text-[11px] font-semibold text-point">7일 연속 접속</span>
       </div>
       <div class="grid grid-cols-2 gap-3 mt-4 text-center">
-        <div class="rounded-xl bg-white border border-line py-3"><p class="text-[1.4rem] font-extrabold text-ink"><span id="pnNum">0</span>개</p><p class="text-[11px] text-faint mt-0.5">이번 주 전제 폭파</p></div>
+        <div class="rounded-xl bg-white border border-line py-3"><p class="text-[1.4rem] font-extrabold text-ink"><span id="pnNum">0</span>개</p><p class="text-[11px] text-faint mt-0.5">이번 주 발견한 전제</p></div>
         <div class="rounded-xl bg-white border border-line py-3"><p class="text-[1.4rem] font-extrabold text-ink"><span class="pn-badge">🔍</span> <span class="pn-badge">🐢</span></p><p class="text-[11px] text-faint mt-0.5">새로 얻은 배지</p></div>
       </div>
       <p class="text-[13px] text-body mt-4 pt-4 border-t border-line leading-relaxed">"이번 주엔 '빠름 = 잘함'이라는 전제를 제일 잘 깼어. 다음 주엔 심화 단계로 가보자!" <span class="text-faint">— 루카</span></p>
     </div>
+    <p class="text-center mt-5"><a href="report.html" class="inline-flex items-center gap-1.5 text-[13.5px] font-semibold text-point hover:underline">전체 샘플 리포트 직접 보기 →</a></p>
   </div>
 
   <!-- 성장 타임라인 -->
@@ -273,7 +274,7 @@
           </svg>
           PBS 학습법<span class="text-[10px] align-top ml-0.5">™</span>
         </a>
-        <p class="text-[13px] leading-relaxed text-white/45 max-w-[220px]">숨은 전제를 찾아 깨고 다시 짜는, 10~17세를 위한 6개월 사고 훈련.</p>
+        <p class="text-[13px] leading-relaxed text-white/45 max-w-[220px]">숨은 전제를 찾아 깨고 다시 짜는, 초5~고2를 위한 6개월 사고 훈련.</p>
       </div>
       <div>
         <p class="text-[11px] font-semibold tracking-widest uppercase text-white/35 mb-4">제품</p>

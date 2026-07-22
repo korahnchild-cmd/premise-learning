@@ -11,7 +11,7 @@
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <script>
   tailwind.config = { theme: { extend: {
-    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", night:"#0A0E17" },
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#6B7688", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", night:"#0A0E17" },
     fontFamily: { sans:["Pretendard","Inter","sans-serif"] }, borderRadius:{ "4xl":"2rem","5xl":"2.5rem" },
   }}};
 </script>
@@ -428,6 +428,12 @@
     const sub = PremiseStore.getSubscription();
     return sub.status === "trial" || sub.status === "active";
   }
+  // 프리미엄 구독 여부 (심화 Level 3 잠금 해제 조건)
+  function isPremium(){
+    if (!window.PremiseStore) return false;
+    const sub = PremiseStore.getSubscription();
+    return (sub.status === "trial" || sub.status === "active") && sub.plan === "premium";
+  }
 
   function render(){
     const store = PremiseStore.get();
@@ -439,11 +445,15 @@
 
     const currentId = firstIncompleteId();
     const subscribed = isSubscribed();
+    const premium = isPremium();
     const inner = $("pathInner");
     inner.innerHTML = "";
 
     currentStages().forEach((stage, stageIdx) => {
-      const gated = stageIdx > 0 && !subscribed; // 기본·심화는 구독 필요
+      const needsSub = stageIdx > 0 && !subscribed;   // 기본(Level2)↑ 구독 필요
+      const needsPremium = stageIdx > 1 && !premium;  // 심화(Level3)는 프리미엄 필요 (요금 카피와 일치)
+      const gated = needsSub || needsPremium;
+      const premiumOnly = needsPremium && !needsSub;  // 베이직 구독자가 심화에 막힌 경우
       const stageWrap = document.createElement("div");
       stageWrap.className = "mb-10";
 
@@ -458,13 +468,19 @@
         <p class="en text-[11px] eyebrow uppercase text-point font-semibold mb-1 ml-[76px]">${stage.en}</p>
         <h2 class="text-[16px] font-bold text-ink mb-1 ml-[76px]">${stage.stage}</h2>
         <p class="text-[13px] text-body mb-5 ml-[76px]">${stage.impact}</p>
-        ${gated ? `<div class="ml-[76px] mb-5 rounded-2xl bg-point/5 border border-point/25 p-4 flex items-center justify-between gap-3 flex-wrap">
+        ${gated ? (premiumOnly ? `<div class="ml-[76px] mb-5 rounded-2xl bg-point/5 border border-point/25 p-4 flex items-center justify-between gap-3 flex-wrap">
+          <div>
+            <p class="text-[13px] font-bold text-ink">심화 단계는 프리미엄에서 열려요</p>
+            <p class="text-[12px] text-body mt-0.5">베이직에서 입문·기본까지 마친 뒤, 심화는 프리미엄으로 이어서 열 수 있어요.</p>
+          </div>
+          <a href="checkout.html?plan=premium" class="btn btn-primary text-[12.5px] font-semibold px-4 py-2.5 shrink-0">프리미엄으로 업그레이드 →</a>
+        </div>` : `<div class="ml-[76px] mb-5 rounded-2xl bg-point/5 border border-point/25 p-4 flex items-center justify-between gap-3 flex-wrap">
           <div>
             <p class="text-[13px] font-bold text-ink">이 단계부터는 구독이 필요해요</p>
             <p class="text-[12px] text-body mt-0.5">카드 없이 7일 무료체험으로 바로 이어서 진행할 수 있어요.</p>
           </div>
           <a href="checkout.html" class="btn btn-primary text-[12.5px] font-semibold px-4 py-2.5 shrink-0">구독하기 →</a>
-        </div>` : ""}`;
+        </div>`) : ""}`;
 
       stage.missions.forEach((m, mi) => {
         const nodeState = statuses[mi];
@@ -513,39 +529,6 @@
   }
   function closeModal(){ $("modal").classList.remove("open"); }
 
-  // ===== 초등/고등(준비중) 트랙 미리보기 =====
-  function renderPreview(t){
-    const wrap = $("previewView");
-    wrap.innerHTML = "";
-    Object.keys(t.previews).forEach(stageName => {
-      const stageWrap = document.createElement("div");
-      stageWrap.className = "mb-10";
-      stageWrap.innerHTML = `<h2 class="text-[15px] font-bold text-ink mb-4">${stageName}</h2>`;
-      const grid = document.createElement("div");
-      grid.className = "grid gap-3";
-      t.previews[stageName].forEach(item => {
-        const card = document.createElement("div");
-        card.className = "bg-white border border-line rounded-2xl p-4 cursor-pointer hover:border-point transition fadein";
-        card.innerHTML = `<p class="text-[14px] font-bold text-ink">${item.title}</p><p class="text-[12px] text-faint mt-1">숨은 전제 보기 →</p>`;
-        card.onclick = () => openPreviewModal(item);
-        grid.appendChild(card);
-      });
-      stageWrap.appendChild(grid);
-      wrap.appendChild(stageWrap);
-    });
-  }
-
-  function openPreviewModal(item){
-    $("mUnit").textContent = "준비 중인 트랙";
-    $("mTitle").textContent = item.title;
-    $("mMyth").textContent = item.myth;
-    $("mPremise").textContent = "이 트랙은 현재 준비 중입니다.";
-    $("mReframe").textContent = "정식 오픈 시 전제 폭파·파트너 노트 기록까지 체험할 수 있어요.";
-    $("mBadge").textContent = "🔔";
-    $("mBadgeName").textContent = "Coming soon";
-    $("modal").classList.add("open");
-  }
-
   // ===== init =====
   PremiseNav.render("coz");
   renderTabs();
@@ -565,7 +548,7 @@
           </svg>
           PBS 학습법<span class="text-[10px] align-top ml-0.5">™</span>
         </a>
-        <p class="text-[13px] leading-relaxed text-white/45 max-w-[220px]">숨은 전제를 찾아 깨고 다시 짜는, 10~17세를 위한 6개월 사고 훈련.</p>
+        <p class="text-[13px] leading-relaxed text-white/45 max-w-[220px]">숨은 전제를 찾아 깨고 다시 짜는, 초5~고2를 위한 6개월 사고 훈련.</p>
       </div>
       <div>
         <p class="text-[11px] font-semibold tracking-widest uppercase text-white/35 mb-4">제품</p>

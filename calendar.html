@@ -11,7 +11,7 @@
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <script>
   tailwind.config = { theme: { extend: {
-    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1" },
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#6B7688", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1" },
     fontFamily: { sans:["Pretendard","Inter","sans-serif"] },
     borderRadius: { "4xl":"2rem", "5xl":"2.5rem" },
   }}};
@@ -61,13 +61,13 @@
     <div>
       <p class="text-[11px] font-semibold tracking-widest uppercase text-point">PBS 캘린더</p>
       <h1 class="text-[1.8rem] md:text-[2.2rem] font-extrabold mt-1">매일의 사고 플랜부터 시험 대비까지, 한 화면에서</h1>
-      <p class="text-[13px] text-body mt-2 max-w-lg">매일 그날의 <b class="text-ink">전제 미션</b>이 자동으로 배치되고, 시험을 등록하면 <b class="text-ink">D-14부터 역산한 대비 로드맵</b>이 채워집니다. 이번 주 전제 테마와 파트너 노트 발행일까지 캘린더 하나로 챙겨요.</p>
+      <p class="text-[13px] text-body mt-2 max-w-lg">매일 그날의 <b class="text-ink">전제 미션</b>이 자동으로 배치돼요. 시험을 등록하면 <b class="text-ink">프리미엄에선 D-14부터 역산한 대비 로드맵</b>까지 채워집니다. 이번 주 전제 테마와 파트너 노트 발행일도 캘린더 하나로 챙겨요.</p>
     </div>
     <div class="flex flex-col items-end gap-2">
       <span class="lock-badge" id="planBadge">-</span>
     </div>
   </div>
-  <p class="text-[11px] text-faint mt-3 max-w-lg leading-relaxed">파이널 스파크란? 등록한 시험 직전(D-5~D-1)에, 그동안 자주 틀린 유형만 짧게 골라 다시 점검하는 마무리 세션이에요. 프리미엄 전용입니다. · 참고로 <b class="text-ink">실전 적용 랩(Application Lab)</b>은 시험 일정과 무관하게, 심화까지 마치면 열리는 커리큘럼의 마지막 단계예요.</p>
+  <p class="text-[11px] text-faint mt-3 max-w-lg leading-relaxed">파이널 스파크란? 등록한 시험 직전(D-5~D-1)에, 그동안 자주 틀린 유형만 짧게 골라 다시 점검하는 마무리 세션이에요. 프리미엄에 포함되고, 베이직은 필요한 시험에만 건별로 이용할 수 있어요. · 참고로 <b class="text-ink">실전 적용 랩(Application Lab)</b>은 시험 일정과 무관하게, 심화까지 마치면 열리는 커리큘럼의 마지막 단계예요.</p>
 
   <!-- 구독 게이트 (미구독 시) -->
   <div id="calGateCard" class="card p-8 md:p-10 text-center mt-6" style="display:none">
@@ -198,7 +198,6 @@ function renderExamList() {
     const d = dDay(e.date);
     const dLabel = d === 0 ? "D-DAY" : d > 0 ? `D-${d}` : `종료`;
     const inFinalSpark = d > 0 && d <= 5;
-    const inAppLab = d > 5 && d <= 28;
     return `<div class="card p-5 fadein">
       <div class="flex items-start justify-between">
         <div>
@@ -212,7 +211,6 @@ function renderExamList() {
         </div>
       </div>
       ${inFinalSpark ? `<div class="mt-3 pt-3 border-t border-line"><p class="text-[11px] font-semibold text-point mb-2">⚡ 파이널 스파크 진행 중 — 자주 틀린 유형만 짧게 다시 확인하는 마무리 세션이에요.</p><a href="final-spark.html" class="btn btn-primary inline-flex px-4 py-2 text-[12px] font-semibold">파이널 스파크 시작하기 →</a></div>` : ""}
-      ${inAppLab ? `<div class="mt-3 pt-3 border-t border-line"><p class="text-[11px] font-semibold text-point mb-2">🔥 실전 적용 랩 진행 중 — 기출·모의고사 유형 문제로 감각을 다지는 시기예요.</p><a href="application-lab.html" class="btn btn-primary inline-flex px-4 py-2 text-[12px] font-semibold">실전 적용 랩 시작하기 →</a></div>` : ""}
       ${isPremium() ? roadmapHtml(e) : roadmapLockedHtml()}
     </div>`;
   }).join("");
@@ -242,7 +240,7 @@ function dailyPlan(dt){ return { theme: themeOf(dt), step: CYCLE[dt.getDay()] };
 const PREP_PLAN = [
   { off:14, label:"개념 전제 점검" },
   { off:10, label:"오답 전제 복습" },
-  { off:7,  label:"실전 적용 랩", href:"application-lab.html" },
+  { off:7,  label:"약점 유형 정리" },
   { off:5,  label:"파이널 스파크 시작", href:"final-spark.html" },
   { off:3,  label:"약점 유형 재점검" },
   { off:1,  label:"최종 점검" },

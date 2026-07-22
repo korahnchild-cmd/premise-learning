@@ -10,24 +10,51 @@
   const KEY = "premise_state_v2";
   const today = () => new Date().toISOString().slice(0, 10);
 
-  function seed() {
+  /* 사용자 입력(질문 로그 등)을 innerHTML로 렌더할 때 감쌀 이스케이프 유틸.
+     리포트 공유 URL이 생기는 순간 저장형 XSS이 되는 경로 차단용. */
+  function escapeHTML(v) {
+    return String(v == null ? "" : v)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+  window.escapeHTML = escapeHTML;
+
+  /* 신규 방문자 기본 상태: 빈 계정. (가짜 학습 이력 노출 방지 — 런칭 신뢰의 뿌리) */
+  function emptySeed() {
     return {
-      streak: 15,
-      lastActive: today(),
-      // 코스의 '완료' 노드와 일치 (입문 전체 + 기본 1)
-      completed: ["in-1", "in-2", "in-3", "in-4", "ba-1"],
-      badges: ["🎯", "🔍", "🕵️", "🧩", "🐢"],
+      streak: 0,
+      lastActive: "",
+      completed: [],
+      badges: [],
       plan: "basic", // "basic" | "premium" — 데모용 플랜 시뮬레이션
       exams: [], // PBS 캘린더: { id, name, date(YYYY-MM-DD), subject }
       user: { loggedIn: false, name: "", email: "", provider: "" }, // provider: "google" | "kakao" | "naver"
       subscription: {
-        status: "none", // "none" | "trial" | "active" | "canceled"
+        status: "none", // "none" | "trial" | "active" | "paused" | "canceled"
         plan: "basic", // "basic" | "premium"
         cycle: "m6", // "m6" | "m1"
         method: "", // "naverpay" | "kakaopay" | "card"
         trialEndsAt: "", // YYYY-MM-DD
         nextBillingAt: "" // YYYY-MM-DD
       },
+      premises: [],
+      // 아이가 데일리 미션에서 직접 남긴 질문 로그 (report.html before/after 소스)
+      questionLog: []
+    };
+  }
+
+  /* 데모/스크린샷용 채워진 상태. URL에 ?demo=1 을 붙였을 때만 시딩됨 */
+  function demoSeed() {
+    return {
+      streak: 15,
+      lastActive: today(),
+      // 코스의 '완료' 노드와 일치 (입문 전체 + 기본 1)
+      completed: ["in-1", "in-2", "in-3", "in-4", "ba-1"],
+      badges: ["🎯", "🔍", "🕵️", "🧩", "🐢"],
+      plan: "basic",
+      exams: [],
+      user: { loggedIn: false, name: "", email: "", provider: "" },
+      subscription: { status: "none", plan: "basic", cycle: "m6", method: "", trialEndsAt: "", nextBillingAt: "" },
       premises: [
         { subject: "수학", note: "속도 대신 깊이로 전환", badge: "🐢", badgeName: "깊이파트너", date: "오늘" },
         { subject: "일상", note: "'수 = 행복' 전제를 흔듦", badge: "🧩", badgeName: "행간파트너", date: "어제" },
@@ -35,9 +62,15 @@
         { subject: "상식", note: "'배웠으니 안다'는 전제를 의심", badge: "🔍", badgeName: "구조파트너", date: "3일 전" },
         { subject: "일상", note: "'열심히=성과' 전제를 알아차림", badge: "🎯", badgeName: "알아차림파트너", date: "4일 전" }
       ],
-      // 아이가 데일리 미션에서 직접 남긴 질문 로그 (report.html before/after 소스)
       questionLog: []
     };
+  }
+
+  function seed() {
+    try {
+      if (typeof location !== "undefined" && /[?&]demo=1(&|$)/.test(location.search)) return demoSeed();
+    } catch (e) {}
+    return emptySeed();
   }
 
   function load() {
@@ -72,9 +105,11 @@
     isDone: (id) => s.completed.includes(id),
     /* 데일리 미션 완료 시 호출 */
     completeCase: (c) => {
+      // 재플레이(이미 완료한 미션 다시 하기)는 '발견한 전제'에 중복 기록하지 않음
+      const isNew = !(c.missionId && s.completed.includes(c.missionId));
       if (c.missionId && !s.completed.includes(c.missionId)) s.completed.push(c.missionId);
       if (c.badge && !s.badges.includes(c.badge)) s.badges.push(c.badge);
-      s.premises.unshift({ subject: c.subject, note: c.note, badge: c.badge, badgeName: c.badgeName, date: "방금" });
+      if (isNew) s.premises.unshift({ subject: c.subject, note: c.note, badge: c.badge, badgeName: c.badgeName, date: "방금" });
       if (s.lastActive !== today()) { s.streak += 1; s.lastActive = today(); }
       save(s);
       return s;
@@ -162,6 +197,19 @@
     cancelSubscription: () => {
       if (!s.subscription) s.subscription = {};
       s.subscription.status = "canceled";
+      save(s);
+      return s.subscription;
+    },
+    // 이탈 방어: 해지 대신 일시정지. 결제는 멈추되 '동결된 지도' 열람은 유지(dashboard guard).
+    pauseSubscription: () => {
+      if (!s.subscription) s.subscription = {};
+      s.subscription.status = "paused";
+      save(s);
+      return s.subscription;
+    },
+    resumeSubscription: () => {
+      if (!s.subscription) s.subscription = {};
+      s.subscription.status = "active";
       save(s);
       return s.subscription;
     },

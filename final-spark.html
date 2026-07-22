@@ -12,7 +12,7 @@
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <script>
   tailwind.config = { theme: { extend: {
-    colors: { ink:"#0A0E17", body:"#525A69", faint:"#9AA4B2", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", accent:"#FFB800" },
+    colors: { ink:"#0A0E17", body:"#525A69", faint:"#6B7688", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", accent:"#FFB800" },
     fontFamily: { sans:["Pretendard","Inter","sans-serif"] },
     borderRadius: { "4xl":"2rem", "5xl":"2.5rem" },
   }}};
@@ -66,9 +66,9 @@
 
   <!-- 접근 게이트 (미구독 / 베이직 구독 시) -->
   <div id="planGateCard" class="card p-8 md:p-10 text-center mb-8" style="display:none">
-    <p class="text-[11px] font-bold tracking-[.2em] uppercase mb-3" style="color:#9A6A00" id="gateEyebrow">프리미엄 전용 기능</p>
-    <p class="text-[18px] md:text-[20px] font-extrabold text-ink mb-2" style="word-break:keep-all" id="gateTitle">파이널 스파크는 프리미엄에서 열려요</p>
-    <p class="text-[13.5px] text-body leading-relaxed max-w-sm mx-auto mb-6" style="word-break:keep-all" id="gateBody">시험 D-5~D-1, 자주 틀렸던 유형만 짧게 다시 확인하는 마무리 세션이에요. 등록한 시험 일정마다 열려요. 프리미엄 전용입니다.</p>
+    <p class="text-[11px] font-bold tracking-[.2em] uppercase mb-3" style="color:#9A6A00" id="gateEyebrow">파이널 스파크</p>
+    <p class="text-[18px] md:text-[20px] font-extrabold text-ink mb-2" style="word-break:keep-all" id="gateTitle">파이널 스파크</p>
+    <p class="text-[13.5px] text-body leading-relaxed max-w-sm mx-auto mb-6" style="word-break:keep-all" id="gateBody">시험 D-5~D-1, 자주 틀렸던 유형만 짧게 다시 확인하는 마무리 세션이에요.</p>
     <div class="flex flex-wrap items-center justify-center gap-3" id="gateActions"></div>
   </div>
 
@@ -252,12 +252,13 @@ if (access !== "premium") {
       '<a href="onboarding.html" class="btn-primary px-6 py-3 rounded-full text-[13px] font-semibold">7일 무료체험 시작하기 →</a>'
       + '<a href="pricing.html" class="btn-ghost px-6 py-3 rounded-full text-[13px] font-semibold">요금제 보기</a>';
   } else {
-    document.getElementById("gateEyebrow").textContent = "프리미엄 전용 기능";
-    document.getElementById("gateTitle").textContent = "파이널 스파크는 프리미엄에서 열려요";
-    document.getElementById("gateBody").textContent = "시험 D-5~D-1, 자주 틀렸던 유형만 짧게 다시 확인하는 마무리 세션이에요. 등록한 시험 일정마다 열려요. 프리미엄 전용입니다.";
+    // 베이직: 건별 구매 경로 제공 (pricing의 '필요한 시험에만 건별로' 약속과 일치)
+    document.getElementById("gateEyebrow").textContent = "베이직 · 건별로 열기";
+    document.getElementById("gateTitle").textContent = "이번 시험에만 필요하면, 건별로 열 수 있어요";
+    document.getElementById("gateBody").textContent = "베이직 회원은 필요한 시험에만 파이널 스파크를 건별 19,900원으로 열 수 있어요. 시험마다 자동으로 포함되길 원하면 프리미엄이 더 유리해요.";
     actions.innerHTML =
-      '<a href="checkout.html?plan=premium" class="btn-primary px-6 py-3 rounded-full text-[13px] font-semibold">프리미엄으로 업그레이드 →</a>'
-      + '<a href="pricing.html" class="btn-ghost px-6 py-3 rounded-full text-[13px] font-semibold">프리미엄 자세히 보기</a>';
+      '<a href="checkout.html?item=final-spark" class="btn-primary px-6 py-3 rounded-full text-[13px] font-semibold">이번 시험 건별 열기 · 19,900원 →</a>'
+      + '<a href="pricing.html" class="btn-ghost px-6 py-3 rounded-full text-[13px] font-semibold">프리미엄으로 매번 포함하기</a>';
   }
 } else {
   renderSpark();
