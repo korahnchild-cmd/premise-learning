@@ -85,6 +85,7 @@
 <div class="toast bg-ink text-white text-[13px] font-semibold px-5 py-3 rounded-full shadow-lg" id="toast"></div>
 
 <script src="common.js"></script>
+<script type="module" src="firebase-init.js"></script>
 <script>
   function kozySVG(){ return `<svg viewBox="0 0 100 100" aria-label="루카"><g class="k-wrap">
     <polygon class="k-face top" points="50,15 82,33 50,50 18,33"/>
@@ -114,12 +115,31 @@
     location.replace(next);
   }
 
-  function loginWith(provider){
-    PremiseStore.login(provider);
-    const label = provider === "google" ? "구글" : provider === "kakao" ? "카카오" : "네이버";
+  function showToast(text){
     const t = document.getElementById("toast");
-    t.textContent = label + " 계정으로 로그인했어";
+    t.textContent = text;
     t.classList.add("show");
+  }
+
+  async function loginWith(provider){
+    if (provider === "google") {
+      if (!window.PremiseAuth) { showToast("잠시 후 다시 시도해줘"); return; }
+      try {
+        const result = await PremiseAuth.signInWithGoogle();
+        const u = result.user;
+        PremiseStore.login("google", u.displayName || "구글 파트너", u.email || "");
+      } catch (e) {
+        if (e && (e.code === "auth/popup-closed-by-user" || e.code === "auth/cancelled-popup-request")) return;
+        console.error(e);
+        showToast("구글 로그인에 실패했어. 다시 시도해줘.");
+        return;
+      }
+    } else {
+      // 카카오/네이버는 Firebase 네이티브 미지원 — 별도 백엔드 연동 전까지 데모 상태 유지
+      PremiseStore.login(provider);
+    }
+    const label = provider === "google" ? "구글" : provider === "kakao" ? "카카오" : "네이버";
+    showToast(label + " 계정으로 로그인했어");
     setTimeout(()=>{ location.href = next; }, 550);
   }
 </script>

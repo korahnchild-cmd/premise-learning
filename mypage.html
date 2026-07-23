@@ -29,6 +29,7 @@
 
 <div id="topnav"></div>
 <script src="common.js"></script>
+<script type="module" src="firebase-init.js"></script>
 
 <main class="flex-1 px-5 py-10">
   <div class="max-w-lg mx-auto">
@@ -221,6 +222,7 @@
 
   function doLogout(){
     PremiseStore.logout();
+    if (window.PremiseAuth) PremiseAuth.signOutFirebase();
     location.href = "index.html";
   }
 

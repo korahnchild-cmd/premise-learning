@@ -131,12 +131,12 @@
     /* ===== 계정 / 구독 (D단계 · 프론트 데모, 실연동 전) ===== */
     isLoggedIn: () => !!(s.user && s.user.loggedIn),
     getUser: () => s.user || { loggedIn: false, name: "", email: "", provider: "" },
-    login: (provider, name) => {
+    login: (provider, name, email) => {
       if (!s.user) s.user = {};
       s.user.loggedIn = true;
       s.user.provider = provider || "google";
       s.user.name = name || (provider === "kakao" ? "카카오 파트너" : provider === "naver" ? "네이버 파트너" : "구글 파트너");
-      s.user.email = s.user.email || (s.user.name.replace(/\s/g, "").toLowerCase() + "@example.com");
+      s.user.email = email || s.user.email || (s.user.name.replace(/\s/g, "").toLowerCase() + "@example.com");
       save(s);
       return s.user;
     },
