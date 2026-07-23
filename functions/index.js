@@ -21,6 +21,7 @@ admin.initializeApp();
 
 const NAVER_CLIENT_ID = defineSecret("NAVER_CLIENT_ID");
 const NAVER_CLIENT_SECRET = defineSecret("NAVER_CLIENT_SECRET");
+const KAKAO_CLIENT_SECRET = defineSecret("KAKAO_CLIENT_SECRET"); // 카카오 콘솔 "보안"에서 활성화된 앱만 해당
 
 const KAKAO_REST_API_KEY = "0cb21928fc35c5208313275e61c494a8";
 const REDIRECT_URI = "https://pbslearning.co.kr/login.html";
@@ -42,7 +43,7 @@ async function ensureAuthUser(uid, displayName, email) {
 /* ===== 카카오 =====
    클라이언트가 받아온 authorization code를 카카오 토큰 엔드포인트에서 access token으로
    교환한 뒤(redirect_uri가 로그인 URL 요청 때와 정확히 같아야 함), /v2/user/me로 프로필을 가져온다. */
-exports.kakaoLogin = onCall({ region: REGION }, async (request) => {
+exports.kakaoLogin = onCall({ region: REGION, secrets: [KAKAO_CLIENT_SECRET] }, async (request) => {
   const code = request.data && request.data.code;
   if (!code) throw new HttpsError("invalid-argument", "code가 필요해");
 
@@ -51,6 +52,7 @@ exports.kakaoLogin = onCall({ region: REGION }, async (request) => {
   tokenUrl.searchParams.set("client_id", KAKAO_REST_API_KEY);
   tokenUrl.searchParams.set("redirect_uri", REDIRECT_URI);
   tokenUrl.searchParams.set("code", code);
+  tokenUrl.searchParams.set("client_secret", KAKAO_CLIENT_SECRET.value());
 
   const tokenRes = await fetch(tokenUrl.toString(), { method: "POST" });
   const tokenBody = await tokenRes.json();
@@ -94,14 +96,14 @@ exports.naverLogin = onCall(
     const tokenRes = await fetch(tokenUrl.toString());
     const tokenBody = await tokenRes.json();
     if (!tokenRes.ok || !tokenBody.access_token) {
-      throw new HttpsError("unauthenticated", "네이버 토큰 교환 실패");
+      throw new HttpsError("unauthenticated", "네이버 토큰 교환 실패: " + JSON.stringify(tokenBody));
     }
 
     const meRes = await fetch("https://openapi.naver.com/v1/nid/me", {
       headers: { Authorization: `Bearer ${tokenBody.access_token}` }
     });
     const meBody = await meRes.json();
-    if (meBody.resultcode !== "00") throw new HttpsError("unauthenticated", "네이버 프로필 조회 실패");
+    if (meBody.resultcode !== "00") throw new HttpsError("unauthenticated", "네이버 프로필 조회 실패: " + JSON.stringify(meBody));
     const profile = meBody.response;
 
     const uid = `naver:${profile.id}`;

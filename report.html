@@ -22,6 +22,10 @@
   .btn-primary:hover { background:#0857db; transform:translateY(-2px); }
   .btn-ghost { background:#fff; color:#0A0E17; border:1px solid #DfE3E8; }
   .btn-ghost:hover { border-color:#0A66FF; color:#0A66FF; }
+  .btn-kakao { background:#FEE500; color:#191600; }
+  .btn-kakao:hover { transform:translateY(-1px); box-shadow:0 6px 16px rgba(254,229,0,.35); }
+  .btn-naver { background:#03C75A; color:#fff; }
+  .btn-naver:hover { transform:translateY(-1px); box-shadow:0 6px 16px rgba(3,199,90,.28); }
   .card { background:#fff; border:1px solid #ECEEF1; border-radius:1.5rem; }
 
   /* 루카 idle */
@@ -76,6 +80,14 @@
       <button class="btn btn-ghost px-3.5 py-2 text-[12.5px] font-semibold" onclick="copyLink(this)">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1"/><path d="M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1"/></svg>
         <span data-copy-label>링크 복사</span>
+      </button>
+      <button class="btn btn-kakao px-3.5 py-2 text-[12.5px] font-semibold" onclick="shareKakao()">
+        <svg width="14" height="14" viewBox="0 0 18 18"><path fill="#191600" d="M9 2C4.86 2 1.5 4.71 1.5 8.06c0 2.14 1.4 4.02 3.5 5.1-.15.55-.55 2.02-.63 2.34-.1.4.15.4.32.29.13-.08 2.1-1.43 2.96-2.02.43.06.87.09 1.35.09 4.14 0 7.5-2.71 7.5-6.06S13.14 2 9 2z"/></svg>
+        카카오톡 공유
+      </button>
+      <button class="btn btn-naver px-3.5 py-2 text-[12.5px] font-semibold" onclick="shareNaver()">
+        <svg width="13" height="13" viewBox="0 0 18 18"><path fill="#fff" d="M11.4 9.7L6.7 3H3v12h4.6V8.3L12.3 15H16V3h-4.6v6.7z"/></svg>
+        네이버 공유
       </button>
       <button class="btn btn-primary px-3.5 py-2 text-[12.5px] font-semibold" onclick="shareLink()">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
@@ -265,8 +277,11 @@
 </main>
 
 <script src="common.js"></script>
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 <script>
   const $ = id => document.getElementById(id);
+  const KAKAO_JS_KEY = "1cfdc036aab4cd30ed1d2df701632e2e";
+  try { if (window.Kakao && !Kakao.isInitialized()) Kakao.init(KAKAO_JS_KEY); } catch(e){}
 
   /* ---- 데이터: 스토어 있으면 읽고, 없으면 데모값 ---- */
   let name = "지호", streak = 15, total = 58;
@@ -449,6 +464,28 @@
     } catch(e){
       prompt("이 링크를 복사하세요:", shareUrl());
     }
+  }
+
+  function shareKakao(){
+    if (!window.Kakao) { alert("카카오 공유 준비 중이야. 잠시 후 다시 눌러줘."); return; }
+    try {
+      if (!Kakao.isInitialized()) Kakao.init(KAKAO_JS_KEY);
+      Kakao.Share.sendDefault({
+        objectType: "feed",
+        content: {
+          title: `${name} 파트너의 주간 리포트`,
+          description: `이번 주 ${name}의 질문이 어떻게 달라졌는지 — PBS 학습법 파트너 노트`,
+          imageUrl: "https://pbslearning.co.kr/assets/pbs-4step-ring.png",
+          link: { mobileWebUrl: shareUrl(), webUrl: shareUrl() }
+        },
+        buttons: [{ title: "리포트 보기", link: { mobileWebUrl: shareUrl(), webUrl: shareUrl() } }]
+      });
+    } catch(e){ console.error(e); alert("카카오톡 공유에 실패했어. 다시 시도해줘."); }
+  }
+
+  function shareNaver(){
+    const url = "https://share.naver.com/web/shareView?url=" + encodeURIComponent(shareUrl()) + "&title=" + encodeURIComponent(`${name} 파트너의 주간 리포트`);
+    window.open(url, "_blank", "width=500,height=600,noopener,noreferrer");
   }
 
   async function shareLink(){
