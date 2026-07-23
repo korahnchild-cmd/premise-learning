@@ -318,6 +318,8 @@
         $("totalPremise").textContent = comp.length;
       }
     }
+    const u = window.PremiseStore && PremiseStore.getUser && PremiseStore.getUser();
+    if (u && u.name) name = u.name;
     const p = JSON.parse(localStorage.getItem("premise_profile") || "null");
     if (p && p.name) name = p.name;
   } catch (e) {}

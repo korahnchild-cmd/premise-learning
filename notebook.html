@@ -82,7 +82,7 @@
       <div>
         <p class="text-[12px] font-semibold text-point mb-1">루카의 주간 리포트</p>
         <p class="text-[15px] md:text-[16px] text-ink leading-relaxed">
-          지호 파트너님, 이번 주 정말 멋졌어요! <b>‘틀리면 안 된다’</b>는 전제를 시원하게 깨부순 덕분에 오답 노트가 훨씬 풍성해졌어요.
+          <span id="greetName">지호</span> 파트너님, 이번 주 정말 멋졌어요! <b>‘틀리면 안 된다’</b>는 전제를 시원하게 깨부순 덕분에 오답 노트가 훨씬 풍성해졌어요.
           특히 <b>‘질문의 전제를 되묻는’</b> 습관이 부쩍 자랐네요. 다음 주엔 비문학의 전제도 함께 폭파해 볼까요?
         </p>
         <a href="report.html" class="btn btn-primary mt-4 px-5 py-2.5 text-[13px] font-semibold">이번 주 리포트 전체 보기 · 공유하기 →</a>
@@ -180,7 +180,18 @@
   const S = PremiseStore.get();
   $("streak").textContent = S.streak;
   $("level").textContent = Math.max(1, Math.floor(S.badges.length / 2));
-  try { const p = JSON.parse(localStorage.getItem("premise_profile")||"null"); if(p && p.name) $("detName").textContent = p.name; } catch(e){}
+  /* 이름 우선순위: 기본값 → 실제 로그인 계정 이름 → 온보딩에서 직접 설정한 표시 이름(dashboard.html과 동일 규칙) */
+  (function(){
+    let name = "지호";
+    try {
+      const u = window.PremiseStore && PremiseStore.getUser && PremiseStore.getUser();
+      if (u && u.name) name = u.name;
+      const p = JSON.parse(localStorage.getItem("premise_profile")||"null");
+      if (p && p.name) name = p.name;
+    } catch(e){}
+    if ($("detName")) $("detName").textContent = name;
+    if ($("greetName")) $("greetName").textContent = name;
+  })();
 
   /* ---- heatmap data (deterministic ramp over 12 weeks) ---- */
   const weeks = 12, tip = $("tip");
