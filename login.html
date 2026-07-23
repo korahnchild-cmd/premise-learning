@@ -164,7 +164,13 @@
       showToast("로그인 확인에 실패했어. 다시 시도해줘.");
       return;
     }
-    if (!window.PremiseAuth) { showToast("잠시 후 다시 시도해줘"); return; }
+
+    // firebase-init.js는 type="module"이라 비동기로 늦게 로드될 수 있음 —
+    // 리다이렉트로 돌아온 직후엔 아직 준비 안 됐을 수 있어서 잠깐 기다려준다.
+    for (let i = 0; i < 30 && !window.PremiseAuth; i++) {
+      await new Promise(r => setTimeout(r, 100));
+    }
+    if (!window.PremiseAuth) { showToast("초기화가 늦어지고 있어. 새로고침해서 다시 시도해줘."); return; }
 
     try {
       const result = provider === "kakao"
