@@ -5,17 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>PBS 학습법 · 문항은 어떻게 검증되나요</title>
 <meta name="description" content="PBS 학습법의 사건(문항)이 설계되고 검증되는 과정." />
-<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/tailwind-a.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-<script>
-  tailwind.config = { theme: { extend: {
-    colors: { ink:"#0A0E17", body:"#525A69", faint:"#7A8499", point:"#0A66FF", pointdeep:"#0B3ACC", accent:"#FFB800", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", night:"#0A0E17" },
-    fontFamily: { sans:["Pretendard","Inter","sans-serif"] }, borderRadius:{ "4xl":"2rem","5xl":"2.5rem" },
-  }}};
-</script>
 <style>
   body{ font-family:"Pretendard","Inter",sans-serif; -webkit-font-smoothing:antialiased; letter-spacing:-.012em; background:#fff; color:#0A0E17; }
   h1,h2{ letter-spacing:-.03em; }
@@ -67,21 +61,21 @@
   @keyframes evbGrow{ 0%,4%{ transform:scaleY(0); } 26%,74%{ transform:scaleY(1); } 96%,100%{ transform:scaleY(0); } }
   @media (prefers-reduced-motion:reduce){
     *{animation:none!important}
-    .ev-viz .ef0{ animation:evFrag0 5.6s ease-in-out infinite !important; }
-    .ev-viz .ef1{ animation:evFrag1 5.6s ease-in-out infinite !important; }
-    .ev-viz .ef2{ animation:evFrag2 5.6s ease-in-out infinite !important; }
-    .ev-viz .ef3{ animation:evFrag3 5.6s ease-in-out infinite !important; }
-    .ev-viz .ef4{ animation:evFrag4 5.6s ease-in-out infinite !important; }
-    .ev-viz .ef5{ animation:evFrag5 5.6s ease-in-out infinite !important; }
-    .ev-check{ animation:evCheckPop 5.6s ease-in-out infinite !important; }
-    .ev-cap{ animation:evCapFade 5.6s ease-in-out infinite !important; }
-    .ev-flip .front{ animation:evFlipFront 3.4s ease-in-out infinite !important; }
-    .ev-flip .back{ animation:evFlipBack 3.4s ease-in-out infinite !important; }
-    .evb-beam{ animation:evbTilt 7s ease-in-out infinite !important; }
-    .evbar1 .evbarfill{ animation:evbGrow 7s ease-in-out infinite !important; }
-    .evbar2 .evbarfill{ animation:evbGrow 7s ease-in-out infinite !important; animation-delay:.15s !important; }
-    .evbar3 .evbarfill{ animation:evbGrow 7s ease-in-out infinite !important; animation-delay:.3s !important; }
-    .evbar4 .evbarfill{ animation:evbGrow 7s ease-in-out infinite !important; animation-delay:.45s !important; }
+    .ev-viz .ef0{ animation:evFrag0 5.6s ease-in-out 1 forwards !important; }
+    .ev-viz .ef1{ animation:evFrag1 5.6s ease-in-out 1 forwards !important; }
+    .ev-viz .ef2{ animation:evFrag2 5.6s ease-in-out 1 forwards !important; }
+    .ev-viz .ef3{ animation:evFrag3 5.6s ease-in-out 1 forwards !important; }
+    .ev-viz .ef4{ animation:evFrag4 5.6s ease-in-out 1 forwards !important; }
+    .ev-viz .ef5{ animation:evFrag5 5.6s ease-in-out 1 forwards !important; }
+    .ev-check{ animation:evCheckPop 5.6s ease-in-out 1 forwards !important; }
+    .ev-cap{ animation:evCapFade 5.6s ease-in-out 1 forwards !important; }
+    .ev-flip .front{ animation:evFlipFront 3.4s ease-in-out 1 forwards !important; }
+    .ev-flip .back{ animation:evFlipBack 3.4s ease-in-out 1 forwards !important; }
+    .evb-beam{ animation:evbTilt 7s ease-in-out 1 forwards !important; }
+    .evbar1 .evbarfill{ animation:evbGrow 7s ease-in-out 1 forwards !important; }
+    .evbar2 .evbarfill{ animation:evbGrow 7s ease-in-out 1 forwards !important; animation-delay:.15s !important; }
+    .evbar3 .evbarfill{ animation:evbGrow 7s ease-in-out 1 forwards !important; animation-delay:.3s !important; }
+    .evbar4 .evbarfill{ animation:evbGrow 7s ease-in-out 1 forwards !important; animation-delay:.45s !important; }
   }
 </style>
 </head>

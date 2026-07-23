@@ -4,18 +4,11 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>PBS 학습법 · 파트너 노트</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/tailwind-b.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-<script>
-  tailwind.config = { theme: { extend: {
-    colors: { ink:"#0A0E17", body:"#525A69", faint:"#6B7688", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1" },
-    fontFamily: { sans:["Pretendard","Inter","sans-serif"] },
-    borderRadius: { "4xl":"2rem", "5xl":"2.5rem" },
-  }}};
-</script>
 <style>
   body { font-family:"Pretendard","Inter",sans-serif; -webkit-font-smoothing:antialiased; letter-spacing:-.012em; background:#F5F6F4; color:#0A0E17; }
   h1,h2,h3 { letter-spacing:-.03em; }
@@ -37,7 +30,8 @@
 
   /* heatmap */
   .hm-cell{ width:100%; aspect-ratio:1; border-radius:4px; background:#EAEEF3; transition:transform .15s; cursor:default; }
-  .hm-cell:hover{ transform:scale(1.25); outline:2px solid rgba(10,102,255,.4); }
+  .hm-cell:hover, .hm-cell:focus-visible{ transform:scale(1.25); outline:2px solid rgba(10,102,255,.4); }
+  .hm-cell:focus{ outline:2px solid rgba(10,102,255,.4); }
   .lv1{ background:#CFE0FB; } .lv2{ background:#9DBFF7; } .lv3{ background:#5B93F1; } .lv4{ background:#0A66FF; }
 
   .badge-chip{ transition:transform .3s; }
@@ -192,6 +186,11 @@
   const weeks = 12, tip = $("tip");
   let total = 0;
   const hm = $("heatmap");
+  function showTip(text, x, y){
+    tip.textContent = text;
+    tip.style.left = Math.max(4, Math.min(x, window.innerWidth-160))+"px";
+    tip.style.top = y+"px"; tip.style.opacity=1;
+  }
   // build column by column (each column = a week, 7 rows)
   for(let w=0; w<weeks; w++){
     for(let d=0; d<7; d++){
@@ -205,11 +204,23 @@
       const cell = document.createElement("div");
       cell.className = "hm-cell" + (v>0?" lv"+v:"");
       const dayName = ["일","월","화","수","목","금","토"][d];
-      cell.addEventListener("mousemove", e=>{
-        tip.textContent = count>0 ? `${weeks-w}주 전 ${dayName} · 전제 ${count}개 발견` : `${weeks-w}주 전 ${dayName} · 기록 없음`;
-        tip.style.left = (e.clientX+12)+"px"; tip.style.top = (e.clientY-8)+"px"; tip.style.opacity=1;
-      });
+      const tipText = count>0 ? `${weeks-w}주 전 ${dayName} · 전제 ${count}개 발견` : `${weeks-w}주 전 ${dayName} · 기록 없음`;
+      cell.setAttribute("tabindex", "0");
+      cell.setAttribute("role", "img");
+      cell.setAttribute("aria-label", tipText);
+      cell.addEventListener("mousemove", e=> showTip(tipText, e.clientX+12, e.clientY-8));
       cell.addEventListener("mouseleave", ()=> tip.style.opacity=0);
+      cell.addEventListener("focus", ()=>{
+        const r = cell.getBoundingClientRect();
+        showTip(tipText, r.left, r.top-30);
+      });
+      cell.addEventListener("blur", ()=> tip.style.opacity=0);
+      cell.addEventListener("touchstart", ()=>{
+        const r = cell.getBoundingClientRect();
+        showTip(tipText, r.left, r.top-34);
+        clearTimeout(cell._tipTimer);
+        cell._tipTimer = setTimeout(()=> tip.style.opacity=0, 2200);
+      }, {passive:true});
       hm.appendChild(cell);
     }
   }

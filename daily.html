@@ -4,17 +4,11 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>PBS 학습법 · 오늘의 사건 — 데일리 레슨</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/tailwind-b.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-<script>
-  tailwind.config = { theme: { extend: {
-    colors: { ink:"#0A0E17", body:"#525A69", faint:"#6B7688", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1" },
-    fontFamily: { sans:["Pretendard","Inter","sans-serif"] }, borderRadius:{ "4xl":"2rem","5xl":"2.5rem" },
-  }}};
-</script>
 <style>
   body { font-family:"Pretendard","Inter",sans-serif; -webkit-font-smoothing:antialiased; letter-spacing:-.012em; background:#F5F6F4; color:#0A0E17; }
   h1,h2,h3 { letter-spacing:-.03em; }
@@ -135,7 +129,7 @@
   // ===== LESSONS (다단계) =====
   const LESSON_SETS = {};
   LESSON_SETS["중등"] = [
-    { missionId:"in-3", subject:"언어", tag:"Case 1 · 입문", badge:"🕵️", badgeName:"문장파트너 획득!", note:"'조차'가 심은 전제를 포착",
+    { missionId:"in-3", subject:"언어", stage:"입문", badge:"🕵️", badgeName:"문장파트너 획득!", note:"'조차'가 심은 전제를 포착",
       material:'"너<span class="trig" data-t>조차</span> 그걸 몰랐어."', trigGlow:true,
       steps:[
         { t:"intro", kozy:"이 짧은 말, 그냥 지나치기엔 뭔가 수상해. 딱 한 단어가 몰래 일하고 있거든." },
@@ -157,7 +151,7 @@
         { t:"wrap" },
       ] },
 
-    { missionId:"ba-1", subject:"수학", tag:"Case 2 · 기본", badge:"🐢", badgeName:"깊이파트너 획득!", note:"속도 대신 깊이로 전환",
+    { missionId:"ba-1", subject:"수학", stage:"기본", badge:"🐢", badgeName:"깊이파트너 획득!", note:"속도 대신 깊이로 전환",
       material:'"수학은 <span class="trig" data-t>빨리 푸는</span> 과목이다."', trigGlow:true,
       steps:[
         { t:"intro", kozy:"많은 친구가 이 말을 당연하게 여겨. 그런데 정말 그럴까?" },
@@ -179,7 +173,7 @@
         { t:"wrap" },
       ] },
 
-    { missionId:"ba-3", subject:"학습", tag:"Case 3 · 기본", badge:"💥", badgeName:"오답폭파파트너 획득!", note:"'틀리면 안 된다' 전제를 깨부숨",
+    { missionId:"ba-3", subject:"학습", stage:"기본", badge:"💥", badgeName:"오답폭파파트너 획득!", note:"'틀리면 안 된다' 전제를 깨부숨",
       material:'"또 틀렸어. <span class="trig" data-t>난 안 되나 봐</span>."', trigGlow:true,
       steps:[
         { t:"intro", kozy:"이 말 속엔 슬픈 전제가 하나 숨어 있어. 같이 조심스럽게 꺼내보자." },
@@ -200,10 +194,76 @@
         { t:"insight", kozy:"이제 오답이 무섭지 않지?", reframe:"오답은 실패가 아니라 '단서'야. 틀린 이유를 알아내는 순간, 그건 다음을 여는 자산이 돼." },
         { t:"wrap" },
       ] },
+
+    { missionId:"in-5", subject:"관계", stage:"기본", badge:"⏳", badgeName:"여유파트너 획득!", note:"'느림=싫어함' 전제를 알아차림",
+      material:'"단톡방 답장이 늦으면 <span class="trig" data-t>날 싫어하는</span> 거야."', trigGlow:true,
+      steps:[
+        { t:"intro", kozy:"이 생각, 한 번쯤 해봤지? 근데 여기 몰래 건너뛴 게 하나 있어. 같이 찾아보자." },
+        { t:"choice", kozy:"답장 속도를 무엇과 곧바로 이어붙였을까?",
+          q:"이어붙인 것을 골라봐", opts:[
+            { label:"호감도", ok:true, fb:"맞아. '늦음'을 곧장 '싫어함'으로 이어붙였어." },
+            { label:"성격", ok:false, fb:"성격 얘긴 없어. '싫어함'에 집중해봐." },
+            { label:"실력", ok:false, fb:"실력도 아니야. 감정과 속도를 이어붙인 게 핵심이야." },
+          ] },
+        { t:"reveal", kozy:"그 연결이 이 전제야.", premise:"'반응 속도 = 호감도' — 답장이 느리면 관심이 없다고 여기는 전제" },
+        { t:"choice", kozy:"답장이 늦는 다른 이유는 뭐가 있을까?",
+          q:"더 맞는 생각을 골라봐", opts:[
+            { label:"바쁘거나 못 봤을 수 있다", ok:true, fb:"맞아! 상황은 셀 수 없이 많아." },
+            { label:"무조건 나를 피하는 거다", ok:false, fb:"그게 방금 찾은 전제야." },
+            { label:"일부러 기다리게 하는 거다", ok:false, fb:"그것도 근거 없는 단정이야." },
+          ] },
+        { t:"blast", kozy:"'느림 = 싫어함' 전제, 폭파하자!" },
+        { t:"insight", kozy:"마음이 좀 가벼워졌지?", reframe:"답장 속도에는 내가 모르는 이유가 많아. 늦었다고 곧장 '싫어한다'로 넘어가지 말고, 먼저 물어보면 돼." },
+        { t:"wrap" },
+      ] },
+
+    { missionId:"ba-5", subject:"국어", stage:"기본", badge:"📖", badgeName:"비평파트너 획득!", note:"인물 평가와 작품 평가를 분리",
+      material:'"주인공이 착하니까 <span class="trig" data-t>좋은 이야기</span>야."', trigGlow:true,
+      steps:[
+        { t:"intro", kozy:"책이나 드라마 볼 때 자주 하는 말이지? 그런데 '좋다'는 말이 너무 쉽게 붙었어." },
+        { t:"choice", kozy:"이 말은 '좋은 이야기'를 무엇 하나로 정했지?",
+          q:"기준으로 삼은 걸 골라봐", opts:[
+            { label:"인물의 착함", ok:true, fb:"맞아. 인물의 성격 하나로 작품 전체를 평가했어." },
+            { label:"결말의 반전", ok:false, fb:"반전 얘긴 없어. '착함'에 집중해봐." },
+            { label:"그림체·연출", ok:false, fb:"연출도 아니야. '착함'을 기준 삼은 게 핵심이야." },
+          ] },
+        { t:"reveal", kozy:"그 기준이 이 전제야.", premise:"'인물이 착함 = 작품이 좋음' — 인물 성격 하나로 작품 전체의 완성도를 판단하는 전제" },
+        { t:"choice", kozy:"이야기의 완성도를 볼 때 더 필요한 건?",
+          q:"더 나은 기준을 골라봐", opts:[
+            { label:"구성·개연성·메시지도 함께 본다", ok:true, fb:"맞아! 인물 하나가 아니라 여러 요소가 함께 작품을 만들어." },
+            { label:"착한 인물만 있으면 충분하다", ok:false, fb:"그게 방금 찾은 전제야." },
+            { label:"나쁜 인물이 나오면 나쁜 작품이다", ok:false, fb:"그것도 같은 함정을 뒤집은 것뿐이야." },
+          ] },
+        { t:"blast", kozy:"'착함 = 좋은 이야기' 전제, 폭파!" },
+        { t:"insight", kozy:"작품을 보는 눈이 넓어졌지?", reframe:"인물이 착하다고 작품이 저절로 좋아지진 않아. 구성과 메시지까지 함께 볼 때 '좋은 이야기'인지 판단할 수 있어." },
+        { t:"wrap" },
+      ] },
+
+    { missionId:"sim-1", subject:"또래관계", stage:"심화", badge:"🧭", badgeName:"주관파트너 획득!", note:"다수의 행동과 옳음을 분리",
+      material:'"다들 그렇게 하니까 <span class="trig" data-t>나도 그래야</span> 해."', trigGlow:true,
+      steps:[
+        { t:"intro", kozy:"친구들 사이에서 제일 힘 센 말 중 하나야. 근데 이 말, 다시 보면 이상한 구석이 있어." },
+        { t:"choice", kozy:"이 말은 '다들 한다'는 걸 무엇의 증거로 삼았지?",
+          q:"증거로 삼은 걸 골라봐", opts:[
+            { label:"옳음 / 해야 함", ok:true, fb:"맞아. '많이 한다'를 '옳다'의 증거로 삼았어." },
+            { label:"재미있음", ok:false, fb:"재미 얘긴 없어. '해야 한다'에 집중해봐." },
+            { label:"쉬움", ok:false, fb:"쉬움도 아니야. '옳다'로 건너뛴 게 핵심이야." },
+          ] },
+        { t:"reveal", kozy:"그 건너뜀이 이 전제야.", premise:"'다수가 함 = 옳음' — 많은 사람이 한다는 이유만으로 그것이 맞다고 여기는 전제" },
+        { t:"choice", kozy:"다들 하는 것이라도 다시 물어야 할 건?",
+          q:"진짜 물어야 할 질문을 골라봐", opts:[
+            { label:"나에게 정말 맞는지, 이유가 있는지", ok:true, fb:"맞아! 많이 한다고 자동으로 맞는 건 아니야." },
+            { label:"몇 명이 하는지 숫자만 세면 된다", ok:false, fb:"숫자는 옳음의 증거가 아니야." },
+            { label:"안 하면 무조건 손해다", ok:false, fb:"그것도 근거 없는 단정이야." },
+          ] },
+        { t:"blast", kozy:"'다수 = 옳음' 전제, 폭파!" },
+        { t:"insight", kozy:"휩쓸리지 않는 힘이 생겼지?", reframe:"많은 사람이 한다고 저절로 옳은 건 아니야. '왜 하는지'를 스스로 물어보면, 휩쓸리지 않고 선택할 수 있어." },
+        { t:"wrap" },
+      ] },
   ];
 
   LESSON_SETS["초등"] = [
-    { missionId:"el-in-3", subject:"관계", tag:"Case 1 · 입문", badge:"🌧️", badgeName:"관점파트너 획득!", note:"'엄마 기분 = 내 탓' 전제를 알아차림",
+    { missionId:"el-in-3", subject:"관계", stage:"입문", badge:"🌧️", badgeName:"관점파트너 획득!", note:"'엄마 기분 = 내 탓' 전제를 알아차림",
       material:'"엄마가 아침부터 화나 있으면 <span class="trig" data-t>내 잘못</span>이야."', trigGlow:true,
       steps:[
         { t:"intro", kozy:"이 말, 마음이 콕 아프지? 근데 여기 몰래 숨은 생각이 하나 있어. 같이 찾아보자." },
@@ -224,7 +284,7 @@
         { t:"insight", kozy:"마음이 조금 가벼워졌지?", reframe:"남의 기분에는 내가 모르는 이유가 많아. 다 내 탓이 아니야 — 먼저 '왜 그럴까?'를 물어보면 돼." },
         { t:"wrap" },
       ] },
-    { missionId:"el-ba-1", subject:"규칙", tag:"Case 2 · 기본", badge:"🛝", badgeName:"구분파트너 획득!", note:"행동과 사람을 구분",
+    { missionId:"el-ba-1", subject:"규칙", stage:"기본", badge:"🛝", badgeName:"구분파트너 획득!", note:"행동과 사람을 구분",
       material:'"놀이터 규칙을 안 지키면 <span class="trig" data-t>나쁜 애</span>야."', trigGlow:true,
       steps:[
         { t:"intro", kozy:"규칙은 중요하지. 근데 이 말은 한 걸음을 너무 크게 건너뛰었어. 같이 볼까?" },
@@ -245,7 +305,7 @@
         { t:"insight", kozy:"사람을 다시 보게 됐지?", reframe:"한 번의 실수가 사람을 정하지 않아. 행동과 사람은 다르게 봐야 해 — 다음엔 어떻게 할지가 더 중요하지." },
         { t:"wrap" },
       ] },
-    { missionId:"el-sim-2", subject:"학습", tag:"Case 3 · 심화", badge:"📚", badgeName:"재정의파트너 획득!", note:"'공부'의 정의를 다시 세움",
+    { missionId:"el-sim-2", subject:"학습", stage:"심화", badge:"📚", badgeName:"재정의파트너 획득!", note:"'공부'의 정의를 다시 세움",
       material:'"만화책은 <span class="trig" data-t>공부에 도움이 안 돼</span>."', trigGlow:true,
       steps:[
         { t:"intro", kozy:"어른들이 자주 하는 말이지? 근데 여기 '공부'라는 말을 아주 좁게 쓰고 있어." },
@@ -266,10 +326,76 @@
         { t:"insight", kozy:"'공부'가 넓어졌지?", reframe:"'공부'가 무엇인지 다시 정하면, 만화도 배움이 될 수 있어. 무엇을 배웠는지를 물어보면 돼." },
         { t:"wrap" },
       ] },
+
+    { missionId:"el-in-5", subject:"외모", stage:"입문", badge:"👓", badgeName:"관찰파트너 획득!", note:"겉모습과 능력을 분리",
+      material:'"안경을 쓰면 <span class="trig" data-t>공부를 잘하는</span> 거야."', trigGlow:true,
+      steps:[
+        { t:"intro", kozy:"이런 말 들어본 적 있지? 근데 안경이랑 공부는 사실 관계가 없어. 왜 그런지 볼까?" },
+        { t:"choice", kozy:"이 말은 '안경 쓴 모습'을 무엇의 증거로 삼았지?",
+          q:"증거로 삼은 걸 골라봐", opts:[
+            { label:"공부를 잘함", ok:true, fb:"맞아. 겉모습 하나를 능력의 증거로 삼았어." },
+            { label:"눈이 나쁨", ok:false, fb:"그건 사실이지만, 이 말이 하는 주장은 아니야." },
+            { label:"나이가 많음", ok:false, fb:"나이 얘긴 없어. '공부를 잘한다'에 집중해봐." },
+          ] },
+        { t:"reveal", kozy:"그 연결이 이 전제야.", premise:"'겉모습 = 능력' — 안경이라는 겉모습 하나로 공부 실력을 판단하는 전제" },
+        { t:"choice", kozy:"진짜 공부를 잘하는지 알려면 뭘 봐야 할까?",
+          q:"더 맞는 방법을 골라봐", opts:[
+            { label:"실제로 공부하는 모습이나 결과", ok:true, fb:"맞아! 겉모습이 아니라 실제 행동과 결과를 봐야 해." },
+            { label:"안경 모양", ok:false, fb:"모양은 능력과 상관없어." },
+            { label:"안경을 쓴 기간", ok:false, fb:"쓴 기간도 실력과는 관계없어." },
+          ] },
+        { t:"blast", kozy:"'안경 = 공부 잘함' 전제, 폭파!" },
+        { t:"insight", kozy:"겉모습에 안 속게 됐지?", reframe:"안경은 그냥 눈을 도와주는 도구야. 누가 공부를 잘하는지는 겉모습이 아니라 실제 모습을 보고 알 수 있어." },
+        { t:"wrap" },
+      ] },
+
+    { missionId:"el-ba-3", subject:"놀이", stage:"기본", badge:"🏃", badgeName:"구분파트너 획득!", note:"한 가지 재능과 전체 능력을 분리",
+      material:'"달리기를 잘하니까 <span class="trig" data-t>뭐든 다 잘하는</span> 애야."', trigGlow:true,
+      steps:[
+        { t:"intro", kozy:"운동을 잘하는 친구를 보면 이런 생각, 든 적 있지? 그런데 하나를 잘한다고 다 잘하는 건 아니야." },
+        { t:"choice", kozy:"이 말은 '달리기 잘함'을 무엇으로 넓혀버렸지?",
+          q:"넓혀버린 걸 골라봐", opts:[
+            { label:"모든 것을 잘함", ok:true, fb:"맞아. 한 가지 잘하는 걸 '다 잘한다'로 넓혀버렸어." },
+            { label:"친구가 많음", ok:false, fb:"친구 얘긴 없어. '뭐든 다 잘한다'에 집중해봐." },
+            { label:"키가 큼", ok:false, fb:"키도 아니야. '전부 잘함'으로 넓힌 게 핵심이야." },
+          ] },
+        { t:"reveal", kozy:"그 넓힘이 이 전제야.", premise:"'한 가지 잘함 = 전부 잘함' — 한 가지 재능을 모든 능력으로 넓혀버리는 전제" },
+        { t:"choice", kozy:"한 가지를 잘하는 친구에 대해 더 맞는 생각은?",
+          q:"더 맞는 생각을 골라봐", opts:[
+            { label:"그 한 가지를 잘하는 거고, 다른 건 또 봐야 안다", ok:true, fb:"맞아! 재능은 각각 따로 있어." },
+            { label:"당연히 공부도 1등일 거다", ok:false, fb:"그게 방금 찾은 전제야." },
+            { label:"운동을 잘하면 다른 건 못한다", ok:false, fb:"그것도 근거 없는 단정이야." },
+          ] },
+        { t:"blast", kozy:"'한 가지 = 전부' 전제, 폭파!" },
+        { t:"insight", kozy:"친구를 더 잘 보게 됐지?", reframe:"달리기를 잘한다고 모든 걸 잘하는 건 아니야. 재능은 저마다 다른 자리에 있어 — 하나씩 따로 보면 돼." },
+        { t:"wrap" },
+      ] },
+
+    { missionId:"el-sim-4", subject:"습관", stage:"심화", badge:"🔄", badgeName:"재검토파트너 획득!", note:"익숙함과 옳음을 분리",
+      material:'"우리 반은 원래 짝을 안 바꿔 — <span class="trig" data-t>계속 이대로</span> 해야 해."', trigGlow:true,
+      steps:[
+        { t:"intro", kozy:"'원래 그래'라는 말, 정말 힘이 세지? 근데 '원래'가 꼭 '계속 그래야 한다'는 뜻은 아니야." },
+        { t:"choice", kozy:"이 말은 '지금까지 해온 것'을 무엇으로 여기고 있지?",
+          q:"여기고 있는 걸 골라봐", opts:[
+            { label:"앞으로도 그래야 하는 것", ok:true, fb:"맞아. '해왔다'를 '해야 한다'로 그대로 이어붙였어." },
+            { label:"제일 재미있는 것", ok:false, fb:"재미 얘긴 없어. '해야 한다'에 집중해봐." },
+            { label:"다들 좋아하는 것", ok:false, fb:"좋아함도 아니야. '계속해야 한다'가 핵심이야." },
+          ] },
+        { t:"reveal", kozy:"그 생각이 이 전제야.", premise:"'해왔음 = 계속해야 함' — 지금까지 그래왔다는 이유만으로 앞으로도 그래야 한다는 전제" },
+        { t:"choice", kozy:"바꿀지 말지 정할 때 진짜 물어야 할 건?",
+          q:"진짜 물어야 할 질문을 골라봐", opts:[
+            { label:"지금도 이 방법이 좋은지", ok:true, fb:"맞아! '오래 됐다'가 아니라 '지금 좋은가'를 물어야 해." },
+            { label:"얼마나 오래 했는지", ok:false, fb:"기간은 옳음의 증거가 아니야." },
+            { label:"바꾸면 다들 싫어할지만", ok:false, fb:"그것도 다른 전제로 넘어간 거야." },
+          ] },
+        { t:"blast", kozy:"'원래 그래' 전제, 폭파!" },
+        { t:"insight", kozy:"다시 생각해볼 용기가 생겼지?", reframe:"오래 해왔다고 계속 그래야 하는 건 아니야. 지금 이 방법이 정말 좋은지 다시 물어보면 돼." },
+        { t:"wrap" },
+      ] },
   ];
 
   LESSON_SETS["고등"] = [
-    { missionId:"hi-in-2", subject:"미디어", tag:"Case 1 · 입문", badge:"👍", badgeName:"근거파트너 획득!", note:"인기와 신뢰를 분리",
+    { missionId:"hi-in-2", subject:"미디어", stage:"입문", badge:"👍", badgeName:"근거파트너 획득!", note:"인기와 신뢰를 분리",
       material:'"조회수가 높은 정보가 <span class="trig" data-t>더 믿을 만하다</span>."', trigGlow:true,
       steps:[
         { t:"intro", kozy:"타임라인에서 매일 마주치는 판단이지. 그런데 여기 조용한 도약이 하나 있어." },
@@ -290,7 +416,7 @@
         { t:"insight", kozy:"판단 기준이 또렷해졌지?", reframe:"많이 본 것과 맞는 것은 다른 축이야. 인기 대신 출처·근거를 따로 확인하면 돼." },
         { t:"wrap" },
       ] },
-    { missionId:"hi-ba-1", subject:"통계", tag:"Case 2 · 기본", badge:"🔗", badgeName:"인과파트너 획득!", note:"상관과 인과를 분리",
+    { missionId:"hi-ba-1", subject:"통계", stage:"기본", badge:"🔗", badgeName:"인과파트너 획득!", note:"상관과 인과를 분리",
       material:'"둘이 <span class="trig" data-t>함께 변했으니</span> 원인과 결과다."', trigGlow:true,
       steps:[
         { t:"intro", kozy:"통계·기사에서 가장 많이 숨는 도약이야. 오늘 이걸 잡아내면 눈이 트일 거야." },
@@ -311,7 +437,7 @@
         { t:"insight", kozy:"이제 통계가 다르게 보이지?", reframe:"함께 움직여도 인과는 아닐 수 있어. 제3의 요인·역방향·우연을 배제했는지부터 물어야 해." },
         { t:"wrap" },
       ] },
-    { missionId:"hi-sim-3", subject:"논증", tag:"Case 3 · 심화", badge:"🎓", badgeName:"권위해체파트너 획득!", note:"권위와 진리를 분리",
+    { missionId:"hi-sim-3", subject:"논증", stage:"심화", badge:"🎓", badgeName:"권위해체파트너 획득!", note:"권위와 진리를 분리",
       material:'"전문가 의견이니 <span class="trig" data-t>반론의 여지가 없다</span>."', trigGlow:true,
       steps:[
         { t:"intro", kozy:"권위 앞에서 생각을 멈추기 쉬워. 근데 전문가도 '전제' 위에서 말해." },
@@ -332,6 +458,72 @@
         { t:"insight", kozy:"존중하되 멈추지 않게 됐지?", reframe:"전문가도 전제 위에서 말해. 그 전제와 근거를 검증하면, 존중하면서도 반론의 문이 열려." },
         { t:"wrap" },
       ] },
+
+    { missionId:"hi-in-4", subject:"토론", stage:"입문", badge:"⚖️", badgeName:"입증파트너 획득!", note:"침묵과 진실을 분리",
+      material:'"아무도 반박하지 않았으니 그 주장은 <span class="trig" data-t>참이다</span>."', trigGlow:true,
+      steps:[
+        { t:"intro", kozy:"토론이나 회의에서 자주 벌어지는 장면이야. 근데 '반박이 없다'는 게 정말 '맞다'는 증거일까?" },
+        { t:"choice", kozy:"이 말은 '반박 없음'을 무엇의 증거로 삼았지?",
+          q:"증거로 삼은 걸 골라봐", opts:[
+            { label:"주장이 참임", ok:true, fb:"맞아. '아무도 반박 안 함'을 '참'의 증거로 삼았어." },
+            { label:"주장이 재미있음", ok:false, fb:"재미 얘긴 없어. '참이다'에 집중해봐." },
+            { label:"발표자가 유명함", ok:false, fb:"유명함도 아니야. '참'으로 단정한 게 핵심이야." },
+          ] },
+        { t:"reveal", kozy:"그 단정이 이 전제야.", premise:"'반박 없음 = 참' — 아무도 반박하지 않았다는 이유만으로 주장을 사실로 단정하는 전제(침묵 논증의 오류)" },
+        { t:"choice", kozy:"반박이 없는 이유로 더 가능성 높은 건?",
+          q:"더 가능성 높은 이유를 골라봐", opts:[
+            { label:"몰라서, 관심 없어서, 말할 기회가 없어서", ok:true, fb:"맞아. 침묵에는 여러 이유가 있어 — '동의'는 그중 하나일 뿐이야." },
+            { label:"모두가 동의하기 때문이다", ok:false, fb:"그게 방금 찾은 전제야." },
+            { label:"주장이 완벽하기 때문이다", ok:false, fb:"완벽함을 증명한 게 아니라, 그냥 반박이 없었을 뿐이야." },
+          ] },
+        { t:"blast", kozy:"'반박 없음 = 참' 전제, 폭파!" },
+        { t:"insight", kozy:"토론을 보는 눈이 날카로워졌지?", reframe:"침묵은 증거가 아니야. 주장이 참인지는 반박의 유무가 아니라 근거로 검증해야 해 — 입증의 책임은 주장한 쪽에 있어." },
+        { t:"wrap" },
+      ] },
+
+    { missionId:"hi-ba-3", subject:"과학", stage:"기본", badge:"🧪", badgeName:"검증파트너 획득!", note:"단일 경험과 일반화된 사실을 분리",
+      material:'"한 번 먹고 나았으니 <span class="trig" data-t>이 약은 효과가 있다</span>."', trigGlow:true,
+      steps:[
+        { t:"intro", kozy:"건강 정보에서 정말 자주 보는 문장이야. 그런데 '한 번'이 '항상'이 될 수 있을까?" },
+        { t:"choice", kozy:"이 말은 '한 번의 경험'을 무엇으로 넓혀버렸지?",
+          q:"넓혀버린 걸 골라봐", opts:[
+            { label:"일반적으로 효과 있는 사실", ok:true, fb:"맞아. 사례 하나를 전체 결론으로 넓혀버렸어." },
+            { label:"가격이 비쌈", ok:false, fb:"가격 얘긴 없어. '효과 있다'에 집중해봐." },
+            { label:"부작용이 없음", ok:false, fb:"부작용 얘기도 아니야. '일반화'가 핵심이야." },
+          ] },
+        { t:"reveal", kozy:"그 넓힘이 이 전제야.", premise:"'한 사례 = 일반적 사실' — 한 번의 경험만으로 전체에 적용되는 결론을 내리는 전제(작은 표본의 오류)" },
+        { t:"choice", kozy:"정말 효과가 있는지 확인하려면 뭐가 더 필요할까?",
+          q:"더 필요한 걸 골라봐", opts:[
+            { label:"여러 사람 대상의 반복된 검증(임상시험 등)", ok:true, fb:"맞아! 한 사람의 경험은 우연일 수도 있어." },
+            { label:"먹은 사람이 몇 명인지는 안 중요하다", ok:false, fb:"그게 방금 찾은 전제야." },
+            { label:"나았다는 느낌만 있으면 충분하다", ok:false, fb:"느낌은 증거가 아니야 — 다른 원인일 수도 있어." },
+          ] },
+        { t:"blast", kozy:"'한 사례 = 일반적 사실' 전제, 폭파!" },
+        { t:"insight", kozy:"정보를 걸러보는 눈이 생겼지?", reframe:"한 번 나았다고 그 약이 효과가 있다고 단정할 수는 없어. 우연, 자연 회복, 다른 원인일 수도 있으니 반복된 검증이 필요해." },
+        { t:"wrap" },
+      ] },
+
+    { missionId:"hi-sim-4", subject:"소비", stage:"심화", badge:"🏷️", badgeName:"소비파트너 획득!", note:"가격과 품질을 분리",
+      material:'"가격이 비싸니까 <span class="trig" data-t>품질이 좋을 거야</span>."', trigGlow:true,
+      steps:[
+        { t:"intro", kozy:"쇼핑할 때 무의식중에 하는 판단이야. 근데 가격과 품질은 정말 항상 같이 갈까?" },
+        { t:"choice", kozy:"이 말은 '높은 가격'을 무엇의 증거로 삼았지?",
+          q:"증거로 삼은 걸 골라봐", opts:[
+            { label:"높은 품질", ok:true, fb:"맞아. '비쌈'을 '좋음'의 증거로 삼았어." },
+            { label:"인기가 많음", ok:false, fb:"인기 얘긴 없어. '품질'에 집중해봐." },
+            { label:"오래 쓸 수 있음", ok:false, fb:"내구성 얘기도 아니야. '품질'로 단정한 게 핵심이야." },
+          ] },
+        { t:"reveal", kozy:"그 연결이 이 전제야.", premise:"'가격 = 품질' — 가격이 높다는 이유만으로 품질이 좋다고 여기는 전제" },
+        { t:"choice", kozy:"진짜 품질을 판단하려면 뭘 봐야 할까?",
+          q:"더 맞는 방법을 골라봐", opts:[
+            { label:"실제 성능·후기·소재 등 근거", ok:true, fb:"맞아! 가격표가 아니라 실제 근거를 봐야 해." },
+            { label:"가격표 숫자만 보면 된다", ok:false, fb:"그게 방금 찾은 전제야." },
+            { label:"브랜드 이름만 보면 된다", ok:false, fb:"브랜드도 가격처럼 또 다른 지름길일 뿐이야." },
+          ] },
+        { t:"blast", kozy:"'가격 = 품질' 전제, 폭파!" },
+        { t:"insight", kozy:"현명한 소비자에 가까워졌지?", reframe:"비싸다고 항상 좋은 건 아니야. 광고비나 브랜드값이 껴 있을 수도 있어 — 성능과 후기 같은 진짜 근거로 판단하면 돼." },
+        { t:"wrap" },
+      ] },
   ];
 
   function pickTrack(){
@@ -343,7 +535,16 @@
     }catch(e){}
     return "중등";
   }
-  const LESSONS = LESSON_SETS[pickTrack()] || LESSON_SETS["중등"];
+  // 요일별 로테이션: 트랙별 사례 풀(6개)에서 날짜 기준으로 3개를 연속 윈도우로 선택
+  // → 하루하루 다른 조합/순서가 보이고, 6일 주기로 한 바퀴 돈다 ('오늘의 사건'이 실제로 매일 바뀜)
+  function pickDailySet(pool){
+    if (!pool || pool.length <= 3) return pool;
+    const dayStart = new Date(new Date().getFullYear(), 0, 0);
+    const doy = Math.floor((Date.now() - dayStart) / 86400000);
+    const start = doy % pool.length;
+    return [0, 1, 2].map(i => pool[(start + i) % pool.length]);
+  }
+  const LESSONS = pickDailySet(LESSON_SETS[pickTrack()] || LESSON_SETS["중등"]);
 
   // 비구독자에게는 '무료 체험판' 라벨로 기대치를 관리 (daily는 의도적 쇼케이스)
   (function(){
@@ -367,7 +568,7 @@
   function loadLesson(){
     const L = LESSONS[li];
     si = 0; answered = false; qLoggedThisLesson = false;
-    $("caseTag").textContent = L.tag;
+    $("caseTag").textContent = `Case ${li+1} · ${L.stage}`;
     $("caseCount").textContent = `${li+1} / ${LESSONS.length}`;
     $("material").innerHTML = L.material;
     $("materialCard").classList.remove("shake");

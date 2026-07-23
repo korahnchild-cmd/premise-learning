@@ -4,17 +4,11 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>PBS 학습법 · 고객센터 — 자주 묻는 질문</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/tailwind-b.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-<script>
-  tailwind.config = { theme: { extend: {
-    colors: { ink:"#0A0E17", body:"#525A69", faint:"#6B7688", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", night:"#0A0E17" },
-    fontFamily: { sans:["Pretendard","Inter","sans-serif"] }, borderRadius:{ "4xl":"2rem","5xl":"2.5rem" },
-  }}};
-</script>
 <style>
   body{ font-family:"Pretendard","Inter",sans-serif; -webkit-font-smoothing:antialiased; letter-spacing:-.012em; background:#F5F6F4; color:#0A0E17; }
   h1,h2{ letter-spacing:-.03em; }
@@ -43,7 +37,7 @@
   @keyframes tqPulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(10,102,255,.28); } 50%{ box-shadow:0 0 0 6px rgba(10,102,255,0); } }
   @media (prefers-reduced-motion:reduce){
     *{animation:none!important}
-    #topQs button:first-child{ animation:tqPulse 2.4s ease-in-out infinite !important; }
+    #topQs button:first-child{ animation:tqPulse 2.4s ease-in-out 1 forwards !important; }
   }
 </style>
 </head>
@@ -123,7 +117,7 @@
 
     { cat:"요금·결제", q:"무료 체험이 있나요?", a:"네, 신용카드 없이 7일 동안 무료로 체험할 수 있어요. 먼저 충분히 경험해 보고 결정하시면 됩니다." },
     { cat:"요금·결제", q:"요금제는 어떻게 되나요?", a:"베이직과 프리미엄 두 가지가 있어요. 6개월 코스 기준 각각 월 39,000원·59,000원이고, 약정 없이 월 단위로도 시작할 수 있습니다. 7일 무료 체험 후 선택하시면 돼요." },
-    { cat:"요금·결제", q:"효과가 없으면 어쩌죠? 환불되나요?", a:"PBS 학습법은 단기 점수를 보장하지 않기 때문에, 결과를 조건으로 한 환불도 두지 않았어요. 대신 리스크를 세 가지로 줄였습니다 — ①7일 무료 체험으로 먼저 충분히 경험하고, ②약정에 가두지 않아 월 단위로 시작하고 언제든 1분이면 해지할 수 있으며, ③매주 성장 리포트로 아이의 변화를 투명하게 확인하실 수 있어요. 생각의 습관은 6개월에 걸쳐 자라기에, 저희는 '언제든 멈출 수 있는 자유'로 신뢰를 드립니다." },
+    { cat:"요금·결제", q:"효과가 없으면 어쩌죠? 환불되나요?", a:"PBS 학습법은 단기 점수를 보장하지 않기 때문에, 결과를 조건으로 한 환불(예: '효과 없으면 100% 환불')은 두지 않았어요. 대신 리스크를 세 가지로 줄였습니다 — ①7일 무료 체험으로 먼저 충분히 경험하고(체험 기간엔 결제가 발생하지 않아요), ②약정에 가두지 않아 월 단위로 시작하고 언제든 1분이면 해지할 수 있으며, ③매주 성장 리포트로 아이의 변화를 투명하게 확인하실 수 있어요. 이미 이용한 기간의 요금은 환불되지 않지만, 6개월 코스를 선결제하신 경우 중도 해지 시 사용하지 않은 잔여 기간에 대한 금액은 관련 법령에 따라 환급해드립니다(세부 기준은 <a href=\"terms.html\" class=\"text-point underline\">이용약관</a> 제9조 참조). 생각의 습관은 6개월에 걸쳐 자라기에, 저희는 '언제든 멈출 수 있는 자유'로 신뢰를 드립니다." },
     { cat:"요금·결제", q:"해지가 복잡하지 않나요?", a:"마이페이지에서 1분이면 해지할 수 있어요. 전화 통화나 상담원 연결 없이 클릭 몇 번으로 끝납니다. 약정 없이 월 단위로 쓰다가 멈추셔도 됩니다." },
 
     { cat:"계정·기술", q:"어떤 기기에서 쓸 수 있나요?", a:"웹 브라우저와 모바일 모두 지원해요. 같은 계정으로 로그인하면 어느 기기에서든 파트너 노트와 진도가 이어집니다." },

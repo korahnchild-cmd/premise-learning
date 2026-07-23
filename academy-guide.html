@@ -5,17 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>PBS 학습법 · 학원 병행 가이드</title>
 <meta name="description" content="학원은 그대로 두고, PBS 학습법을 하루 10분 더하는 방법." />
-<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/tailwind-a.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-<script>
-  tailwind.config = { theme: { extend: {
-    colors: { ink:"#0A0E17", body:"#525A69", faint:"#7A8499", point:"#0A66FF", pointdeep:"#0B3ACC", accent:"#FFB800", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", night:"#0A0E17" },
-    fontFamily: { sans:["Pretendard","Inter","sans-serif"] }, borderRadius:{ "4xl":"2rem","5xl":"2.5rem" },
-  }}};
-</script>
 <style>
   body{ font-family:"Pretendard","Inter",sans-serif; -webkit-font-smoothing:antialiased; letter-spacing:-.012em; background:#fff; color:#0A0E17; }
   h1,h2{ letter-spacing:-.03em; }
@@ -38,7 +32,7 @@
   .hl-sweep{ position:relative; display:inline-block; }
   .hl-sweep::after{ content:""; position:absolute; left:0; right:0; bottom:-3px; height:3px; background:#0A66FF; border-radius:2px; transform:scaleX(0); transform-origin:left; animation:hlSweep 3.6s ease-in-out infinite; }
   @keyframes hlSweep{ 0%,10%{ transform:scaleX(0); opacity:1; } 38%,72%{ transform:scaleX(1); opacity:1; } 88%,100%{ transform:scaleX(1); opacity:0; } }
-  @media (prefers-reduced-motion:reduce){ *{animation:none!important} .hl-sweep::after{ animation:hlSweep 3.6s ease-in-out infinite !important; } }
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important} .hl-sweep::after{ animation:hlSweep 3.6s ease-in-out 1 forwards !important; } }
 </style>
 </head>
 <body>

@@ -4,17 +4,11 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>PBS 학습법 · 입문 — 전제 알아차리기</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/tailwind-b.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-<script>
-  tailwind.config = { theme: { extend: {
-    colors: { ink:"#0A0E17", body:"#525A69", faint:"#6B7688", point:"#0A66FF", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1" },
-    fontFamily: { sans:["Pretendard","Inter","sans-serif"] }, borderRadius:{ "4xl":"2rem","5xl":"2.5rem" },
-  }}};
-</script>
 <style>
   body { font-family:"Pretendard","Inter",sans-serif; -webkit-font-smoothing:antialiased; letter-spacing:-.012em; background:#F5F6F4; color:#0A0E17; }
   h1,h2,h3 { letter-spacing:-.03em; } .display{ line-height:1.08; }
@@ -53,9 +47,9 @@
   .lvl-new{ font-size:12px; font-weight:700; color:#0A66FF; margin-top:6px; animation:lpNewIn 4.6s ease-in-out infinite; }
   @keyframes lpNewIn{ 0%,58%{ opacity:0; transform:translateY(4px); } 72%,100%{ opacity:1; transform:translateY(0); } }
   @media (prefers-reduced-motion:reduce){
-    .lvl-old{ animation:lpOldFade 4.6s ease-in-out infinite !important; }
-    .lvl-old::after{ animation:lpStrike 4.6s ease-in-out infinite !important; }
-    .lvl-new{ animation:lpNewIn 4.6s ease-in-out infinite !important; }
+    .lvl-old{ animation:lpOldFade 4.6s ease-in-out 1 forwards !important; }
+    .lvl-old::after{ animation:lpStrike 4.6s ease-in-out 1 forwards !important; }
+    .lvl-new{ animation:lpNewIn 4.6s ease-in-out 1 forwards !important; }
   }
 
   /* 기르는 힘 아이콘 브리딩 */
@@ -65,10 +59,10 @@
   .lvl-grid > div:nth-child(4) svg{ animation:lvlPulse 2.6s ease-in-out infinite .9s; }
   @keyframes lvlPulse{ 0%,100%{ transform:scale(1); opacity:1; } 50%{ transform:scale(1.14); opacity:.7; } }
   @media (prefers-reduced-motion:reduce){
-    .lvl-grid > div:nth-child(1) svg{ animation:lvlPulse 2.6s ease-in-out infinite !important; }
-    .lvl-grid > div:nth-child(2) svg{ animation:lvlPulse 2.6s ease-in-out infinite .3s !important; }
-    .lvl-grid > div:nth-child(3) svg{ animation:lvlPulse 2.6s ease-in-out infinite .6s !important; }
-    .lvl-grid > div:nth-child(4) svg{ animation:lvlPulse 2.6s ease-in-out infinite .9s !important; }
+    .lvl-grid > div:nth-child(1) svg{ animation:lvlPulse 2.6s ease-in-out 1 forwards !important; }
+    .lvl-grid > div:nth-child(2) svg{ animation:lvlPulse 2.6s ease-in-out 1 forwards .3s !important; }
+    .lvl-grid > div:nth-child(3) svg{ animation:lvlPulse 2.6s ease-in-out 1 forwards .6s !important; }
+    .lvl-grid > div:nth-child(4) svg{ animation:lvlPulse 2.6s ease-in-out 1 forwards .9s !important; }
   }
 </style>
 </head>
@@ -156,7 +150,7 @@
 
 <div class="modal" id="modal">
   <div class="modal-bg" onclick="closeModal()"></div>
-  <div class="modal-panel card p-7 md:p-9">
+  <div class="modal-panel card p-7 md:p-9" role="dialog" aria-modal="true" aria-labelledby="mTitle" tabindex="-1">
     <div class="flex items-start justify-between">
       <div><p class="text-[11px] font-semibold tracking-widest uppercase text-point" id="mUnit"></p><h3 class="text-[18px] font-bold text-ink mt-0.5" id="mTitle"></h3></div>
       <button onclick="closeModal()" class="text-faint hover:text-ink text-[22px] leading-none">×</button>
@@ -218,9 +212,38 @@
     if(allDone){ b.textContent = "다음 단계: 기본 →"; b.href = "level-basic.html"; }
     else { b.textContent = "이어서 시작하기"; b.href = "daily.html"; }
   }
-  function openModal(m,i){ $("mUnit").textContent = `미션 ${String(i+1).padStart(2,"0")} · 소재 ${m.src}`; $("mTitle").textContent=m.title; $("mMyth").textContent=m.myth; $("mPremise").textContent=m.premise; $("mReframe").textContent=m.reframe; $("modal").classList.add("open"); }
-  function closeModal(){ $("modal").classList.remove("open"); } window.closeModal=closeModal;
-  document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeModal(); });
+  let modalLastFocus = null;
+  function getFocusable(container){
+    return Array.from(container.querySelectorAll('a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])')).filter(el => el.offsetParent !== null);
+  }
+  function openModal(m,i){
+    $("mUnit").textContent = `미션 ${String(i+1).padStart(2,"0")} · 소재 ${m.src}`; $("mTitle").textContent=m.title; $("mMyth").textContent=m.myth; $("mPremise").textContent=m.premise; $("mReframe").textContent=m.reframe;
+    modalLastFocus = document.activeElement;
+    $("modal").classList.add("open");
+    document.body.style.overflow = "hidden";
+    const panel = $("modal").querySelector(".modal-panel");
+    const focusables = getFocusable(panel);
+    (focusables[0] || panel).focus();
+  }
+  function closeModal(){
+    $("modal").classList.remove("open");
+    document.body.style.overflow = "";
+    if (modalLastFocus && modalLastFocus.focus) modalLastFocus.focus();
+  }
+  window.closeModal=closeModal;
+  document.addEventListener("keydown", e=>{
+    const modalEl = $("modal");
+    if (!modalEl.classList.contains("open")) return;
+    if (e.key === "Escape") { closeModal(); return; }
+    if (e.key === "Tab") {
+      const panel = modalEl.querySelector(".modal-panel");
+      const focusables = getFocusable(panel);
+      if (focusables.length === 0) return;
+      const first = focusables[0], last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
 
   $("pvBtn").addEventListener("click", ()=>{ const t=$("pvTrig"); t.style.color="#0A66FF"; t.style.fontWeight="800"; $("pvReveal").classList.remove("hidden"); $("pvBtn").textContent="이게 '전제 알아차리기'입니다"; $("pvBtn").disabled=true; $("pvBtn").style.opacity=".55"; });
 

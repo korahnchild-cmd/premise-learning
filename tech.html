@@ -5,17 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>PBS 학습법 · 적응형 전제탐지 시스템</title>
 <meta name="description" content="아이마다 다른 사고의 빈틈을 찾아주는 적응형 전제탐지 시스템 (특허 출원 중)." />
-<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/tailwind-a.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-<script>
-  tailwind.config = { theme: { extend: {
-    colors: { ink:"#0A0E17", body:"#525A69", faint:"#7A8499", point:"#0A66FF", pointdeep:"#0B3ACC", accent:"#FFB800", line:"#ECEEF1", soft:"#F5F6F4", panel:"#F2F4F1", night:"#0A0E17" },
-    fontFamily: { sans:["Pretendard","Inter","sans-serif"] }, borderRadius:{ "4xl":"2rem","5xl":"2.5rem" },
-  }}};
-</script>
 <style>
   body{ font-family:"Pretendard","Inter",sans-serif; -webkit-font-smoothing:antialiased; letter-spacing:-.012em; background:#fff; color:#0A0E17; }
   h1,h2{ letter-spacing:-.03em; }
@@ -55,16 +49,16 @@
   .afx-bar1,.afx-bar2,.afx-bar3{ transform-box:fill-box; transform-origin:bottom; animation:afxBarGrow 6s ease-in-out infinite; }
   .afx-bar2{ animation-delay:.15s; } .afx-bar3{ animation-delay:.3s; }
   @keyframes afxBarGrow{ 0%,64%{ transform:scaleY(0); } 72%,90%{ transform:scaleY(1); } 96%,100%{ transform:scaleY(0); } }
-  @media (prefers-reduced-motion:reduce){ *{animation:none!important} .hl-sweep::after{ animation:hlSweep 3.6s ease-in-out infinite !important; }
-    .afx-step{ animation:afxStepPulse 6s ease-in-out infinite !important; }
-    .afx-arrow1{ animation:afxArrow1 6s ease-in-out infinite !important; }
-    .afx-step2{ animation:afxStep2Pulse 6s ease-in-out infinite !important; }
-    .afx-scanring{ animation:afxScan 6s ease-in-out infinite !important; }
-    .afx-arrow2{ animation:afxArrow2 6s ease-in-out infinite !important; }
-    .afx-step3{ animation:afxStep3Pulse 6s ease-in-out infinite !important; }
-    .afx-bar1{ animation:afxBarGrow 6s ease-in-out infinite !important; }
-    .afx-bar2{ animation:afxBarGrow 6s ease-in-out infinite !important; animation-delay:.15s !important; }
-    .afx-bar3{ animation:afxBarGrow 6s ease-in-out infinite !important; animation-delay:.3s !important; }
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important} .hl-sweep::after{ animation:hlSweep 3.6s ease-in-out 1 forwards !important; }
+    .afx-step{ animation:afxStepPulse 6s ease-in-out 1 forwards !important; }
+    .afx-arrow1{ animation:afxArrow1 6s ease-in-out 1 forwards !important; }
+    .afx-step2{ animation:afxStep2Pulse 6s ease-in-out 1 forwards !important; }
+    .afx-scanring{ animation:afxScan 6s ease-in-out 1 forwards !important; }
+    .afx-arrow2{ animation:afxArrow2 6s ease-in-out 1 forwards !important; }
+    .afx-step3{ animation:afxStep3Pulse 6s ease-in-out 1 forwards !important; }
+    .afx-bar1{ animation:afxBarGrow 6s ease-in-out 1 forwards !important; }
+    .afx-bar2{ animation:afxBarGrow 6s ease-in-out 1 forwards !important; animation-delay:.15s !important; }
+    .afx-bar3{ animation:afxBarGrow 6s ease-in-out 1 forwards !important; animation-delay:.3s !important; }
   }
 </style>
 </head>

@@ -1713,48 +1713,48 @@ var APPLICATION_LAB_ITEMS = [
   {
     "id": "al-hist-008",
     "subject": "역사",
-    "domain": "고대사",
+    "domain": "중세사",
     "track": "초등",
     "stage": "입문",
     "difficulty": 1,
     "finalSparkEligible": false,
-    "stem": "세종대왕이 만든 것 중 하나를 고르시오.",
+    "stem": "지우는 '세종대왕은 조선을 세운 첫 번째 왕이니까, 경복궁도 세종대왕이 지었을 거야'라고 말했다. 지우의 말에서 잘못된 전제는?",
     "choices": [
       {
         "label": "①",
-        "text": "한글",
+        "text": "세종대왕이 조선을 세운 첫 번째 왕이라는 것",
         "correct": true,
         "trapNote": ""
       },
       {
         "label": "②",
-        "text": "온돌",
+        "text": "경복궁이 조선의 궁궐이라는 것",
         "correct": false,
-        "trapNote": "온돌은 세종 이전부터 있던 전통 난방 방식 — 세종의 발명품이 아님"
+        "trapNote": "맞는 내용 — 틀린 전제를 찾는 문제인데 맞는 내용을 고름"
       },
       {
         "label": "③",
-        "text": "금속활자",
+        "text": "세종대왕이 조선의 왕이었다는 것",
         "correct": false,
-        "trapNote": "고려 시대"
+        "trapNote": "맞는 내용"
       },
       {
         "label": "④",
-        "text": "경복궁",
+        "text": "지우가 세종대왕에 대해 말했다는 것",
         "correct": false,
-        "trapNote": "태조 때 창건"
+        "trapNote": "논지와 무관한 선택"
       },
       {
         "label": "⑤",
-        "text": "모름",
+        "text": "지우의 말은 전부 맞다",
         "correct": false,
-        "trapNote": "회피"
+        "trapNote": "조선을 세우고 경복궁을 지은 사람은 태조 이성계 — 세종대왕이 아님"
       }
     ],
-    "hiddenPremise": "세종대왕의 업적(한글 창제)을 아는 것. 시대를 혼동하면 ③(고려)이나 ④(조선 건국).",
-    "commonMistake": "④를 고르는 학생 — 경복궁을 세종 때 지은 것으로 착각. 경복궁은 태조(1395).",
-    "lukaExplain": "세종대왕이 만든 건 한글이야. 경복궁은 태조 이성계가 지었고, 금속활자는 고려 때야. 왕과 업적을 정확히 연결하는 게 중요해.",
-    "reframe": "역사적 인물과 업적을 정확히 연결하는 기초 지식. '조선 왕 = 다 같은 시기'라는 전제 깨기."
+    "hiddenPremise": "'유명하고 훌륭한 왕이니까 나라도 세우고 대표 건축물도 지었을 것'이라는 비약. 업적을 한 사람에게 몰아주는 전제.",
+    "commonMistake": "②나 ③을 고르는 학생 — 경복궁·세종대왕에 대한 개별 사실은 맞기 때문에 문장 전체를 사실로 받아들임.",
+    "lukaExplain": "지우 말에서 진짜 틀린 지점은 '세종대왕이 조선을 세운 첫 번째 왕'이라는 전제야. 조선을 세우고 경복궁을 지은 사람은 태조 이성계이고, 세종대왕은 그로부터 4번째 왕이야. 세종대왕이 만든 건 한글이지, 나라나 궁궐이 아니야.",
+    "reframe": "문장 속에 맞는 사실과 틀린 전제가 섞여 있을 때, 어느 부분이 잘못된 출발점인지 짚어내는 능력."
   },
   {
     "id": "al-hist-009",
@@ -3880,19 +3880,19 @@ var APPLICATION_LAB_ITEMS_HIST_ELEM = [
   {
     "id": "al-hist-018", "subject": "역사", "domain": "중세사", "track": "초등", "stage": "입문",
     "difficulty": 1, "finalSparkEligible": false,
-    "stem": "고려를 세운 사람은?",
+    "stem": "서연이는 '고려는 이성계가 세운 나라니까, 조선이랑 비슷한 시기에 있었을 거야'라고 말했다. 서연이의 말에서 잘못된 전제는?",
     "passage": "",
     "choices": [
-      { "label": "①", "text": "왕건", "correct": true, "trapNote": "" },
-      { "label": "②", "text": "이성계", "correct": false, "trapNote": "조선을 세운 인물과 혼동" },
-      { "label": "③", "text": "김유신", "correct": false, "trapNote": "신라의 장군과 혼동" },
-      { "label": "④", "text": "세종대왕", "correct": false, "trapNote": "조선의 왕과 혼동" },
-      { "label": "⑤", "text": "광개토대왕", "correct": false, "trapNote": "고구려의 왕과 혼동" }
+      { "label": "①", "text": "고려를 이성계가 세웠다는 것", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "고려와 조선이 이름이 다른 나라라는 것", "correct": false, "trapNote": "의미 없는 선택지" },
+      { "label": "③", "text": "고려가 옛날 나라라는 것", "correct": false, "trapNote": "맞는 내용이지만 핵심 오류는 아님" },
+      { "label": "④", "text": "서연이가 고려에 대해 말했다는 것", "correct": false, "trapNote": "논지와 무관" },
+      { "label": "⑤", "text": "서연이의 말은 전부 맞다", "correct": false, "trapNote": "고려는 왕건이 세웠고, 조선보다 훨씬 앞선 시대의 나라 — 전부 맞다는 건 틀림" }
     ],
-    "hiddenPremise": "'왕'이라는 호칭이 붙은 유명한 인물이면 나라를 세웠을 거라 짐작하는 전제.",
-    "commonMistake": "②를 고르는 학생 — 이성계가 세운 나라(조선)와 고려를 혼동.",
-    "lukaExplain": "고려는 왕건이 세운 나라야. 조선을 세운 사람은 이성계고. 두 나라 모두 '건국자'가 있는데, 이름이랑 나라를 짝지어서 기억해두면 헷갈리지 않아 — 왕건→고려, 이성계→조선.",
-    "reframe": "각 왕조의 건국자를 정확히 매칭하는 능력."
+    "hiddenPremise": "건국자를 헷갈리면 그 나라가 존재했던 시기까지 함께 잘못 추측하게 되는 전제. '이성계=조선'이라는 연결이 강해서 이성계가 나오면 곧 조선 시대로 착각.",
+    "commonMistake": "③이나 ⑤를 고르는 학생 — 고려가 옛날 나라라는 것까지는 맞다고 느껴서 문장 전체를 맞다고 판단.",
+    "lukaExplain": "서연이가 착각한 시작점은 '고려를 이성계가 세웠다'는 전제야. 고려를 세운 사람은 왕건이고, 이성계는 그보다 한참 뒤에 고려를 무너뜨리고 조선을 세운 사람이야. 건국자를 잘못 짚으면 그다음에 이어지는 '비슷한 시기'라는 추측까지 함께 틀어져버려.",
+    "reframe": "하나의 잘못된 전제(건국자 오류)가 뒤따르는 추론(시대 추측)까지 연쇄적으로 틀리게 만든다는 것을 파악하는 능력."
   },
   {
     "id": "al-hist-019", "subject": "역사", "domain": "중세사", "track": "초등", "stage": "기본",
@@ -3914,36 +3914,36 @@ var APPLICATION_LAB_ITEMS_HIST_ELEM = [
   {
     "id": "al-hist-020", "subject": "역사", "domain": "중세사", "track": "초등", "stage": "입문",
     "difficulty": 1, "finalSparkEligible": false,
-    "stem": "조선을 세운 사람은?",
+    "stem": "하준이는 '세종대왕은 태조 이성계보다 먼저 조선을 다스린 왕이니까, 조선을 세운 사람은 세종대왕일 거야'라고 말했다. 하준이의 말에서 잘못된 전제는?",
     "passage": "",
     "choices": [
-      { "label": "①", "text": "이성계", "correct": true, "trapNote": "" },
-      { "label": "②", "text": "왕건", "correct": false, "trapNote": "고려를 세운 인물과 혼동" },
-      { "label": "③", "text": "세종대왕", "correct": false, "trapNote": "조선의 4대 왕(건국자 아님)과 혼동" },
-      { "label": "④", "text": "정약용", "correct": false, "trapNote": "조선 후기 실학자와 혼동" },
-      { "label": "⑤", "text": "을지문덕", "correct": false, "trapNote": "고구려의 장군과 혼동" }
+      { "label": "①", "text": "세종대왕이 태조 이성계보다 먼저 조선을 다스렸다는 것", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "세종대왕이 조선의 왕이었다는 것", "correct": false, "trapNote": "맞는 내용" },
+      { "label": "③", "text": "태조 이성계가 조선의 왕이었다는 것", "correct": false, "trapNote": "맞는 내용" },
+      { "label": "④", "text": "하준이가 조선의 왕들에 대해 말했다는 것", "correct": false, "trapNote": "논지와 무관" },
+      { "label": "⑤", "text": "하준이의 말은 전부 맞다", "correct": false, "trapNote": "세종대왕은 태조보다 뒤(4대 왕)이며, 조선을 세운 사람은 태조 이성계" }
     ],
-    "hiddenPremise": "조선의 유명한 인물이면 누구나 건국자일 수 있다고 착각하는 전제. 세종대왕은 조선의 왕이지만 나라를 세운 사람은 아님(4대 왕).",
-    "commonMistake": "③을 고르는 학생 — 세종대왕이 조선의 가장 유명한 왕이라 건국자로 착각.",
-    "lukaExplain": "조선을 세운 사람은 이성계(태조)야. 세종대왕은 조선의 4번째 왕으로, 나라를 세운 게 아니라 한글을 만드는 등 나라를 더 발전시킨 왕이지. '유명하다'와 '건국했다'는 다른 얘기야.",
-    "reframe": "왕조의 건국자와 후대의 유명한 왕을 구분하는 능력."
+    "hiddenPremise": "왕의 순서를 거꾸로 알면, 누가 나라를 세웠는지도 잘못 짚게 되는 전제. '태조'라는 호칭이 익숙하지 않아 세종대왕을 더 앞선 왕으로 착각.",
+    "commonMistake": "②나 ③을 고르는 학생 — 두 왕 모두 조선의 왕이었다는 사실 자체는 맞기 때문에 문장 전체를 사실로 받아들임.",
+    "lukaExplain": "하준이가 틀린 지점은 '세종대왕이 태조보다 먼저 다스렸다'는 순서야. 실제로는 태조 이성계가 조선을 세운 첫 번째 왕이고, 세종대왕은 그 뒤 4번째 왕이야. 왕의 순서를 정확히 알아야 누가 나라를 세웠는지도 헷갈리지 않아.",
+    "reframe": "왕위의 순서(1대, 4대 등)를 정확히 알아야 건국자를 올바르게 짚을 수 있다는 것을 이해하는 능력."
   },
   {
     "id": "al-hist-021", "subject": "역사", "domain": "중세사", "track": "초등", "stage": "기본",
     "difficulty": 2, "finalSparkEligible": true,
-    "stem": "세종대왕이 만든 것으로 옳은 것은?",
+    "stem": "민서는 '거북선은 조선을 대표하는 발명품이니까, 조선을 대표하는 왕인 세종대왕이 만들었을 거야'라고 말했다. 민서의 말에서 잘못된 전제는?",
     "passage": "",
     "choices": [
-      { "label": "①", "text": "훈민정음(한글)", "correct": true, "trapNote": "" },
-      { "label": "②", "text": "팔만대장경", "correct": false, "trapNote": "고려시대 제작물과 혼동" },
-      { "label": "③", "text": "거북선", "correct": false, "trapNote": "이순신과 관련된 것과 혼동" },
-      { "label": "④", "text": "첨성대", "correct": false, "trapNote": "신라시대 유물과 혼동" },
-      { "label": "⑤", "text": "석굴암", "correct": false, "trapNote": "통일신라시대 유물과 혼동" }
+      { "label": "①", "text": "조선을 대표하는 발명품은 조선을 대표하는 왕이 만들었을 것이라는 것", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "세종대왕이 조선을 대표하는 왕이라는 것", "correct": false, "trapNote": "널리 인정되는 평가라 오류로 보기 어려움" },
+      { "label": "③", "text": "거북선이 조선시대에 사용됐다는 것", "correct": false, "trapNote": "맞는 내용" },
+      { "label": "④", "text": "민서가 거북선에 대해 말했다는 것", "correct": false, "trapNote": "논지와 무관" },
+      { "label": "⑤", "text": "민서의 말은 전부 맞다", "correct": false, "trapNote": "거북선은 임진왜란 때 이순신과 관련된 것으로, 세종대왕이 만든 게 아님(세종대왕은 훈민정음을 만듦)" }
     ],
-    "hiddenPremise": "유명한 우리 문화유산은 전부 세종대왕과 관련 있을 거라 짐작하는 전제.",
-    "commonMistake": "③을 고르는 학생 — 거북선도 조선시대 자랑스러운 발명품이라 세종대왕이 만들었을 거라 착각(실제로는 임진왜란 때 이순신).",
-    "lukaExplain": "세종대왕은 훈민정음(한글)을 만든 왕이야. 거북선은 그보다 훨씬 뒤, 임진왜란 때 이순신 장군과 관련된 거고. '조선시대 자랑스러운 것 = 세종대왕'이 아니라, 각각 누가 언제 만들었는지 따로 기억해야 해.",
-    "reframe": "같은 왕조 안에서도 시기별로 다른 인물의 업적을 구분하는 능력."
+    "hiddenPremise": "'그 나라를 대표하는 자랑스러운 것은 그 나라의 가장 유명한 왕이 만들었을 것'이라는 비약. 세종대왕(15세기)과 이순신(16세기 말)의 시대 차이를 무시.",
+    "commonMistake": "③이나 ⑤를 고르는 학생 — 거북선이 조선시대 것이라는 사실은 맞기 때문에 문장 전체를 참으로 판단.",
+    "lukaExplain": "민서 논리에서 진짜 틀린 지점은 '조선을 대표하는 것 = 세종대왕이 만든 것'이라는 전제야. 세종대왕이 만든 대표작은 훈민정음(한글)이고, 거북선은 그보다 약 150년 뒤 임진왜란 때 이순신 장군과 관련된 것이야. 같은 조선시대라고 해서 같은 사람의 업적은 아니야.",
+    "reframe": "같은 왕조 안에서도 시기가 다르면 관련 인물도 다르다는 것을 짚어, '대표성'만으로 만든 사람을 단정하지 않는 능력."
   },
   {
     "id": "al-hist-022", "subject": "역사", "domain": "근현대사", "track": "초등", "stage": "기본",
@@ -3965,36 +3965,36 @@ var APPLICATION_LAB_ITEMS_HIST_ELEM = [
   {
     "id": "al-hist-023", "subject": "역사", "domain": "근현대사", "track": "초등", "stage": "기본",
     "difficulty": 2, "finalSparkEligible": true,
-    "stem": "우리나라가 일본으로부터 광복을 맞이한 해는?",
+    "stem": "유진이는 '3·1 운동 때 사람들이 만세를 부르며 독립을 외쳤으니까, 그 해에 바로 광복이 됐을 거야'라고 말했다. 유진이의 말에서 잘못된 전제는?",
     "passage": "",
     "choices": [
-      { "label": "①", "text": "1945년", "correct": true, "trapNote": "" },
-      { "label": "②", "text": "1919년", "correct": false, "trapNote": "3·1 운동 연도와 혼동" },
-      { "label": "③", "text": "1950년", "correct": false, "trapNote": "6·25 전쟁 연도와 혼동" },
-      { "label": "④", "text": "1592년", "correct": false, "trapNote": "임진왜란 발발 연도와 혼동" },
-      { "label": "⑤", "text": "1897년", "correct": false, "trapNote": "대한제국 수립 연도와 혼동" }
+      { "label": "①", "text": "독립을 외친 해에 실제로 독립이 이뤄졌을 것이라는 것", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "3·1 운동 때 사람들이 만세를 불렀다는 것", "correct": false, "trapNote": "맞는 내용" },
+      { "label": "③", "text": "3·1 운동이 독립을 요구하는 운동이었다는 것", "correct": false, "trapNote": "맞는 내용" },
+      { "label": "④", "text": "유진이가 3·1 운동에 대해 말했다는 것", "correct": false, "trapNote": "논지와 무관" },
+      { "label": "⑤", "text": "유진이의 말은 전부 맞다", "correct": false, "trapNote": "3·1 운동은 1919년, 실제 광복은 1945년으로 26년 차이가 남" }
     ],
-    "hiddenPremise": "일본 관련 사건이면 3·1 운동과 광복을 같은 해라고 착각하는 전제. 3·1 운동(1919)과 광복(1945)은 26년 차이가 남.",
-    "commonMistake": "②를 고르는 학생 — 만세운동(3·1운동)과 실제 해방(광복)을 같은 사건으로 착각.",
-    "lukaExplain": "광복은 1945년 8월 15일이야. 3·1 운동은 그보다 훨씬 전인 1919년으로, 독립을 외친 사건이지 실제 독립은 아니었어. 외친 것과 실제로 이뤄진 것 사이에 시간 차이가 있다는 걸 기억해두면 헷갈리지 않아.",
-    "reframe": "독립을 요구한 사건과 실제 독립이 이뤄진 사건의 연도를 구분하는 능력."
+    "hiddenPremise": "'외침 = 실현'이라는 전제. 요구한 것과 실제로 이루어진 것 사이에 시간 차이가 있을 수 있다는 걸 생략.",
+    "commonMistake": "②나 ③을 고르는 학생 — 3·1 운동에 대한 설명 자체는 맞기 때문에 문장 전체를 사실로 받아들임.",
+    "lukaExplain": "유진이 말에서 틀린 전제는 '외친 해에 바로 이루어졌을 것'이라는 부분이야. 3·1 운동은 1919년, 실제 광복은 1945년이라 26년이나 차이가 나. 무언가를 요구했다고 해서 바로 그 자리에서 이뤄지는 게 아니라는 걸 기억해두면, 사건과 결과의 연도를 헷갈리지 않아.",
+    "reframe": "'요구한 시점'과 '실현된 시점'을 같다고 전제하지 않고 각각의 연도를 따로 확인하는 능력."
   },
   {
     "id": "al-hist-024", "subject": "역사", "domain": "근현대사", "track": "초등", "stage": "기본",
     "difficulty": 2, "finalSparkEligible": false,
-    "stem": "6·25 전쟁이 일어난 연도는?",
+    "stem": "재민이는 '6·25 전쟁이라는 이름은 전쟁이 끝난 날짜를 가리키는 거니까, 전쟁이 끝난 해가 1950년일 거야'라고 말했다. 재민이의 말에서 잘못된 전제는?",
     "passage": "",
     "choices": [
-      { "label": "①", "text": "1950년", "correct": true, "trapNote": "" },
-      { "label": "②", "text": "1945년", "correct": false, "trapNote": "광복 연도와 혼동" },
-      { "label": "③", "text": "1919년", "correct": false, "trapNote": "3·1 운동 연도와 혼동" },
-      { "label": "④", "text": "1953년", "correct": false, "trapNote": "휴전협정 연도와 혼동" },
-      { "label": "⑤", "text": "1961년", "correct": false, "trapNote": "5·16 군사정변 연도와 혼동" }
+      { "label": "①", "text": "6·25라는 이름이 전쟁이 끝난 날짜를 가리킨다는 것", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "6·25 전쟁이 우리나라에서 일어났다는 것", "correct": false, "trapNote": "맞는 내용" },
+      { "label": "③", "text": "전쟁에는 시작한 날과 끝난 날이 있다는 것", "correct": false, "trapNote": "맞는 내용" },
+      { "label": "④", "text": "재민이가 6·25 전쟁에 대해 말했다는 것", "correct": false, "trapNote": "논지와 무관" },
+      { "label": "⑤", "text": "재민이의 말은 전부 맞다", "correct": false, "trapNote": "6·25는 전쟁이 시작된 날짜(1950년 6월 25일)를 가리키며, 전쟁은 1953년 휴전협정으로 멈춤" }
     ],
-    "hiddenPremise": "전쟁의 시작 연도와 끝난(휴전) 연도를 같은 것으로 혼동하는 전제.",
-    "commonMistake": "④를 고르는 학생 — 6·25 전쟁이 끝난(휴전) 1953년을 시작 연도로 착각.",
-    "lukaExplain": "6·25 전쟁은 1950년 6월 25일에 시작됐어. 3년 가까이 이어지다가 1953년에 휴전협정으로 멈췄지 — 이건 '끝난' 해야. '6·25'라는 이름 자체가 시작된 날짜(6월 25일)를 가리킨다는 걸 알면 헷갈리지 않아.",
-    "reframe": "전쟁의 시작 연도와 종료(휴전) 연도를 구분하는 능력."
+    "hiddenPremise": "사건 이름에 붙은 날짜가 '끝난 날'을 의미할 거라는 잘못된 전제. 이름의 날짜가 시작점이라는 걸 확인하지 않음.",
+    "commonMistake": "②나 ③을 고르는 학생 — 전쟁에 대한 배경 설명 자체는 맞기 때문에 문장 전체를 사실로 받아들임.",
+    "lukaExplain": "재민이가 착각한 지점은 '6·25라는 이름이 끝난 날짜를 가리킨다'는 전제야. 실제로 6·25는 전쟁이 시작된 1950년 6월 25일을 가리키는 이름이고, 전쟁이 멈춘(휴전) 해는 1953년이야. 이름에 들어간 날짜가 항상 '끝'을 의미하지는 않는다는 걸 기억해두자.",
+    "reframe": "사건 이름에 포함된 날짜가 시작인지 끝인지를 확인 없이 단정하지 않는 능력."
   },
   {
     "id": "al-hist-025", "subject": "역사", "domain": "고대사", "track": "초등", "stage": "기본",
@@ -4016,19 +4016,19 @@ var APPLICATION_LAB_ITEMS_HIST_ELEM = [
   {
     "id": "al-hist-026", "subject": "역사", "domain": "고대사", "track": "초등", "stage": "기본",
     "difficulty": 2, "finalSparkEligible": false,
-    "stem": "광개토대왕은 어느 나라의 왕인가?",
+    "stem": "소율이는 '광개토대왕은 이름이 힘차게 들리니까, 나라 이름도 비슷하게 들리는 고려의 왕일 거야'라고 말했다. 소율이의 말에서 잘못된 전제는?",
     "passage": "",
     "choices": [
-      { "label": "①", "text": "고구려", "correct": true, "trapNote": "" },
-      { "label": "②", "text": "백제", "correct": false, "trapNote": "삼국 중 다른 나라와 혼동" },
-      { "label": "③", "text": "신라", "correct": false, "trapNote": "삼국 중 다른 나라와 혼동" },
-      { "label": "④", "text": "고려", "correct": false, "trapNote": "이름이 비슷한 후대 국가와 혼동" },
-      { "label": "⑤", "text": "발해", "correct": false, "trapNote": "고구려 멸망 이후 세워진 나라와 혼동" }
+      { "label": "①", "text": "이름이 비슷하게 들리는 나라(고구려-고려)는 서로 이어진 같은 나라일 것이라는 것", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "광개토대왕이 영토를 크게 넓힌 왕이라는 것", "correct": false, "trapNote": "맞는 내용" },
+      { "label": "③", "text": "고려라는 나라가 실제로 있었다는 것", "correct": false, "trapNote": "맞는 내용" },
+      { "label": "④", "text": "소율이가 광개토대왕에 대해 말했다는 것", "correct": false, "trapNote": "논지와 무관" },
+      { "label": "⑤", "text": "소율이의 말은 전부 맞다", "correct": false, "trapNote": "광개토대왕은 고구려의 왕이며, 고려는 고구려가 멸망하고 약 250년 뒤 왕건이 세운 별개의 나라" }
     ],
-    "hiddenPremise": "이름에 '고'가 들어가면 고려와 관련 있을 거라 착각하는 전제. 광개토대왕은 고구려의 왕으로, 고려와는 다른 나라.",
-    "commonMistake": "④를 고르는 학생 — '고구려'와 '고려'의 이름이 비슷해서 착각.",
-    "lukaExplain": "광개토대왕은 고구려의 왕이야. 영토를 크게 넓힌 걸로 유명하지. 고려는 그보다 한참 뒤에(고구려 멸망 후 200여 년 뒤) 왕건이 세운 완전히 다른 나라야. 이름이 비슷하다고 같은 나라가 아니라는 거 기억해두자.",
-    "reframe": "이름이 비슷한 왕과 국가를 정확한 시대에 배치하는 능력."
+    "hiddenPremise": "이름이 비슷하게 들리면 같은 나라이거나 이어진 나라라고 착각하는 전제. '고구려'와 '고려'는 실제로는 다른 시대의 다른 나라.",
+    "commonMistake": "②나 ③을 고르는 학생 — 광개토대왕과 고려에 대한 개별 사실은 맞기 때문에 문장 전체를 사실로 받아들임.",
+    "lukaExplain": "소율이가 틀린 지점은 '이름이 비슷하면 같은 계열의 나라'라는 전제야. 광개토대왕은 고구려의 왕이고, 고려는 고구려가 멸망한 뒤 약 250년이 지나 왕건이 세운 완전히 다른 나라야. 이름이 닮았다고 나라가 이어진 건 아니야.",
+    "reframe": "이름의 유사성과 실제 역사적 연속성을 구분해서, '비슷하게 들림'을 근거로 삼지 않는 능력."
   },
   {
     "id": "al-hist-027", "subject": "역사", "domain": "중세사", "track": "초등", "stage": "심화",
@@ -4050,19 +4050,19 @@ var APPLICATION_LAB_ITEMS_HIST_ELEM = [
   {
     "id": "al-hist-028", "subject": "역사", "domain": "고대사", "track": "초등", "stage": "기본",
     "difficulty": 2, "finalSparkEligible": false,
-    "stem": "첨성대는 어느 나라의 유물인가?",
+    "stem": "다은이는 '첨성대는 아주 오래된 유물이니까, 우리나라 최초의 나라인 고조선의 유물일 거야'라고 말했다. 다은이의 말에서 잘못된 전제는?",
     "passage": "",
     "choices": [
-      { "label": "①", "text": "신라", "correct": true, "trapNote": "" },
-      { "label": "②", "text": "백제", "correct": false, "trapNote": "삼국 중 다른 나라와 혼동" },
-      { "label": "③", "text": "고구려", "correct": false, "trapNote": "삼국 중 다른 나라와 혼동" },
-      { "label": "④", "text": "고려", "correct": false, "trapNote": "후대 국가와 혼동" },
-      { "label": "⑤", "text": "조선", "correct": false, "trapNote": "후대 국가와 혼동" }
+      { "label": "①", "text": "오래된 유물이면 가장 오래된 나라(고조선)의 것일 것이라는 것", "correct": true, "trapNote": "" },
+      { "label": "②", "text": "첨성대가 오래된 유물이라는 것", "correct": false, "trapNote": "맞는 내용" },
+      { "label": "③", "text": "고조선이 우리나라 최초의 국가라는 것", "correct": false, "trapNote": "맞는 내용" },
+      { "label": "④", "text": "다은이가 첨성대에 대해 말했다는 것", "correct": false, "trapNote": "논지와 무관" },
+      { "label": "⑤", "text": "다은이의 말은 전부 맞다", "correct": false, "trapNote": "첨성대는 신라의 천문 관측대로, 고조선보다 훨씬 뒤인 신라(경주)에서 만들어짐" }
     ],
-    "hiddenPremise": "오래된 유물이면 아무 옛날 나라나 다 가능하다고 짐작하는 전제. 첨성대는 신라의 천문 관측 시설로 정확히 알려져 있음.",
-    "commonMistake": "②·③을 고르는 학생 — 삼국시대 유물이라는 것만 기억하고 어느 나라인지는 확신 못함.",
-    "lukaExplain": "첨성대는 신라의 천문 관측대야. 별과 하늘을 관찰하기 위해 만들어졌다고 알려져 있어. 경주(신라의 수도)에 있다는 것도 함께 기억해두면 '신라=경주=첨성대'로 잘 안 헷갈려.",
-    "reframe": "유물의 소재지와 역사적 배경을 연결해 정확한 국가를 파악하는 능력."
+    "hiddenPremise": "'오래됨'의 정도를 비교하지 않고, 오래된 것은 다 가장 오래된 나라의 것이라 단정하는 전제. 첨성대도 오래됐지만 고조선(기원전 2333년 건국 전승)보다는 훨씬 후대(신라)의 것.",
+    "commonMistake": "②나 ③을 고르는 학생 — 각각의 사실은 맞기 때문에 연결된 문장 전체를 사실로 받아들임.",
+    "lukaExplain": "다은이가 틀린 지점은 '오래된 유물 = 가장 오래된 나라의 것'이라는 전제야. 첨성대는 분명 오래됐지만, 신라(경주)의 천문 관측대야. 고조선은 그보다 훨씬 이전에 있었던 나라라서, '오래됨'의 정도를 구체적으로 비교하지 않으면 이렇게 착각하기 쉬워.",
+    "reframe": "'오래됨'이라는 막연한 인상만으로 가장 오래된 대상과 연결짓지 않고, 정확한 시기를 확인하는 능력."
   },
   {
     "id": "al-hist-029", "subject": "역사", "domain": "근현대사", "track": "초등", "stage": "심화",
