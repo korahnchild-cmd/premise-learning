@@ -1,0 +1,16 @@
+{
+  "name": "functions",
+  "description": "PBS 학습법 — 카카오/네이버 로그인 브릿지 Cloud Functions",
+  "private": true,
+  "engines": { "node": "20" },
+  "main": "index.js",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^5.1.1"
+  }
+}

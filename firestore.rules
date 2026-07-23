@@ -1,0 +1,51 @@
+rules_version = '2';
+
+/* PBS 학습법 — Firestore 보안규칙
+   핵심 원칙: 학습 활동 기록(진도·배지·전제노트 등)은 본인이 직접 써도 위조 실익이 없어
+   허용하지만, 결제/구독(subscription) 데이터와 users 문서의 plan 필드는 클라이언트가
+   절대 못 건드리게 막는다. 그 값은 토스페이먼츠 웹훅을 받은 Cloud Function이
+   Admin SDK로만 써야 한다(Admin SDK는 이 규칙을 우회하므로 문제없이 동작함). */
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    match /users/{uid} {
+      allow read: if isOwner(uid);
+      allow create: if isOwner(uid)
+                    && !("plan" in request.resource.data);
+      allow update: if isOwner(uid)
+                    && !request.resource.data.diff(resource.data).affectedKeys().hasAny(["plan"]);
+      allow delete: if false;
+
+      // 결제/구독 상태 — 클라이언트 write 전면 금지, Cloud Function(Admin SDK)만 쓴다
+      match /subscription/{docId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
+      // PBS 캘린더 시험 일정 — 본인만 read/write (베이직 3개 제한은 Cloud Function/클라이언트에서 카운트 체크)
+      match /exams/{examId} {
+        allow read, write: if isOwner(uid);
+      }
+
+      // '발견한 전제' 로그 (report.html 소스)
+      match /premises/{id} {
+        allow read, write: if isOwner(uid);
+      }
+
+      // 데일리 미션 질문 기록 (report.html before/after 소스)
+      match /questionLog/{id} {
+        allow read, write: if isOwner(uid);
+      }
+    }
+
+    // 그 외 모든 경로는 기본 차단
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

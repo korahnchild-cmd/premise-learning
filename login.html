@@ -97,10 +97,21 @@
   </g></svg>`; }
   document.getElementById("kIcon").innerHTML = kozySVG();
 
-  // next: 로그인 후 이동할 페이지, mode: trial(무료체험) | checkout(바로결제) | plain
+  // 카카오/네이버는 이 페이지 자체를 Redirect URI로 등록해뒀음. client_id는 로그인 URL에
+  // 그대로 노출되는 공개 식별자라 상수로 둬도 안전함(비밀값은 Cloud Functions 쪽에만 있음).
+  const KAKAO_REST_API_KEY = "0cb21928fc35c5208313275e61c494a8";
+  const NAVER_CLIENT_ID = "oszEVpQJxCwTX02g6TBN";
+  const REDIRECT_URI = "https://pbslearning.co.kr/login.html";
+
   const params = new URLSearchParams(location.search);
-  const next = params.get("next") || "onboarding.html";
-  const mode = params.get("mode") || "";
+  const oauthCode = params.get("code");
+  const oauthState = params.get("state");
+  const oauthError = params.get("error");
+
+  // next: 로그인 후 이동할 페이지, mode: trial(무료체험) | checkout(바로결제) | plain
+  // 카카오/네이버는 리다이렉트 왕복 중 쿼리가 code/state로 덮이므로 sessionStorage로 들고 다님
+  const next = params.get("next") || sessionStorage.getItem("pbs_oauth_next") || "onboarding.html";
+  const mode = params.get("mode") || sessionStorage.getItem("pbs_oauth_mode") || "";
 
   if (mode === "checkout") {
     document.getElementById("headline").innerHTML = "로그인하고<br>결제를 계속하자";
@@ -110,36 +121,85 @@
     document.getElementById("subline").textContent = "신용카드 없이 바로 시작돼. 로그인은 체험 기록을 지켜주는 용도야.";
   }
 
-  // 이미 로그인 상태면 바로 next로
-  if (window.PremiseStore && PremiseStore.isLoggedIn()) {
-    location.replace(next);
-  }
-
   function showToast(text){
     const t = document.getElementById("toast");
     t.textContent = text;
     t.classList.add("show");
   }
 
-  async function loginWith(provider){
-    if (provider === "google") {
-      if (!window.PremiseAuth) { showToast("잠시 후 다시 시도해줘"); return; }
-      try {
-        const result = await PremiseAuth.signInWithGoogle();
-        const u = result.user;
-        PremiseStore.login("google", u.displayName || "구글 파트너", u.email || "");
-      } catch (e) {
-        if (e && (e.code === "auth/popup-closed-by-user" || e.code === "auth/cancelled-popup-request")) return;
-        console.error(e);
-        showToast("구글 로그인에 실패했어. 다시 시도해줘.");
-        return;
-      }
-    } else {
-      // 카카오/네이버는 Firebase 네이티브 미지원 — 별도 백엔드 연동 전까지 데모 상태 유지
-      PremiseStore.login(provider);
+  function randomState(){
+    return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : (String(Date.now()) + Math.random().toString(36).slice(2));
+  }
+
+  function startRedirectLogin(provider){
+    const state = randomState();
+    sessionStorage.setItem("pbs_oauth_provider", provider);
+    sessionStorage.setItem("pbs_oauth_state", state);
+    sessionStorage.setItem("pbs_oauth_next", next);
+    sessionStorage.setItem("pbs_oauth_mode", mode);
+
+    const url = provider === "kakao"
+      ? "https://kauth.kakao.com/oauth/authorize"
+        + "?client_id=" + encodeURIComponent(KAKAO_REST_API_KEY)
+        + "&redirect_uri=" + encodeURIComponent(REDIRECT_URI)
+        + "&response_type=code&state=" + encodeURIComponent(state)
+      : "https://nid.naver.com/oauth2.0/authorize"
+        + "?client_id=" + encodeURIComponent(NAVER_CLIENT_ID)
+        + "&redirect_uri=" + encodeURIComponent(REDIRECT_URI)
+        + "&response_type=code&state=" + encodeURIComponent(state);
+    location.href = url;
+  }
+
+  async function handleOAuthCallback(){
+    const provider = sessionStorage.getItem("pbs_oauth_provider");
+    const savedState = sessionStorage.getItem("pbs_oauth_state");
+    sessionStorage.removeItem("pbs_oauth_provider");
+    sessionStorage.removeItem("pbs_oauth_state");
+    sessionStorage.removeItem("pbs_oauth_next");
+    sessionStorage.removeItem("pbs_oauth_mode");
+    history.replaceState(null, "", location.pathname); // code/state를 주소창에서 지움
+
+    if (oauthError) { showToast("로그인이 취소됐어"); return; }
+    if (!provider || !savedState || savedState !== oauthState) {
+      showToast("로그인 확인에 실패했어. 다시 시도해줘.");
+      return;
     }
-    const label = provider === "google" ? "구글" : provider === "kakao" ? "카카오" : "네이버";
-    showToast(label + " 계정으로 로그인했어");
+    if (!window.PremiseAuth) { showToast("잠시 후 다시 시도해줘"); return; }
+
+    try {
+      const result = provider === "kakao"
+        ? await PremiseAuth.signInWithKakaoCode(oauthCode)
+        : await PremiseAuth.signInWithNaverCode(oauthCode, oauthState);
+      PremiseStore.login(provider, result.name || "", (result.user && result.user.email) || "");
+      showToast((provider === "kakao" ? "카카오" : "네이버") + " 계정으로 로그인했어");
+      setTimeout(()=>{ location.href = next; }, 550);
+    } catch (e) {
+      console.error(e);
+      showToast("로그인에 실패했어. 다시 시도해줘.");
+    }
+  }
+
+  if (oauthCode || oauthError) {
+    handleOAuthCallback();
+  } else if (window.PremiseStore && PremiseStore.isLoggedIn()) {
+    // 이미 로그인 상태면 바로 next로
+    location.replace(next);
+  }
+
+  async function loginWith(provider){
+    if (provider !== "google") { startRedirectLogin(provider); return; }
+    if (!window.PremiseAuth) { showToast("잠시 후 다시 시도해줘"); return; }
+    try {
+      const result = await PremiseAuth.signInWithGoogle();
+      const u = result.user;
+      PremiseStore.login("google", u.displayName || "구글 파트너", u.email || "");
+    } catch (e) {
+      if (e && (e.code === "auth/popup-closed-by-user" || e.code === "auth/cancelled-popup-request")) return;
+      console.error(e);
+      showToast("구글 로그인에 실패했어. 다시 시도해줘.");
+      return;
+    }
+    showToast("구글 계정으로 로그인했어");
     setTimeout(()=>{ location.href = next; }, 550);
   }
 </script>
