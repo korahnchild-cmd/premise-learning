@@ -52,6 +52,9 @@
   /* reduced-motion이면 CSS 데코 애니메이션만 정지(레이더 강조 깜빡임은 JS가 접근성 고려해 별도 처리) */
   @media (prefers-reduced-motion:reduce){ .kw, .fadein{ animation:none!important } }
 
+  /* 공유 메뉴 항목 hover — hover:bg-soft가 정적빌드 CSS에 없어 별도 정의 */
+  .share-menu-item:hover{ background:rgb(245 246 244); }
+
   /* 인쇄/PDF */
   @media print {
     body{ background:#fff; }
@@ -77,22 +80,38 @@
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg>
         PDF로 저장
       </button>
-      <button class="btn btn-ghost px-3.5 py-2 text-[12.5px] font-semibold" onclick="copyLink(this)">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1"/><path d="M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1"/></svg>
-        <span data-copy-label>링크 복사</span>
-      </button>
-      <button class="btn btn-kakao px-3.5 py-2 text-[12.5px] font-semibold" onclick="shareKakao()">
-        <svg width="14" height="14" viewBox="0 0 18 18"><path fill="#191600" d="M9 2C4.86 2 1.5 4.71 1.5 8.06c0 2.14 1.4 4.02 3.5 5.1-.15.55-.55 2.02-.63 2.34-.1.4.15.4.32.29.13-.08 2.1-1.43 2.96-2.02.43.06.87.09 1.35.09 4.14 0 7.5-2.71 7.5-6.06S13.14 2 9 2z"/></svg>
-        카카오톡 공유
-      </button>
-      <button class="btn btn-naver px-3.5 py-2 text-[12.5px] font-semibold" onclick="shareNaver()">
-        <svg width="13" height="13" viewBox="0 0 18 18"><path fill="#fff" d="M11.4 9.7L6.7 3H3v12h4.6V8.3L12.3 15H16V3h-4.6v6.7z"/></svg>
-        네이버 공유
-      </button>
-      <button class="btn btn-primary px-3.5 py-2 text-[12.5px] font-semibold" onclick="shareLink()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
-        공유하기
-      </button>
+      <div class="relative">
+        <button class="btn btn-primary px-3.5 py-2 text-[12.5px] font-semibold" onclick="toggleShareMenu(event)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+          공유하기
+        </button>
+        <div id="shareMenu" class="hidden absolute right-0 bg-white rounded-2xl border border-line shadow-lg overflow-hidden" style="top:calc(100% + 8px);width:13rem;z-index:30">
+          <button class="share-menu-item w-full flex items-center gap-2.5 px-4 py-3 text-[13px] font-semibold text-ink transition text-left" onclick="shareKakao()">
+            <span style="width:20px;height:20px;border-radius:6px;background:#FEE500;display:inline-flex;align-items:center;justify-content:center;flex:none">
+              <svg width="12" height="12" viewBox="0 0 18 18"><path fill="#191600" d="M9 2C4.86 2 1.5 4.71 1.5 8.06c0 2.14 1.4 4.02 3.5 5.1-.15.55-.55 2.02-.63 2.34-.1.4.15.4.32.29.13-.08 2.1-1.43 2.96-2.02.43.06.87.09 1.35.09 4.14 0 7.5-2.71 7.5-6.06S13.14 2 9 2z"/></svg>
+            </span>
+            카카오톡 공유
+          </button>
+          <button class="w-full flex items-center gap-2.5 px-4 py-3 text-[13px] font-semibold text-ink share-menu-item transition text-left border-t border-line" onclick="shareNaver()">
+            <span style="width:20px;height:20px;border-radius:6px;background:#03C75A;display:inline-flex;align-items:center;justify-content:center;flex:none">
+              <svg width="11" height="11" viewBox="0 0 18 18"><path fill="#fff" d="M11.4 9.7L6.7 3H3v12h4.6V8.3L12.3 15H16V3h-4.6v6.7z"/></svg>
+            </span>
+            네이버 공유
+          </button>
+          <button class="w-full flex items-center gap-2.5 px-4 py-3 text-[13px] font-semibold text-ink share-menu-item transition text-left border-t border-line" onclick="copyLink(this)">
+            <span style="width:20px;height:20px;border-radius:6px;background:#F2F4F1;display:inline-flex;align-items:center;justify-content:center;flex:none">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#525A69" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1"/><path d="M14 11a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1"/></svg>
+            </span>
+            <span data-copy-label>링크 복사</span>
+          </button>
+          <button id="shareMenuNative" class="hidden w-full flex items-center gap-2.5 px-4 py-3 text-[13px] font-semibold text-ink share-menu-item transition text-left border-t border-line" onclick="shareNative()">
+            <span style="width:20px;height:20px;border-radius:6px;background:#F2F4F1;display:inline-flex;align-items:center;justify-content:center;flex:none">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#525A69" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 002 2h12a2 2 0 002-2v-7M16 6l-4-4-4 4M12 2v13"/></svg>
+            </span>
+            다른 방법으로 공유
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -464,6 +483,7 @@
     } catch(e){
       prompt("이 링크를 복사하세요:", shareUrl());
     }
+    closeShareMenu();
   }
 
   function shareKakao(){
@@ -481,25 +501,40 @@
         buttons: [{ title: "리포트 보기", link: { mobileWebUrl: shareUrl(), webUrl: shareUrl() } }]
       });
     } catch(e){ console.error(e); alert("카카오톡 공유에 실패했어. 다시 시도해줘."); }
+    closeShareMenu();
   }
 
   function shareNaver(){
     const url = "https://share.naver.com/web/shareView?url=" + encodeURIComponent(shareUrl()) + "&title=" + encodeURIComponent(`${name} 파트너의 주간 리포트`);
     window.open(url, "_blank", "width=500,height=600,noopener,noreferrer");
+    closeShareMenu();
   }
 
-  async function shareLink(){
+  async function shareNative(){
     const data = {
       title: `${name} 파트너의 주간 리포트`,
       text: `이번 주 ${name}의 질문이 어떻게 달라졌는지 — PBS 학습법 파트너 노트`,
       url: shareUrl()
     };
-    if (navigator.share){
-      try { await navigator.share(data); } catch(e){}
-    } else {
-      copyLink(document.querySelector("[onclick^='copyLink']"));
-    }
+    if (navigator.share){ try { await navigator.share(data); } catch(e){} }
+    closeShareMenu();
   }
+
+  /* ---- 공유 메뉴 토글 (버튼 하나로 카카오/네이버/링크복사/OS공유 모아둠) ---- */
+  function closeShareMenu(){ const m = $("shareMenu"); if (m) m.classList.add("hidden"); }
+  function toggleShareMenu(ev){
+    ev && ev.stopPropagation();
+    const m = $("shareMenu");
+    if (!m) return;
+    m.classList.toggle("hidden");
+  }
+  document.addEventListener("click", (ev) => {
+    const m = $("shareMenu");
+    if (!m || m.classList.contains("hidden")) return;
+    if (!m.contains(ev.target)) closeShareMenu();
+  });
+  document.addEventListener("keydown", (ev) => { if (ev.key === "Escape") closeShareMenu(); });
+  if (navigator.share) { const n = $("shareMenuNative"); if (n) n.classList.remove("hidden"); }
 </script>
 </body>
 </html>
