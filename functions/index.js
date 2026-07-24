@@ -114,3 +114,104 @@ exports.naverLogin = onCall(
     return { token, name };
   }
 );
+
+/* ===== 구독/체험 (P5 · Model A: 카드 없이 체험 → 수동전환) =====
+   진실원천은 Firestore users/{uid}/subscription/current. 클라이언트는 read만 가능하고
+   (firestore.rules에서 write:false), 이 함수들이 Admin SDK로만 쓴다.
+   ── 중요: 무료체험은 '카드 없이' 시작한다. 만료돼도 자동청구 없음(수단이 없으므로).
+      만료 시 접근 차단 + '결제하고 계속' 안내가 정책. 자동전환/빌링키/사전고지 없음.
+      유료 결제·빌링키·정기청구는 Phase 3~4(토스페이먼츠)에서 추가한다. */
+
+// 서버 시계 기준 KST(UTC+9) 날짜 문자열. 클라 시계를 신뢰하지 않는다.
+function kstDate(offsetDays) {
+  const t = new Date(Date.now() + 9 * 3600 * 1000);
+  if (offsetDays) t.setUTCDate(t.getUTCDate() + offsetDays);
+  return t.toISOString().slice(0, 10);
+}
+function subDocRef(uid) {
+  return admin.firestore().doc(`users/${uid}/subscription/current`);
+}
+function requireUid(request) {
+  const uid = request.auth && request.auth.uid;
+  if (!uid) throw new HttpsError("unauthenticated", "로그인이 필요해");
+  return uid;
+}
+
+/* 카드 없이 7일 무료체험 시작 — 계정당 1회. 이미 이용 중이거나 체험 이력이 있으면 거부. */
+exports.startTrial = onCall({ region: REGION }, async (request) => {
+  const uid = requireUid(request);
+  const plan = (request.data && request.data.plan) === "premium" ? "premium" : "basic";
+  const cycle = (request.data && request.data.cycle) === "m1" ? "m1" : "m6";
+
+  const ref = subDocRef(uid);
+  const snap = await ref.get();
+  const cur = snap.exists ? snap.data() : null;
+  if (cur && (cur.status === "trial" || cur.status === "active" || cur.status === "paused")) {
+    throw new HttpsError("failed-precondition", "이미 이용 중인 구독이 있어");
+  }
+  if (cur && cur.trialUsed) {
+    throw new HttpsError("failed-precondition", "무료체험은 계정당 한 번만 가능해");
+  }
+
+  const data = {
+    status: "trial",
+    plan,
+    cycle,
+    method: "",              // 체험은 결제수단 없음
+    hasBillingKey: false,
+    trialStartedAt: kstDate(0),
+    trialEndsAt: kstDate(7),
+    accessUntil: kstDate(7), // 게이팅 기준: 이 날짜까지 접근 허용
+    trialUsed: true,
+    nextBillingAt: "",       // 자동청구 없음
+    currentPeriodEnd: "",
+    amount: 0,
+    updatedAt: admin.firestore.FieldValue.serverTimestamp()
+  };
+  await ref.set(data, { merge: true });
+  return { ok: true, subscription: { ...data, updatedAt: null } };
+});
+
+/* 해지 — 정기청구만 중단하고 접근은 기간 말(accessUntil)까지 유지. */
+exports.cancelSubscription = onCall({ region: REGION }, async (request) => {
+  const uid = requireUid(request);
+  const ref = subDocRef(uid);
+  const snap = await ref.get();
+  if (!snap.exists) throw new HttpsError("failed-precondition", "구독 정보가 없어");
+  await ref.set({
+    status: "canceled",
+    canceledAt: kstDate(0),
+    nextBillingAt: "",
+    updatedAt: admin.firestore.FieldValue.serverTimestamp()
+  }, { merge: true });
+  return { ok: true };
+});
+
+/* 이탈방어: 해지 대신 일시정지 — 정기청구는 스킵하되 상태/지도는 보존. */
+exports.pauseSubscription = onCall({ region: REGION }, async (request) => {
+  const uid = requireUid(request);
+  const ref = subDocRef(uid);
+  const snap = await ref.get();
+  if (!snap.exists) throw new HttpsError("failed-precondition", "구독 정보가 없어");
+  await ref.set({
+    status: "paused",
+    pausedAt: kstDate(0),
+    updatedAt: admin.firestore.FieldValue.serverTimestamp()
+  }, { merge: true });
+  return { ok: true };
+});
+
+exports.resumeSubscription = onCall({ region: REGION }, async (request) => {
+  const uid = requireUid(request);
+  const ref = subDocRef(uid);
+  const snap = await ref.get();
+  if (!snap.exists) throw new HttpsError("failed-precondition", "구독 정보가 없어");
+  const cur = snap.data();
+  if (cur.status !== "paused") throw new HttpsError("failed-precondition", "일시정지 상태가 아니야");
+  await ref.set({
+    status: "active",
+    pausedAt: admin.firestore.FieldValue.delete(),
+    updatedAt: admin.firestore.FieldValue.serverTimestamp()
+  }, { merge: true });
+  return { ok: true };
+});

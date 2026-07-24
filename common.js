@@ -99,6 +99,12 @@
 
   let s = load(); save(s);
 
+  /* Firebase에 실제 로그인된 유저가 있으면 반환(서버 진실원천 기록 조건). 없으면 null. */
+  function fbUser() {
+    try { return window.PremiseAuth && PremiseAuth.auth && PremiseAuth.auth.currentUser; }
+    catch (e) { return null; }
+  }
+
   window.PremiseStore = {
     get: () => s,
     reset: () => { try { localStorage.removeItem(KEY); } catch (e) {} s = seed(); save(s); return s; },
@@ -164,7 +170,29 @@
       save(s); return s;
     },
     getSubscription: () => s.subscription || { status: "none", plan: "basic", cycle: "m6", method: "", trialEndsAt: "", nextBillingAt: "" },
-    /* 카드 없이 7일 무료체험 시작 — 로그인 필요 */
+
+    /* 서버(Firestore) 구독문서를 로컬 상태에 미러링 — firebase-init의 onSnapshot이 호출.
+       서버가 진실원천이므로, 로그인 유저는 이 값이 화면 표시의 근거가 된다. */
+    applyServerSubscription: (sub) => {
+      if (!sub) return s; // 서버에 구독문서 없음(신규/비로그인/데모) → 로컬 유지
+      s.subscription = {
+        status: sub.status || "none",
+        plan: sub.plan || "basic",
+        cycle: sub.cycle || "m6",
+        method: sub.method || "",
+        trialEndsAt: sub.trialEndsAt || "",
+        nextBillingAt: sub.nextBillingAt || ""
+      };
+      // 유효 접근: trial/active/paused 이고 accessUntil(없으면 trialEndsAt) 미경과일 때만 플랜 부여
+      const until = sub.accessUntil || sub.currentPeriodEnd || sub.trialEndsAt || "";
+      const hasAccess = ["trial", "active", "paused"].indexOf(sub.status) >= 0 && (!until || until >= today());
+      s.plan = (hasAccess && sub.plan === "premium") ? "premium" : "basic";
+      save(s);
+      try { document.dispatchEvent(new CustomEvent("premise:subscription")); } catch (e) {}
+      return s;
+    },
+
+    /* 카드 없이 7일 무료체험 시작 — 로그인 필요. 로컬은 낙관적 갱신, 서버(Firestore)에도 기록. */
     startTrial: (plan, cycle) => {
       if (!s.user || !s.user.loggedIn) return { ok: false, reason: "login_required" };
       if (!s.subscription) s.subscription = {};
@@ -173,9 +201,14 @@
       s.subscription.plan = plan === "premium" ? "premium" : "basic";
       s.subscription.cycle = cycle === "m1" ? "m1" : "m6";
       s.subscription.trialEndsAt = end.toISOString().slice(0, 10);
-      s.subscription.nextBillingAt = end.toISOString().slice(0, 10);
+      s.subscription.nextBillingAt = "";
       s.plan = s.subscription.plan;
       save(s);
+      // 서버 진실원천 기록. 성공하면 onSnapshot이 정본으로 재동기화(체험 1회 제한 등 서버가 최종 판정).
+      if (fbUser() && window.PremiseBilling) {
+        PremiseBilling.startTrial(s.subscription.plan, s.subscription.cycle)
+          .catch((e) => console.warn("[startTrial] server:", e && e.message));
+      }
       return { ok: true, subscription: s.subscription };
     },
     /* 바로 결제(유료 시작) — 결제수단: naverpay | kakaopay | card */
@@ -198,6 +231,9 @@
       if (!s.subscription) s.subscription = {};
       s.subscription.status = "canceled";
       save(s);
+      if (fbUser() && window.PremiseBilling) {
+        PremiseBilling.cancelSubscription().catch((e) => console.warn("[cancel] server:", e && e.message));
+      }
       return s.subscription;
     },
     // 이탈 방어: 해지 대신 일시정지. 결제는 멈추되 '동결된 지도' 열람은 유지(dashboard guard).
@@ -205,12 +241,18 @@
       if (!s.subscription) s.subscription = {};
       s.subscription.status = "paused";
       save(s);
+      if (fbUser() && window.PremiseBilling) {
+        PremiseBilling.pauseSubscription().catch((e) => console.warn("[pause] server:", e && e.message));
+      }
       return s.subscription;
     },
     resumeSubscription: () => {
       if (!s.subscription) s.subscription = {};
       s.subscription.status = "active";
       save(s);
+      if (fbUser() && window.PremiseBilling) {
+        PremiseBilling.resumeSubscription().catch((e) => console.warn("[resume] server:", e && e.message));
+      }
       return s.subscription;
     },
     getExams: () => (s.exams || []).slice().sort((a, b) => a.date < b.date ? -1 : 1),

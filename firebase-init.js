@@ -21,6 +21,11 @@ import {
   getFunctions,
   httpsCallable
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-functions.js";
+import {
+  getFirestore,
+  doc,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAxjIgGWwDEg4guQsidmZWbtEze80TaQf4",
@@ -35,12 +40,17 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 const functions = getFunctions(app, "asia-northeast3"); // Cloud Functions 배포 리전과 반드시 일치해야 함
+const db = getFirestore(app);
 
 async function bridgeLogin(fnName, payload) {
   const call = httpsCallable(functions, fnName);
   const res = await call(payload);
   const cred = await signInWithCustomToken(auth, res.data.token);
   return { user: cred.user, name: res.data.name };
+}
+
+function callFn(name, payload) {
+  return httpsCallable(functions, name)(payload || {}).then((r) => r.data);
 }
 
 window.PremiseAuth = {
@@ -51,3 +61,35 @@ window.PremiseAuth = {
   signOutFirebase: () => signOut(auth).catch(() => {}),
   onChange: (cb) => onAuthStateChanged(auth, cb)
 };
+
+/* ===== 구독/결제 브릿지 (P5 · 서버 진실원천) =====
+   Cloud Function을 호출해 Firestore subscription/current 를 갱신하고,
+   onSnapshot 으로 그 문서를 실시간 구독해 PremiseStore 에 미러링한다.
+   결제 실연동(subscribe)은 Phase 3(토스페이먼츠)에서 추가. */
+window.PremiseBilling = {
+  startTrial: (plan, cycle) => callFn("startTrial", { plan, cycle }),
+  cancelSubscription: () => callFn("cancelSubscription", {}),
+  pauseSubscription: () => callFn("pauseSubscription", {}),
+  resumeSubscription: () => callFn("resumeSubscription", {}),
+  // 구독문서 실시간 감시. cb(subOrNull) 호출. 해제 함수 반환.
+  watch: (uid, cb) =>
+    onSnapshot(
+      doc(db, "users", uid, "subscription", "current"),
+      (snap) => cb(snap.exists() ? snap.data() : null),
+      (err) => console.warn("[PremiseBilling] subscription watch error:", err)
+    )
+};
+
+/* 로그인/로그아웃에 따라 구독문서 감시를 붙였다 뗀다. 값이 오면 PremiseStore에 반영. */
+let _subUnsub = null;
+onAuthStateChanged(auth, (user) => {
+  if (_subUnsub) { _subUnsub(); _subUnsub = null; }
+  if (!user) return;
+  _subUnsub = window.PremiseBilling.watch(user.uid, (sub) => {
+    try {
+      if (window.PremiseStore && typeof PremiseStore.applyServerSubscription === "function") {
+        PremiseStore.applyServerSubscription(sub);
+      }
+    } catch (e) { console.warn("[PremiseBilling] applyServerSubscription failed:", e); }
+  });
+});
