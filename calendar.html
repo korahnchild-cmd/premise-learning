@@ -242,7 +242,7 @@ const PREP_PLAN = [
   { off:3,  label:"약점 유형 재점검" },
   { off:1,  label:"최종 점검" },
 ];
-function isPremium(){ return store.getPlan && store.getPlan() === "premium"; }
+function isPremium(){ return (store.accessLevel) ? store.accessLevel() === "premium" : (store.getPlan && store.getPlan() === "premium"); }
 function examPrepMap(){
   if (!isPremium()) return {};   // 시험 역산 대비 마커/로드맵은 프리미엄 전용
   const m={};

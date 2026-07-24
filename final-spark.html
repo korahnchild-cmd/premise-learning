@@ -225,9 +225,8 @@ function resetSpark() { sIdx = 0; renderSpark(); }
 function sparkAccess() {
   if (!window.PremiseStore) return "none";
   var sub = PremiseStore.getSubscription();
-  var subscribed = sub.status === "trial" || sub.status === "active";
-  if (!subscribed) return "none";
-  return sub.plan === "premium" ? "premium" : "basic";
+  // Phase 2: 만료 반영 중앙 판정으로 통일 — 체험 만료 시 자동 "none".
+  return (window.PremiseStore && PremiseStore.accessLevel) ? PremiseStore.accessLevel() : "none";
 }
 
 var access = sparkAccess();

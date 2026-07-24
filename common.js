@@ -171,6 +171,24 @@
     },
     getSubscription: () => s.subscription || { status: "none", plan: "basic", cycle: "m6", method: "", trialEndsAt: "", nextBillingAt: "" },
 
+    /* ===== 접근 판정 (Phase 2 · 만료 반영) — 모든 게이트는 이걸로 통일 =====
+       진실원천은 서버(applyServerSubscription로 미러). 만료(accessUntil<오늘)면 접근 없음. */
+    accessLevel: () => {                    // "none" | "basic" | "premium"
+      const sub = s.subscription || {};
+      const live = (sub.status === "trial" || sub.status === "active");
+      const until = sub.accessUntil || sub.trialEndsAt || "";
+      if (!live || !until || until < today()) return "none";
+      return sub.plan === "premium" ? "premium" : "basic";
+    },
+    hasAccess: () => (window.PremiseStore ? PremiseStore.accessLevel() !== "none" : false),
+    // 이탈방어: 해지/일시정지라도 잔여기간(accessUntil) 내엔 '동결된 지도' 열람 허용.
+    canViewFrozen: () => {
+      const sub = s.subscription || {};
+      if (sub.status !== "paused" && sub.status !== "canceled") return false;
+      const until = sub.accessUntil || sub.trialEndsAt || "";
+      return !!until && until >= today();
+    },
+
     /* 서버(Firestore) 구독문서를 로컬 상태에 미러링 — firebase-init의 onSnapshot이 호출.
        서버가 진실원천이므로, 로그인 유저는 이 값이 화면 표시의 근거가 된다. */
     applyServerSubscription: (sub) => {
@@ -181,6 +199,7 @@
         cycle: sub.cycle || "m6",
         method: sub.method || "",
         trialEndsAt: sub.trialEndsAt || "",
+        accessUntil: sub.accessUntil || sub.trialEndsAt || "", // 게이팅 기준일(만료 판정)
         nextBillingAt: sub.nextBillingAt || ""
       };
       // 유효 접근: trial/active/paused 이고 accessUntil(없으면 trialEndsAt) 미경과일 때만 플랜 부여
@@ -256,10 +275,10 @@
       return s.subscription;
     },
     getExams: () => (s.exams || []).slice().sort((a, b) => a.date < b.date ? -1 : 1),
-    examLimit: () => (s.plan === "premium" ? Infinity : 3),
+    examLimit: () => (PremiseStore.accessLevel() === "premium" ? Infinity : 3),
     addExam: (exam) => {
       if (!s.exams) s.exams = [];
-      const limit = s.plan === "premium" ? Infinity : 3;
+      const limit = PremiseStore.accessLevel() === "premium" ? Infinity : 3;
       if (s.exams.length >= limit) return { ok: false, reason: "limit" };
       const id = "ex-" + Date.now();
       s.exams.push({ id, name: exam.name, date: exam.date, subject: exam.subject || "" });

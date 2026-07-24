@@ -317,10 +317,8 @@ document.querySelectorAll(".tbtn").forEach(function(btn) {
    - 프리미엄 구독(trial/active + premium): 정상 접근 */
 function labAccess() {
   if (!window.PremiseStore) return "none";
-  var sub = PremiseStore.getSubscription();
-  var subscribed = sub.status === "trial" || sub.status === "active";
-  if (!subscribed) return "none";
-  return sub.plan === "premium" ? "premium" : "basic";
+  // Phase 2: 만료 반영 중앙 판정으로 통일 — 체험 만료(accessUntil<오늘) 시 자동으로 "none".
+  return (window.PremiseStore && PremiseStore.accessLevel) ? PremiseStore.accessLevel() : "none";
 }
 
 var access = labAccess();
