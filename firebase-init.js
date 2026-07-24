@@ -24,6 +24,7 @@ import {
 import {
   getFirestore,
   doc,
+  getDoc,
   onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
@@ -73,8 +74,16 @@ window.PremiseBilling = {
   resumeSubscription: () => callFn("resumeSubscription", {}),
   // Phase 3 · 유료 결제(토스페이먼츠)
   createOrder: (plan, cycle) => callFn("createOrder", { plan, cycle }),
+  createFinalSparkOrder: (examId, examName) => callFn("createOrder", { item: "final-spark", examId, examName }),
   confirmPayment: (paymentKey, orderId, amount) => callFn("confirmPayment", { paymentKey, orderId, amount }),
   issueBillingKey: (authKey, customerKey, orderId) => callFn("issueBillingKey", { authKey, customerKey, orderId }),
+  // 파이널 스파크 엔타이틀먼트 1회 조회 (없으면 null)
+  getEntitlement: (entId) => {
+    const u = auth.currentUser;
+    if (!u) return Promise.resolve(null);
+    return getDoc(doc(db, "users", u.uid, "entitlements", String(entId)))
+      .then((s) => (s.exists() ? s.data() : null)).catch(() => null);
+  },
   // 구독문서 실시간 감시. cb(subOrNull) 호출. 해제 함수 반환.
   watch: (uid, cb) =>
     onSnapshot(

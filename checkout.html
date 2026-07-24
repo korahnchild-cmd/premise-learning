@@ -113,6 +113,10 @@
     cycle: params.get("cycle") === "m1" ? "m1" : "m6",
     method: "card"
   };
+  // 파이널 스파크 건별 모드
+  const ITEM = params.get("item") === "final-spark" ? "final-spark" : null;
+  const FS_EXAM_ID = params.get("examId") || "generic";
+  const FS_EXAM_NAME = params.get("examName") || "";
 
   function renderPlans(){
     const wrap = $("planSel"); wrap.innerHTML = "";
@@ -159,6 +163,11 @@
     }
   }
   function renderTotal(){
+    if (ITEM === "final-spark"){
+      $("totalPrice").textContent = "19,900원";
+      $("totalSub").textContent = "이번 시험 · 파이널 스파크" + (FS_EXAM_NAME ? (" · " + FS_EXAM_NAME) : "");
+      return;
+    }
     const price = PRICES[state.plan][state.cycle];
     $("totalPrice").textContent = price.toLocaleString() + "원 / 월";
     $("totalSub").textContent = state.cycle === "m6"
@@ -182,8 +191,24 @@
     try {
       await waitFor(()=> window.PremiseBilling && window.TossPayments && currentUser(), 8000);
       if (!window.PremiseBilling || !window.TossPayments) throw new Error("결제 모듈 로드에 실패했어. 새로고침 후 다시 시도해줘.");
-      const order = await PremiseBilling.createOrder(state.plan, state.cycle); // {orderId, amount, orderName, customerKey}
       const base = location.origin + "/checkout.html";
+
+      // 파이널 스파크 건별 — 일회성 일반결제(구독 아님)
+      if (ITEM === "final-spark"){
+        const fsOrder = await PremiseBilling.createFinalSparkOrder(FS_EXAM_ID, FS_EXAM_NAME);
+        const useEasyFs = state.method === "naverpay" || state.method === "kakaopay";
+        const reqFs = {
+          method: useEasyFs ? "EASY_PAY" : "CARD",
+          amount: { value: fsOrder.amount, currency: "KRW" },
+          orderId: fsOrder.orderId, orderName: fsOrder.orderName,
+          successUrl: base + "?toss=payment", failUrl: base + "?toss=fail"
+        };
+        if (useEasyFs) reqFs.easyPay = { provider: state.method === "naverpay" ? "NAVERPAY" : "KAKAOPAY" };
+        await TossPayments(TOSS_CLIENT_KEY).payment({ customerKey: TossPayments.ANONYMOUS }).requestPayment(reqFs);
+        return;
+      }
+
+      const order = await PremiseBilling.createOrder(state.plan, state.cycle); // {orderId, amount, orderName, customerKey}
       const tp = TossPayments(TOSS_CLIENT_KEY);
       if (state.cycle === "m1"){
         // 월 구독: 자동결제(빌링) 카드 등록 — 카드만
@@ -247,7 +272,18 @@
 
   (async function init(){
     const returned = await handleReturn();
-    if (!returned) renderAll();
+    if (!returned){
+      if (ITEM === "final-spark"){
+        const pc = $("planSel").closest(".card"); if (pc) pc.style.display = "none";
+        const cc = $("cycleSel").closest(".card"); if (cc) cc.style.display = "none";
+        const h1 = document.querySelector("#formView h1"); if (h1) h1.innerHTML = "파이널 스파크<br>이번 시험만 건별로";
+        const sub = document.querySelector("#formView h1 + p"); if (sub) sub.textContent = "베이직 회원이 필요한 시험에만 여는 마무리 세션이에요.";
+        state.cycle = "m6"; // 결제수단 전체 노출(카드/네이버/카카오)
+        renderMethods(); renderTotal();
+      } else {
+        renderAll();
+      }
+    }
     if (window.PremiseNav) PremiseNav.render("checkout");
   })();
 </script>

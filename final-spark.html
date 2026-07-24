@@ -39,6 +39,7 @@
 <!-- topnav 자리 -->
 <div id="topnav"></div>
 <script src="common.js"></script>
+<script type="module" src="firebase-init.js"></script>
 <script>PremiseNav.render("lab");</script>
 
 <main class="max-w-2xl mx-auto px-5 pt-12 pb-20">
@@ -229,31 +230,71 @@ function sparkAccess() {
   return (window.PremiseStore && PremiseStore.accessLevel) ? PremiseStore.accessLevel() : "none";
 }
 
-var access = sparkAccess();
-if (access !== "premium") {
-  var gate = document.getElementById("planGateCard");
-  var actions = document.getElementById("gateActions");
-  gate.style.display = "block";
-  document.getElementById("dots").style.display = "none";
+function nearestExam(){
+  try {
+    var t = new Date().toISOString().slice(0,10);
+    var exams = (PremiseStore.getExams && PremiseStore.getExams()) || [];
+    var up = exams.filter(function(e){ return e.date >= t; });
+    return up.length ? up[0] : null;   // getExams는 날짜 오름차순 정렬
+  } catch(e){ return null; }
+}
+function waitForBilling(ms){
+  return new Promise(function(res){
+    var t0 = Date.now();
+    var iv = setInterval(function(){
+      var ok = false;
+      try { ok = window.PremiseBilling && window.PremiseAuth && PremiseAuth.auth && PremiseAuth.auth.currentUser; } catch(e){}
+      if (ok || Date.now()-t0 > ms){ clearInterval(iv); res(!!ok); }
+    }, 200);
+  });
+}
+var _ne = nearestExam();
+var FS_EID = _ne ? (_ne.id || "generic") : "generic";
+var FS_ENAME = _ne ? (_ne.name || "") : "";
 
-  if (access === "none") {
-    document.getElementById("gateEyebrow").textContent = "구독 전용 기능";
-    document.getElementById("gateTitle").textContent = "파이널 스파크는 구독 후에 열려요";
-    document.getElementById("gateBody").textContent = "시험 D-5~D-1, 자주 틀렸던 유형만 짧게 다시 확인하는 마무리 세션이에요. 카드 없이 7일 무료체험으로 지금 바로 시작할 수 있어요.";
-    actions.innerHTML =
-      '<a href="onboarding.html" class="btn-primary px-6 py-3 rounded-full text-[13px] font-semibold">7일 무료체험 시작하기 →</a>'
-      + '<a href="pricing.html" class="btn-ghost px-6 py-3 rounded-full text-[13px] font-semibold">요금제 보기</a>';
-  } else {
-    // 베이직: 건별 구매 경로 제공 (pricing의 '필요한 시험에만 건별로' 약속과 일치)
-    document.getElementById("gateEyebrow").textContent = "베이직 · 건별로 열기";
-    document.getElementById("gateTitle").textContent = "이번 시험에만 필요하면, 건별로 열 수 있어요";
-    document.getElementById("gateBody").textContent = "베이직 회원은 필요한 시험에만 파이널 스파크를 건별 19,900원으로 열 수 있어요. 시험마다 자동으로 포함되길 원하면 프리미엄이 더 유리해요.";
-    actions.innerHTML =
-      '<a href="checkout.html?item=final-spark" class="btn-primary px-6 py-3 rounded-full text-[13px] font-semibold">이번 시험 건별 열기 · 19,900원 →</a>'
-      + '<a href="pricing.html" class="btn-ghost px-6 py-3 rounded-full text-[13px] font-semibold">프리미엄으로 매번 포함하기</a>';
-  }
-} else {
+function _gateShell(){
+  var actions = document.getElementById("gateActions");
+  document.getElementById("planGateCard").style.display = "block";
+  document.getElementById("dots").style.display = "none";
+  return actions;
+}
+function showNoneGate(){
+  var actions = _gateShell();
+  document.getElementById("gateEyebrow").textContent = "구독 전용 기능";
+  document.getElementById("gateTitle").textContent = "파이널 스파크는 구독 후에 열려요";
+  document.getElementById("gateBody").textContent = "시험 D-5~D-1, 자주 틀렸던 유형만 짧게 다시 확인하는 마무리 세션이에요. 카드 없이 7일 무료체험으로 지금 바로 시작할 수 있어요.";
+  actions.innerHTML =
+    '<a href="onboarding.html" class="btn-primary px-6 py-3 rounded-full text-[13px] font-semibold">7일 무료체험 시작하기 →</a>'
+    + '<a href="pricing.html" class="btn-ghost px-6 py-3 rounded-full text-[13px] font-semibold">요금제 보기</a>';
+}
+function showBasicGate(){
+  var actions = _gateShell();
+  document.getElementById("gateEyebrow").textContent = "베이직 · 건별로 열기";
+  document.getElementById("gateTitle").textContent = "이번 시험에만 필요하면, 건별로 열 수 있어요";
+  document.getElementById("gateBody").textContent = "베이직 회원은 필요한 시험에만 파이널 스파크를 건별 19,900원으로 열 수 있어요. 시험마다 자동으로 포함되길 원하면 프리미엄이 더 유리해요.";
+  var link = "checkout.html?item=final-spark&examId=" + encodeURIComponent(FS_EID) + "&examName=" + encodeURIComponent(FS_ENAME);
+  actions.innerHTML =
+    '<a href="' + link + '" class="btn-primary px-6 py-3 rounded-full text-[13px] font-semibold">이번 시험 건별 열기 · 19,900원 →</a>'
+    + '<a href="pricing.html" class="btn-ghost px-6 py-3 rounded-full text-[13px] font-semibold">프리미엄으로 매번 포함하기</a>';
+}
+function unlockSpark(){
+  var gate = document.getElementById("planGateCard"); if (gate) gate.style.display = "none";
+  var dots = document.getElementById("dots"); if (dots) dots.style.display = "";
   renderSpark();
+}
+
+var access = sparkAccess();
+if (access === "premium") {
+  renderSpark();
+} else if (access === "none") {
+  showNoneGate();
+} else {
+  // 베이직: 우선 건별 게이트 표시 → 서버 엔타이틀먼트(해당 시험)가 있으면 언락.
+  showBasicGate();
+  waitForBilling(6000).then(function(ok){
+    if (!ok || !window.PremiseBilling) return;
+    PremiseBilling.getEntitlement(FS_EID).then(function(ent){ if (ent) unlockSpark(); });
+  });
 }
 </script>
 </body>

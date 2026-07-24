@@ -230,6 +230,7 @@ const PRICE = {
   basic:   { m6: 234000, m1: 49000 },
   premium: { m6: 354000, m1: 74000 }
 };
+const FINAL_SPARK = 19900; // 파이널 스파크 건별(베이직 · 시험당)
 function planCycleAmount(plan, cycle) {
   const p = PRICE[plan === "premium" ? "premium" : "basic"];
   return cycle === "m1" ? p.m1 : p.m6;
@@ -257,6 +258,21 @@ function kstAddMonths(n) {
 /* 주문 생성 — 서버가 금액 산정·저장. 클라는 이 orderId/amount로만 결제 요청(위변조 차단). */
 exports.createOrder = onCall({ region: REGION }, async (request) => {
   const uid = requireUid(request);
+  const d0 = request.data || {};
+
+  // 파이널 스파크 건별(19,900) — 구독과 무관, 시험별 엔타이틀먼트.
+  if (d0.item === "final-spark") {
+    const examId = (typeof d0.examId === "string" && d0.examId) ? d0.examId.slice(0, 64) : "generic";
+    const examName = (typeof d0.examName === "string") ? d0.examName.slice(0, 40) : "";
+    const orderId = "pbs-" + crypto.randomUUID();
+    const orderName = "파이널 스파크" + (examName ? (" · " + examName) : "");
+    await admin.firestore().doc(`users/${uid}/orders/${orderId}`).set({
+      item: "final-spark", examId, examName, amount: FINAL_SPARK, status: "pending",
+      orderName, createdAt: admin.firestore.FieldValue.serverTimestamp()
+    });
+    return { ok: true, orderId, amount: FINAL_SPARK, orderName, item: "final-spark", customerKey: null };
+  }
+
   const plan = (request.data && request.data.plan) === "premium" ? "premium" : "basic";
   const cycle = (request.data && request.data.cycle) === "m1" ? "m1" : "m6";
   const amount = planCycleAmount(plan, cycle);
@@ -301,6 +317,23 @@ exports.confirmPayment = onCall({ region: REGION, secrets: [TOSS_SECRET_KEY] }, 
   if (!confirm.ok) throw new HttpsError("internal", "토스 승인 실패: " + JSON.stringify(confirm.data));
 
   const now = admin.firestore.FieldValue.serverTimestamp();
+
+  // 파이널 스파크 건별 — 구독 변경 없이 시험별 엔타이틀먼트만 발급.
+  if (order.item === "final-spark") {
+    const eid = order.examId || "generic";
+    await orderRef.set({ status: "done", paidAt: kstDate(0) }, { merge: true });
+    await db.doc(`users/${uid}/entitlements/${eid}`).set({
+      type: "final-spark", examId: eid, examName: order.examName || "",
+      paidAt: kstDate(0), createdAt: now
+    }, { merge: true });
+    await db.doc(`users/${uid}/payments/${paymentKey}`).set({
+      orderId, amount: order.amount, item: "final-spark", examId: eid,
+      type: "final-spark", method: confirm.data.method || "",
+      approvedAt: confirm.data.approvedAt || "", createdAt: now
+    });
+    return { ok: true, item: "final-spark" };
+  }
+
   const until = kstAddMonths(order.cycle === "m1" ? 1 : 6);
   await orderRef.set({ status: "done", paidAt: kstDate(0) }, { merge: true });
   await db.doc(`users/${uid}/payments/${paymentKey}`).set({
