@@ -255,9 +255,10 @@
     if (!ready){ doneTitle("결제 확인 실패"); showDone("로그인 세션 확인에 실패했어. 마이페이지에서 상태를 확인해줘."); return true; }
     try {
       if (toss === "payment"){
-        await PremiseBilling.confirmPayment(params.get("paymentKey"), params.get("orderId"), Number(params.get("amount")));
+        const r = await PremiseBilling.confirmPayment(params.get("paymentKey"), params.get("orderId"), Number(params.get("amount")));
         doneTitle("결제가 완료됐어요");
-        showDone("유료 구독이 시작됐어요. 지금 바로 이어서 학습할 수 있어요.");
+        if (r && r.item === "final-spark") showDone("파이널 스파크가 열렸어요. 이번 시험 마무리 세션을 지금 시작할 수 있어요.");
+        else showDone("유료 구독이 시작됐어요. 지금 바로 이어서 학습할 수 있어요.");
       } else if (toss === "billing"){
         await PremiseBilling.issueBillingKey(params.get("authKey"), params.get("customerKey"), params.get("orderId"));
         doneTitle("결제가 완료됐어요");
