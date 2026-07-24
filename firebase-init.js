@@ -71,6 +71,10 @@ window.PremiseBilling = {
   cancelSubscription: () => callFn("cancelSubscription", {}),
   pauseSubscription: () => callFn("pauseSubscription", {}),
   resumeSubscription: () => callFn("resumeSubscription", {}),
+  // Phase 3 · 유료 결제(토스페이먼츠)
+  createOrder: (plan, cycle) => callFn("createOrder", { plan, cycle }),
+  confirmPayment: (paymentKey, orderId, amount) => callFn("confirmPayment", { paymentKey, orderId, amount }),
+  issueBillingKey: (authKey, customerKey, orderId) => callFn("issueBillingKey", { authKey, customerKey, orderId }),
   // 구독문서 실시간 감시. cb(subOrNull) 호출. 해제 함수 반환.
   watch: (uid, cb) =>
     onSnapshot(

@@ -29,9 +29,21 @@ service cloud.firestore {
       }
 
       // 빌링키 등 민감 결제정보 — 클라이언트 read/write 전면 금지(Admin SDK 전용).
-      // 빌링키 원문은 여기에만 저장하고, subscription/current에는 hasBillingKey 불리언만 노출.
+      // 빌링키·customerKey 원문은 여기에만 저장하고, subscription/current에는 hasBillingKey 불리언만 노출.
       match /private/{docId} {
         allow read, write: if false;
+      }
+
+      // 주문 인텐트(금액 서버산정) — 본인 read만, write는 Cloud Function(Admin)만.
+      match /orders/{orderId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
+      // 결제 내역 — 본인 read만(영수증/이력), write는 Cloud Function(Admin)만.
+      match /payments/{paymentId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
       }
 
       // PBS 캘린더 시험 일정 — 본인만 read/write (베이직 3개 제한은 Cloud Function/클라이언트에서 카운트 체크)

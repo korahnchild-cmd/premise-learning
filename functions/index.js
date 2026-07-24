@@ -16,6 +16,7 @@
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
 const { defineSecret } = require("firebase-functions/params");
 const admin = require("firebase-admin");
+const crypto = require("crypto");
 
 admin.initializeApp();
 
@@ -212,6 +213,153 @@ exports.resumeSubscription = onCall({ region: REGION }, async (request) => {
     status: "active",
     pausedAt: admin.firestore.FieldValue.delete(),
     updatedAt: admin.firestore.FieldValue.serverTimestamp()
+  }, { merge: true });
+  return { ok: true };
+});
+
+/* ===== 유료 결제 (P5 Phase 3 · 토스페이먼츠 v2) =====
+   - 6개월 선불 = 일반결제(결제창) → confirmPayment (일회성, 자동갱신 없음)
+   - 월 구독 = 자동결제(빌링) → issueBillingKey(빌링키 발급 + 첫 청구), 정기청구는 스케줄러(Phase4)
+   보안: 시크릿키는 TOSS_SECRET_KEY(서버 전용). 금액은 서버 PRICE로만 산정·검증(클라 금액 불신, Critical 2.2).
+   빌링은 카드만 지원 → 월 구독은 CARD 고정. */
+const TOSS_SECRET_KEY = defineSecret("TOSS_SECRET_KEY");
+const TOSS_API = "https://api.tosspayments.com";
+
+// 서버 권위 가격표(실제 청구 총액). 화면 표기와 일치해야 함.
+const PRICE = {
+  basic:   { m6: 234000, m1: 49000 },
+  premium: { m6: 354000, m1: 74000 }
+};
+function planCycleAmount(plan, cycle) {
+  const p = PRICE[plan === "premium" ? "premium" : "basic"];
+  return cycle === "m1" ? p.m1 : p.m6;
+}
+function orderNameFor(plan, cycle) {
+  return `PBS ${plan === "premium" ? "프리미엄" : "베이직"} ${cycle === "m1" ? "월 구독" : "6개월"}`;
+}
+function tossAuthHeader() {
+  // Basic base64(SECRET:) — 콜론 필수(가장 흔한 실수)
+  return "Basic " + Buffer.from(TOSS_SECRET_KEY.value() + ":").toString("base64");
+}
+async function tossPost(path, body, idempotencyKey) {
+  const headers = { Authorization: tossAuthHeader(), "Content-Type": "application/json" };
+  if (idempotencyKey) headers["Idempotency-Key"] = idempotencyKey;
+  const res = await fetch(TOSS_API + path, { method: "POST", headers, body: JSON.stringify(body) });
+  const data = await res.json().catch(() => ({}));
+  return { ok: res.ok, status: res.status, data };
+}
+function kstAddMonths(n) {
+  const t = new Date(Date.now() + 9 * 3600 * 1000);
+  t.setUTCMonth(t.getUTCMonth() + n);
+  return t.toISOString().slice(0, 10);
+}
+
+/* 주문 생성 — 서버가 금액 산정·저장. 클라는 이 orderId/amount로만 결제 요청(위변조 차단). */
+exports.createOrder = onCall({ region: REGION }, async (request) => {
+  const uid = requireUid(request);
+  const plan = (request.data && request.data.plan) === "premium" ? "premium" : "basic";
+  const cycle = (request.data && request.data.cycle) === "m1" ? "m1" : "m6";
+  const amount = planCycleAmount(plan, cycle);
+  const orderId = "pbs-" + crypto.randomUUID();
+  const db = admin.firestore();
+
+  // 월 구독은 customerKey 필요 — 계정당 1개(예측불가 UUID) 생성·저장·재사용.
+  let customerKey = null;
+  if (cycle === "m1") {
+    const billingRef = db.doc(`users/${uid}/private/billing`);
+    const bsnap = await billingRef.get();
+    customerKey = (bsnap.exists && bsnap.data().customerKey) ? bsnap.data().customerKey : ("cus-" + crypto.randomUUID());
+    if (!bsnap.exists || !bsnap.data().customerKey) {
+      await billingRef.set({ customerKey, updatedAt: admin.firestore.FieldValue.serverTimestamp() }, { merge: true });
+    }
+  }
+
+  await db.doc(`users/${uid}/orders/${orderId}`).set({
+    plan, cycle, amount, status: "pending",
+    orderName: orderNameFor(plan, cycle),
+    createdAt: admin.firestore.FieldValue.serverTimestamp()
+  });
+  return { ok: true, orderId, amount, orderName: orderNameFor(plan, cycle), customerKey };
+});
+
+/* 일반결제(6개월 선불) 승인 — successUrl 값 검증 후 토스 승인. */
+exports.confirmPayment = onCall({ region: REGION, secrets: [TOSS_SECRET_KEY] }, async (request) => {
+  const uid = requireUid(request);
+  const d = request.data || {};
+  const paymentKey = d.paymentKey, orderId = d.orderId, amount = d.amount;
+  if (!paymentKey || !orderId || amount == null) throw new HttpsError("invalid-argument", "결제 정보가 부족해");
+  const db = admin.firestore();
+  const orderRef = db.doc(`users/${uid}/orders/${orderId}`);
+  const osnap = await orderRef.get();
+  if (!osnap.exists) throw new HttpsError("not-found", "주문을 찾을 수 없어");
+  const order = osnap.data();
+  if (order.status === "done") return { ok: true, already: true };
+  // 금액 위변조 방지: 서버 저장 금액과 대조
+  if (Number(amount) !== Number(order.amount)) throw new HttpsError("failed-precondition", "결제 금액이 일치하지 않아");
+
+  const confirm = await tossPost("/v1/payments/confirm", { paymentKey, orderId, amount: Number(order.amount) }, orderId);
+  if (!confirm.ok) throw new HttpsError("internal", "토스 승인 실패: " + JSON.stringify(confirm.data));
+
+  const now = admin.firestore.FieldValue.serverTimestamp();
+  const until = kstAddMonths(order.cycle === "m1" ? 1 : 6);
+  await orderRef.set({ status: "done", paidAt: kstDate(0) }, { merge: true });
+  await db.doc(`users/${uid}/payments/${paymentKey}`).set({
+    orderId, amount: order.amount, plan: order.plan, cycle: order.cycle,
+    method: confirm.data.method || "", type: "subscription",
+    approvedAt: confirm.data.approvedAt || "", createdAt: now
+  });
+  await subDocRef(uid).set({
+    status: "active", plan: order.plan, cycle: order.cycle,
+    method: confirm.data.method || "card",
+    accessUntil: until, currentPeriodEnd: until,
+    nextBillingAt: "",           // 6개월 선불은 일회성(자동갱신 없음)
+    hasBillingKey: false, amount: order.amount, updatedAt: now
+  }, { merge: true });
+  return { ok: true };
+});
+
+/* 월 구독 빌링키 발급 + 첫 청구. (successUrl로 authKey·customerKey 수신) */
+exports.issueBillingKey = onCall({ region: REGION, secrets: [TOSS_SECRET_KEY] }, async (request) => {
+  const uid = requireUid(request);
+  const d = request.data || {};
+  const authKey = d.authKey, customerKey = d.customerKey, orderId = d.orderId;
+  if (!authKey || !customerKey || !orderId) throw new HttpsError("invalid-argument", "빌링 정보가 부족해");
+  const db = admin.firestore();
+
+  const billingRef = db.doc(`users/${uid}/private/billing`);
+  const bsnap = await billingRef.get();
+  if (!bsnap.exists || bsnap.data().customerKey !== customerKey) {
+    throw new HttpsError("permission-denied", "customerKey가 일치하지 않아");
+  }
+  const orderRef = db.doc(`users/${uid}/orders/${orderId}`);
+  const osnap = await orderRef.get();
+  if (!osnap.exists) throw new HttpsError("not-found", "주문을 찾을 수 없어");
+  const order = osnap.data();
+  if (order.status === "done") return { ok: true, already: true };
+
+  // 1) 빌링키 발급 (authKey → billingKey)
+  const issue = await tossPost("/v1/billing/authorizations/issue", { authKey, customerKey });
+  if (!issue.ok || !issue.data.billingKey) throw new HttpsError("internal", "빌링키 발급 실패: " + JSON.stringify(issue.data));
+  const billingKey = issue.data.billingKey;
+  await billingRef.set({ billingKey, updatedAt: admin.firestore.FieldValue.serverTimestamp() }, { merge: true });
+
+  // 2) 첫 달 청구
+  const charge = await tossPost(`/v1/billing/${billingKey}`, {
+    customerKey, amount: order.amount, orderId, orderName: order.orderName
+  }, orderId);
+  if (!charge.ok) throw new HttpsError("internal", "첫 청구 실패: " + JSON.stringify(charge.data));
+
+  const now = admin.firestore.FieldValue.serverTimestamp();
+  const until = kstAddMonths(1);
+  await orderRef.set({ status: "done", paidAt: kstDate(0) }, { merge: true });
+  await db.doc(`users/${uid}/payments/${charge.data.paymentKey || orderId}`).set({
+    orderId, amount: order.amount, plan: order.plan, cycle: "m1", method: "card", type: "billing-first",
+    approvedAt: charge.data.approvedAt || "", createdAt: now
+  });
+  await subDocRef(uid).set({
+    status: "active", plan: order.plan, cycle: "m1", method: "card",
+    accessUntil: until, currentPeriodEnd: until, nextBillingAt: until,
+    hasBillingKey: true, amount: order.amount, updatedAt: now
   }, { merge: true });
   return { ok: true };
 });
