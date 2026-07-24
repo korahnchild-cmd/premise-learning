@@ -18,6 +18,7 @@
   .btn-ghost{ background:#fff; color:#0A0E17; border:1px solid #DfE3E8; } .btn-ghost:hover{ border-color:#0A66FF; color:#0A66FF; }
   .card{ background:#fff; border:1px solid #ECEEF1; border-radius:1.5rem; }
   .seg{ transition:all .25s; } .seg.on{ background:#0A0E17; color:#fff; }
+  .seg.on .text-point{ color:#fff; } /* on:text-white가 실제 CSS 규칙이 아니라 배지가 흰색으로 안 바뀌던 것 수정 */
   .price-num{ transition:opacity .25s; }
 
   /* 파트너 노트 미리보기 — 배지 팝인 + 스트릭 펄스 */
@@ -54,7 +55,7 @@
   <!-- billing toggle -->
   <div class="flex justify-center mt-8">
     <div class="inline-flex items-center gap-1 bg-white border border-line rounded-full p-1">
-      <button class="seg on px-5 py-2.5 rounded-full text-[13px] font-semibold" data-mode="m6">6개월 코스 <span class="text-[11px] font-bold text-point on:text-white ml-1">–20%</span></button>
+      <button class="seg on px-5 py-2.5 rounded-full text-[13px] font-semibold" data-mode="m6">6개월 코스 <span class="text-[11px] font-bold text-point ml-1">–20%</span></button>
       <button class="seg px-5 py-2.5 rounded-full text-[13px] font-semibold text-body" data-mode="m1">월 단위로 시작</button>
     </div>
   </div>
