@@ -89,7 +89,7 @@
       <div class="kozy st-idle mx-auto mb-6" style="width:84px;height:84px" id="k1"></div>
       <h2 class="text-[1.6rem] md:text-[2rem] font-extrabold">몇 학년 파트너야?</h2>
       <p class="mt-3 text-[15px] text-body">네 수준에 딱 맞는 사건을 골라줄게.</p>
-      <div class="grid gap-3 mt-8 text-left" id="grades"></div>
+      <div class="grid grid-cols-2 gap-3 mt-8 text-left" id="grades"></div>
       <div class="flex gap-3 mt-8"><button class="btn btn-ghost flex-1 py-3.5 text-[14px] font-semibold" onclick="go(0)">← 뒤로</button><button id="n1" class="btn btn-primary flex-1 py-3.5 text-[14px] font-semibold" onclick="go(2)" disabled>다음</button></div>
     </section>
 
@@ -271,16 +271,16 @@
     }
   }
 
-  // grades
+  // grades — 초5~고2를 학년별로 세분화(밴드 묶음 대신 정확한 학년 선택). 튜터링 톤(tier)은 기존 3밴드 그대로 매핑.
   const grades = [
-    { g:"초등 5–6학년", t:"입문", d:"전제를 눈에 보이게 드러내 주는 사건" },
-    { g:"중등 1–3학년", t:"핵심", d:"스스로 전제를 찾아내는 교과 연계 사건" },
-    { g:"고등 1–2학년", t:"심화", d:"전제끼리 충돌시켜 재구성하는 사건" },
+    { g:"초5", t:"입문" }, { g:"초6", t:"입문" },
+    { g:"중1", t:"핵심" }, { g:"중2", t:"핵심" }, { g:"중3", t:"핵심" },
+    { g:"고1", t:"심화" }, { g:"고2", t:"심화" },
   ];
   grades.forEach((x,i)=>{
     const el=document.createElement("div");
     el.className="choice bg-white border border-line rounded-2xl px-5 py-4 flex items-center justify-between";
-    el.innerHTML=`<div><p class="text-[15px] font-bold text-ink">${x.g}</p><p class="text-[13px] text-body mt-0.5">${x.d}</p></div><span class="text-[11px] font-bold text-point bg-point/10 rounded-full px-2.5 py-1">${x.t}</span>`;
+    el.innerHTML=`<p class="text-[15px] font-bold text-ink">${x.g}</p><span class="text-[11px] font-bold text-point bg-point/10 rounded-full px-2.5 py-1">${x.t}</span>`;
     el.onclick=()=>{ document.querySelectorAll("#grades .choice").forEach(c=>c.classList.remove("sel")); el.classList.add("sel"); profile.grade=x.g; profile.tier=x.t; $("n1").disabled=false; applyTone(x.t); };
     $("grades").appendChild(el);
   });
@@ -321,43 +321,153 @@
   function setK4(state){ $("k4").className = "kozy mx-auto mb-6 "+state; $("k4").style.width="96px"; $("k4").style.height="96px"; }
 
   // 성적대별 사건 난이도 세트 — profile.scoreBand로 선택됨
-  const DEMO_BY_BAND = {
-    "기초": { trig:"빨리 푸는", steps:[
-      { t:"choice", kozy:"많은 친구가 이 말을 당연하게 여겨. 이 문장이 몰래 믿고 있는 건 뭘까?",
-        q:"숨은 믿음을 골라봐", opts:[
-          { label:"빠르면 잘하는 것이다", ok:true, fb:"정확해! 속도를 실력의 증거로 삼고 있어." },
-          { label:"수학은 어렵다", ok:false, fb:"어렵다는 얘긴 없어. '빨리'에 집중해봐." },
-          { label:"문제는 많이 풀어야 한다", ok:false, fb:"'양'이 아니라 '속도'를 실력으로 보는 게 핵심이야." },
-        ] },
-      { t:"reveal", kozy:"바로 이게 숨은 전제야. 트리거 단어가 보이지?", premise:"‘빠름 = 잘함’ — 속도를 실력의 증거로 삼는 전제" },
-      { t:"blast", kozy:"이 전제를 폭파해볼까? 눌러봐!" },
-      { t:"insight", kozy:"방향이 바뀌었지? 이게 바로 PBS 학습법이야.", reframe:"수학은 천천히 이해하는 과목이다" },
-    ]},
-    "보통": { trig:"빨리 푸는", steps:[
-      { t:"choice", kozy:"많은 친구가 이 말을 당연하게 여겨. 이 문장이 몰래 믿고 있는 건 뭘까?",
-        q:"숨은 믿음을 골라봐", opts:[
-          { label:"빠르면 잘하는 것이다", ok:true, fb:"정확해! 속도를 실력의 증거로 삼고 있어." },
-          { label:"수학은 어렵다", ok:false, fb:"어렵다는 얘긴 없어. '빨리'에 집중해봐." },
-          { label:"문제는 많이 풀어야 한다", ok:false, fb:"'양'이 아니라 '속도'를 실력으로 보는 게 핵심이야." },
-        ] },
-      { t:"reveal", kozy:"바로 이게 숨은 전제야. 트리거 단어가 보이지?", premise:"‘빠름 = 잘함’ — 속도를 실력의 증거로 삼는 전제" },
-      { t:"blast", kozy:"이 전제를 폭파해볼까? 눌러봐!" },
-      { t:"insight", kozy:"방향이 바뀌었지? 이게 바로 PBS 학습법이야.", reframe:"수학은 깊이 이해하는 과목이다" },
-    ]},
-    "상위": { trig:"공식대로 푸는", steps:[
-      { t:"choice", kozy:"응용문제도 잘 푸는 친구들도 은근히 당연하게 여기는 말이 있어. 이 문장이 몰래 믿고 있는 건 뭘까?",
-        q:"숨은 믿음을 골라봐", opts:[
-          { label:"정해진 절차만이 정답이다", ok:true, fb:"정확해! '공식대로'를 유일한 정답 경로로 삼고 있어." },
-          { label:"수학은 암기 과목이다", ok:false, fb:"암기 얘긴 없어. '공식대로'라는 절차 자체에 집중해봐." },
-          { label:"어려운 문제는 시간이 오래 걸린다", ok:false, fb:"시간이 아니라 '풀이 방법이 하나뿐이라는 믿음'이 핵심이야." },
-        ] },
-      { t:"reveal", kozy:"바로 이게 숨은 전제야. 트리거 단어가 보이지?", premise:"‘공식 = 유일한 방법’ — 정해진 절차만 답이라 여기는 전제" },
-      { t:"blast", kozy:"이 전제를 폭파해볼까? 눌러봐!" },
-      { t:"insight", kozy:"방향이 바뀌었지? 이게 바로 PBS 학습법이야.", reframe:"수학은 여러 방법으로 접근할 수 있는 과목이다" },
-    ]},
+  /* 소재(STEP4 취향 선택)별로 다른 사건을 보여준다. 이전엔 성적대(scoreBand)로만 갈라서
+     '일상 이야기'를 골라도 수학 예시가 나오는 버그가 있었음 — 소재를 1축, 성적대를 2축으로 매트릭스 구성. */
+  const DEMO_MATRIX = {
+    "일상 이야기": {
+      "기초": { pre:"친구는 ", trig:"많을수록", post:" 좋다", steps:[
+        { t:"choice", kozy:"많은 친구가 이 말을 당연하게 여겨. 이 문장이 몰래 믿고 있는 건 뭘까?",
+          q:"숨은 믿음을 골라봐", opts:[
+            { label:"수가 많으면 더 행복한 것이다", ok:true, fb:"정확해! '수 = 행복'이라는 믿음을 깔고 있어." },
+            { label:"친구는 소중하다", ok:false, fb:"소중함이 아니라 '많을수록'에 대한 믿음이 핵심이야." },
+            { label:"혼자 있으면 안 된다", ok:false, fb:"'혼자'가 아니라 '많음'에 대한 믿음이 핵심이야." },
+          ] },
+        { t:"reveal", kozy:"바로 이게 숨은 전제야. 트리거 단어가 보이지?", premise:"‘수 = 행복’ — 친구 수를 행복의 증거로 삼는 전제" },
+        { t:"blast", kozy:"이 전제를 폭파해볼까? 눌러봐!" },
+        { t:"insight", kozy:"방향이 바뀌었지? 이게 바로 PBS 학습법이야.", reframe:"행복은 관계의 깊이에서 온다" },
+      ]},
+      "보통": { pre:"친구는 ", trig:"많을수록", post:" 좋다", steps:[
+        { t:"choice", kozy:"많은 친구가 이 말을 당연하게 여겨. 이 문장이 몰래 믿고 있는 건 뭘까?",
+          q:"숨은 믿음을 골라봐", opts:[
+            { label:"수가 많으면 더 행복한 것이다", ok:true, fb:"정확해! '수 = 행복'이라는 믿음을 깔고 있어." },
+            { label:"친구는 소중하다", ok:false, fb:"소중함이 아니라 '많을수록'에 대한 믿음이 핵심이야." },
+            { label:"혼자 있으면 안 된다", ok:false, fb:"'혼자'가 아니라 '많음'에 대한 믿음이 핵심이야." },
+          ] },
+        { t:"reveal", kozy:"바로 이게 숨은 전제야. 트리거 단어가 보이지?", premise:"‘수 = 행복’ — 친구 수를 행복의 증거로 삼는 전제" },
+        { t:"blast", kozy:"이 전제를 폭파해볼까? 눌러봐!" },
+        { t:"insight", kozy:"방향이 바뀌었지? 이게 바로 PBS 학습법이야.", reframe:"친구는 수가 아니라 깊이가 중요하다" },
+      ]},
+      "상위": { pre:"노력은 ", trig:"양이 많을수록", post:" 성과로 이어진다", steps:[
+        { t:"choice", kozy:"다들 은근히 당연하게 여기는 말이 있어. 이 문장이 몰래 믿고 있는 건 뭘까?",
+          q:"숨은 믿음을 골라봐", opts:[
+            { label:"노력의 양이 결과를 결정한다", ok:true, fb:"정확해! '양 = 결과'라는 전제를 깔고 있어." },
+            { label:"노력은 중요하다", ok:false, fb:"중요성이 아니라 '양'에 대한 믿음이 핵심이야." },
+            { label:"쉬면 안 된다", ok:false, fb:"'쉼'이 아니라 '양이 결과를 만든다'는 믿음을 봐야 해." },
+          ] },
+        { t:"reveal", kozy:"바로 이게 숨은 전제야. 트리거 단어가 보이지?", premise:"‘양 = 결과’ — 방향보다 노력의 양을 성과의 증거로 삼는 전제" },
+        { t:"blast", kozy:"이 전제를 폭파해볼까? 눌러봐!" },
+        { t:"insight", kozy:"방향이 바뀌었지? 이게 바로 PBS 학습법이야.", reframe:"노력은 양이 아니라 방향이 맞을 때 성과로 이어진다" },
+      ]},
+    },
+    "세상·시사": {
+      "기초": { pre:"많은 사람이 동의하면 ", trig:"그건 사실이다", post:"", steps:[
+        { t:"choice", kozy:"뉴스나 어른들 말에서 자주 나오는 말이 있어. 이 문장이 몰래 믿고 있는 건 뭘까?",
+          q:"숨은 믿음을 골라봐", opts:[
+            { label:"다수 의견이 진실을 결정한다", ok:true, fb:"정확해! '다수 = 진실'이라는 전제를 깔고 있어." },
+            { label:"사람들은 똑똑하다", ok:false, fb:"지능이 아니라 '다수'에 대한 믿음이 핵심이야." },
+            { label:"뉴스는 믿을 만하다", ok:false, fb:"뉴스 신뢰도가 아니라 '많은 사람 = 사실'이라는 믿음을 봐야 해." },
+          ] },
+        { t:"reveal", kozy:"바로 이게 숨은 전제야. 트리거 단어가 보이지?", premise:"‘다수 = 진실’ — 동의하는 사람 수를 사실의 증거로 삼는 전제" },
+        { t:"blast", kozy:"이 전제를 폭파해볼까? 눌러봐!" },
+        { t:"insight", kozy:"방향이 바뀌었지? 이게 바로 PBS 학습법이야.", reframe:"사실은 다수가 아니라 근거로 확인해야 한다" },
+      ]},
+      "보통": { pre:"많은 사람이 동의하면 ", trig:"그건 사실이다", post:"", steps:[
+        { t:"choice", kozy:"뉴스나 어른들 말에서 자주 나오는 말이 있어. 이 문장이 몰래 믿고 있는 건 뭘까?",
+          q:"숨은 믿음을 골라봐", opts:[
+            { label:"다수 의견이 진실을 결정한다", ok:true, fb:"정확해! '다수 = 진실'이라는 전제를 깔고 있어." },
+            { label:"사람들은 똑똑하다", ok:false, fb:"지능이 아니라 '다수'에 대한 믿음이 핵심이야." },
+            { label:"뉴스는 믿을 만하다", ok:false, fb:"뉴스 신뢰도가 아니라 '많은 사람 = 사실'이라는 믿음을 봐야 해." },
+          ] },
+        { t:"reveal", kozy:"바로 이게 숨은 전제야. 트리거 단어가 보이지?", premise:"‘다수 = 진실’ — 동의하는 사람 수를 사실의 증거로 삼는 전제" },
+        { t:"blast", kozy:"이 전제를 폭파해볼까? 눌러봐!" },
+        { t:"insight", kozy:"방향이 바뀌었지? 이게 바로 PBS 학습법이야.", reframe:"다수의 동의가 아니라 근거가 사실을 만든다" },
+      ]},
+      "상위": { pre:"전문가가 ", trig:"한 목소리를 내면", post:" 의심할 필요 없다", steps:[
+        { t:"choice", kozy:"시사 이슈를 볼 때 다들 당연하게 깔고 있는 말이 있어. 뭘까?",
+          q:"숨은 믿음을 골라봐", opts:[
+            { label:"전문가 의견 일치가 곧 정답이다", ok:true, fb:"정확해! '합의 = 정답'이라는 전제를 깔고 있어." },
+            { label:"전문가는 똑똑하다", ok:false, fb:"지능이 아니라 '합의 = 정답'이라는 믿음이 핵심이야." },
+            { label:"이슈는 복잡하다", ok:false, fb:"복잡함이 아니라 '합의하면 더 따질 필요 없다'는 믿음을 봐야 해." },
+          ] },
+        { t:"reveal", kozy:"바로 이게 숨은 전제야. 트리거 단어가 보이지?", premise:"‘합의 = 검증 완료’ — 전문가들이 동의하면 더 따질 필요 없다는 전제" },
+        { t:"blast", kozy:"이 전제를 폭파해볼까? 눌러봐!" },
+        { t:"insight", kozy:"방향이 바뀌었지? 이게 바로 PBS 학습법이야.", reframe:"합의도 근거를 따져봐야 한다" },
+      ]},
+    },
+    "과학·자연": {
+      "기초": { pre:"자연스러운 것은 ", trig:"몸에 좋다", post:"", steps:[
+        { t:"choice", kozy:"과학 이야기를 할 때 흔히 당연하게 여기는 말이 있어. 뭘까?",
+          q:"숨은 믿음을 골라봐", opts:[
+            { label:"자연산이면 무조건 이롭다", ok:true, fb:"정확해! '자연 = 이로움'이라는 전제를 깔고 있어." },
+            { label:"자연은 아름답다", ok:false, fb:"아름다움이 아니라 '이로움'에 대한 믿음이 핵심이야." },
+            { label:"화학 성분은 위험하다", ok:false, fb:"화학 성분 얘기가 아니라 '자연 = 이로움'이라는 믿음을 봐야 해." },
+          ] },
+        { t:"reveal", kozy:"바로 이게 숨은 전제야. 트리거 단어가 보이지?", premise:"‘자연 = 이로움’ — 자연스럽다는 이유만으로 안전하다고 믿는 전제" },
+        { t:"blast", kozy:"이 전제를 폭파해볼까? 눌러봐!" },
+        { t:"insight", kozy:"방향이 바뀌었지? 이게 바로 PBS 학습법이야.", reframe:"자연스러움과 안전함은 별개다" },
+      ]},
+      "보통": { pre:"자연스러운 것은 ", trig:"몸에 좋다", post:"", steps:[
+        { t:"choice", kozy:"과학 이야기를 할 때 흔히 당연하게 여기는 말이 있어. 뭘까?",
+          q:"숨은 믿음을 골라봐", opts:[
+            { label:"자연산이면 무조건 이롭다", ok:true, fb:"정확해! '자연 = 이로움'이라는 전제를 깔고 있어." },
+            { label:"자연은 아름답다", ok:false, fb:"아름다움이 아니라 '이로움'에 대한 믿음이 핵심이야." },
+            { label:"화학 성분은 위험하다", ok:false, fb:"화학 성분 얘기가 아니라 '자연 = 이로움'이라는 믿음을 봐야 해." },
+          ] },
+        { t:"reveal", kozy:"바로 이게 숨은 전제야. 트리거 단어가 보이지?", premise:"‘자연 = 이로움’ — 자연스럽다는 이유만으로 안전하다고 믿는 전제" },
+        { t:"blast", kozy:"이 전제를 폭파해볼까? 눌러봐!" },
+        { t:"insight", kozy:"방향이 바뀌었지? 이게 바로 PBS 학습법이야.", reframe:"이로운지는 근거로 확인해야 한다" },
+      ]},
+      "상위": { pre:"한 번 실험으로 증명되면 ", trig:"영원한 진리다", post:"", steps:[
+        { t:"choice", kozy:"실험 결과를 볼 때 다들 당연히 여기는 말이 있어. 뭘까?",
+          q:"숨은 믿음을 골라봐", opts:[
+            { label:"실험 한 번 = 절대적 진리", ok:true, fb:"정확해! '한 번 증명 = 영원한 진리'라는 전제를 깔고 있어." },
+            { label:"실험은 정확하다", ok:false, fb:"정확도가 아니라 '영원함'에 대한 믿음이 핵심이야." },
+            { label:"과학은 어렵다", ok:false, fb:"어려움이 아니라 '한 번 증명되면 끝'이라는 믿음을 봐야 해." },
+          ] },
+        { t:"reveal", kozy:"바로 이게 숨은 전제야. 트리거 단어가 보이지?", premise:"‘증명 = 영원’ — 반증 가능성을 배제하는 전제" },
+        { t:"blast", kozy:"이 전제를 폭파해볼까? 눌러봐!" },
+        { t:"insight", kozy:"방향이 바뀌었지? 이게 바로 PBS 학습법이야.", reframe:"과학은 새로운 증거로 계속 갱신된다" },
+      ]},
+    },
+    "말과 글": {
+      "기초": { pre:"글은 ", trig:"길수록", post:" 논리적이다", steps:[
+        { t:"choice", kozy:"글을 읽거나 쓸 때 흔히 당연하게 여기는 말이 있어. 뭘까?",
+          q:"숨은 믿음을 골라봐", opts:[
+            { label:"분량이 논리성을 결정한다", ok:true, fb:"정확해! '길이 = 논리'라는 전제를 깔고 있어." },
+            { label:"글쓰기는 어렵다", ok:false, fb:"어려움이 아니라 '길이'에 대한 믿음이 핵심이야." },
+            { label:"짧은 글은 성의 없다", ok:false, fb:"성의가 아니라 '길이 = 논리'라는 믿음을 봐야 해." },
+          ] },
+        { t:"reveal", kozy:"바로 이게 숨은 전제야. 트리거 단어가 보이지?", premise:"‘길이 = 논리’ — 분량을 논리성의 증거로 삼는 전제" },
+        { t:"blast", kozy:"이 전제를 폭파해볼까? 눌러봐!" },
+        { t:"insight", kozy:"방향이 바뀌었지? 이게 바로 PBS 학습법이야.", reframe:"논리는 길이가 아니라 근거의 짜임에서 온다" },
+      ]},
+      "보통": { pre:"글은 ", trig:"길수록", post:" 논리적이다", steps:[
+        { t:"choice", kozy:"글을 읽거나 쓸 때 흔히 당연하게 여기는 말이 있어. 뭘까?",
+          q:"숨은 믿음을 골라봐", opts:[
+            { label:"분량이 논리성을 결정한다", ok:true, fb:"정확해! '길이 = 논리'라는 전제를 깔고 있어." },
+            { label:"글쓰기는 어렵다", ok:false, fb:"어려움이 아니라 '길이'에 대한 믿음이 핵심이야." },
+            { label:"짧은 글은 성의 없다", ok:false, fb:"성의가 아니라 '길이 = 논리'라는 믿음을 봐야 해." },
+          ] },
+        { t:"reveal", kozy:"바로 이게 숨은 전제야. 트리거 단어가 보이지?", premise:"‘길이 = 논리’ — 분량을 논리성의 증거로 삼는 전제" },
+        { t:"blast", kozy:"이 전제를 폭파해볼까? 눌러봐!" },
+        { t:"insight", kozy:"방향이 바뀌었지? 이게 바로 PBS 학습법이야.", reframe:"짧아도 근거가 탄탄하면 논리적이다" },
+      ]},
+      "상위": { pre:"어려운 단어를 쓰면 ", trig:"더 정확한 말이다", post:"", steps:[
+        { t:"choice", kozy:"글이나 말을 평가할 때 다들 당연하게 여기는 말이 있어. 뭘까?",
+          q:"숨은 믿음을 골라봐", opts:[
+            { label:"전문용어를 쓰면 더 정확해진다", ok:true, fb:"정확해! '어려움 = 정확함'이라는 전제를 깔고 있어." },
+            { label:"단어가 어려우면 똑똑해 보인다", ok:false, fb:"인상이 아니라 '정확함'에 대한 믿음이 핵심이야." },
+            { label:"쉬운 말은 유치하다", ok:false, fb:"유치함이 아니라 '어려움 = 정확함'이라는 믿음을 봐야 해." },
+          ] },
+        { t:"reveal", kozy:"바로 이게 숨은 전제야. 트리거 단어가 보이지?", premise:"‘난해함 = 정확함’ — 단어의 어려움을 논리 정확성의 증거로 삼는 전제" },
+        { t:"blast", kozy:"이 전제를 폭파해볼까? 눌러봐!" },
+        { t:"insight", kozy:"방향이 바뀌었지? 이게 바로 PBS 학습법이야.", reframe:"정확함은 단어의 난이도가 아니라 의미의 명확함에서 온다" },
+      ]},
+    },
   };
+  const DEFAULT_DEMO_SUBJECT = "일상 이야기"; // '상관없어, 골고루' 등 매칭 안 되는 경우 기본값
 
-  let demo = DEMO_BY_BAND["보통"];
+  let demo = DEMO_MATRIX[DEFAULT_DEMO_SUBJECT]["보통"];
   let di = 0;
   let demoAnswered = false;
 
@@ -430,7 +540,8 @@
       $("demoTrig").onclick = ()=>{
         if ($("demoTrig").classList.contains("blast")) return;
         $("demoTrig").classList.add("blast");
-        setTimeout(()=>{ $("demoBtn").disabled = false; }, 700);
+        // 트리거를 누르면 애니메이션 후 '다음' 클릭 없이 바로 다음 단계로 넘어감(모바일 탭 한 번 줄이기)
+        setTimeout(()=>{ advanceDemo(); }, 700);
       };
       $("demoBtn").textContent = "다음";
       $("demoBtn").disabled = true;
@@ -449,12 +560,14 @@
   }
 
   function resetDemo(){
-    demo = DEMO_BY_BAND[profile.scoreBand] || DEMO_BY_BAND["보통"];
+    const subj = DEMO_MATRIX[profile.subject] ? profile.subject : DEFAULT_DEMO_SUBJECT;
+    demo = (DEMO_MATRIX[subj] && DEMO_MATRIX[subj][profile.scoreBand]) || DEMO_MATRIX[subj]["보통"];
+    // 소재별로 사건 문장 자체가 다르므로(전에는 트리거 단어만 바뀌고 "수학은 ___ 과목이다"는 고정이었음) 문장 전체를 다시 그림
+    $("demoText").innerHTML = '"' + demo.pre + '<span class="trigger" data-t id="demoTrig">' + demo.trig + '</span>' + demo.post + '"';
     di = 0; demoAnswered = false; renderDemo();
   }
 
-  $("demoBtn").addEventListener("click", ()=>{
-    if ($("demoBtn").disabled) return;
+  function advanceDemo(){
     if (di < demo.steps.length - 1){
       di += 1;
       demoAnswered = false;
@@ -462,6 +575,10 @@
     } else {
       go(6);
     }
+  }
+  $("demoBtn").addEventListener("click", ()=>{
+    if ($("demoBtn").disabled) return;
+    advanceDemo();
   });
 
   function saveProfile(){

@@ -339,8 +339,8 @@
   function gradeFromProfile(){
     try{
       const p = JSON.parse(localStorage.getItem("premise_profile")||"{}");
-      if(p.grade && p.grade.includes("초등")) return "초등";
-      if(p.grade && p.grade.includes("고등")) return "고등";
+      if(p.grade && p.grade.startsWith("초")) return "초등";
+      if(p.grade && p.grade.startsWith("고")) return "고등";
     }catch(e){}
     return "중등";
   }

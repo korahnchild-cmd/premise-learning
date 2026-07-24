@@ -149,7 +149,7 @@
     { dim:"D", text:'공부 계획을 스스로 세우고 돌아본다.' }
   ];
   var SCALE = [
-    { v:1, t:"전혀 아니다" }, { v:2, t:"아니다" }, { v:3, t:"그렇다" }, { v:4, t:"매우 그렇다" }
+    { v:1, t:"전혀 아니다" }, { v:2, t:"아니다" }, { v:3, t:"잘 모르겠다" }, { v:4, t:"그렇다" }, { v:5, t:"매우 그렇다" }
   ];
 
   /* ===== 유형 정의 ===== */
@@ -213,12 +213,12 @@
     renderResult(sums);
     updateShareUrl(sums);
   }
-  function pct(sum){ return Math.round((sum-3)/9*100); } // 3→0, 12→100
+  function pct(sum){ return Math.round((sum-3)/12*100); } // 3문항×1~5점: 3→0, 15→100
   function renderResult(sums){
     quiz.classList.add("hidden"); intro.classList.add("hidden");
     result.classList.remove("hidden");
     var total = sums.A+sums.B+sums.C+sums.D;
-    var totalPct = Math.round((total-12)/36*100);
+    var totalPct = Math.round((total-12)/48*100); // 12문항×1~5점: 12→0, 60→100
 
     // 유형 결정
     var typeKey;
@@ -293,7 +293,7 @@
     var m = (location.search.match(/[?&]r=([0-9]{1,2}-[0-9]{1,2}-[0-9]{1,2}-[0-9]{1,2})/));
     if (!m) return;
     var p = m[1].split("-").map(Number);
-    if (p.length !== 4 || p.some(function(n){ return isNaN(n)||n<3||n>12; })) return;
+    if (p.length !== 4 || p.some(function(n){ return isNaN(n)||n<3||n>15; })) return;
     renderResult({ A:p[0], B:p[1], C:p[2], D:p[3] });
   })();
 
