@@ -14,6 +14,7 @@
    Firebase Secret Manager(NAVER_CLIENT_ID/NAVER_CLIENT_SECRET)에서 가져온다. */
 
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
+const { onSchedule } = require("firebase-functions/v2/scheduler");
 const { defineSecret } = require("firebase-functions/params");
 const admin = require("firebase-admin");
 const crypto = require("crypto");
@@ -23,6 +24,7 @@ admin.initializeApp();
 const NAVER_CLIENT_ID = defineSecret("NAVER_CLIENT_ID");
 const NAVER_CLIENT_SECRET = defineSecret("NAVER_CLIENT_SECRET");
 const KAKAO_CLIENT_SECRET = defineSecret("KAKAO_CLIENT_SECRET"); // 카카오 콘솔 "보안"에서 활성화된 앱만 해당
+const TOSS_SECRET_KEY = defineSecret("TOSS_SECRET_KEY"); // 토스페이먼츠 시크릿키(서버 전용) — 상단 선언(cancelSubscription 등에서 참조)
 
 const KAKAO_REST_API_KEY = "0cb21928fc35c5208313275e61c494a8";
 const REDIRECT_URI = "https://pbslearning.co.kr/login.html";
@@ -174,18 +176,44 @@ exports.startTrial = onCall({ region: REGION }, async (request) => {
 });
 
 /* 해지 — 정기청구만 중단하고 접근은 기간 말(accessUntil)까지 유지. */
-exports.cancelSubscription = onCall({ region: REGION }, async (request) => {
+exports.cancelSubscription = onCall({ region: REGION, secrets: [TOSS_SECRET_KEY] }, async (request) => {
   const uid = requireUid(request);
   const ref = subDocRef(uid);
   const snap = await ref.get();
   if (!snap.exists) throw new HttpsError("failed-precondition", "구독 정보가 없어");
+  const sub = snap.data();
+  const now = admin.firestore.FieldValue.serverTimestamp();
+
+  // 6개월 선불 중도해지 → 잔여기간 일할환급(방문판매법 계속거래). 접근은 즉시 종료.
+  if (sub.status === "active" && sub.cycle === "m6" && sub.lastPaymentKey && sub.paidAt && sub.currentPeriodEnd) {
+    const total = daysBetween(sub.paidAt, sub.currentPeriodEnd);      // 총 이용기간(일)
+    const remaining = daysBetween(kstDate(0), sub.currentPeriodEnd);  // 잔여(일)
+    let refund = 0;
+    if (total > 0 && remaining > 0) {
+      refund = Math.floor((sub.amount || 0) * Math.min(remaining, total) / total);
+    }
+    let refunded = 0;
+    if (refund > 0) {
+      const cancel = await tossPost(`/v1/payments/${sub.lastPaymentKey}/cancel`, {
+        cancelReason: "구매자 중도 해지(잔여기간 일할환급)",
+        cancelAmount: refund
+      }, "cancel-" + sub.lastPaymentKey);
+      if (!cancel.ok) throw new HttpsError("internal", "환급 실패: " + JSON.stringify(cancel.data));
+      refunded = refund;
+    }
+    await ref.set({
+      status: "canceled", canceledAt: kstDate(0),
+      accessUntil: kstDate(0), currentPeriodEnd: kstDate(0),
+      nextBillingAt: "", refundedAmount: refunded, updatedAt: now
+    }, { merge: true });
+    return { ok: true, refunded };
+  }
+
+  // 월 구독/체험/기타 → 정기청구만 중단, 접근은 기간 말(accessUntil)까지 유지, 환급 없음.
   await ref.set({
-    status: "canceled",
-    canceledAt: kstDate(0),
-    nextBillingAt: "",
-    updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    status: "canceled", canceledAt: kstDate(0), nextBillingAt: "", updatedAt: now
   }, { merge: true });
-  return { ok: true };
+  return { ok: true, refunded: 0 };
 });
 
 /* 이탈방어: 해지 대신 일시정지 — 정기청구는 스킵하되 상태/지도는 보존. */
@@ -209,11 +237,17 @@ exports.resumeSubscription = onCall({ region: REGION }, async (request) => {
   if (!snap.exists) throw new HttpsError("failed-precondition", "구독 정보가 없어");
   const cur = snap.data();
   if (cur.status !== "paused") throw new HttpsError("failed-precondition", "일시정지 상태가 아니야");
-  await ref.set({
+  const patch = {
     status: "active",
     pausedAt: admin.firestore.FieldValue.delete(),
     updatedAt: admin.firestore.FieldValue.serverTimestamp()
-  }, { merge: true });
+  };
+  // 월 빌링은 재개 시 다음 결제일을 앞으로 재설정(소급 청구 방지).
+  if (cur.cycle === "m1" && cur.hasBillingKey) {
+    const next = kstAddMonths(1);
+    patch.nextBillingAt = next; patch.accessUntil = next; patch.currentPeriodEnd = next;
+  }
+  await ref.set(patch, { merge: true });
   return { ok: true };
 });
 
@@ -222,7 +256,6 @@ exports.resumeSubscription = onCall({ region: REGION }, async (request) => {
    - 월 구독 = 자동결제(빌링) → issueBillingKey(빌링키 발급 + 첫 청구), 정기청구는 스케줄러(Phase4)
    보안: 시크릿키는 TOSS_SECRET_KEY(서버 전용). 금액은 서버 PRICE로만 산정·검증(클라 금액 불신, Critical 2.2).
    빌링은 카드만 지원 → 월 구독은 CARD 고정. */
-const TOSS_SECRET_KEY = defineSecret("TOSS_SECRET_KEY");
 const TOSS_API = "https://api.tosspayments.com";
 
 // 서버 권위 가격표(실제 청구 총액). 화면 표기와 일치해야 함.
@@ -253,6 +286,18 @@ function kstAddMonths(n) {
   const t = new Date(Date.now() + 9 * 3600 * 1000);
   t.setUTCMonth(t.getUTCMonth() + n);
   return t.toISOString().slice(0, 10);
+}
+// 특정 날짜(YYYY-MM-DD)에 n개월 더하기 — 정기결제 드리프트 방지(다음결제일 = 이전 결제일 기준).
+function addMonthsToDate(ymd, n) {
+  const d = new Date(ymd + "T00:00:00Z");
+  if (isNaN(d.getTime())) return kstAddMonths(n);
+  d.setUTCMonth(d.getUTCMonth() + n);
+  return d.toISOString().slice(0, 10);
+}
+// 날짜 간 일수 차이(b - a).
+function daysBetween(aYmd, bYmd) {
+  const a = new Date(aYmd + "T00:00:00Z"), b = new Date(bYmd + "T00:00:00Z");
+  return Math.round((b - a) / 86400000);
 }
 
 /* 주문 생성 — 서버가 금액 산정·저장. 클라는 이 orderId/amount로만 결제 요청(위변조 차단). */
@@ -346,7 +391,9 @@ exports.confirmPayment = onCall({ region: REGION, secrets: [TOSS_SECRET_KEY] }, 
     method: confirm.data.method || "card",
     accessUntil: until, currentPeriodEnd: until,
     nextBillingAt: "",           // 6개월 선불은 일회성(자동갱신 없음)
-    hasBillingKey: false, amount: order.amount, updatedAt: now
+    hasBillingKey: false, amount: order.amount,
+    lastPaymentKey: paymentKey, paidAt: kstDate(0), // 중도해지 환급 참조용
+    updatedAt: now
   }, { merge: true });
   return { ok: true };
 });
@@ -392,7 +439,78 @@ exports.issueBillingKey = onCall({ region: REGION, secrets: [TOSS_SECRET_KEY] },
   await subDocRef(uid).set({
     status: "active", plan: order.plan, cycle: "m1", method: "card",
     accessUntil: until, currentPeriodEnd: until, nextBillingAt: until,
-    hasBillingKey: true, amount: order.amount, updatedAt: now
+    hasBillingKey: true, amount: order.amount,
+    lastPaymentKey: (charge.data.paymentKey || orderId), paidAt: kstDate(0),
+    updatedAt: now
   }, { merge: true });
   return { ok: true };
+});
+
+/* ===== 정기청구 (P5 Phase 4) =====
+   한 유저의 월 빌링 1회 청구 — 스케줄러와 테스트 callable이 공유. */
+async function chargeRecurringForUser(uid, sub) {
+  const db = admin.firestore();
+  const bsnap = await db.doc(`users/${uid}/private/billing`).get();
+  if (!bsnap.exists || !bsnap.data().billingKey) return { ok: false, reason: "no-billing-key" };
+  const billingKey = bsnap.data().billingKey;
+  const customerKey = bsnap.data().customerKey;
+  const amount = sub.amount || planCycleAmount(sub.plan, "m1");
+  const orderId = "pbs-rec-" + crypto.randomUUID();
+  const ref = db.doc(`users/${uid}/subscription/current`);
+  const now = admin.firestore.FieldValue.serverTimestamp();
+
+  const charge = await tossPost(`/v1/billing/${billingKey}`, {
+    customerKey, amount, orderId, orderName: orderNameFor(sub.plan, "m1")
+  }, orderId);
+  if (!charge.ok) {
+    await ref.set({ status: "past_due", lastChargeError: JSON.stringify(charge.data).slice(0, 300), updatedAt: now }, { merge: true });
+    return { ok: false, data: charge.data };
+  }
+  const next = addMonthsToDate(sub.nextBillingAt || kstDate(0), 1); // 드리프트 방지(이전 결제일 기준)
+  await ref.set({
+    status: "active", nextBillingAt: next, accessUntil: next, currentPeriodEnd: next,
+    lastPaymentKey: (charge.data.paymentKey || orderId), paidAt: kstDate(0), updatedAt: now
+  }, { merge: true });
+  await db.doc(`users/${uid}/payments/${charge.data.paymentKey || orderId}`).set({
+    orderId, amount, plan: sub.plan, cycle: "m1", method: "card", type: "billing-recurring",
+    approvedAt: charge.data.approvedAt || "", createdAt: now
+  });
+  return { ok: true, amount, next };
+}
+
+/* 정기청구 스케줄러 — 매일 KST 03:00, nextBillingAt 도래한 월 빌링 구독을 자동청구.
+   토스는 자체 스케줄링 미제공 → 직접 구현. collectionGroup 인덱스 필요(firestore.indexes.json). */
+exports.chargeDueSubscriptions = onSchedule(
+  { schedule: "0 3 * * *", timeZone: "Asia/Seoul", region: REGION, secrets: [TOSS_SECRET_KEY] },
+  async () => {
+    const db = admin.firestore();
+    const today = kstDate(0);
+    const snap = await db.collectionGroup("subscription")
+      .where("status", "==", "active").where("cycle", "==", "m1").where("nextBillingAt", "<=", today).get();
+    let charged = 0, failed = 0;
+    for (const docSnap of snap.docs) {
+      const sub = docSnap.data();
+      if (!sub.hasBillingKey || !sub.nextBillingAt) continue;
+      const userRef = docSnap.ref.parent.parent;
+      if (!userRef) continue;
+      try {
+        const r = await chargeRecurringForUser(userRef.id, sub);
+        if (r.ok) charged++; else failed++;
+      } catch (e) { failed++; console.error("[recurring] error", userRef.id, e && e.message); }
+    }
+    console.log(`[recurring] charged=${charged} failed=${failed} scanned=${snap.size}`);
+    return;
+  }
+);
+
+/* 테스트용 — 호출자 본인의 월 빌링을 지금 즉시 1회 청구(날짜 무시). 스케줄러와 동일 로직 검증용. */
+exports.chargeMyBillingNow = onCall({ region: REGION, secrets: [TOSS_SECRET_KEY] }, async (request) => {
+  const uid = requireUid(request);
+  const snap = await subDocRef(uid).get();
+  if (!snap.exists) throw new HttpsError("failed-precondition", "구독 정보가 없어");
+  const sub = snap.data();
+  if (sub.cycle !== "m1" || !sub.hasBillingKey) throw new HttpsError("failed-precondition", "월 빌링 구독이 아니야");
+  const r = await chargeRecurringForUser(uid, sub);
+  if (!r.ok) throw new HttpsError("internal", "청구 실패: " + JSON.stringify(r.data || r.reason));
+  return r;
 });

@@ -77,6 +77,7 @@ window.PremiseBilling = {
   createFinalSparkOrder: (examId, examName) => callFn("createOrder", { item: "final-spark", examId, examName }),
   confirmPayment: (paymentKey, orderId, amount) => callFn("confirmPayment", { paymentKey, orderId, amount }),
   issueBillingKey: (authKey, customerKey, orderId) => callFn("issueBillingKey", { authKey, customerKey, orderId }),
+  chargeMyBillingNow: () => callFn("chargeMyBillingNow", {}), // 테스트: 본인 월 빌링 즉시 1회 청구
   // 파이널 스파크 엔타이틀먼트 1회 조회 (없으면 null)
   getEntitlement: (entId) => {
     const u = auth.currentUser;
