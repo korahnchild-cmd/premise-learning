@@ -164,9 +164,11 @@
       s.user.name = s.user.name || "구글 파트너";
       s.user.email = s.user.email || "google@example.com";
       if (!s.subscription) s.subscription = { status:"none", plan:"basic", cycle:"m6", method:"", trialEndsAt:"", nextBillingAt:"" };
-      if (kind === "free"){ s.subscription.status = "none"; }
-      else if (kind === "basic"){ s.subscription.status = "active"; s.subscription.plan = "basic"; s.plan = "basic"; }
-      else if (kind === "premium"){ s.subscription.status = "active"; s.subscription.plan = "premium"; s.plan = "premium"; }
+      // QA 상태에도 accessUntil을 넣어야 accessLevel/hasAccess(Phase2)가 접근을 인정함(안 넣으면 프리미엄인데도 게이트·대시보드 차단).
+      var _qaUntil = new Date(Date.now() + 30 * 864e5).toISOString().slice(0, 10);
+      if (kind === "free"){ s.subscription.status = "none"; s.subscription.accessUntil = ""; s.subscription.trialUsed = false; s.plan = "basic"; }
+      else if (kind === "basic"){ s.subscription.status = "active"; s.subscription.plan = "basic"; s.subscription.cycle = "m6"; s.subscription.accessUntil = _qaUntil; s.subscription.trialEndsAt = _qaUntil; s.plan = "basic"; }
+      else if (kind === "premium"){ s.subscription.status = "active"; s.subscription.plan = "premium"; s.subscription.cycle = "m6"; s.subscription.accessUntil = _qaUntil; s.subscription.trialEndsAt = _qaUntil; s.plan = "premium"; }
       save(s); return s;
     },
     getSubscription: () => s.subscription || { status: "none", plan: "basic", cycle: "m6", method: "", trialEndsAt: "", nextBillingAt: "" },
@@ -189,6 +191,21 @@
       return !!until && until >= today();
     },
 
+    /* ===== 중앙 사용자 상태 (4종) — 상태별 CTA/라벨은 전부 이걸로 분기 =====
+       "guest"(비로그인) | "free"(로그인·무접근) | "trial"(체험중) | "basic" | "premium" */
+    userState: () => {
+      if (!(s.user && s.user.loggedIn)) return "guest";
+      const sub = s.subscription || {};
+      const lvl = PremiseStore.accessLevel();
+      if (lvl === "none") return "free";
+      if (sub.status === "trial") return "trial";
+      return lvl === "premium" ? "premium" : "basic";
+    },
+    // 체험을 이미 소진했는지(계정당 1회). '카드없이 7일 무료체험' 문구 노출 판단용.
+    trialUsed: () => !!(s.subscription && s.subscription.trialUsed),
+    // 유료·체험 접근 보유 여부(무료체험/요금제 CTA 숨김 판단용).
+    isMember: () => (PremiseStore.accessLevel() !== "none"),
+
     /* 서버(Firestore) 구독문서를 로컬 상태에 미러링 — firebase-init의 onSnapshot이 호출.
        서버가 진실원천이므로, 로그인 유저는 이 값이 화면 표시의 근거가 된다. */
     applyServerSubscription: (sub) => {
@@ -200,7 +217,8 @@
         method: sub.method || "",
         trialEndsAt: sub.trialEndsAt || "",
         accessUntil: sub.accessUntil || sub.trialEndsAt || "", // 게이팅 기준일(만료 판정)
-        nextBillingAt: sub.nextBillingAt || ""
+        nextBillingAt: sub.nextBillingAt || "",
+        trialUsed: !!sub.trialUsed // 체험 소진 여부(카드없이 문구 상태분기용)
       };
       // 유효 접근: trial/active/paused 이고 accessUntil(없으면 trialEndsAt) 미경과일 때만 플랜 부여
       const until = sub.accessUntil || sub.currentPeriodEnd || sub.trialEndsAt || "";
@@ -339,6 +357,37 @@
         </div></header>`;
     }
   };
+
+  /* ===== 상태별 표시 자동화 (선언식) =====
+     요소에 data-show-state="guest,free" → 해당 상태에서만 표시
+             data-hide-state="basic,premium" → 해당 상태에서 숨김
+     상태: guest|free|trial|basic|premium. 로드 시 + 서버동기화(premise:subscription) 시 재적용. */
+  window.PremiseState = {
+    get: function(){ try { return PremiseStore.userState(); } catch(e){ return "guest"; } },
+    apply: function(){
+      var st = this.get();
+      try {
+        document.querySelectorAll("[data-show-state]").forEach(function(el){
+          var arr = (el.getAttribute("data-show-state")||"").split(",").map(function(x){return x.trim();});
+          el.style.display = arr.indexOf(st) >= 0 ? "" : "none";
+        });
+        document.querySelectorAll("[data-hide-state]").forEach(function(el){
+          var arr = (el.getAttribute("data-hide-state")||"").split(",").map(function(x){return x.trim();});
+          if (arr.indexOf(st) >= 0) el.style.display = "none";
+        });
+        // data-trialused-text: 체험 소진 시 이 텍스트로 교체(원문은 data-fresh-text에 백업)
+        document.querySelectorAll("[data-trialused-text]").forEach(function(el){
+          var used = false; try { used = PremiseStore.trialUsed(); } catch(e){}
+          if (!el.getAttribute("data-fresh-text")) el.setAttribute("data-fresh-text", el.textContent);
+          el.textContent = used ? el.getAttribute("data-trialused-text") : el.getAttribute("data-fresh-text");
+        });
+      } catch(e){}
+    }
+  };
+  function _applyState(){ window.PremiseState.apply(); }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", _applyState);
+  else _applyState();
+  document.addEventListener("premise:subscription", _applyState); // 서버 동기화 도착 시 재적용
 
   /* ===== 임시 QA 회원상태 스위처 (런칭 전 · 상단 고정, 제거 예정) ===== */
   function mountQaBar(){

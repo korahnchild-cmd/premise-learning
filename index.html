@@ -295,7 +295,7 @@
 <!-- NAV -->
 <header id="nav" class="nav fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur border-b border-transparent h-16 md:h-20 flex items-center">
   <div class="max-w-6xl mx-auto w-full px-5 md:px-8 flex items-center justify-between">
-    <a href="#hero" class="flex items-center gap-2.5 font-bold text-[16px]">
+    <a href="#hero" class="flex items-center gap-2.5 font-bold text-[16px]" style="white-space:nowrap;flex-shrink:0">
       <svg width="32" height="32" viewBox="0 0 40 40" aria-label="PBS 학습법 로고">
         <defs><clipPath id="logoClipNav"><circle cx="20" cy="20" r="18"/></clipPath></defs>
         <circle cx="20" cy="20" r="18" fill="#0A66FF"/>
@@ -1271,7 +1271,7 @@
 </footer>
 
 <!-- ===== 모바일 sticky CTA (스크롤 시 노출, 하단 근처에선 숨김) ===== -->
-<div id="mobileCta" class="md:hidden fixed inset-x-0 bottom-0 z-40 translate-y-full transition-transform" style="transition-duration:.34s;transition-timing-function:cubic-bezier(.16,1,.3,1)">
+<div id="mobileCta" data-hide-state="trial,basic,premium" class="md:hidden fixed inset-x-0 bottom-0 z-40 translate-y-full transition-transform" style="transition-duration:.34s;transition-timing-function:cubic-bezier(.16,1,.3,1)">
   <div class="mx-3 mb-3 rounded-2xl bg-white/95 backdrop-blur border border-line px-4 py-3 flex items-center gap-3" style="box-shadow:0 8px 30px rgba(10,14,23,.16)">
     <div class="min-w-0 flex-1">
       <p class="text-[11px] text-faint leading-tight">7일 전액 무료 · 위약금 없음</p>
@@ -1800,12 +1800,19 @@
 </script>
 <script src="common.js"></script>
 <script>
-  /* 로그인 인식 네비 — 로그인 시 '내 대시보드' 노출 */
+  /* 상태 인식 네비(4종) — 비로그인:로그인+무료체험 / 무료:무료체험 / 베이직·프리미엄·체험:내 대시보드 */
   (function(){
     if(!window.PremiseStore) return;
-    var logged=false; try{ logged=PremiseStore.isLoggedIn(); }catch(e){}
-    var dash=document.getElementById("navDash"), trial=document.getElementById("navTrial"), login=document.getElementById("navLogin");
-    if(logged){ if(dash)dash.style.display=""; if(trial)trial.style.display="none"; if(login)login.style.display="none"; }
+    function upd(){
+      var st="guest"; try{ st=PremiseStore.userState(); }catch(e){}
+      var member = (st==="trial"||st==="basic"||st==="premium");
+      var dash=document.getElementById("navDash"), trial=document.getElementById("navTrial"), login=document.getElementById("navLogin");
+      if(dash) dash.style.display = member ? "" : "none";
+      if(trial) trial.style.display = member ? "none" : "";     // 비로그인·무료만 무료체험
+      if(login) login.style.display = (st==="guest") ? "" : "none"; // 로그인 버튼은 비로그인만
+    }
+    upd();
+    document.addEventListener("premise:subscription", upd); // 서버 동기화 후 재적용
   })();
 </script>
 </body>
