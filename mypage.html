@@ -114,8 +114,18 @@
 
   function providerLabel(p){ return p==="kakao" ? "카카오 계정" : p==="naver" ? "네이버 계정" : "구글 계정"; }
   function planLabel(p){ return p==="premium" ? "프리미엄" : "베이직"; }
-  function methodLabel(m){ return m==="naverpay" ? "네이버페이" : m==="kakaopay" ? "카카오페이" : m==="card" ? "카드" : "미등록"; }
-  function methodColor(m){ return m==="naverpay" ? "#03C75A" : m==="kakaopay" ? "#FEE500" : "#0A0E17"; }
+  function methodLabel(m){
+    if (!m) return "미등록";
+    if (m==="naverpay" || m==="네이버페이") return "네이버페이";
+    if (m==="kakaopay" || m==="카카오페이") return "카카오페이";
+    if (m==="card" || m==="카드") return "카드";
+    return m; // 토스가 주는 기타 결제수단 원문 표시
+  }
+  function methodColor(m){
+    if (m==="naverpay" || m==="네이버페이") return "#03C75A";
+    if (m==="kakaopay" || m==="카카오페이") return "#FEE500";
+    return "#0A0E17";
+  }
 
   function render(){
     const u = PremiseStore.getUser();
