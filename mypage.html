@@ -146,7 +146,9 @@
     } else if (sub.status === "active"){
       badge.className = "badge badge-active"; badge.textContent = "구독 중";
       $("subPlan").textContent = planLabel(sub.plan) + " · " + (sub.cycle==="m6" ? "6개월 코스" : "월 단위");
-      $("subDetail").textContent = "다음 결제일 " + sub.nextBillingAt;
+      $("subDetail").textContent = sub.nextBillingAt
+        ? ("다음 결제일 " + sub.nextBillingAt)
+        : ("이용 만료 " + (sub.accessUntil || "-"));  // 6개월 선불은 자동갱신 없음 → 만료일 표기
       const change = document.createElement("a");
       change.href = "checkout.html?plan=" + sub.plan + "&cycle=" + sub.cycle;
       change.className = "btn btn-ghost flex-1 py-3.5 text-[14px] font-semibold";
@@ -227,6 +229,8 @@
   }
 
   if (window.PremiseStore && PremiseStore.isLoggedIn()) render();
+  // 서버 구독상태(firebase-init onSnapshot)가 늦게 도착하면 다시 렌더해 stale 표시 방지
+  document.addEventListener("premise:subscription", function(){ if (PremiseStore.isLoggedIn && PremiseStore.isLoggedIn()) render(); });
   if (window.PremiseNav) PremiseNav.render("mypage");
 </script>
 </body>
