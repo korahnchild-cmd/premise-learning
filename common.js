@@ -373,7 +373,7 @@
         });
         document.querySelectorAll("[data-hide-state]").forEach(function(el){
           var arr = (el.getAttribute("data-hide-state")||"").split(",").map(function(x){return x.trim();});
-          if (arr.indexOf(st) >= 0) el.style.display = "none";
+          el.style.display = (arr.indexOf(st) >= 0) ? "none" : ""; // 매칭 안 되면 리셋(상태 변경 대비)
         });
         // data-trialused-text: 체험 소진 시 이 텍스트로 교체(원문은 data-fresh-text에 백업)
         document.querySelectorAll("[data-trialused-text]").forEach(function(el){
