@@ -335,7 +335,7 @@
         `<style>
           .pn-bar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.82);backdrop-filter:blur(14px);border-bottom:1px solid #ECEEF1}
           .pn-in{max-width:56rem;margin:0 auto;padding:0 1.25rem;height:64px;display:flex;align-items:center;justify-content:space-between}
-          .pn-logo{display:flex;align-items:center;gap:.6rem;font-weight:700;font-size:15px;color:#0A0E17;text-decoration:none}
+          .pn-logo{display:flex;align-items:center;gap:.6rem;font-weight:700;font-size:15px;color:#0A0E17;text-decoration:none;white-space:nowrap;flex-shrink:0}
           .pn-mark{width:32px;height:32px;border-radius:11px;background:#0A66FF;transform:rotate(45deg);display:inline-flex;align-items:center;justify-content:center}
           .pn-nav{display:flex;align-items:center;gap:2px}
           .pn-link{padding:8px 14px;border-radius:9999px;font-size:13px;font-weight:600;color:#525A69;text-decoration:none;transition:background .2s,color .2s;white-space:nowrap}

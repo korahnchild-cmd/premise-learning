@@ -267,7 +267,16 @@
         const sub = PremiseStore.getSubscription();
         // 요금제에서 넘어온 plan 파라미터를 반영 (프리미엄 '7일 무료체험' 경로 개통)
         const wantPlan = new URLSearchParams(location.search).get("plan") === "premium" ? "premium" : "basic";
-        if (sub.status === "none") PremiseStore.startTrial(wantPlan, "m6");
+        const member = !!(PremiseStore.isMember && PremiseStore.isMember());
+        const used = !!(PremiseStore.trialUsed && PremiseStore.trialUsed());
+        if (member) {
+          // 이미 구독/체험 이용 중 → 트라이얼 재시작 안 함(완료화면 그대로)
+        } else if (used) {
+          // 체험을 이미 소진 → 무료체험 불가, 결제로 유도
+          location.replace("checkout.html?plan=" + wantPlan + "&cycle=m6"); return;
+        } else if (sub.status === "none") {
+          PremiseStore.startTrial(wantPlan, "m6");
+        }
       }
     }
   }
