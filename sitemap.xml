@@ -37,12 +37,6 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://pbslearning.co.kr/daily.html</loc>
-    <lastmod>2026-07-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://pbslearning.co.kr/demo.html</loc>
     <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
@@ -52,7 +46,7 @@
     <loc>https://pbslearning.co.kr/diagnosis.html</loc>
     <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://pbslearning.co.kr/evals.html</loc>
