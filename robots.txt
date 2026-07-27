@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# 검색 노출 제외 — 앱·거래 페이지
+Disallow: /dashboard.html
+Disallow: /mypage.html
+Disallow: /checkout.html
+Disallow: /login.html
+
+Sitemap: https://pbslearning.co.kr/sitemap.xml
