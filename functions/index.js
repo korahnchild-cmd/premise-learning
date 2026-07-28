@@ -514,3 +514,161 @@ exports.chargeMyBillingNow = onCall({ region: REGION, secrets: [TOSS_SECRET_KEY]
   if (!r.ok) throw new HttpsError("internal", "청구 실패: " + JSON.stringify(r.data || r.reason));
   return r;
 });
+
+/* ============================================================================
+   관리자 전용 — 베타 테스터 플랜 부여 (Admin SDK로만 subscription 문서를 쓴다)
+
+   보안: 호출자가 관리자인지 서버에서 검증한다. 클라이언트 화면의 관리자 판정은
+   '메뉴 노출' 수준이고, 실제 권한 경계는 여기다. 아래 목록에 없는 계정이 호출하면
+   permission-denied로 거부된다.
+
+   부여된 구독은 hasBillingKey:false, nextBillingAt:"" 이므로
+   정기청구 스케줄러(chargeDueSubscriptions)가 절대 청구하지 않는다.
+   ========================================================================== */
+const ADMIN_EMAILS = ["korahnchild@gmail.com"];
+const ADMIN_UIDS = ["1owkGOnh2vemk705JfBeJhGXvjf1"];
+
+function requireAdmin(request) {
+  const uid = request.auth && request.auth.uid;
+  if (!uid) throw new HttpsError("unauthenticated", "로그인이 필요합니다");
+  const email = String((request.auth.token && request.auth.token.email) || "").toLowerCase();
+  const ok = ADMIN_UIDS.indexOf(uid) >= 0 || (email && ADMIN_EMAILS.indexOf(email) >= 0);
+  if (!ok) throw new HttpsError("permission-denied", "관리자만 사용할 수 있습니다");
+  return uid;
+}
+
+/* 이메일 또는 UID로 계정 1건 조회 + 현재 구독 상태 반환 */
+async function lookupUser(query) {
+  const q = String(query || "").trim();
+  if (!q) throw new HttpsError("invalid-argument", "이메일 또는 UID를 입력하세요");
+  let rec = null;
+  try {
+    rec = q.indexOf("@") >= 0
+      ? await admin.auth().getUserByEmail(q)
+      : await admin.auth().getUser(q);
+  } catch (e) {
+    throw new HttpsError("not-found", "해당 계정을 찾을 수 없습니다: " + q);
+  }
+  const snap = await subDocRef(rec.uid).get();
+  return {
+    uid: rec.uid,
+    email: rec.email || "",
+    name: rec.displayName || "",
+    provider: (rec.providerData && rec.providerData[0] && rec.providerData[0].providerId) || "custom",
+    createdAt: (rec.metadata && rec.metadata.creationTime) || "",
+    lastLoginAt: (rec.metadata && rec.metadata.lastSignInTime) || "",
+    subscription: snap.exists ? snap.data() : null
+  };
+}
+
+exports.adminFindUser = onCall({ region: REGION }, async (request) => {
+  requireAdmin(request);
+  return await lookupUser(request.data && request.data.query);
+});
+
+/* 최근 가입 계정 목록 + 구독 상태 (베타 코호트 확인용) */
+exports.adminListUsers = onCall({ region: REGION }, async (request) => {
+  requireAdmin(request);
+  const limit = Math.min(Math.max(Number((request.data && request.data.limit) || 50), 1), 200);
+  const res = await admin.auth().listUsers(limit);
+  const users = res.users.map((u) => ({
+    uid: u.uid,
+    email: u.email || "",
+    name: u.displayName || "",
+    provider: (u.providerData && u.providerData[0] && u.providerData[0].providerId) || "custom",
+    createdAt: (u.metadata && u.metadata.creationTime) || "",
+    lastLoginAt: (u.metadata && u.metadata.lastSignInTime) || ""
+  }));
+  // 구독 상태를 병렬로 붙인다 (베타 규모 20~30명 기준으로 충분히 가볍다)
+  const subs = await Promise.all(users.map((u) => subDocRef(u.uid).get().catch(() => null)));
+  users.forEach((u, i) => {
+    const s = subs[i];
+    const d = s && s.exists ? s.data() : null;
+    u.status = d ? d.status : "none";
+    u.plan = d ? d.plan : "";
+    u.accessUntil = d ? (d.accessUntil || d.trialEndsAt || "") : "";
+    u.grantedByAdmin = !!(d && d.grantedByAdmin);
+  });
+  users.sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
+  return { users, count: users.length };
+});
+
+/* 플랜 강제 부여 — 기간(일) 지정. 결제수단 없이 접근만 열어준다. */
+exports.adminGrantPlan = onCall({ region: REGION }, async (request) => {
+  const adminUid = requireAdmin(request);
+  const d = request.data || {};
+  const plan = d.plan === "premium" ? "premium" : "basic";
+  const days = Math.min(Math.max(Number(d.days || 7), 1), 400);
+  const target = await lookupUser(d.uid || d.email || d.query);
+
+  const until = kstDate(days);
+  const data = {
+    status: "active",
+    plan,
+    cycle: "m6",
+    method: "admin_grant",
+    hasBillingKey: false,     // 정기청구 스케줄러가 건너뛰는 조건
+    nextBillingAt: "",        // 자동청구 없음
+    accessUntil: until,       // 게이팅 기준일
+    currentPeriodEnd: until,
+    amount: 0,
+    trialUsed: !!(target.subscription && target.subscription.trialUsed),
+    grantedByAdmin: true,
+    grantedBy: adminUid,
+    grantedAt: kstDate(0),
+    grantNote: String(d.note || "").slice(0, 200),
+    updatedAt: admin.firestore.FieldValue.serverTimestamp()
+  };
+  await subDocRef(target.uid).set(data, { merge: true });
+  return { ok: true, uid: target.uid, email: target.email, plan, accessUntil: until };
+});
+
+/* 부여 회수 — 접근을 즉시 끊는다. 실제 결제 구독은 이 함수로 건드리지 않는다. */
+exports.adminRevokePlan = onCall({ region: REGION }, async (request) => {
+  requireAdmin(request);
+  const d = request.data || {};
+  const target = await lookupUser(d.uid || d.email || d.query);
+  const cur = target.subscription;
+  if (cur && cur.status === "active" && !cur.grantedByAdmin) {
+    throw new HttpsError("failed-precondition", "실제 결제 구독입니다. 관리자 부여 건만 회수할 수 있습니다.");
+  }
+  await subDocRef(target.uid).set({
+    status: "none",
+    accessUntil: "",
+    currentPeriodEnd: "",
+    nextBillingAt: "",
+    grantedByAdmin: false,
+    revokedAt: kstDate(0),
+    updatedAt: admin.firestore.FieldValue.serverTimestamp()
+  }, { merge: true });
+  return { ok: true, uid: target.uid, email: target.email };
+});
+
+/* 베타 코호트 일괄 부여 — 이메일/UID 목록을 한 번에 처리 */
+exports.adminGrantBulk = onCall({ region: REGION }, async (request) => {
+  const adminUid = requireAdmin(request);
+  const d = request.data || {};
+  const plan = d.plan === "premium" ? "premium" : "basic";
+  const days = Math.min(Math.max(Number(d.days || 7), 1), 400);
+  const list = Array.isArray(d.targets) ? d.targets.slice(0, 100) : [];
+  if (!list.length) throw new HttpsError("invalid-argument", "대상 목록이 비어 있습니다");
+
+  const until = kstDate(days);
+  const results = [];
+  for (const q of list) {
+    try {
+      const t = await lookupUser(q);
+      await subDocRef(t.uid).set({
+        status: "active", plan, cycle: "m6", method: "admin_grant",
+        hasBillingKey: false, nextBillingAt: "", accessUntil: until, currentPeriodEnd: until,
+        amount: 0, grantedByAdmin: true, grantedBy: adminUid, grantedAt: kstDate(0),
+        grantNote: String(d.note || "").slice(0, 200),
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+      results.push({ query: q, ok: true, uid: t.uid, email: t.email });
+    } catch (e) {
+      results.push({ query: q, ok: false, error: (e && e.message) || "실패" });
+    }
+  }
+  return { ok: true, plan, accessUntil: until, results };
+});

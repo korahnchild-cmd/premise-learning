@@ -78,6 +78,12 @@ window.PremiseBilling = {
   confirmPayment: (paymentKey, orderId, amount) => callFn("confirmPayment", { paymentKey, orderId, amount }),
   issueBillingKey: (authKey, customerKey, orderId) => callFn("issueBillingKey", { authKey, customerKey, orderId }),
   chargeMyBillingNow: () => callFn("chargeMyBillingNow", {}), // 테스트: 본인 월 빌링 즉시 1회 청구
+  /* 관리자 전용 — 서버에서 호출자 권한을 다시 검증한다(클라 판정은 메뉴 노출용일 뿐). */
+  adminFindUser: (query) => callFn("adminFindUser", { query }),
+  adminListUsers: (limit) => callFn("adminListUsers", { limit: limit || 50 }),
+  adminGrantPlan: (query, plan, days, note) => callFn("adminGrantPlan", { query, plan, days, note }),
+  adminRevokePlan: (query) => callFn("adminRevokePlan", { query }),
+  adminGrantBulk: (targets, plan, days, note) => callFn("adminGrantBulk", { targets, plan, days, note }),
   // 파이널 스파크 엔타이틀먼트 1회 조회 (없으면 null)
   getEntitlement: (entId) => {
     const u = auth.currentUser;

@@ -93,10 +93,60 @@
       <p class="text-[12px] mt-4" style="color:#6B7290">* 시나리오를 적용하면 기존 학습 기록이 덮어써집니다. 본인 실제 기록이 있는 계정에서는 주의하세요.</p>
     </section>
 
-    <!-- 3. 진단 -->
+    <!-- 3. 베타 테스터 관리 (서버 반영) -->
+    <section class="card p-6 md:p-7 mt-4" style="border-color:rgba(10,102,255,.28)">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <h2 style="font-size:1.1rem;font-weight:800">3 · 베타 테스터 플랜 부여</h2>
+        <span class="pill warn">서버 반영 · 실제 권한</span>
+      </div>
+      <p class="text-[12.5px] mt-1.5" style="color:#6B7290; word-break:keep-all">위 1·2번은 이 브라우저만 바뀌지만, <b>여기서 부여한 플랜은 해당 계정에 실제로 적용</b>됩니다. 결제수단 없이 접근만 열리고 자동청구는 발생하지 않습니다.</p>
+
+      <div class="grid sm:grid-cols-3 gap-2.5 mt-5">
+        <div>
+          <label class="text-[12px] font-bold">플랜</label>
+          <select id="gPlan" class="abtn" style="width:100%;margin-top:6px">
+            <option value="basic">베이직</option>
+            <option value="premium">프리미엄</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-[12px] font-bold">기간</label>
+          <select id="gDays" class="abtn" style="width:100%;margin-top:6px">
+            <option value="7">7일</option>
+            <option value="14" selected>14일</option>
+            <option value="30">30일</option>
+            <option value="60">60일</option>
+            <option value="180">180일</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-[12px] font-bold">메모 (선택)</label>
+          <input id="gNote" class="abtn" style="width:100%;margin-top:6px;font-weight:500" placeholder="예: 1차 베타" />
+        </div>
+      </div>
+
+      <label class="text-[12px] font-bold mt-5" style="display:block">대상 — 이메일 또는 UID (여러 명은 줄바꿈/쉼표로 구분)</label>
+      <textarea id="gTargets" rows="4" class="abtn" style="width:100%;margin-top:6px;font-weight:500;font-family:inherit" placeholder="tester1@gmail.com&#10;tester2@naver.com&#10;1owkGOnh2vemk705JfBeJhGXvjf1"></textarea>
+
+      <div class="grid sm:grid-cols-3 gap-2.5 mt-4">
+        <button class="abtn" id="findBtn">계정 조회</button>
+        <button class="abtn" id="grantBtn" style="border-color:#0A66FF;background:#0A66FF;color:#fff">플랜 부여</button>
+        <button class="abtn danger" id="revokeBtn">부여 회수</button>
+      </div>
+
+      <div id="grantResult" class="text-[12.5px] mt-4" style="line-height:1.7"></div>
+
+      <div class="flex items-center justify-between flex-wrap gap-2 mt-7">
+        <p class="text-[12.5px] font-bold">가입 계정 목록</p>
+        <button class="abtn" id="listBtn" style="padding:8px 14px">목록 불러오기</button>
+      </div>
+      <div id="userList" class="text-[12.5px] mt-3" style="overflow-x:auto"></div>
+    </section>
+
+    <!-- 4. 진단 -->
     <section class="card p-6 md:p-7 mt-4">
       <div class="flex items-center justify-between flex-wrap gap-3">
-        <h2 style="font-size:1.1rem;font-weight:800">3 · 현재 상태 진단</h2>
+        <h2 style="font-size:1.1rem;font-weight:800">4 · 현재 상태 진단</h2>
         <button class="abtn" id="refreshBtn" style="padding:8px 14px">새로고침</button>
       </div>
       <dl class="kv mt-5" id="diagKv"></dl>
@@ -108,9 +158,9 @@
       <pre id="rawState">…</pre>
     </section>
 
-    <!-- 4. 초기화 -->
+    <!-- 5. 초기화 -->
     <section class="card p-6 md:p-7 mt-4 mb-10">
-      <h2 style="font-size:1.1rem;font-weight:800">4 · 초기화</h2>
+      <h2 style="font-size:1.1rem;font-weight:800">5 · 초기화</h2>
       <p class="text-[12.5px] mt-1.5" style="color:#6B7290">이 브라우저의 로컬 학습 상태를 지웁니다. 서버 데이터는 지워지지 않습니다.</p>
       <div class="grid sm:grid-cols-2 gap-2.5 mt-5">
         <button class="abtn danger" id="resetBtn">로컬 상태 전체 초기화<span class="sub">PremiseStore.reset()</span></button>
@@ -314,6 +364,96 @@
       navigator.clipboard.writeText(u.uid);
       copyBtn.textContent = "복사됨 · " + u.uid;
     } catch(e){ prompt("아래 UID를 복사하세요", u.uid); }
+  });
+
+  /* ===== 베타 테스터 플랜 부여 (서버 반영) ===== */
+  function targets(){
+    return ($("gTargets").value || "").split(/[\n,]+/).map(function(x){ return x.trim(); }).filter(Boolean);
+  }
+  function say(html, kind){
+    $("grantResult").innerHTML = '<div class="pill '+(kind||"ok")+'" style="margin-bottom:8px">'+(kind==="no"?"실패":kind==="warn"?"확인":"완료")+'</div><div>'+html+'</div>';
+  }
+  function busy(btn, on, label){
+    btn.disabled = on;
+    if (on) { btn.dataset.t = btn.textContent; btn.textContent = label || "처리 중…"; }
+    else if (btn.dataset.t) btn.textContent = btn.dataset.t;
+  }
+  function needBilling(){
+    if (!window.PremiseBilling) { say("서버 연결이 아직 준비되지 않았습니다. 잠시 후 다시 시도하세요.", "no"); return false; }
+    return true;
+  }
+
+  $("findBtn").addEventListener("click", function(){
+    var t = targets(); if (!t.length) return say("대상을 입력하세요.", "warn");
+    if (!needBilling()) return;
+    busy(this, true, "조회 중…"); var self = this;
+    PremiseBilling.adminFindUser(t[0]).then(function(u){
+      var sub = u.subscription || {};
+      say("<b>"+escapeHTML(u.email || "(이메일 없음)")+"</b><br>"
+        + "UID " + escapeHTML(u.uid) + "<br>"
+        + "로그인 수단 " + escapeHTML(u.provider) + "<br>"
+        + "가입 " + escapeHTML(u.createdAt || "-") + "<br>"
+        + "현재 상태 <b>" + escapeHTML(sub.status || "none") + "</b>"
+        + (sub.plan ? " · " + escapeHTML(sub.plan) : "")
+        + (sub.accessUntil ? " · ~" + escapeHTML(sub.accessUntil) : "")
+        + (sub.grantedByAdmin ? " <span class='pill warn'>관리자 부여</span>" : ""));
+    }).catch(function(e){ say(escapeHTML((e && e.message) || "조회 실패"), "no"); })
+      .finally(function(){ busy(self, false); });
+  });
+
+  $("grantBtn").addEventListener("click", function(){
+    var t = targets(); if (!t.length) return say("대상을 입력하세요.", "warn");
+    if (!needBilling()) return;
+    var plan = $("gPlan").value, days = Number($("gDays").value), note = $("gNote").value;
+    if (!confirm(t.length + "명에게 " + (plan === "premium" ? "프리미엄" : "베이직") + " " + days + "일을 부여합니다. 계속할까요?")) return;
+    busy(this, true, "부여 중…"); var self = this;
+    PremiseBilling.adminGrantBulk(t, plan, days, note).then(function(r){
+      var okN = r.results.filter(function(x){ return x.ok; }).length;
+      var html = "<b>" + okN + "/" + r.results.length + "명 부여 완료</b> · " + escapeHTML(r.plan) + " · ~" + escapeHTML(r.accessUntil) + "<br>"
+        + r.results.map(function(x){
+            return (x.ok ? "✅ " : "❌ ") + escapeHTML(x.query) + (x.ok ? "" : " — " + escapeHTML(x.error));
+          }).join("<br>");
+      say(html, okN === r.results.length ? "ok" : "warn");
+    }).catch(function(e){ say(escapeHTML((e && e.message) || "부여 실패"), "no"); })
+      .finally(function(){ busy(self, false); });
+  });
+
+  $("revokeBtn").addEventListener("click", function(){
+    var t = targets(); if (!t.length) return say("대상을 입력하세요.", "warn");
+    if (!needBilling()) return;
+    if (!confirm(t.length + "명의 관리자 부여를 회수합니다. 계속할까요?")) return;
+    busy(this, true, "회수 중…"); var self = this;
+    Promise.all(t.map(function(q){
+      return PremiseBilling.adminRevokePlan(q)
+        .then(function(r){ return "✅ " + escapeHTML(q); })
+        .catch(function(e){ return "❌ " + escapeHTML(q) + " — " + escapeHTML((e && e.message) || "실패"); });
+    })).then(function(lines){ say(lines.join("<br>"), "warn"); })
+      .finally(function(){ busy(self, false); });
+  });
+
+  $("listBtn").addEventListener("click", function(){
+    if (!needBilling()) return;
+    busy(this, true, "불러오는 중…"); var self = this;
+    PremiseBilling.adminListUsers(100).then(function(r){
+      if (!r.users.length) { $("userList").innerHTML = "<p style='color:#6B7290'>가입 계정이 없습니다.</p>"; return; }
+      var head = "<tr style='text-align:left;color:#6B7290'><th style='padding:6px 10px'>계정</th><th style='padding:6px 10px'>수단</th><th style='padding:6px 10px'>상태</th><th style='padding:6px 10px'>만료</th><th style='padding:6px 10px'>가입</th></tr>";
+      var rows = r.users.map(function(u){
+        var badge = u.status === "active" ? (u.grantedByAdmin ? "<span class='pill warn'>부여</span>" : "<span class='pill ok'>결제</span>")
+                  : u.status === "trial" ? "<span class='pill ok'>체험</span>"
+                  : "<span class='pill no'>없음</span>";
+        return "<tr style='border-top:1px solid #ECEEF1'>"
+          + "<td style='padding:8px 10px'><b>" + escapeHTML(u.email || "(이메일 없음)") + "</b><br><span style='color:#6B7290;font-size:11px'>" + escapeHTML(u.uid) + "</span></td>"
+          + "<td style='padding:8px 10px'>" + escapeHTML(u.provider) + "</td>"
+          + "<td style='padding:8px 10px'>" + badge + (u.plan ? " " + escapeHTML(u.plan) : "") + "</td>"
+          + "<td style='padding:8px 10px'>" + escapeHTML(u.accessUntil || "-") + "</td>"
+          + "<td style='padding:8px 10px;color:#6B7290;font-size:11px'>" + escapeHTML((u.createdAt || "").slice(0, 16)) + "</td>"
+          + "</tr>";
+      }).join("");
+      $("userList").innerHTML = "<table style='width:100%;border-collapse:collapse;font-size:12.5px'>" + head + rows + "</table>"
+        + "<p style='color:#6B7290;margin-top:8px'>총 " + r.count + "명 · 계정을 클릭 대신 이메일/UID를 위 입력창에 붙여 넣어 부여하세요.</p>";
+    }).catch(function(e){
+      $("userList").innerHTML = "<p style='color:#A32D2D'>" + escapeHTML((e && e.message) || "불러오기 실패") + "</p>";
+    }).finally(function(){ busy(self, false); });
   });
 
   $("refreshBtn").addEventListener("click", render);
