@@ -526,9 +526,20 @@
   else _applyState();
   document.addEventListener("premise:subscription", _applyState); // 서버 동기화 도착 시 재적용
 
-  /* ===== 관리자 전용 회원상태 스위처 (운영자 계정에서만 노출) ===== */
+  /* ===== 관리자 전용 회원상태 스위처 (admin.html에서만, 운영자 계정에서만 노출) ===== */
+  /* 관리자 계정이라도 일반 페이지(index 등)에는 띄우지 않는다.
+     운영자가 실사용 화면을 볼 때 QA 바가 겹쳐 보이던 문제. 상태 전환은 admin.html에서만 한다. */
+  function isAdminPage(){
+    try { return /(^|\/)admin\.html?$/i.test(location.pathname); } catch(e){ return false; }
+  }
   function mountQaBar(){
-    if (!document.body || document.getElementById("qaBar")) return;
+    if (!document.body) return;
+    if (!isAdminPage()){                      // 관리자 페이지 밖에서는 렌더하지 않고, 남아있으면 제거
+      var stale = document.getElementById("qaBar");
+      if (stale && stale.parentNode) stale.parentNode.removeChild(stale);
+      return;
+    }
+    if (document.getElementById("qaBar")) return;
     if (!(window.PremiseAdmin && PremiseAdmin.is())) return; // 일반 사용자에게는 렌더하지 않음
     var cur = "guest";
     try {
