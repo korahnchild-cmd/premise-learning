@@ -10,6 +10,35 @@
   const KEY = "premise_state_v2";
   const today = () => new Date().toISOString().slice(0, 10);
 
+  /* ===== 관리자 판정 =====
+     운영자 본인 계정에서만 QA 스위처/관리자 페이지가 열린다.
+     주의: 클라이언트 판정이므로 '기능 노출 제어'일 뿐 보안 경계가 아니다.
+     실제 보안 경계는 Firestore 규칙(subscription write 전면 차단)이 담당한다. */
+  const ADMIN_EMAILS = ["korahnchild@gmail.com"];
+  function isLocalhost() {
+    try {
+      const h = location.hostname;
+      return h === "localhost" || h === "127.0.0.1" || location.protocol === "file:";
+    } catch (e) { return false; }
+  }
+  window.PremiseAdmin = {
+    emails: ADMIN_EMAILS,
+    /* Firebase 로그인 이메일이 화이트리스트에 있거나, 로컬 개발 환경이면 true */
+    is: function () {
+      if (isLocalhost()) return true;
+      try {
+        const u = window.PremiseAuth && PremiseAuth.auth && PremiseAuth.auth.currentUser;
+        if (u && u.email && ADMIN_EMAILS.indexOf(String(u.email).toLowerCase()) >= 0) return true;
+      } catch (e) {}
+      try {
+        const st = JSON.parse(localStorage.getItem(KEY) || "null");
+        const em = st && st.user && st.user.email;
+        if (em && ADMIN_EMAILS.indexOf(String(em).toLowerCase()) >= 0) return true;
+      } catch (e) {}
+      return false;
+    }
+  };
+
   /* 사용자 입력(질문 로그 등)을 innerHTML로 렌더할 때 감쌀 이스케이프 유틸.
      리포트 공유 URL이 생기는 순간 저장형 XSS이 되는 경로 차단용. */
   function escapeHTML(v) {
@@ -151,8 +180,14 @@
       save(s);
       return s.user;
     },
-    /* ===== 임시 QA: 회원 상태 강제 설정 (런칭 전 · 제거 예정) ===== */
+    /* ===== 관리자 전용: 회원 상태 강제 설정 (테스트용, 로컬 상태만 변경) =====
+       서버 구독문서는 건드리지 않는다. Firestore 규칙이 클라이언트 write를 막고 있고,
+       실제 권한 부여는 Cloud Function만 가능하다. */
     __setMembership: (kind) => {
+      if (!(window.PremiseAdmin && PremiseAdmin.is())) {
+        console.warn("[PBS] __setMembership: 관리자 계정에서만 사용할 수 있습니다.");
+        return s;
+      }
       if (kind === "guest"){
         s.user = { loggedIn: false, name: "", email: "", provider: "" };
         s.subscription = { status: "none", plan: "basic", cycle: "m6", method: "", trialEndsAt: "", nextBillingAt: "" };
@@ -209,7 +244,19 @@
     /* 서버(Firestore) 구독문서를 로컬 상태에 미러링 — firebase-init의 onSnapshot이 호출.
        서버가 진실원천이므로, 로그인 유저는 이 값이 화면 표시의 근거가 된다. */
     applyServerSubscription: (sub) => {
-      if (!sub) return s; // 서버에 구독문서 없음(신규/비로그인/데모) → 로컬 유지
+      if (!sub) {
+        /* 서버에 구독문서가 없다 = 이 계정은 아무 권한이 없다.
+           로그인 상태인데 로컬에만 유료 상태가 남아 있으면 위조이므로 초기화한다.
+           (관리자 테스트 중에는 유지 — 상태 시뮬레이션이 매번 되돌려지면 테스트가 불가능하다) */
+        const isAdmin = !!(window.PremiseAdmin && PremiseAdmin.is());
+        if (!isAdmin && s.user && s.user.loggedIn && s.subscription && s.subscription.status !== "none") {
+          s.subscription = { status: "none", plan: "basic", cycle: "m6", method: "", trialEndsAt: "", accessUntil: "", nextBillingAt: "", trialUsed: !!s.subscription.trialUsed };
+          s.plan = "basic";
+          save(s);
+          try { document.dispatchEvent(new CustomEvent("premise:subscription")); } catch (e) {}
+        }
+        return s;
+      }
       s.subscription = {
         status: sub.status || "none",
         plan: sub.plan || "basic",
@@ -315,6 +362,7 @@
     render: function (active) {
       const el = document.getElementById("topnav");
       if (!el) return;
+      try { el.dataset.active = active || ""; } catch (e) {}
       const items = [
         ["coz", "course.html", "코스"],
         ["daily", "daily.html", "오늘의 사건"],
@@ -325,6 +373,7 @@
       const links = items.map(([k, href, label]) =>
         `<a href="${href}" class="pn-link${active === k ? " pn-active" : ""}">${label}</a>`
       ).join("");
+      const isAdmin = !!(window.PremiseAdmin && PremiseAdmin.is());
       const logged = window.PremiseStore && PremiseStore.isLoggedIn();
       const accountLink = logged
         ? `<a href="mypage.html" class="pn-account${active === "mypage" ? " pn-active" : ""}" title="마이페이지">
@@ -353,7 +402,7 @@
             <span class="pn-mark"><svg style="transform:rotate(-45deg)" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.5 15.5L20 20"/></svg></span>
             PBS 학습법
           </a>
-          <nav class="pn-nav">${links}${accountLink}<button class="pn-reset" title="데모 초기화" onclick="PremiseStore.reset();location.reload()">↻</button></nav>
+          <nav class="pn-nav">${links}${accountLink}${isAdmin ? `<a class="pn-link" href="admin.html" title="관리자">⚙</a>` : ""}</nav>
         </div></header>`;
     }
   };
@@ -389,9 +438,10 @@
   else _applyState();
   document.addEventListener("premise:subscription", _applyState); // 서버 동기화 도착 시 재적용
 
-  /* ===== 임시 QA 회원상태 스위처 (런칭 전 · 상단 고정, 제거 예정) ===== */
+  /* ===== 관리자 전용 회원상태 스위처 (운영자 계정에서만 노출) ===== */
   function mountQaBar(){
     if (!document.body || document.getElementById("qaBar")) return;
+    if (!(window.PremiseAdmin && PremiseAdmin.is())) return; // 일반 사용자에게는 렌더하지 않음
     var cur = "guest";
     try {
       var st = window.PremiseStore && PremiseStore.get();
@@ -420,4 +470,13 @@
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mountQaBar);
   else mountQaBar();
+  /* Firebase 로그인은 비동기라 첫 렌더 시점엔 currentUser가 없을 수 있다.
+     인증 상태가 확정된 뒤 한 번 더 시도하고, 네비게이션도 다시 그린다. */
+  document.addEventListener("premise:auth", function(){
+    mountQaBar();
+    try {
+      var el = document.getElementById("topnav");
+      if (el && el.dataset && el.dataset.active) PremiseNav.render(el.dataset.active);
+    } catch(e){}
+  });
 })();

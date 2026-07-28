@@ -7,5 +7,6 @@ Disallow: /mypage.html
 Disallow: /checkout.html
 Disallow: /login.html
 Disallow: /daily.html
+Disallow: /admin.html
 
 Sitemap: https://pbslearning.co.kr/sitemap.xml

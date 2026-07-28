@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>PBS 학습법 · 관리자 테스트 콘솔</title>
+<link rel="stylesheet" href="assets/tailwind-b.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style>
+  body{ font-family:"Pretendard",sans-serif; -webkit-font-smoothing:antialiased; letter-spacing:-.012em; background:#F5F6F4; color:#0A0E17; }
+  .card{ background:#fff; border:1px solid #ECEEF1; border-radius:20px; }
+  .abtn{ cursor:pointer; border:1px solid #ECEEF1; background:#fff; border-radius:12px; padding:12px 14px; font-size:13.5px; font-weight:700; color:#0A0E17; text-align:left; transition:border-color .15s, background .15s; }
+  .abtn:hover{ border-color:#0A66FF; background:#F4F7FF; }
+  .abtn.on{ border-color:#0A66FF; background:#0A66FF; color:#fff; }
+  .abtn .sub{ display:block; font-size:11.5px; font-weight:500; color:#6B7290; margin-top:3px; }
+  .abtn.on .sub{ color:rgba(255,255,255,.8); }
+  .abtn.danger:hover{ border-color:#E24B4A; background:#FDF3F3; }
+  .kv{ display:grid; grid-template-columns:132px 1fr; gap:6px 12px; font-size:13px; }
+  .kv dt{ color:#6B7290; }
+  .kv dd{ margin:0; font-weight:600; word-break:break-all; }
+  .pill{ display:inline-block; border-radius:9999px; padding:3px 10px; font-size:11.5px; font-weight:800; }
+  .ok{ background:rgba(29,158,117,.12); color:#0F6E56; }
+  .no{ background:rgba(226,75,74,.12); color:#A32D2D; }
+  .warn{ background:rgba(239,159,39,.14); color:#854F0B; }
+  pre{ background:#0A0E17; color:#D7E0FA; border-radius:14px; padding:16px; font-size:11.5px; line-height:1.65; overflow:auto; max-height:340px; }
+</style>
+</head>
+<body>
+
+<div id="topnav"></div>
+
+<main class="max-w-4xl mx-auto px-5 py-8">
+
+  <!-- 접근 거부 -->
+  <div id="denied" style="display:none" class="card p-8 text-center">
+    <p style="font-size:40px;margin-bottom:12px">🔒</p>
+    <h1 class="text-[1.4rem] font-extrabold">관리자 전용 페이지입니다</h1>
+    <p class="text-[13.5px] mt-3 leading-relaxed" style="color:#6B7290">운영자 계정으로 로그인해야 열람할 수 있습니다.<br />이 페이지의 기능은 본인 브라우저의 표시 상태만 바꾸며, 서버의 구독 권한은 변경하지 않습니다.</p>
+    <div class="mt-6 flex gap-2 justify-center">
+      <a href="login.html" class="abtn" style="text-align:center">로그인하기</a>
+      <a href="index.html" class="abtn" style="text-align:center">홈으로</a>
+    </div>
+  </div>
+
+  <!-- 콘솔 -->
+  <div id="console" style="display:none">
+
+    <div class="flex items-start justify-between flex-wrap gap-3">
+      <div>
+        <p class="text-[11px] font-semibold tracking-widest uppercase" style="color:#0A66FF">Admin Console</p>
+        <h1 class="text-[1.7rem] md:text-[2rem] font-extrabold mt-1">관리자 테스트 콘솔</h1>
+        <p class="text-[13px] mt-2" style="color:#6B7290; word-break:keep-all">회원 상태와 학습 데이터를 바꿔가며 화면을 확인합니다. <b>이 브라우저의 로컬 상태만</b> 바뀝니다.</p>
+      </div>
+      <span id="whoPill" class="pill ok">확인 중</span>
+    </div>
+
+    <!-- 1. 회원 상태 -->
+    <section class="card p-6 md:p-7 mt-6">
+      <h2 style="font-size:1.1rem;font-weight:800">1 · 회원 상태</h2>
+      <p class="text-[12.5px] mt-1.5" style="color:#6B7290">게이팅·CTA·배너가 상태별로 어떻게 바뀌는지 확인합니다.</p>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-2.5 mt-5" id="stateBtns">
+        <button class="abtn" data-k="guest">비로그인<span class="sub">guest · 모든 게이트 잠김</span></button>
+        <button class="abtn" data-k="free">무료 회원<span class="sub">free · 로그인했으나 접근 없음</span></button>
+        <button class="abtn" data-k="trial">체험 중<span class="sub">trial · 7일 무료체험</span></button>
+        <button class="abtn" data-k="basic">베이직<span class="sub">basic · 결제 구독</span></button>
+        <button class="abtn" data-k="premium">프리미엄<span class="sub">premium · 전체 개방</span></button>
+        <button class="abtn" data-k="paused">일시정지<span class="sub">paused · 동결된 지도 열람</span></button>
+        <button class="abtn" data-k="canceled">해지<span class="sub">canceled · 잔여기간</span></button>
+        <button class="abtn" data-k="expired">만료<span class="sub">accessUntil 경과</span></button>
+      </div>
+    </section>
+
+    <!-- 2. 학습 데이터 -->
+    <section class="card p-6 md:p-7 mt-4">
+      <h2 style="font-size:1.1rem;font-weight:800">2 · 학습 데이터 시나리오</h2>
+      <p class="text-[12.5px] mt-1.5" style="color:#6B7290">파트너 노트·리포트·마인드맵이 기간별로 무엇을 보여주는지 확인합니다. 가짜 이력이 노출되는지 잡아내는 용도입니다.</p>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-2.5 mt-5" id="dataBtns">
+        <button class="abtn" data-d="day0">0일차<span class="sub">가입 직후 · 완전 빈 상태</span></button>
+        <button class="abtn" data-d="day1">1일차<span class="sub">3문항 완료 · 재현 사례</span></button>
+        <button class="abtn" data-d="day7">7일차<span class="sub">첫 주간 리포트 시점</span></button>
+        <button class="abtn" data-d="week8">8주차<span class="sub">그래프·함정 지도 개방</span></button>
+      </div>
+      <p class="text-[12px] mt-4" style="color:#6B7290">* 시나리오를 적용하면 기존 학습 기록이 덮어써집니다. 본인 실제 기록이 있는 계정에서는 주의하세요.</p>
+    </section>
+
+    <!-- 3. 진단 -->
+    <section class="card p-6 md:p-7 mt-4">
+      <div class="flex items-center justify-between flex-wrap gap-3">
+        <h2 style="font-size:1.1rem;font-weight:800">3 · 현재 상태 진단</h2>
+        <button class="abtn" id="refreshBtn" style="padding:8px 14px">새로고침</button>
+      </div>
+      <dl class="kv mt-5" id="diagKv"></dl>
+
+      <p class="text-[12.5px] font-bold mt-6 mb-2">가짜 데이터 검출</p>
+      <div id="fakeScan" class="text-[12.5px] leading-relaxed"></div>
+
+      <p class="text-[12.5px] font-bold mt-6 mb-2">localStorage 원본</p>
+      <pre id="rawState">…</pre>
+    </section>
+
+    <!-- 4. 초기화 -->
+    <section class="card p-6 md:p-7 mt-4 mb-10">
+      <h2 style="font-size:1.1rem;font-weight:800">4 · 초기화</h2>
+      <p class="text-[12.5px] mt-1.5" style="color:#6B7290">이 브라우저의 로컬 학습 상태를 지웁니다. 서버 데이터는 지워지지 않습니다.</p>
+      <div class="grid sm:grid-cols-2 gap-2.5 mt-5">
+        <button class="abtn danger" id="resetBtn">로컬 상태 전체 초기화<span class="sub">PremiseStore.reset()</span></button>
+        <a class="abtn" href="notebook.html" style="text-align:left">파트너 노트로 이동<span class="sub">바뀐 상태로 화면 확인</span></a>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<script src="common.js"></script>
+<script type="module" src="firebase-init.js"></script>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+
+  function gate(){
+    var ok = false;
+    try { ok = window.PremiseAdmin && PremiseAdmin.is(); } catch(e){}
+    $("denied").style.display  = ok ? "none" : "";
+    $("console").style.display = ok ? "" : "none";
+    if (ok) { try { PremiseNav.render("admin"); } catch(e){} render(); }
+    return ok;
+  }
+
+  /* ===== 회원 상태 ===== */
+  var TODAY = new Date().toISOString().slice(0,10);
+  function plusDays(n){ var d=new Date(); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10); }
+
+  function setState(kind){
+    var S = PremiseStore.get();
+    if (kind === "guest" || kind === "free" || kind === "basic" || kind === "premium") {
+      PremiseStore.__setMembership(kind);
+    } else {
+      // trial / paused / canceled / expired — __setMembership이 다루지 않는 상태를 직접 구성
+      if (!S.user) S.user = {};
+      S.user.loggedIn = true;
+      S.user.provider = S.user.provider || "google";
+      S.user.name  = S.user.name  || "테스트 파트너";
+      S.user.email = S.user.email || "korahnchild@gmail.com";
+      S.subscription = S.subscription || {};
+      if (kind === "trial"){
+        S.subscription.status="trial"; S.subscription.plan="basic"; S.subscription.cycle="m6";
+        S.subscription.trialEndsAt=plusDays(7); S.subscription.accessUntil=plusDays(7); S.plan="basic";
+      } else if (kind === "paused"){
+        S.subscription.status="paused"; S.subscription.plan="basic"; S.subscription.accessUntil=plusDays(20); S.plan="basic";
+      } else if (kind === "canceled"){
+        S.subscription.status="canceled"; S.subscription.plan="basic"; S.subscription.accessUntil=plusDays(12); S.plan="basic";
+      } else if (kind === "expired"){
+        S.subscription.status="active"; S.subscription.plan="basic"; S.subscription.accessUntil=plusDays(-1); S.plan="basic";
+      }
+      try { localStorage.setItem("premise_state_v2", JSON.stringify(S)); } catch(e){}
+    }
+    location.reload();
+  }
+
+  /* ===== 학습 데이터 시나리오 ===== */
+  function daysAgo(n){ var d=new Date(); d.setDate(d.getDate()-n); return d.toISOString().slice(0,10); }
+
+  function setData(kind){
+    var S = PremiseStore.get();
+    var mk = function(sub,q,dayOffset){ return { subject:sub, q:q, premise:"", date:daysAgo(dayOffset) }; };
+
+    if (kind === "day0"){
+      S.streak=0; S.lastActive=""; S.completed=[]; S.badges=[]; S.premises=[]; S.questionLog=[];
+    } else if (kind === "day1"){
+      S.streak=1; S.lastActive=TODAY;
+      S.completed=["k-m1","k-m2","k-m3"];
+      S.badges=["🔍"];
+      S.premises=[
+        { subject:"국어", note:"'조차'가 심은 전제", badge:"🔍", badgeName:"구조파트너", date:"오늘" },
+        { subject:"국어", note:"필자의 관점 확인", badge:"🔍", badgeName:"구조파트너", date:"오늘" },
+        { subject:"국어", note:"'당연히'를 되물음", badge:"🔍", badgeName:"구조파트너", date:"오늘" }
+      ];
+      S.questionLog=[ mk("국어","이 글쓴이는 왜 이렇게 봤어요?",0) ];
+    } else if (kind === "day7"){
+      S.streak=7; S.lastActive=TODAY;
+      S.completed=["k-m1","k-m2","k-m3","k-m4","k-m5","m-ma1","m-ma2"];
+      S.badges=["🔍","🧩","🕵️"];
+      S.premises=[];
+      for (var i=0;i<7;i++) S.premises.push({ subject: i%2?"수학":"국어", note:"전제 발견 "+(7-i), badge:"🔍", badgeName:"구조파트너", date: i===0?"오늘":(i+"일 전") });
+      S.questionLog=[ mk("국어","답이 뭐예요?",6), mk("국어","이 문장이 뭘 당연하게 깔았죠?",0),
+                      mk("수학","이거 왜 이렇게 풀어요?",5), mk("수학","식 말고 다른 방법도 돼요?",1) ];
+    } else if (kind === "week8"){
+      S.streak=56; S.lastActive=TODAY;
+      S.completed=["in-1","in-2","in-3","in-4","ba-1","ba-2","ba-3","k-m1","k-m2","k-m3","k-m4","k-m5","k-m6","m-ma1","m-ma2","m-ma3"];
+      S.badges=["🔍","🧩","⚖️","🕵️","🎯","🐢","🛠️","🧭"];
+      S.premises=[];
+      for (var j=0;j<24;j++) S.premises.push({ subject:["국어","수학","일상","상식"][j%4], note:"전제 기록 "+(24-j), badge:"🔍", badgeName:"구조파트너", date: j===0?"오늘":(j+"일 전") });
+      S.questionLog=[];
+      for (var k=0;k<18;k++) S.questionLog.push(mk(["국어","수학","일상"][k%3], "질문 기록 "+(k+1), 55-k*3));
+    }
+    try { localStorage.setItem("premise_state_v2", JSON.stringify(S)); } catch(e){}
+    location.reload();
+  }
+
+  /* ===== 진단 ===== */
+  function render(){
+    var S = PremiseStore.get();
+    var st = "guest", lvl = "none";
+    try { st = PremiseStore.userState(); lvl = PremiseStore.accessLevel(); } catch(e){}
+
+    var fb = null;
+    try { fb = window.PremiseAuth && PremiseAuth.auth && PremiseAuth.auth.currentUser; } catch(e){}
+
+    $("whoPill").textContent = "관리자 · " + (fb && fb.email ? fb.email : (S.user && S.user.email) || "로컬");
+    document.querySelectorAll("#stateBtns .abtn").forEach(function(b){ b.classList.toggle("on", b.dataset.k === st); });
+
+    var sub = S.subscription || {};
+    var rows = [
+      ["userState", st],
+      ["accessLevel", lvl],
+      ["구독 상태", sub.status || "none"],
+      ["플랜", sub.plan || "-"],
+      ["접근 만료일", sub.accessUntil || sub.trialEndsAt || "-"],
+      ["체험 소진", sub.trialUsed ? "예" : "아니오"],
+      ["Firebase UID", fb ? fb.uid : "미로그인"],
+      ["Firebase 이메일", fb && fb.email ? fb.email : "-"],
+      ["연속일 streak", S.streak],
+      ["완료 미션", (S.completed||[]).length + "개"],
+      ["발견한 전제", (S.premises||[]).length + "개"],
+      ["질문 로그", (S.questionLog||[]).length + "개"],
+      ["마지막 활동", S.lastActive || "없음"]
+    ];
+    $("diagKv").innerHTML = rows.map(function(r){
+      return "<dt>"+escapeHTML(r[0])+"</dt><dd>"+escapeHTML(String(r[1]))+"</dd>";
+    }).join("");
+
+    // 가짜 데이터 검출 — 활동량 대비 화면이 과장될 조건을 점검
+    var days = (S.completed||[]).length;
+    var checks = [
+      { label:"학습 기록 없이 연속일 표시", bad: S.streak > 0 && (S.completed||[]).length === 0 },
+      { label:"질문 로그 없이 주간 리포트 생성 가능", bad: (S.questionLog||[]).length < 2 },
+      { label:"8주 미만인데 성장 그래프 조건 충족", bad: S.streak < 56 },
+      { label:"발견한 전제 0개", bad: (S.premises||[]).length === 0 }
+    ];
+    $("fakeScan").innerHTML = checks.map(function(c){
+      return '<p style="margin:4px 0"><span class="pill '+(c.bad?"warn":"ok")+'">'+(c.bad?"해당":"정상")+'</span> <span style="margin-left:8px">'+escapeHTML(c.label)+'</span></p>';
+    }).join("") + '<p class="text-[12px] text-[#6B7290] mt-3" style="word-break:keep-all">"해당"인 항목은 화면에서 빈 상태 안내가 떠야 정상입니다. 대신 숫자나 "지난주 대비" 같은 문구가 보이면 가짜 데이터입니다.</p>';
+
+    try { $("rawState").textContent = JSON.stringify(S, null, 2); } catch(e){ $("rawState").textContent = "(읽기 실패)"; }
+  }
+
+  /* ===== 바인딩 ===== */
+  document.querySelectorAll("#stateBtns .abtn").forEach(function(b){
+    b.addEventListener("click", function(){ setState(b.dataset.k); });
+  });
+  document.querySelectorAll("#dataBtns .abtn").forEach(function(b){
+    b.addEventListener("click", function(){
+      if (confirm("학습 데이터를 '" + b.textContent.split("<")[0].trim() + "' 시나리오로 덮어씁니다. 계속할까요?")) setData(b.dataset.d);
+    });
+  });
+  $("refreshBtn").addEventListener("click", render);
+  $("resetBtn").addEventListener("click", function(){
+    if (confirm("이 브라우저의 로컬 학습 상태를 모두 지웁니다. 계속할까요?")) { PremiseStore.reset(); location.reload(); }
+  });
+
+  gate();
+  document.addEventListener("premise:auth", gate);       // Firebase 인증 확정 후 재판정
+  document.addEventListener("premise:subscription", render);
+})();
+</script>
+</body>
+</html>
