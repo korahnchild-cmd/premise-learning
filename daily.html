@@ -560,7 +560,7 @@
   })();
 
   let li = 0, si = 0, answered = false, qLoggedThisLesson = false;
-  const streakBase = (window.PremiseStore ? PremiseStore.get().streak : 12);
+  const streakBase = (window.PremiseStore ? PremiseStore.get().streak : 0);
   $("streak").textContent = streakBase;
 
   function renderDots(){

@@ -49,10 +49,10 @@
     <!-- 1. 상단 요약 -->
     <div class="mb-6">
       <span class="text-[11px] font-bold text-point bg-point/10 rounded-full px-2.5 py-1">PBS 마인드맵</span>
-      <h1 class="text-[1.8rem] md:text-[2.3rem] font-extrabold mt-3 leading-tight"><span id="hName">지호</span>의 사고가 <span class="text-point">자라는 중</span>입니다</h1>
+      <h1 class="text-[1.8rem] md:text-[2.3rem] font-extrabold mt-3 leading-tight"><span id="hName">우리 아이</span>의 사고가 <span class="text-point">자라는 중</span>입니다</h1>
       <div class="mt-4 flex flex-wrap items-center gap-2.5">
         <div class="rounded-2xl bg-white border border-line px-4 py-2.5"><p class="text-[19px] font-extrabold text-ink" id="hEvents">247</p><p class="text-[10.5px] text-body">함께 분석한 사건</p></div>
-        <div class="rounded-2xl bg-white border border-line px-4 py-2.5"><p class="text-[19px] font-extrabold text-point" id="hPremise">58</p><p class="text-[10.5px] text-body">발견한 전제</p></div>
+        <div class="rounded-2xl bg-white border border-line px-4 py-2.5"><p class="text-[19px] font-extrabold text-point" id="hPremise">0</p><p class="text-[10.5px] text-body">발견한 전제</p></div>
         <div class="rounded-2xl bg-white border border-line px-4 py-2.5"><p class="text-[19px] font-extrabold text-ink">🔥<span id="hStreak">15</span></p><p class="text-[10.5px] text-body">연속일</p></div>
         <span class="text-[11.5px] text-faint ml-1">매주 갱신 · 마지막 3일 전</span>
       </div>
@@ -60,7 +60,7 @@
 
     <!-- 2. 사고 지도 레이더 -->
     <div class="card p-5 md:p-7 mb-5">
-      <h2 class="text-[1.15rem] md:text-[1.35rem] font-extrabold">지금 <span id="rName">지호</span>가 보는 것, 아직 못 보는 것</h2>
+      <h2 class="text-[1.15rem] md:text-[1.35rem] font-extrabold">지금 <span id="rName">우리 아이</span>가 보는 것, 아직 못 보는 것</h2>
       <p class="text-[13px] text-body mt-1.5 leading-relaxed">전제 함정 유형별로 <b class="text-ink">스스로 잡아내는 정도</b>예요. 쓸수록 또렷해지고, <b class="text-ink">학년이 바뀌어도 이어집니다</b>.</p>
       <div class="mt-4 flex flex-col md:flex-row items-center gap-5">
         <div class="w-full max-w-[330px] mx-auto shrink-0"><svg id="trapRadar" viewBox="0 0 320 250" class="w-full" aria-label="전제 함정 지도"></svg></div>
@@ -166,7 +166,7 @@
         </div>
         <div class="min-w-0">
           <p class="text-[11.5px] font-semibold text-point mb-1">사고분석관 루카</p>
-          <p class="text-[13.5px] md:text-[14.5px] text-ink leading-relaxed"><b id="lName">지호</b>는 3개월 전만 해도 ‘조차’ 같은 말이 심어둔 전제를 지나쳤어요. 지금은 그 말이 뭘 당연하게 깔고 있는지 스스로 되묻습니다. 다음엔 <b class="text-point">‘필자는 중립적이다’</b>라는 전제를 함께 흔들어 볼게요.</p>
+          <p class="text-[13.5px] md:text-[14.5px] text-ink leading-relaxed" id="lukaLine"></p>
         </div>
       </div>
     </div>
@@ -176,7 +176,7 @@
       <div class="flex flex-col sm:flex-row sm:items-center gap-4">
         <div class="flex-1">
           <p class="text-[11px] font-bold text-point mb-1">학년이 바뀌어도, 처음이 아닙니다</p>
-          <p class="text-[15px] md:text-[16px] font-extrabold text-ink leading-snug"><span id="gName">지호</span>가 쌓아온 마인드맵은 다음 학년으로 그대로 이어집니다.</p>
+          <p class="text-[15px] md:text-[16px] font-extrabold text-ink leading-snug"><span id="gName">우리 아이</span>가 쌓아온 마인드맵은 다음 학년으로 그대로 이어집니다.</p>
           <p class="text-[12.5px] text-body mt-1.5 leading-relaxed">작년에 여기까지 자랐어요. 올해는 <b class="text-ink">바로 이 지점에서</b> 이어서 시작합니다.</p>
         </div>
         <div class="shrink-0 text-center rounded-2xl bg-white/70 border border-point/20 px-4 py-3">
@@ -198,7 +198,7 @@
     </div>
 
     <p class="text-center text-[11.5px] text-faint mt-6 leading-relaxed">
-      본 화면은 런칭 전 <b>샘플 예시</b>입니다. 실제 데이터가 쌓이면 아이의 실제 기록으로 채워집니다.<br>© 2026 PBS 학습법 · Premise-Break Schema
+      이 지도는 아이가 실제로 남긴 기록만으로 그려집니다. 근거가 부족한 구간은 비워 둡니다.<br>© 2026 PBS 학습법 · Premise-Break Schema
     </p>
   </div>
 </main>
@@ -220,36 +220,77 @@
   if (window.PremiseNav) PremiseNav.render("dash");
 
   /* ---- 이름 / 카운트 ---- */
-  let name = "지호", streak = 15, events = 247, premise = 58;
+  const IS_PREVIEW = new URLSearchParams(location.search).has("preview");
+  /* 미리보기(마케팅 둘러보기)에서는 예시 데이터를 쓰되, 화면 상단에 예시임을 명시한다.
+     실제 로그인 사용자의 화면에는 절대 섞이지 않는다. */
+  const PREVIEW_ST = {
+    firstActiveAt:"", activeDates:[], activeDayCount:56, daysSinceStart:84, weeksTracked:12,
+    streak:15, totalPremise:58, completedCount:24, badgeCount:8, questionCount:31,
+    thisWeekPremise:6, lastWeekPremise:4, thisWeekQuestion:5, lastWeekQuestion:3,
+    hasAnyActivity:true, canCompareWeeks:true, canShowWeeklyReport:true, canShowGrowthCurve:true
+  };
+  const ST = IS_PREVIEW ? PREVIEW_ST : PremiseStore.stats();
+  if (IS_PREVIEW) {
+    document.addEventListener("DOMContentLoaded", function(){
+      var b=document.createElement("div");
+      b.style.cssText="position:sticky;top:0;z-index:60;background:#FFF6E0;border-bottom:1px solid #FFE6A6;color:#8A6400;font-size:12.5px;font-weight:700;text-align:center;padding:9px 12px";
+      b.textContent="예시 화면입니다 — 실제 아이의 기록이 아니라, 6개월 뒤 이렇게 보인다는 예시예요.";
+      document.body.insertBefore(b, document.body.firstChild);
+    });
+  }
+  let name = "";
   try {
     const u = PremiseStore.getUser && PremiseStore.getUser();
     if (u && u.name) name = u.name;
     const p = JSON.parse(localStorage.getItem("premise_profile") || "null");
     if (p && p.name) name = p.name;
-    const S = PremiseStore.get();
-    if (S) {
-      streak = S.streak ?? streak;
-      if (Array.isArray(S.premises) && S.premises.length) premise = Math.max(premise, S.premises.length);
-      if (Array.isArray(S.completed) && S.completed.length) events = Math.max(events, S.completed.length);
-    }
   } catch (e) {}
+  name = name || "우리 아이";
+  const streak = ST.streak, events = ST.completedCount, premise = ST.totalPremise;
   ["hName","rName","lName","gName"].forEach(id => $(id) && ($(id).textContent = name));
+  /* 루카 한 줄 — 근거 없는 과거 서술을 하지 않는다 */
+  (function(){
+    const el=$("lukaLine"); if(!el) return;
+    if (!ST.hasAnyActivity){
+      el.innerHTML = `<b>${name}</b>의 지도는 아직 비어 있어요. 오늘의 사건을 하나 풀면 첫 좌표가 찍힙니다.`;
+    } else if (ST.weeksTracked < 8){
+      el.innerHTML = `<b>${name}</b>는 지금까지 <b class="text-point">${ST.totalPremise}개</b>의 전제를 찾았어요. 기록이 8주쯤 쌓이면 어떤 함정에 자주 걸리는지 패턴이 보이기 시작합니다. 현재 ${ST.weeksTracked}주차예요.`;
+    } else {
+      el.innerHTML = `<b>${name}</b>는 지금까지 <b class="text-point">${ST.totalPremise}개</b>의 전제를 찾았고, 최근 일주일에만 ${ST.thisWeekPremise}개를 더했어요. 이 기록은 학년이 바뀌어도 그대로 이어집니다.`;
+    }
+  })();
   $("hEvents").textContent = events; $("hPremise").textContent = premise; $("hStreak").textContent = streak;
 
   /* ---- 전제 함정 지도 (report.html과 동일 로직) ---- */
-  const traps = [
+  /* 실제 기록(과목별 전제 발견 분포)에서 만든다. 임의 수치를 쓰지 않는다.
+     8주 미만이면 지도를 그리지 않고 안내로 대체한다(아래 renderTrapMap 참조). */
+  const traps = IS_PREVIEW ? [
     { key:"상관→인과", now:78, prev:40 }, { key:"숨은 전제", now:66, prev:28 },
     { key:"단일 기준", now:58, prev:35 }, { key:"과잉 일반화", now:47, prev:30 },
-    { key:"권위 전제", now:38, prev:15 }, { key:"이분법", now:52, prev:33 },
-    { key:"순환 논리", now:44, prev:24 }, { key:"감정 전제", now:61, prev:36 },
-    { key:"표본 편향", now:35, prev:18 },
-  ];
-  const BENCH = { "상관→인과":96, "숨은 전제":94, "단일 기준":92, "과잉 일반화":90, "권위 전제":89, "이분법":91, "순환 논리":90, "감정 전제":88, "표본 편향":87 };
-  const scoreNow  = Math.round(traps.reduce((s,t)=>s+t.now,0)/traps.length);
-  const scorePrev = Math.round(traps.reduce((s,t)=>s+t.prev,0)/traps.length);
-  const scoreTop  = Math.round(Object.values(BENCH).reduce((a,b)=>a+b,0)/traps.length);
+    { key:"권위 전제", now:38, prev:15 }, { key:"이분법", now:52, prev:33 }
+  ] : (function(){
+    const S = PremiseStore.get();
+    const by = {};
+    (S.premises||[]).forEach(p => { const k = (p && p.subject) || "기타"; by[k] = (by[k]||0)+1; });
+    const keys = Object.keys(by);
+    if (!keys.length) return [];
+    const max = Math.max.apply(null, keys.map(k=>by[k]));
+    return keys.map(k => ({ key:k, now: Math.round(by[k]/max*100), prev: 0 }));
+  })();
+  const BENCH_TOP = 95; // 최상위권 기준선(고정 벤치마크)
+  const scoreNow  = traps.length ? Math.round(traps.reduce((s,t)=>s+t.now,0)/traps.length) : 0;
+  const scorePrev = traps.length ? Math.round(traps.reduce((s,t)=>s+t.prev,0)/traps.length) : 0;
+  const scoreTop  = BENCH_TOP;
   (function renderRadar(){
     const svg = $("trapRadar"); if(!svg) return;
+    /* 근거 없는 지도를 그리지 않는다 — 기록이 없거나 8주 미만이면 안내로 대체 */
+    if (!traps.length || ST.weeksTracked < 8){
+      svg.innerHTML = `<text x="160" y="112" text-anchor="middle" font-size="13" font-weight="700" fill="#9AA4B2">함정 지도 준비 중</text>
+        <text x="160" y="136" text-anchor="middle" font-size="11.5" fill="#9AA4B2">현재 ${ST.weeksTracked}주차 · 8주차부터 그려집니다</text>`;
+      const lst = $("trapList");
+      if (lst) lst.innerHTML = `<p class="text-[12.5px] text-faint" style="word-break:keep-all">아이가 어떤 전제에 반복해서 걸리는지는 기록이 충분히 쌓여야 패턴으로 드러납니다. 지금은 매일 한 사건씩 쌓는 구간이에요.</p>`;
+      return;
+    }
     const cx=160, cy=120, R=86, n=traps.length;
     const ang = i => (-90 + i*(360/n)) * Math.PI/180;
     const pt = (i,r) => [cx + Math.cos(ang(i))*r, cy + Math.sin(ang(i))*r];
@@ -274,6 +315,7 @@
   })();
   (function renderTrapList(){
     const el = $("trapList"); if(!el) return;
+    if (!traps.length || ST.weeksTracked < 8) return; // 위에서 안내를 이미 넣었다
     el.innerHTML = [...traps].sort((a,b)=>b.now-a.now).map(t=>{
       const caught = t.now>=55, delta = t.now - t.prev;
       return `<div class="flex items-center gap-2.5">
@@ -336,7 +378,7 @@
      상위 구간 둔화까지 넉넉히 반영해 정직하게. 실제 연동 시 weeksTracked는 store의 활동 주차로 교체. */
   const THRESHOLD_WEEKS = 8; // 매일 사건 해결 기준 8주가 지나야 예측 그래프화(초반 '새것 효과' 거품 제거)
   const _qw = parseInt(new URLSearchParams(location.search).get("weeks"), 10);
-  const weeksTracked = Number.isFinite(_qw) ? _qw : 12; // 샘플: established(성장곡선 12주와 일치). ?weeks=N 로 초기 상태 미리보기
+  const weeksTracked = Number.isFinite(_qw) ? _qw : ST.weeksTracked; // 실제 활동 주차 (?weeks=N 은 관리자 미리보기용)
   (function renderEta(){
     const elT=$("etaTitle"), elV=$("etaValue"), elB=$("etaBasis"), vis=$("etaVisual");
     const fmt = m => m>=12 ? (Math.floor(m/12)+"년"+((m%12)?(" "+(m%12)+"개월"):"")) : (m+"개월");
@@ -380,7 +422,20 @@
   })();
 
   /* ---- 성장 곡선 (실제 궤적 / 최상위권 예상 토글) ---- */
-  const growthActual = [30,32,34,35,37,40,42,45,47,49,51,scoreNow]; // 사고력 점수 12주(끝=현재)
+  /* 12주 곡선은 8주 이상 기록이 있을 때만 그린다(아래 분기에서 차단).
+     값은 주차별 실제 활동량을 정규화해 만든다. 없는 주는 0. */
+  const growthActual = (function(){
+    const S = PremiseStore.get();
+    const arr = new Array(12).fill(0);
+    const now = Date.now();
+    (S.premises||[]).forEach(p=>{
+      if (!p || !/^\d{4}-\d{2}-\d{2}$/.test(p.at)) return;
+      const wk = Math.floor((now - Date.parse(p.at)) / (7*864e5));
+      if (wk >= 0 && wk < 12) arr[11-wk] += 1;
+    });
+    const mx = Math.max.apply(null, arr.concat([1]));
+    return arr.map(v => Math.round(v/mx*Math.max(scoreNow,1)));
+  })();
   const growthPct = Math.round((growthActual[growthActual.length-1]-growthActual[0])/growthActual[0]*100);
   function smoothPath(pts){
     if(pts.length<3) return pts.map((p,i)=>`${i?'L':'M'}${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(' ');
@@ -453,7 +508,7 @@
   drawGrowth('actual');
   $("milestones").innerHTML = [
     { d:"3주차", t:"“빨리 푸는 게 잘하는 것”이라는 전제를 내려놓음" },
-    { d:"8주차", t:"“숨은 전제”를 스스로 보기 시작" },
+    { d:"8주차", t:"“숨은 전제”를 스스로 보기 시작하는 시기" },
   ].map(m=>`<div class="flex items-start gap-2.5">
       <span style="width:8px;height:8px;border-radius:50%;background:#0A66FF;display:inline-block;flex:none;margin-top:6px"></span>
       <p class="text-[12.5px] text-body leading-snug"><b class="text-ink">${m.d}</b> · ${m.t}</p></div>`).join("");

@@ -117,8 +117,30 @@
     </div>
   </div>
 
+  <!-- 리포트 준비 중 (7일 미만) -->
+  <div id="reportPending" style="display:none" class="card p-8 md:p-10 text-center">
+    <div class="kozy mx-auto" style="width:64px;height:64px">
+      <svg viewBox="0 0 100 100" aria-label="루카"><g class="kw">
+        <polygon class="k-face top" points="50,15 82,33 50,50 18,33"/>
+        <polygon class="k-face right" points="82,33 82,67 50,85 50,50"/>
+        <polygon class="k-face left" points="18,33 50,50 50,85 18,67"/>
+        <polygon class="k-edge" points="50,15 82,33 82,67 50,85 18,67 18,33"/>
+        <path class="k-edge" d="M50,50 L82,33 M50,50 L18,33 M50,50 L50,85"/>
+        <circle class="k-core" cx="50" cy="50" r="4.5"/>
+      </g></svg>
+    </div>
+    <h2 class="text-[1.35rem] font-extrabold mt-5" id="pendTitle" style="font-size:1.5rem">첫 리포트를 준비하고 있어요</h2>
+    <p class="text-[14px] text-body mt-3 leading-relaxed" id="pendMsg" style="word-break:keep-all"></p>
+    <div class="mt-6 rounded-2xl bg-soft border border-line px-5 py-4 text-left">
+      <p class="text-[12.5px] font-bold text-ink mb-2">지금까지 쌓인 기록</p>
+      <div class="grid gap-3 text-center" id="pendStats" style="grid-template-columns:repeat(3,minmax(0,1fr))"></div>
+    </div>
+    <a href="daily.html" class="btn btn-primary mt-6 px-6 py-3 text-[14px] font-semibold">오늘의 사건 풀러 가기 →</a>
+    <p class="text-[12px] text-faint mt-4" style="word-break:keep-all">없는 기록으로 리포트를 만들지 않습니다. 실제로 쌓인 것만 보여드려요.</p>
+  </div>
+
   <!-- 리포트 시트 -->
-  <div class="sheet card overflow-hidden">
+  <div class="sheet card overflow-hidden" id="reportSheet">
 
     <!-- 헤더 -->
     <div class="px-6 md:px-9 pt-7 pb-6 border-b border-line">
@@ -134,14 +156,14 @@
 
       <!-- 샘플 미리보기 배너 (비로그인·무료만 · 구독자는 본인 실제 리포트) -->
       <div data-show-state="guest,free" class="no-print mt-5 rounded-2xl px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3" style="background:rgba(10,102,255,.06);border:1px solid rgba(10,102,255,.16)">
-        <p class="flex-1 text-[13px] text-body leading-relaxed" style="word-break:keep-all"><b class="text-ink">샘플 미리보기예요.</b> 구독하면 매주 우리 아이의 실제 질문 변화로 이 리포트가 채워져요.</p>
+        <p class="flex-1 text-[13px] text-body leading-relaxed" style="word-break:keep-all"><b class="text-ink">아직 리포트가 없어요.</b> 무료 체험을 시작하고 7일이 모이면 우리 아이의 실제 질문 변화로 채워집니다.</p>
         <a href="onboarding.html" data-trialused-text="바로 결제로 시작 →" class="btn btn-primary shrink-0 px-5 py-2.5 text-[13px] font-semibold whitespace-nowrap">7일 무료체험 시작 →</a>
       </div>
 
       <div class="mt-6 flex items-end justify-between flex-wrap gap-4">
         <div>
           <p class="text-[12.5px] text-body">No.<span id="reportNo">6</span> · <span id="dateRange">2026.07.07 – 07.13</span></p>
-          <h1 class="text-[1.7rem] md:text-[2.15rem] font-extrabold mt-1 leading-tight"><span id="detName">지호</span> 파트너의 <span class="text-point">이번 주</span></h1>
+          <h1 class="text-[1.7rem] md:text-[2.15rem] font-extrabold mt-1 leading-tight"><span id="detName">우리 아이</span> 파트너의 <span class="text-point">이번 주</span></h1>
         </div>
         <div class="flex gap-2.5">
           <div class="text-center rounded-2xl bg-soft border border-line px-3.5 py-2.5"><p class="text-[19px] font-extrabold text-ink">🔥<span id="streak">15</span></p><p class="text-[10.5px] text-body">연속일</p></div>
@@ -167,7 +189,7 @@
         <div>
           <p class="text-[11.5px] font-semibold text-point mb-1">사고분석관 루카의 이번 주 한 줄</p>
           <p class="text-[15px] md:text-[16.5px] text-ink leading-relaxed font-medium">
-            이번 주 <b id="detName2">지호</b> 파트너는 <b class="text-point">“빨리 푸는 게 잘하는 것”</b>이라는 전제를 내려놓기 시작했어요. 답을 먼저 찾던 아이가, 이제 <b>문제가 무엇을 당연하게 깔고 있는지</b>부터 되묻습니다.
+            <span id="lukaWeek"></span>
           </p>
         </div>
       </div>
@@ -213,7 +235,7 @@
       <div class="flex items-center gap-2 mb-1.5">
         <span class="text-[11px] font-bold text-point bg-point/10 rounded-full px-2.5 py-1">PBS 마인드맵</span>
       </div>
-      <h3 class="text-[1.35rem] md:text-[1.6rem] font-extrabold">지금 <span id="mapName">지호</span>가 보는 것, 아직 못 보는 것</h3>
+      <h3 class="text-[1.35rem] md:text-[1.6rem] font-extrabold">지금 <span id="mapName">우리 아이</span>가 보는 것, 아직 못 보는 것</h3>
       <p class="text-[13.5px] text-body mt-2 leading-relaxed">전제 함정 유형별로, <b class="text-ink">스스로 잡아내는 정도</b>예요. 이 지도는 PBS 학습법을 쓸수록 또렷해지고, <b class="text-ink">학년이 바뀌어도 이어집니다</b>.</p>
 
       <div class="mt-5 rounded-2xl border border-line bg-soft px-4 py-5 md:px-6 flex flex-col md:flex-row items-center gap-5">
@@ -298,7 +320,7 @@
 
   <!-- 하단 노트 -->
   <p class="no-print text-center text-[11.5px] text-faint mt-6 leading-relaxed">
-    본 리포트는 런칭 전 <b>샘플 예시</b>입니다. 실제 데이터가 쌓이면 아이의 실제 질문과 기록으로 채워집니다.<br>
+    이 리포트는 아이가 실제로 남긴 기록만으로 만들어집니다. 기록이 없는 항목은 비워 둡니다.<br>
     © 2026 PBS 학습법 · Premise-Break Schema
   </p>
 </main>
@@ -306,32 +328,53 @@
 <script src="common.js"></script>
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 <script>
+try {
   const $ = id => document.getElementById(id);
   const KAKAO_JS_KEY = "1cfdc036aab4cd30ed1d2df701632e2e";
   try { if (window.Kakao && !Kakao.isInitialized()) Kakao.init(KAKAO_JS_KEY); } catch(e){}
 
-  /* ---- 데이터: 스토어 있으면 읽고, 없으면 데모값 ---- */
-  let name = "지호", streak = 15, total = 58;
+  /* ---- 데이터: 저장소 실값만 사용. 없는 값은 만들지 않는다 ---- */
+  const S  = PremiseStore.get();
+  const ST = PremiseStore.stats();
+
+  let name = "";
   try {
-    const S = (window.PremiseStore && PremiseStore.get()) || null;
-    if (S) {
-      streak = S.streak ?? streak;
-      const log = S.questionLog || [];
-      const comp = S.completed || [];
-      // 시드(미사용) 상태면 데모 숫자 유지, 실제 사용 흔적이 있으면 실데이터로 교체
-      const used = log.length > 0 || comp.length > 5;
-      if (used) {
-        const within7 = d => { const t = Date.parse((d || "").replace(/\./g, "-")); return !isNaN(t) && (Date.now() - t) <= 7 * 864e5; };
-        $("weekPremise").textContent = log.filter(e => within7(e.date)).length;
-        $("totalPremise").textContent = comp.length;
-      }
-    }
-    const u = window.PremiseStore && PremiseStore.getUser && PremiseStore.getUser();
+    const u = PremiseStore.getUser && PremiseStore.getUser();
     if (u && u.name) name = u.name;
     const p = JSON.parse(localStorage.getItem("premise_profile") || "null");
     if (p && p.name) name = p.name;
   } catch (e) {}
-  $("detName").textContent = name; $("detName2").textContent = name; $("streak").textContent = streak;
+  const NAME = name || "우리 아이";
+
+  /* 7일치가 모이기 전에는 리포트를 만들지 않는다 */
+  if (!ST.canShowWeeklyReport) {
+    const sheet = $("reportSheet"), pend = $("reportPending");
+    if (sheet) sheet.style.display = "none";
+    if (pend) {
+      pend.style.display = "";
+      const left = Math.max(0, 7 - ST.daysSinceStart);
+      $("pendTitle").textContent = ST.hasAnyActivity ? "첫 리포트까지 " + left + "일 남았어요" : "아직 기록이 없어요";
+      $("pendMsg").innerHTML = ST.hasAnyActivity
+        ? NAME + " 파트너의 7일치 기록이 모이면 <b>질문이 어떻게 달라졌는지</b>를 한 장으로 정리해 보내드립니다."
+        : "오늘의 사건을 하나 풀면 기록이 시작됩니다. 7일이 모이면 첫 리포트가 만들어져요.";
+      $("pendStats").innerHTML = [
+        ["발견한 전제", ST.totalPremise + "개"],
+        ["남긴 질문", ST.questionCount + "개"],
+        ["활동한 날", ST.activeDayCount + "일"]
+      ].map(function(r){
+        return '<div><p class="text-[18px] font-extrabold text-ink">' + r[1] + '</p><p class="text-[11px] text-body mt-0.5">' + r[0] + '</p></div>';
+      }).join("");
+    }
+    try { PremiseNav && PremiseNav.render && PremiseNav.render("note"); } catch(e){}
+    throw new Error("__report_pending__"); // 이하 렌더 중단
+  }
+
+  const streak = ST.streak;
+  if ($("weekPremise")) $("weekPremise").textContent = ST.thisWeekPremise;
+  if ($("totalPremise")) $("totalPremise").textContent = ST.totalPremise;
+  if ($("mapPremiseCount")) $("mapPremiseCount").textContent = ST.totalPremise;
+  if ($("mapName")) $("mapName").textContent = NAME;
+  $("detName").textContent = NAME; $("detName2").textContent = NAME; $("streak").textContent = streak;
 
   /* ---- 기간: 최근 7일 ---- */
   (function(){
@@ -383,12 +426,18 @@
       </div>
     </div>`).join("");
 
-  /* ---- 태도 지표 ---- */
-  const metrics = [
-    { key:"질문의 질", now:"깊어지는 중", sub:"지난주 대비 ↑", series:[1,1,2,2,2,3,3,4] },
-    { key:"스스로 세운 계획", now:"4개", sub:"지난주 2개", series:[0,1,1,2,2,3,2,4] },
-    { key:"다르게 시도한 횟수", now:"11회", sub:"지난주 7회", series:[3,4,5,6,7,8,7,11] },
-  ];
+  /* ---- 태도 지표 — 2주 이상일 때만 비교, 아니면 이번 주 수치만 ---- */
+  const metrics = ST.canCompareWeeks
+    ? [
+        { key:"발견한 전제", now: ST.thisWeekPremise + "개", sub: ST.lastWeekPremise > 0 ? ("지난주 " + ST.lastWeekPremise + "개") : "지난주 기록 없음" },
+        { key:"남긴 질문",   now: ST.thisWeekQuestion + "개", sub: ST.lastWeekQuestion > 0 ? ("지난주 " + ST.lastWeekQuestion + "개") : "지난주 기록 없음" },
+        { key:"활동한 날",   now: ST.activeDates.filter(function(d){var t=Date.parse(d);return !isNaN(t)&&(Date.now()-t)<7*864e5;}).length + "일", sub: "최근 7일" }
+      ]
+    : [
+        { key:"발견한 전제", now: ST.thisWeekPremise + "개", sub: "이번 주" },
+        { key:"남긴 질문",   now: ST.thisWeekQuestion + "개", sub: "이번 주" },
+        { key:"활동한 날",   now: ST.activeDayCount + "일", sub: "누적" }
+      ];
   function spark(series){
     const w=120,h=34,max=Math.max(...series),min=Math.min(...series);
     const pts=series.map((v,i)=>{ const x=i/(series.length-1)*w; const y=h-((v-min)/(max-min||1))*(h-6)-3; return `${x.toFixed(1)},${y.toFixed(1)}`; }).join(" ");
@@ -401,21 +450,38 @@
       <div class="flex items-end justify-between mt-1 mb-2">
         <p class="text-[20px] font-extrabold text-ink">${m.now}</p>
         <p class="text-[11px] text-point font-semibold">${m.sub}</p>
-      </div>${spark(m.series)}
+      </div>
     </div>`).join("");
 
+  /* ---- 루카 한 줄 — 실제 기록에 근거해서만 ---- */
+  (function(){
+    const el=$("lukaWeek"); if(!el) return;
+    if (ST.thisWeekPremise > 0){
+      el.innerHTML = "이번 주 <b>"+NAME+"</b> 파트너는 <b class='text-point'>"+ST.thisWeekPremise+"개</b>의 전제를 찾아냈어요. 누적 <b>"+ST.totalPremise+"개</b>입니다.";
+    } else {
+      el.innerHTML = "<b>"+NAME+"</b> 파트너, 이번 주에는 기록이 없었어요. 한 사건만 다시 열어봐도 흐름이 이어집니다.";
+    }
+  })();
+
   /* ---- ★ 전제 함정 지도 (레이더) ---- */
-  $("mapName") && ($("mapName").textContent = name);
-  const traps = [
-    { key:"상관→인과",  now:78, prev:40 },
-    { key:"숨은 전제",   now:66, prev:28 },
-    { key:"단일 기준",   now:58, prev:35 },
-    { key:"과잉 일반화", now:47, prev:30 },
-    { key:"권위 전제",   now:38, prev:15 },
-    { key:"이분법",      now:52, prev:33 },
-  ];
+  $("mapName") && ($("mapName").textContent = NAME);
+  const traps = (function(){
+    const by = {};
+    (S.premises||[]).forEach(function(p){ const k=(p&&p.subject)||"기타"; by[k]=(by[k]||0)+1; });
+    const keys=Object.keys(by);
+    if(!keys.length) return [];
+    const max=Math.max.apply(null, keys.map(function(k){return by[k];}));
+    return keys.map(function(k){ return { key:k, now: Math.round(by[k]/max*100), prev: 0 }; });
+  })();
   (function renderRadar(){
     const svg = $("trapRadar"); if(!svg) return;
+    if (!traps.length || ST.weeksTracked < 8){
+      svg.innerHTML = `<text x="160" y="112" text-anchor="middle" font-size="13" font-weight="700" fill="#9AA4B2">함정 지도 준비 중</text>
+        <text x="160" y="136" text-anchor="middle" font-size="11.5" fill="#9AA4B2">현재 ${ST.weeksTracked}주차 · 8주차부터 그려집니다</text>`;
+      const lst=$("trapList");
+      if (lst) lst.innerHTML = `<p class="text-[12.5px] text-faint" style="word-break:keep-all">반복해서 걸리는 전제 유형은 기록이 충분히 쌓여야 드러납니다.</p>`;
+      return;
+    }
     const cx=160, cy=120, R=86, n=traps.length;
     const ang = i => (-90 + i*(360/n)) * Math.PI/180;
     const pt = (i,r) => [cx + Math.cos(ang(i))*r, cy + Math.sin(ang(i))*r];
@@ -545,6 +611,10 @@
   });
   document.addEventListener("keydown", (ev) => { if (ev.key === "Escape") closeShareMenu(); });
   if (navigator.share) { const n = $("shareMenuNative"); if (n) n.classList.remove("hidden"); }
+} catch (e) {
+  /* 리포트 준비 중이면 여기서 렌더를 멈춘다(정상 흐름). 그 외 오류만 콘솔에 남긴다. */
+  if (!e || e.message !== "__report_pending__") console.error("[report]", e);
+}
 </script>
 </body>
 </html>

@@ -81,7 +81,10 @@
       },
       premises: [],
       // 아이가 데일리 미션에서 직접 남긴 질문 로그 (report.html before/after 소스)
-      questionLog: []
+      questionLog: [],
+      // 실제 활동한 날짜(YYYY-MM-DD) 집합. 히트맵·주차 계산의 유일한 근거.
+      activeDates: [],
+      firstActiveAt: ""
     };
   }
 
@@ -124,6 +127,16 @@
       if (!parsed.user) parsed.user = { loggedIn: false, name: "", email: "", provider: "" };
       if (!parsed.subscription) parsed.subscription = { status: "none", plan: parsed.plan || "basic", cycle: "m6", method: "", trialEndsAt: "", nextBillingAt: "" };
       if (!parsed.questionLog) parsed.questionLog = [];
+      /* 활동일 기록이 없던 기존 사용자 마이그레이션 — 있는 근거만으로 최소 복원.
+         없는 날짜를 지어내지 않는다(가짜 이력 방지). */
+      if (!Array.isArray(parsed.activeDates)) {
+        const seen = {};
+        (parsed.questionLog || []).forEach((e) => { if (e && /^\d{4}-\d{2}-\d{2}$/.test(e.date)) seen[e.date] = 1; });
+        (parsed.premises || []).forEach((p) => { if (p && /^\d{4}-\d{2}-\d{2}$/.test(p.at)) seen[p.at] = 1; });
+        if (parsed.lastActive) seen[parsed.lastActive] = 1;
+        parsed.activeDates = Object.keys(seen).sort();
+      }
+      if (!parsed.firstActiveAt) parsed.firstActiveAt = parsed.activeDates.length ? parsed.activeDates[0] : "";
       // 자가치유: 구버전 빌드에서 긴 리프레임 문장이 note로 잘못 저장돼 잘려 보이는 데이터 정리
       if (Array.isArray(parsed.premises)) {
         parsed.premises.forEach(p => {
@@ -157,8 +170,11 @@
       const isNew = !(c.missionId && s.completed.includes(c.missionId));
       if (c.missionId && !s.completed.includes(c.missionId)) s.completed.push(c.missionId);
       if (c.badge && !s.badges.includes(c.badge)) s.badges.push(c.badge);
-      if (isNew) s.premises.unshift({ subject: c.subject, note: c.note, badge: c.badge, badgeName: c.badgeName, date: "방금" });
+      if (isNew) s.premises.unshift({ subject: c.subject, note: c.note, badge: c.badge, badgeName: c.badgeName, date: "방금", at: today() });
       if (s.lastActive !== today()) { s.streak += 1; s.lastActive = today(); }
+      if (!Array.isArray(s.activeDates)) s.activeDates = [];
+      if (s.activeDates.indexOf(today()) < 0) { s.activeDates.push(today()); s.activeDates.sort(); }
+      if (!s.firstActiveAt) s.firstActiveAt = today();
       save(s);
       return s;
     },
@@ -169,8 +185,55 @@
       if (!s.questionLog) s.questionLog = [];
       s.questionLog.push({ subject: subject || "", q: text, premise: premise || "", date: today() });
       if (s.questionLog.length > 60) s.questionLog = s.questionLog.slice(-60);
+      if (!Array.isArray(s.activeDates)) s.activeDates = [];
+      if (s.activeDates.indexOf(today()) < 0) { s.activeDates.push(today()); s.activeDates.sort(); }
+      if (!s.firstActiveAt) s.firstActiveAt = today();
       save(s);
       return s;
+    },
+
+    /* ===== 파생 통계 — 화면이 상수를 들고 있지 않게 하는 유일한 출처 =====
+       없는 데이터는 0/빈값으로 준다. 절대 추정치를 만들어내지 않는다. */
+    stats: () => {
+      const dates = Array.isArray(s.activeDates) ? s.activeDates.slice().sort() : [];
+      const first = s.firstActiveAt || (dates.length ? dates[0] : "");
+      const dayMs = 864e5;
+      const t0 = first ? Date.parse(first) : 0;
+      const daysSinceStart = t0 ? Math.floor((Date.now() - t0) / dayMs) + 1 : 0;
+      const weeksTracked = t0 ? Math.floor(daysSinceStart / 7) : 0;
+
+      const inRange = (iso, fromDaysAgo, toDaysAgo) => {
+        const t = Date.parse(iso);
+        if (isNaN(t)) return false;
+        const d = Math.floor((Date.now() - t) / dayMs);
+        return d >= toDaysAgo && d < fromDaysAgo;
+      };
+      const premisesDated = (s.premises || []).filter(p => p && /^\d{4}-\d{2}-\d{2}$/.test(p.at));
+      const qlog = s.questionLog || [];
+
+      const countIn = (arr, key, from, to) => arr.filter(x => inRange(x[key], from, to)).length;
+
+      return {
+        firstActiveAt: first,
+        activeDates: dates,
+        activeDayCount: dates.length,
+        daysSinceStart,
+        weeksTracked,
+        streak: s.streak || 0,
+        totalPremise: (s.premises || []).length,
+        completedCount: (s.completed || []).length,
+        badgeCount: (s.badges || []).length,
+        questionCount: qlog.length,
+        thisWeekPremise: countIn(premisesDated, "at", 7, 0),
+        lastWeekPremise: countIn(premisesDated, "at", 14, 7),
+        thisWeekQuestion: countIn(qlog, "date", 7, 0),
+        lastWeekQuestion: countIn(qlog, "date", 14, 7),
+        // 화면 분기용 — 근거가 충분할 때만 true
+        hasAnyActivity: dates.length > 0 || (s.premises || []).length > 0,
+        canCompareWeeks: daysSinceStart >= 14,
+        canShowWeeklyReport: daysSinceStart >= 7,
+        canShowGrowthCurve: weeksTracked >= 8
+      };
     },
     /* ===== PBS 캘린더 ===== */
     getPlan: () => s.plan || "basic",

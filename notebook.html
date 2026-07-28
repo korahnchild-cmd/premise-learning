@@ -70,7 +70,7 @@
 
   <!-- 샘플 미리보기 배너 (비로그인·무료만 · 구독자는 본인 실제 기록) -->
   <div data-show-state="guest,free" class="mb-5 rounded-2xl px-4 py-3.5 flex flex-col sm:flex-row sm:items-center gap-3" style="background:rgba(10,102,255,.06);border:1px solid rgba(10,102,255,.16)">
-    <p class="flex-1 text-[13px] text-body leading-relaxed" style="word-break:keep-all"><b class="text-ink">샘플 미리보기예요.</b> 구독하면 우리 아이가 매일 발견한 전제로 이 노트가 실제 기록으로 채워져요.</p>
+    <p class="flex-1 text-[13px] text-body leading-relaxed" style="word-break:keep-all"><b class="text-ink">아직 기록이 없어요.</b> 무료 체험을 시작하면 우리 아이가 매일 발견한 전제로 이 노트가 채워집니다.</p>
     <a href="onboarding.html" data-trialused-text="바로 결제로 시작 →" class="btn btn-primary shrink-0 px-5 py-2.5 text-[13px] font-semibold whitespace-nowrap">7일 무료체험 시작 →</a>
   </div>
 
@@ -78,11 +78,11 @@
   <div class="flex items-center justify-between flex-wrap gap-4">
     <div>
       <p class="text-[11px] font-semibold tracking-widest uppercase text-point">파트너 노트</p>
-      <h1 class="text-[1.8rem] md:text-[2.2rem] font-extrabold mt-1"><span id="detName">지호</span> 파트너의 성장 기록</h1>
+      <h1 class="text-[1.8rem] md:text-[2.2rem] font-extrabold mt-1"><span id="detName">우리 아이</span> 파트너의 성장 기록</h1>
     </div>
     <div class="flex items-center gap-3">
-      <div class="card px-4 py-3 text-center"><p class="text-[20px] font-extrabold text-ink">🔥 <span id="streak">15</span></p><p class="text-[11px] text-body">연속일</p></div>
-      <div class="card px-4 py-3 text-center"><p class="text-[20px] font-extrabold text-ink">Lv.<span id="level">3</span></p><p class="text-[11px] text-body">사고분석관</p></div>
+      <div class="card px-4 py-3 text-center"><p class="text-[20px] font-extrabold text-ink">🔥 <span id="streak">0</span></p><p class="text-[11px] text-body">연속일</p></div>
+      <div class="card px-4 py-3 text-center"><p class="text-[20px] font-extrabold text-ink">Lv.<span id="level">1</span></p><p class="text-[11px] text-body">사고분석관</p></div>
       <div class="card px-4 py-3 text-center"><p class="text-[20px] font-extrabold text-point" id="totalPremise">0</p><p class="text-[11px] text-body">발견한 전제</p></div>
     </div>
   </div>
@@ -103,8 +103,7 @@
       <div>
         <p class="text-[12px] font-semibold text-point mb-1">루카의 주간 리포트</p>
         <p class="text-[15px] md:text-[16px] text-ink leading-relaxed">
-          <span id="greetName">지호</span> 파트너님, 이번 주 정말 멋졌어요! <b>‘틀리면 안 된다’</b>는 전제를 시원하게 깨부순 덕분에 오답 노트가 훨씬 풍성해졌어요.
-          특히 <b>‘질문의 전제를 되묻는’</b> 습관이 부쩍 자랐네요. 다음 주엔 비문학의 전제도 함께 폭파해 볼까요?
+<span id="lukaMsg"></span>
         </p>
         <a href="report.html" class="btn btn-primary mt-4 px-5 py-2.5 text-[13px] font-semibold">이번 주 리포트 전체 보기 · 공유하기 →</a>
       </div>
@@ -135,7 +134,7 @@
       <div class="flex items-center justify-between mb-5">
         <div>
           <p class="text-[15px] font-bold text-ink">발견한 전제 히트맵</p>
-          <p class="text-[12px] text-body mt-0.5">최근 12주 · 매일 발견한 전제 기록</p>
+          <p class="text-[12px] text-body mt-0.5">최근 12주 · 실제 활동한 날만 표시됩니다</p>
         </div>
         <div class="flex items-center gap-1.5 text-[11px] text-faint">
           적음 <span class="w-3 h-3 rounded-[3px] bg-[#EAEEF3]"></span><span class="w-3 h-3 rounded-[3px] lv1"></span><span class="w-3 h-3 rounded-[3px] lv2"></span><span class="w-3 h-3 rounded-[3px] lv3"></span><span class="w-3 h-3 rounded-[3px] lv4"></span> 많음
@@ -203,84 +202,112 @@
   $("level").textContent = Math.max(1, Math.floor(S.badges.length / 2));
   /* 이름 우선순위: 기본값 → 실제 로그인 계정 이름 → 온보딩에서 직접 설정한 표시 이름(dashboard.html과 동일 규칙) */
   (function(){
-    let name = "지호";
+    let name = "";
     try {
       const u = window.PremiseStore && PremiseStore.getUser && PremiseStore.getUser();
       if (u && u.name) name = u.name;
       const p = JSON.parse(localStorage.getItem("premise_profile")||"null");
       if (p && p.name) name = p.name;
     } catch(e){}
-    if ($("detName")) $("detName").textContent = name;
-    if ($("greetName")) $("greetName").textContent = name;
+    if ($("detName")) $("detName").textContent = name || "우리 아이";
+    if ($("greetName")) $("greetName").textContent = name || "파트너";
   })();
 
-  /* ---- heatmap data (deterministic ramp over 12 weeks) ---- */
+  /* ---- 활동 히트맵 — 실제 활동일(activeDates)만 칠한다 ---- */
+  const ST = PremiseStore.stats();
   const weeks = 12, tip = $("tip");
-  let total = 0;
   const hm = $("heatmap");
   function showTip(text, x, y){
     tip.textContent = text;
     tip.style.left = Math.max(4, Math.min(x, window.innerWidth-160))+"px";
     tip.style.top = y+"px"; tip.style.opacity=1;
   }
-  // build column by column (each column = a week, 7 rows)
-  for(let w=0; w<weeks; w++){
-    for(let d=0; d<7; d++){
-      // ramp: later weeks + weekdays more active; weekend lighter
-      const base = (w/weeks)*3.2;
-      const weekend = (d===0||d===6) ? -1.2 : 0;
-      const noise = ((w*7+d)*13 % 7)/7 * 1.6 - 0.6;
-      let v = Math.round(Math.max(0, Math.min(4, base + weekend + noise)));
-      const count = v===0?0:v*1; // premises that day
-      total += count;
-      const cell = document.createElement("div");
-      cell.className = "hm-cell" + (v>0?" lv"+v:"");
-      const dayName = ["일","월","화","수","목","금","토"][d];
-      const tipText = count>0 ? `${weeks-w}주 전 ${dayName} · 전제 ${count}개 발견` : `${weeks-w}주 전 ${dayName} · 기록 없음`;
-      cell.setAttribute("tabindex", "0");
-      cell.setAttribute("role", "img");
-      cell.setAttribute("aria-label", tipText);
-      cell.addEventListener("mousemove", e=> showTip(tipText, e.clientX+12, e.clientY-8));
-      cell.addEventListener("mouseleave", ()=> tip.style.opacity=0);
-      cell.addEventListener("focus", ()=>{
-        const r = cell.getBoundingClientRect();
-        showTip(tipText, r.left, r.top-30);
-      });
-      cell.addEventListener("blur", ()=> tip.style.opacity=0);
-      cell.addEventListener("touchstart", ()=>{
-        const r = cell.getBoundingClientRect();
-        showTip(tipText, r.left, r.top-34);
-        clearTimeout(cell._tipTimer);
-        cell._tipTimer = setTimeout(()=> tip.style.opacity=0, 2200);
-      }, {passive:true});
-      hm.appendChild(cell);
-    }
-  }
-  // count-up total — 누적 '발견한 전제'는 dashboard·report와 동일한 데모 상수(58)로 통일.
-  // (히트맵 total은 12주 활동 시각화용으로만 사용)
-  const TOTAL_PREMISE = 58;
-  (function(){ let n=0; const target=TOTAL_PREMISE; const t=setInterval(()=>{ n+=Math.ceil(target/40); if(n>=target){n=target; clearInterval(t);} $("totalPremise").textContent=n; },25); })();
+  (function buildHeatmap(){
+    if (!hm) return;
+    // 날짜별 발견 개수
+    const byDate = {};
+    (S.premises||[]).forEach(p => { if (p && /^\d{4}-\d{2}-\d{2}$/.test(p.at)) byDate[p.at] = (byDate[p.at]||0)+1; });
+    (ST.activeDates||[]).forEach(d => { if (!byDate[d]) byDate[d] = 1; });
 
-  /* ---- attitude metrics (태도 중심, 점수 아님) ---- */
-  const metrics = [
-    { key:"질문의 질", now:"깊어지는 중", sub:"지난주 대비 ↑", series:[1,1,2,2,2,3,3,4], unit:"단계" },
-    { key:"스스로 세운 계획", now:"4개", sub:"지난주 2개", series:[0,1,1,2,2,3,2,4], unit:"" },
-    { key:"다르게 시도한 횟수", now:"11회", sub:"지난주 7회", series:[3,4,5,6,7,8,7,11], unit:"" },
-  ];
-  function spark(series){
-    const w=120,h=34,max=Math.max(...series),min=Math.min(...series);
-    const pts=series.map((v,i)=>{ const x=i/(series.length-1)*w; const y=h-((v-min)/(max-min||1))*(h-6)-3; return `${x.toFixed(1)},${y.toFixed(1)}`; }).join(" ");
-    const last=pts.split(" ").pop().split(",");
-    return `<svg viewBox="0 0 ${w} ${h}" class="w-full h-9"><polyline points="${pts}" fill="none" stroke="#0A66FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${last[0]}" cy="${last[1]}" r="3" fill="#0A66FF"/></svg>`;
-  }
-  metrics.forEach((m,i)=>{
-    $("metric"+(i+1)).innerHTML = `
-      <p class="text-[12px] text-body">${m.key}</p>
-      <div class="flex items-end justify-between mt-1 mb-2">
-        <p class="text-[22px] font-extrabold text-ink">${m.now}</p>
-        <p class="text-[11px] text-point font-semibold">${m.sub}</p>
-      </div>${spark(m.series)}`;
-  });
+    // 12주 그리드의 마지막 칸이 오늘이 되도록 시작일 계산
+    const end = new Date(); end.setHours(0,0,0,0);
+    const start = new Date(end); start.setDate(end.getDate() - (weeks*7 - 1));
+    const iso = d => d.toISOString().slice(0,10);
+
+    for (let w=0; w<weeks; w++){
+      for (let d=0; d<7; d++){
+        const cur = new Date(start); cur.setDate(start.getDate() + w*7 + d);
+        const key = iso(cur);
+        const count = byDate[key] || 0;
+        const v = count === 0 ? 0 : Math.min(4, count);
+        const cell = document.createElement("div");
+        cell.className = "hm-cell" + (v>0?" lv"+v:"");
+        const tipText = count>0
+          ? `${key} · 전제 ${count}개 발견`
+          : `${key} · 기록 없음`;
+        cell.setAttribute("tabindex","0");
+        cell.setAttribute("role","img");
+        cell.setAttribute("aria-label", tipText);
+        cell.addEventListener("mousemove", e=> showTip(tipText, e.clientX+12, e.clientY-8));
+        cell.addEventListener("mouseleave", ()=> tip.style.opacity=0);
+        cell.addEventListener("focus", ()=>{ const r=cell.getBoundingClientRect(); showTip(tipText, r.left, r.top-30); });
+        cell.addEventListener("blur", ()=> tip.style.opacity=0);
+        cell.addEventListener("touchstart", ()=>{
+          const r=cell.getBoundingClientRect(); showTip(tipText, r.left, r.top-34);
+          clearTimeout(cell._tipTimer); cell._tipTimer=setTimeout(()=> tip.style.opacity=0, 2200);
+        }, {passive:true});
+        hm.appendChild(cell);
+      }
+    }
+    // 활동이 아직 없으면 안내를 덧붙인다
+    if (!ST.hasAnyActivity){
+      const note = document.createElement("p");
+      note.className = "text-[12.5px] text-faint mt-3";
+      note.style.gridColumn = "1 / -1";
+      note.textContent = "아직 기록이 없어요. 오늘의 사건을 하나 풀면 이 지도에 첫 칸이 칠해집니다.";
+      hm.parentNode.appendChild(note);
+    }
+  })();
+
+  /* ---- 누적 발견한 전제 (실제 값) ---- */
+  (function(){
+    const target = ST.totalPremise;
+    if (target <= 0){ $("totalPremise").textContent = "0"; return; }
+    let n=0; const t=setInterval(()=>{ n+=Math.max(1,Math.ceil(target/40)); if(n>=target){n=target; clearInterval(t);} $("totalPremise").textContent=n; },25);
+  })();
+
+  /* ---- 태도 지표 — 2주 이상 기록이 있을 때만 비교를 보여준다 ---- */
+  (function(){
+    const box1=$("metric1"), box2=$("metric2"), box3=$("metric3");
+    if (!box1) return;
+    if (!ST.canCompareWeeks){
+      const need = Math.max(0, 14 - ST.daysSinceStart);
+      const msg = ST.daysSinceStart === 0
+        ? "첫 사건을 풀면 여기서부터 기록이 시작됩니다."
+        : `2주치가 모이면 지난주와 비교해 보여드려요. ${need}일 남았습니다.`;
+      [box1,box2,box3].forEach((b,i)=>{
+        const label = ["질문의 질","스스로 세운 계획","다르게 시도한 횟수"][i];
+        b.innerHTML = `<p class="text-[12px] text-body">${label}</p>
+          <p class="text-[15px] font-extrabold text-faint mt-1 mb-2">준비 중</p>
+          <p class="text-[11.5px] text-faint" style="word-break:keep-all;line-height:1.5">${msg}</p>`;
+      });
+      return;
+    }
+    const metrics = [
+      { key:"발견한 전제", now: ST.thisWeekPremise + "개", prev: ST.lastWeekPremise },
+      { key:"남긴 질문",   now: ST.thisWeekQuestion + "개", prev: ST.lastWeekQuestion },
+      { key:"활동한 날",   now: (ST.activeDates||[]).filter(d=>{const t=Date.parse(d);return !isNaN(t)&&(Date.now()-t)<7*864e5;}).length + "일", prev: null }
+    ];
+    [box1,box2,box3].forEach((b,i)=>{
+      const m=metrics[i];
+      const sub = m.prev===null ? "최근 7일" : (m.prev>0 ? `지난주 ${m.prev}개` : "지난주 기록 없음");
+      b.innerHTML = `<p class="text-[12px] text-body">${m.key}</p>
+        <div class="flex items-end justify-between mt-1 mb-2">
+          <p class="text-[22px] font-extrabold text-ink">${m.now}</p>
+          <p class="text-[11px] text-point font-semibold">${sub}</p>
+        </div>`;
+    });
+  })();
 
   /* ---- badges ---- */
   const badges = [
@@ -306,64 +333,99 @@
       <p class="text-[14px] font-semibold text-ink flex-1">${n.t}</p>
       <span class="text-[12px] text-faint">${n.d}</span>
     </div>`).join("");
-  /* ---- [NEW 2] 마인드맵 요약 레이더 ---- */
-  const NB_TRAPS = [
-    {k:"상관→인과",now:78},{k:"숨은 전제",now:66},{k:"단일 기준",now:58},
-    {k:"과잉 일반화",now:47},{k:"권위 전제",now:38},{k:"이분법",now:52},
-    {k:"순환 논리",now:44},{k:"감정 전제",now:61},{k:"표본 편향",now:35},
-  ];
+  /* ---- 마인드맵 요약 레이더 — 8주 이상 기록이 쌓여야 그린다 ---- */
   (function nbRadar(){
     const svg=$("nbRadar"); if(!svg) return;
-    const cx=150,cy=112,R=80,n=NB_TRAPS.length;
+    const list=$("nbTrapList");
+    if (!ST.canShowGrowthCurve){
+      svg.innerHTML = `<text x="150" y="106" text-anchor="middle" font-size="12.5" font-weight="700" fill="#9AA4B2">함정 지도 준비 중</text>
+        <text x="150" y="128" text-anchor="middle" font-size="11" fill="#9AA4B2">현재 ${ST.weeksTracked}주차 · 8주차부터 그려집니다</text>`;
+      if (list) list.innerHTML = `<span class="text-[12px] text-faint">아이가 어떤 전제에 반복해서 걸리는지는 기록이 8주쯤 쌓여야 패턴으로 보입니다.</span>`;
+      return;
+    }
+    // 실제 오답·전제 기록에서 과목별 분포를 만든다 (임의 상수 사용 금지)
+    const bySub={};
+    (S.premises||[]).forEach(p=>{ const k=p.subject||"기타"; bySub[k]=(bySub[k]||0)+1; });
+    const keys=Object.keys(bySub);
+    if (!keys.length){ svg.innerHTML=""; if(list) list.innerHTML=""; return; }
+    const max=Math.max.apply(null, keys.map(k=>bySub[k]));
+    const TRAPS=keys.map(k=>({k:k, now: Math.round(bySub[k]/max*100)}));
+    const cx=150,cy=112,R=80,n=Math.max(3,TRAPS.length);
     const ang=i=>(-90+i*(360/n))*Math.PI/180;
     const pt=(i,r)=>[cx+Math.cos(ang(i))*r, cy+Math.sin(ang(i))*r];
-    const poly=(fn)=>NB_TRAPS.map((t,i)=>pt(i,fn(t)).map(v=>v.toFixed(1)).join(",")).join(" ");
+    const poly=(fn)=>TRAPS.map((t,i)=>pt(i,fn(t)).map(v=>v.toFixed(1)).join(",")).join(" ");
     let g="";
     [0.33,0.66,1].forEach(f=>{ g+=`<polygon points="${poly(()=>R*f)}" fill="none" stroke="#ECEEF1" stroke-width="1"/>`; });
-    NB_TRAPS.forEach((_,i)=>{ const p=pt(i,R); g+=`<line x1="${cx}" y1="${cy}" x2="${p[0].toFixed(1)}" y2="${p[1].toFixed(1)}" stroke="#ECEEF1" stroke-width="1"/>`; });
+    TRAPS.forEach((_,i)=>{ const p=pt(i,R); g+=`<line x1="${cx}" y1="${cy}" x2="${p[0].toFixed(1)}" y2="${p[1].toFixed(1)}" stroke="#ECEEF1" stroke-width="1"/>`; });
     g+=`<polygon points="${poly(t=>R*t.now/100)}" fill="rgba(10,102,255,.14)" stroke="#0A66FF" stroke-width="2" stroke-linejoin="round"/>`;
-    NB_TRAPS.forEach((t,i)=>{ const on=t.now>=55; const p=pt(i,R*t.now/100); g+=`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${on?3:2.4}" fill="${on?'#0A66FF':'#9AA4B2'}"/>`; });
-    NB_TRAPS.forEach((t,i)=>{ const p=pt(i,R+18); const a=p[0]<cx-6?"end":(p[0]>cx+6?"start":"middle"); const on=t.now>=55; g+=`<text x="${p[0].toFixed(1)}" y="${(p[1]+3).toFixed(1)}" text-anchor="${a}" font-size="9.5" font-weight="${on?700:600}" fill="${on?'#0A0E17':'#9AA4B2'}">${t.k}</text>`; });
+    TRAPS.forEach((t,i)=>{ const p=pt(i,R+18); const a=p[0]<cx-6?"end":(p[0]>cx+6?"start":"middle");
+      g+=`<text x="${p[0].toFixed(1)}" y="${(p[1]+3).toFixed(1)}" text-anchor="${a}" font-size="9.5" font-weight="700" fill="#0A0E17">${escapeHTML(t.k)}</text>`; });
     svg.innerHTML=g;
-    $("nbTrapList").innerHTML = NB_TRAPS.slice().sort((a,b)=>b.now-a.now).map(t=>{const on=t.now>=55; return `<span class="text-[12px] font-semibold rounded-full px-2.5 py-1 ${on?'text-point bg-point/10':'text-faint bg-soft'}">${t.k}</span>`;}).join("");
+    if(list) list.innerHTML = TRAPS.slice().sort((a,b)=>b.now-a.now)
+      .map(t=>`<span class="text-[12px] font-semibold rounded-full px-2.5 py-1 text-point bg-point/10">${escapeHTML(t.k)}</span>`).join("");
   })();
 
-  /* ---- [NEW 3] 성장 마일스톤 ---- */
-  const NB_MILESTONES = [
-    { wk:"3주차", t:"‘빨리 푸는 게 잘하는 것’이라는 전제를 내려놓음" },
-    { wk:"6주차", t:"질문이 ‘답이 뭐예요?’에서 ‘왜 이렇게 봐야 하죠?’로 바뀜" },
-    { wk:"8주차", t:"‘숨은 전제’를 스스로 보기 시작" },
-    { wk:"지금", t:"낯선 지문에서도 전제를 찾아 다르게 읽는 중" },
-  ];
-  if($("milestones")) $("milestones").innerHTML = NB_MILESTONES.map((m,i)=>{
-    const last=i===NB_MILESTONES.length-1;
-    return `<div class="flex gap-4 ${last?'':'pb-5'}" style="position:relative">
-      ${last?'':'<span style="position:absolute;left:7px;top:18px;bottom:-2px;width:2px;background:#ECEEF1"></span>'}
-      <span class="shrink-0 mt-1 w-4 h-4 rounded-full ${last?'bg-point':'bg-white'} border-2 border-point" style="z-index:1"></span>
-      <div><p class="text-[12px] font-bold ${last?'text-point':'text-faint'}">${m.wk}</p><p class="text-[14px] font-semibold text-ink leading-snug mt-0.5">${m.t}</p></div>
-    </div>`;
-  }).join("");
+  /* ---- 성장 마일스톤 — 실제 경과 주차까지만 표시 ---- */
+  (function(){
+    const el=$("milestones"); if(!el) return;
+    const PLAN=[
+      { wk:1, t:"매일 사건 하나로 기록을 시작" },
+      { wk:3, t:"'빨리 푸는 게 잘하는 것'이라는 전제를 내려놓는 시기" },
+      { wk:6, t:"질문이 '답이 뭐예요?'에서 '왜 이렇게 봐야 하죠?'로 바뀌는 시기" },
+      { wk:8, t:"'숨은 전제'를 스스로 보기 시작하는 시기" }
+    ];
+    const w=ST.weeksTracked;
+    if (!ST.hasAnyActivity){
+      el.innerHTML = `<p class="text-[13px] text-faint" style="word-break:keep-all">첫 사건을 풀면 여기에 성장 기록이 쌓이기 시작합니다.</p>`;
+      return;
+    }
+    el.innerHTML = PLAN.map((m,i)=>{
+      const reached = w >= m.wk;
+      const last = i===PLAN.length-1;
+      return `<div class="flex gap-4 ${last?'':'pb-5'}" style="position:relative">
+        ${last?'':'<span style="position:absolute;left:7px;top:18px;bottom:-2px;width:2px;background:#ECEEF1"></span>'}
+        <span class="shrink-0 mt-1 w-4 h-4 rounded-full ${reached?'bg-point':'bg-white'} border-2 border-point" style="z-index:1;${reached?'':'opacity:.4'}"></span>
+        <div><p class="text-[12px] font-bold ${reached?'text-point':'text-faint'}">${m.wk}주차${reached?'':' · 예정'}</p>
+        <p class="text-[14px] font-semibold ${reached?'text-ink':'text-faint'} leading-snug mt-0.5">${m.t}</p></div>
+      </div>`;
+    }).join("") + `<p class="text-[12px] text-faint mt-3">현재 ${w}주차입니다.</p>`;
+  })();
 
-  /* ---- [NEW 1] 질문 아카이브 ---- */
-  const NB_DEMO_Q = [
-    { subject:"수학", q:"이 식은 왜 ‘=’를 정답으로 봐요? 균형으로 보면 다르지 않아요?", date:"오늘" },
-    { subject:"국어", q:"글쓴이가 ‘조차’로 뭘 당연하게 깔아둔 거죠?", date:"2일 전" },
-    { subject:"학습", q:"틀린 게 왜 실패예요? 다음 단서일 수도 있잖아요.", date:"4일 전" },
-    { subject:"일상", q:"열심히 전에 ‘어떻게’부터 정해야 하는 거 아니에요?", date:"6일 전" },
-    { subject:"상식", q:"‘배웠으니까 안다’는 건 진짜 아는 거예요?", date:"8일 전" },
-  ];
-  const qLog = (S.questionLog && S.questionLog.length)
-    ? S.questionLog.slice().reverse().map(e=>({ subject:e.subject||"질문", q:e.q, date:e.date }))
-    : NB_DEMO_Q;
-  if($("qCount")) $("qCount").textContent = `누적 ${qLog.length}개`;
-  if($("qArchive")) $("qArchive").innerHTML = qLog.map(e=>`
-    <div class="rounded-2xl bg-soft border border-line px-4 py-3">
-      <div class="flex items-center justify-between gap-2 mb-1">
-        <span class="text-[11px] font-bold text-point bg-point/10 rounded-full px-2.5 py-0.5">${escapeHTML(e.subject)}</span>
-        <span class="text-[11.5px] text-faint">${escapeHTML(e.date)}</span>
-      </div>
-      <p class="text-[13.5px] text-ink leading-snug" style="word-break:keep-all">“${escapeHTML(e.q)}”</p>
-    </div>`).join("");
+  /* ---- 질문 아카이브 — 실제 기록만. 없으면 빈 상태 ---- */
+  (function(){
+    const qLog = (S.questionLog||[]).slice().reverse();
+    if ($("qCount")) $("qCount").textContent = `누적 ${qLog.length}개`;
+    const box = $("qArchive"); if (!box) return;
+    if (!qLog.length){
+      box.innerHTML = `<div class="rounded-2xl bg-soft border border-line px-4 py-5 text-center">
+        <p class="text-[13.5px] font-bold text-ink">아직 남긴 질문이 없어요</p>
+        <p class="text-[12.5px] text-body mt-1.5" style="word-break:keep-all">오늘의 사건을 풀면서 남긴 질문이 여기에 쌓입니다. 질문이 어떻게 달라지는지가 이 노트의 핵심이에요.</p>
+        <a href="daily.html" class="btn btn-primary mt-4 px-5 py-2.5 text-[13px] font-semibold">오늘의 사건 풀러 가기 →</a>
+      </div>`;
+      return;
+    }
+    box.innerHTML = qLog.map(e=>`
+      <div class="rounded-2xl bg-soft border border-line px-4 py-3">
+        <div class="flex items-center justify-between gap-2 mb-1">
+          <span class="text-[11px] font-bold text-point bg-point/10 rounded-full px-2.5 py-0.5">${escapeHTML(e.subject||"질문")}</span>
+          <span class="text-[11.5px] text-faint">${escapeHTML(e.date)}</span>
+        </div>
+        <p class="text-[13.5px] text-ink leading-snug" style="word-break:keep-all">“${escapeHTML(e.q)}”</p>
+      </div>`).join("");
+  })();
+
+  /* ---- 루카 주간 메시지 — 실제 활동에 근거해서만 말한다 ---- */
+  (function(){
+    const el=$("lukaMsg"); if(!el) return;
+    const nm = ($("greetName") && $("greetName").textContent) || "파트너";
+    if (!ST.hasAnyActivity){
+      el.innerHTML = `${escapeHTML(nm)} 파트너님, 반가워요! 아직 함께 푼 사건이 없네요. <b>첫 사건 하나</b>만 같이 열어볼까요? 10분이면 충분해요.`;
+    } else if (!ST.canShowWeeklyReport){
+      el.innerHTML = `${escapeHTML(nm)} 파트너님, 지금까지 <b>${ST.totalPremise}개</b>의 전제를 찾았어요. 7일이 모이면 첫 주간 리포트를 보내드릴게요 — <b>${Math.max(0,7-ST.daysSinceStart)}일</b> 남았습니다.`;
+    } else {
+      el.innerHTML = `${escapeHTML(nm)} 파트너님, 이번 주에 <b>${ST.thisWeekPremise}개</b>의 전제를 찾았어요. 지금까지 누적 <b>${ST.totalPremise}개</b>입니다. 이번 주도 이어가 볼까요?`;
+    }
+  })();
 
   PremiseNav.render("note");
 
