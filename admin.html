@@ -39,9 +39,14 @@
     <p style="font-size:40px;margin-bottom:12px">🔒</p>
     <h1 class="text-[1.4rem] font-extrabold">관리자 전용 페이지입니다</h1>
     <p class="text-[13.5px] mt-3 leading-relaxed" style="color:#6B7290">운영자 계정으로 로그인해야 열람할 수 있습니다.<br />이 페이지의 기능은 본인 브라우저의 표시 상태만 바꾸며, 서버의 구독 권한은 변경하지 않습니다.</p>
-    <div class="mt-6 flex gap-2 justify-center">
-      <a href="login.html" class="abtn" style="text-align:center">로그인하기</a>
+    <div class="mt-6 flex gap-2 justify-center flex-wrap">
+      <a href="login.html?next=admin.html" class="abtn" style="text-align:center">로그인하기</a>
       <a href="index.html" class="abtn" style="text-align:center">홈으로</a>
+    </div>
+    <div class="mt-7 pt-6" style="border-top:1px solid #ECEEF1;text-align:left">
+      <p class="text-[12.5px] font-bold mb-2">왜 막혔는지 확인</p>
+      <dl class="kv" id="denyKv"></dl>
+      <p class="text-[11.5px] mt-3" style="color:#6B7290; word-break:keep-all">Firebase 로그인이 "확인 중"에서 안 넘어가면 인증 스크립트가 로드되지 않은 것입니다. 이메일이 허용 목록과 다르면 다른 계정으로 로그인된 상태입니다.</p>
     </div>
   </div>
 
@@ -120,12 +125,40 @@
 (function(){
   var $ = function(id){ return document.getElementById(id); };
 
+  var _authSettled = false;
+
+  function denyDiag(){
+    var fb = null, fbReady = false;
+    try {
+      fbReady = !!(window.PremiseAuth && PremiseAuth.auth);
+      fb = fbReady ? PremiseAuth.auth.currentUser : null;
+    } catch(e){}
+    var localEmail = "";
+    try {
+      var st = JSON.parse(localStorage.getItem("premise_state_v2") || "null");
+      localEmail = (st && st.user && st.user.email) || "";
+    } catch(e){}
+    var allow = (window.PremiseAdmin && PremiseAdmin.emails) ? PremiseAdmin.emails.join(", ") : "-";
+    var rows = [
+      ["인증 스크립트", fbReady ? "로드됨" : "로드 안 됨"],
+      ["Firebase 로그인", fb ? (fb.email || "(이메일 없음)") : (_authSettled ? "로그인 안 됨" : "확인 중…")],
+      ["로컬 저장 이메일", localEmail || "(없음)"],
+      ["허용 목록", allow],
+      ["현재 주소", location.hostname]
+    ];
+    var el = $("denyKv");
+    if (el) el.innerHTML = rows.map(function(r){
+      return "<dt>"+escapeHTML(r[0])+"</dt><dd>"+escapeHTML(String(r[1]))+"</dd>";
+    }).join("");
+  }
+
   function gate(){
     var ok = false;
     try { ok = window.PremiseAdmin && PremiseAdmin.is(); } catch(e){}
     $("denied").style.display  = ok ? "none" : "";
     $("console").style.display = ok ? "" : "none";
     if (ok) { try { PremiseNav.render("admin"); } catch(e){} render(); }
+    else denyDiag();
     return ok;
   }
 
@@ -262,8 +295,18 @@
   });
 
   gate();
-  document.addEventListener("premise:auth", gate);       // Firebase 인증 확정 후 재판정
+  /* Firebase 인증은 비동기라 첫 판정에서 로그인 정보가 없을 수 있다.
+     인증 확정 이벤트 + 짧은 폴링으로 두 번 더 기회를 준다. */
+  document.addEventListener("premise:auth", function(){ _authSettled = true; gate(); });
   document.addEventListener("premise:subscription", render);
+  var _tries = 0;
+  var _poll = setInterval(function(){
+    _tries++;
+    if (gate() || _tries >= 12) {
+      clearInterval(_poll);
+      if (_tries >= 12) { _authSettled = true; denyDiag(); }
+    }
+  }, 400);
 })();
 </script>
 </body>
