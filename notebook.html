@@ -327,6 +327,49 @@
     const note=$("metricNote"); if(note) note.textContent="";
   })();
 
+  /* ---- 배지 ---- */
+  (function(){
+    const BADGES = [
+      {e:"🔍",n:"구조파트너"},{e:"🧩",n:"행간파트너"},{e:"⚖️",n:"분별파트너"},{e:"🕵️",n:"문장파트너"},
+      {e:"🎯",n:"되물음파트너"},{e:"🐢",n:"깊이파트너"},{e:"🛠️",n:"유도파트너"},{e:"🧭",n:"근거파트너"},
+      {e:"🗺️",n:"구조도파트너"},{e:"🔭",n:"관점파트너"},{e:"💥",n:"오답폭파파트너"},{e:"🏗️",n:"논리건축파트너"},
+      {e:"🔎",n:"조건파트너"},{e:"🔄",n:"재정의파트너"},{e:"🧠",n:"패턴파트너"},{e:"🎲",n:"반례파트너"}
+    ];
+    const wrap=$("badges"); if(!wrap) return;
+    let done=0;
+    wrap.innerHTML = "";
+    BADGES.forEach(b=>{
+      const got=(S.badges||[]).includes(b.e); if(got) done++;
+      const el=document.createElement("div");
+      el.className="badge-chip flex flex-col items-center text-center"+(got?"":" locked");
+      el.innerHTML=`<div class="w-14 h-14 rounded-2xl ${got?'bg-point/10':'bg-soft'} border ${got?'border-point/25':'border-line'} flex items-center justify-center text-[26px]">${b.e}</div>`
+        + `<p class="text-[11px] mt-1.5 ${got?'text-ink font-semibold':'text-faint'}">${b.n}</p>`;
+      wrap.appendChild(el);
+    });
+    if($("badgeDone")) $("badgeDone").textContent=done;
+    if($("badgeTotal")) $("badgeTotal").textContent=BADGES.length;
+  })();
+
+  /* ---- 최근 발견한 전제 타임라인 ---- */
+  (function(){
+    const el=$("timeline"); if(!el) return;
+    const notes=(S.premises||[]).slice(0,8);
+    if(!notes.length){
+      el.innerHTML = `<div class="rounded-2xl bg-soft border border-line px-4 py-5 text-center">
+        <p class="text-[13.5px] font-bold text-ink">아직 기록이 없어요</p>
+        <p class="text-[12.5px] text-body mt-1.5" style="word-break:keep-all">오늘의 사건을 하나 풀면 여기에 발견한 전제가 쌓이기 시작합니다.</p>
+        <a href="daily.html" class="btn btn-primary mt-4 px-5 py-2.5 text-[13px] font-semibold">오늘의 사건 풀러 가기 →</a>
+      </div>`;
+      return;
+    }
+    el.innerHTML = notes.map(n=>`
+      <div class="flex items-center gap-3 rounded-2xl bg-soft border border-line px-4 py-3">
+        <span class="text-[11px] font-bold text-point bg-point/10 rounded-full px-2.5 py-1">${escapeHTML(n.subject||"")}</span>
+        <p class="text-[14px] font-semibold text-ink flex-1">${escapeHTML(n.note||"")}</p>
+        <span class="text-[12px] text-faint">${escapeHTML(n.date||"")}</span>
+      </div>`).join("");
+  })();
+
   /* ---- 마인드맵 요약 레이더 — 조건 미달이면 '예시' 지도를 보여준다 ---- */
   (function nbRadar(){
     const svg=$("nbRadar"); if(!svg) return;
