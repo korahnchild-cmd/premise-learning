@@ -175,6 +175,18 @@
       save(s);
       return s.user;
     },
+    /* Firebase 인증이 확정되면 로컬 user를 서버 계정 정보로 맞춘다.
+       (예전 로그인에서 이메일이 비어 placeholder가 저장된 계정을 자가 복구) */
+    syncAuthUser: (u) => {
+      if (!s.user) s.user = {};
+      if (!u) return s.user;
+      s.user.loggedIn = true;
+      if (u.email) s.user.email = u.email;
+      if (u.name) s.user.name = u.name;
+      if (u.uid) s.user.uid = u.uid;
+      save(s);
+      return s.user;
+    },
     logout: () => {
       s.user = { loggedIn: false, name: "", email: "", provider: "" };
       save(s);

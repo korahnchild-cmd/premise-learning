@@ -98,6 +98,13 @@ window.PremiseBilling = {
 let _subUnsub = null;
 onAuthStateChanged(auth, (user) => {
   if (_subUnsub) { _subUnsub(); _subUnsub = null; }
+  /* 로컬 user를 서버 계정 정보로 동기화 — 예전 로그인에서 저장된 가짜 이메일을 복구한다.
+     관리자 판정이 이메일에 의존하므로 이 동기화가 선행돼야 한다. */
+  try {
+    if (user && window.PremiseStore && typeof PremiseStore.syncAuthUser === "function") {
+      PremiseStore.syncAuthUser({ uid: user.uid, email: user.email || "", name: user.displayName || "" });
+    }
+  } catch (e) { console.warn("[auth] syncAuthUser:", e && e.message); }
   /* 인증 상태 확정 알림 — common.js가 관리자 판정/네비게이션을 다시 그린다. */
   try { document.dispatchEvent(new CustomEvent("premise:auth", { detail: { uid: user ? user.uid : null } })); } catch (e) {}
   if (!user) return;
