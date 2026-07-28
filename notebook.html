@@ -201,16 +201,16 @@
   $("streak").textContent = S.streak;
   $("level").textContent = Math.max(1, Math.floor(S.badges.length / 2));
   /* 이름 우선순위: 기본값 → 실제 로그인 계정 이름 → 온보딩에서 직접 설정한 표시 이름(dashboard.html과 동일 규칙) */
+  let PARTNER_NAME = "";
   (function(){
-    let name = "";
     try {
       const u = window.PremiseStore && PremiseStore.getUser && PremiseStore.getUser();
-      if (u && u.name) name = u.name;
+      if (u && u.name) PARTNER_NAME = u.name;
       const p = JSON.parse(localStorage.getItem("premise_profile")||"null");
-      if (p && p.name) name = p.name;
+      if (p && p.name) PARTNER_NAME = p.name;
     } catch(e){}
-    if ($("detName")) $("detName").textContent = name || "우리 아이";
-    if ($("greetName")) $("greetName").textContent = name || "파트너";
+    if ($("detName")) $("detName").textContent = PARTNER_NAME || "우리 아이";
+    if ($("greetName")) $("greetName").textContent = PARTNER_NAME || "파트너";
   })();
 
   /* ---- 활동 히트맵 — 실제 활동일(activeDates)만 칠한다 ---- */
@@ -338,8 +338,10 @@
     const svg=$("nbRadar"); if(!svg) return;
     const list=$("nbTrapList");
     if (!ST.canShowGrowthCurve){
-      svg.innerHTML = `<text x="150" y="106" text-anchor="middle" font-size="12.5" font-weight="700" fill="#9AA4B2">함정 지도 준비 중</text>
-        <text x="150" y="128" text-anchor="middle" font-size="11" fill="#9AA4B2">현재 ${ST.weeksTracked}주차 · 8주차부터 그려집니다</text>`;
+      svg.setAttribute("viewBox","0 0 300 96");
+      svg.innerHTML = `<rect x="8" y="8" width="284" height="80" rx="14" fill="#F7F8FA" stroke="#ECEEF1"/>
+        <text x="150" y="42" text-anchor="middle" font-size="12.5" font-weight="700" fill="#6B7290">함정 지도 준비 중</text>
+        <text x="150" y="64" text-anchor="middle" font-size="11" fill="#9AA4B2">현재 ${ST.weeksTracked}주차 · 8주차부터 그려집니다</text>`;
       if (list) list.innerHTML = `<span class="text-[12px] text-faint">아이가 어떤 전제에 반복해서 걸리는지는 기록이 8주쯤 쌓여야 패턴으로 보입니다.</span>`;
       return;
     }
@@ -417,13 +419,13 @@
   /* ---- 루카 주간 메시지 — 실제 활동에 근거해서만 말한다 ---- */
   (function(){
     const el=$("lukaMsg"); if(!el) return;
-    const nm = ($("greetName") && $("greetName").textContent) || "파트너";
+    const nm = PARTNER_NAME ? escapeHTML(PARTNER_NAME) + " 파트너님" : "파트너님";
     if (!ST.hasAnyActivity){
-      el.innerHTML = `${escapeHTML(nm)} 파트너님, 반가워요! 아직 함께 푼 사건이 없네요. <b>첫 사건 하나</b>만 같이 열어볼까요? 10분이면 충분해요.`;
+      el.innerHTML = `${nm}, 반가워요! 아직 함께 푼 사건이 없네요. <b>첫 사건 하나</b>만 같이 열어볼까요? 10분이면 충분해요.`;
     } else if (!ST.canShowWeeklyReport){
-      el.innerHTML = `${escapeHTML(nm)} 파트너님, 지금까지 <b>${ST.totalPremise}개</b>의 전제를 찾았어요. 7일이 모이면 첫 주간 리포트를 보내드릴게요 — <b>${Math.max(0,7-ST.daysSinceStart)}일</b> 남았습니다.`;
+      el.innerHTML = `${nm}, 지금까지 <b>${ST.totalPremise}개</b>의 전제를 찾았어요. 7일이 모이면 첫 주간 리포트를 보내드릴게요 — <b>${Math.max(0,7-ST.daysSinceStart)}일</b> 남았습니다.`;
     } else {
-      el.innerHTML = `${escapeHTML(nm)} 파트너님, 이번 주에 <b>${ST.thisWeekPremise}개</b>의 전제를 찾았어요. 지금까지 누적 <b>${ST.totalPremise}개</b>입니다. 이번 주도 이어가 볼까요?`;
+      el.innerHTML = `${nm}, 이번 주에 <b>${ST.thisWeekPremise}개</b>의 전제를 찾았어요. 지금까지 누적 <b>${ST.totalPremise}개</b>입니다. 이번 주도 이어가 볼까요?`;
     }
   })();
 
