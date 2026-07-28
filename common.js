@@ -160,6 +160,57 @@
     catch (e) { return null; }
   }
 
+  /* ===== 베타 계측 (GA4) — 2026-07-28 =====
+     학습 기록(activeDates·completed·streak)은 localStorage에만 있어서 서버에서 진척을 볼 수 없다.
+     베타 리텐션을 재려고 사건 완료 시점에 GA4 이벤트를 쏜다.
+
+       pbs_since_dN  — 첫 활동일로부터 N일차에 사건을 완료함  → '생존'(며칠째까지 돌아왔나)
+       pbs_active_dN — 누적 활동일이 N일이 됨                → '성실도'(총 며칠 했나)
+       pbs_activation — 생애 첫 사건 완료
+       case_complete — 위 숫자를 파라미터로 담은 원본 이벤트
+
+     N을 이벤트 '이름'에 박아둔 이유: GA4에서 맞춤 측정기준을 등록하지 않아도
+     이벤트 보고서에서 이름별 사용자 수가 바로 읽힌다. 표본 20~30명이면 이게 제일 빠르다.
+     같은 날 두 사건을 풀어도 일자 이벤트는 하루 한 번만 나간다(isFirstToday). */
+  function _gaCaseComplete(st, c, isFirstToday) {
+    if (typeof window.PBSGA !== "function") return;
+    const dates = Array.isArray(st.activeDates) ? st.activeDates : [];
+    const activeDays = dates.length;
+    const first = st.firstActiveAt || (dates.length ? dates[0] : "");
+    const t0 = first ? Date.parse(first) : 0;
+    const since = t0 ? Math.floor((Date.now() - t0) / 864e5) + 1 : 1;
+    const totalCases = (st.completed || []).length;
+
+    PBSGA("case_complete", {
+      case_id: (c && c.missionId) || "",
+      subject: (c && c.subject) || "",
+      since_day: since,
+      active_days: activeDays,
+      streak: st.streak || 0,
+      total_cases: totalCases
+    });
+    if (totalCases === 1) PBSGA("pbs_activation");
+    if (!isFirstToday) return;
+    if (since >= 1 && since <= 14) PBSGA("pbs_since_d" + since);
+    if (activeDays >= 1 && activeDays <= 14) PBSGA("pbs_active_d" + activeDays);
+  }
+
+  /* analytics.js를 전 페이지에 자동 주입.
+     index/diagnosis는 직접 <script>로 넣고 있어 중복이 되는데, analytics.js 자체의
+     __pbsGA 가드가 두 번 실행을 막는다. 경로는 common.js 자신의 src에서 유도해
+     magazine/ 같은 하위 폴더에서도 깨지지 않게 한다. */
+  (function injectAnalytics() {
+    try {
+      if (window.__pbsGA) return;
+      if (document.querySelector('script[src$="analytics.js"]')) return;
+      const me = document.currentScript && document.currentScript.src;
+      const url = me ? me.replace(/common\.js(\?.*)?$/, "analytics.js") : "analytics.js";
+      const el = document.createElement("script");
+      el.src = url; el.async = true;
+      (document.head || document.documentElement).appendChild(el);
+    } catch (e) {}
+  })();
+
   window.PremiseStore = {
     get: () => s,
     reset: () => { try { localStorage.removeItem(KEY); } catch (e) {} s = seed(); save(s); return s; },
@@ -168,6 +219,7 @@
     completeCase: (c) => {
       // 재플레이(이미 완료한 미션 다시 하기)는 '발견한 전제'에 중복 기록하지 않음
       const isNew = !(c.missionId && s.completed.includes(c.missionId));
+      const isFirstToday = s.lastActive !== today(); // GA 일자별 이벤트 중복 방지용(mutate 전에 잡아둔다)
       if (c.missionId && !s.completed.includes(c.missionId)) s.completed.push(c.missionId);
       if (c.badge && !s.badges.includes(c.badge)) s.badges.push(c.badge);
       if (isNew) s.premises.unshift({ subject: c.subject, note: c.note, badge: c.badge, badgeName: c.badgeName, date: "방금", at: today() });
@@ -176,6 +228,7 @@
       if (s.activeDates.indexOf(today()) < 0) { s.activeDates.push(today()); s.activeDates.sort(); }
       if (!s.firstActiveAt) s.firstActiveAt = today();
       save(s);
+      try { _gaCaseComplete(s, c, isFirstToday); } catch (e) {}
       return s;
     },
     /* 데일리 미션에서 아이가 남긴 질문 한 줄 기록 (report.html before/after 소스) */
