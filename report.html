@@ -381,6 +381,7 @@ try {
     }
   }
 
+  if ($("reportNo")) $("reportNo").textContent = Math.max(1, Math.ceil(ST.daysSinceStart/7));
   const streak = ST.streak;
   if ($("weekPremise")) $("weekPremise").textContent = ST.thisWeekPremise;
   if ($("totalPremise")) $("totalPremise").textContent = ST.totalPremise;
@@ -420,6 +421,12 @@ try {
       baData = pairs.slice(0,3);
     }
   } catch(e){}
+  if (EX_BA){
+    const w=$("baWrap");
+    if(w){ w.classList.add("ex-wrap"); const b=document.createElement("span"); b.className="ex-badge"; b.textContent="예시"; w.appendChild(b); }
+    if ($("baList")) $("baList").classList.add("ex-dim");
+    const n=$("baNote"); if(n) n.innerHTML='아이가 <b>질문을 두 번 이상</b> 남기면 위 자리에 실제 변화가 들어갑니다. 지금은 예시예요.';
+  } else { const n=$("baNote"); if(n) n.textContent=""; }
   if ($("baList")) $("baList").innerHTML = baData.map(x => `
     <div class="rounded-2xl border border-line overflow-hidden">
       <div class="flex flex-col md:flex-row">

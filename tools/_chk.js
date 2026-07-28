@@ -1,0 +1,1 @@
+if(window.PremiseNav) PremiseNav.render("terms");
