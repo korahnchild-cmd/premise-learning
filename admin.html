@@ -40,13 +40,15 @@
     <h1 class="text-[1.4rem] font-extrabold">관리자 전용 페이지입니다</h1>
     <p class="text-[13.5px] mt-3 leading-relaxed" style="color:#6B7290">운영자 계정으로 로그인해야 열람할 수 있습니다.<br />이 페이지의 기능은 본인 브라우저의 표시 상태만 바꾸며, 서버의 구독 권한은 변경하지 않습니다.</p>
     <div class="mt-6 flex gap-2 justify-center flex-wrap">
-      <a href="login.html?next=admin.html" class="abtn" style="text-align:center">로그인하기</a>
+      <button class="abtn" id="switchBtn" style="text-align:center">다른 계정으로 로그인</button>
       <a href="index.html" class="abtn" style="text-align:center">홈으로</a>
     </div>
+    <p class="text-[11.5px] mt-3" style="color:#6B7290">이미 다른 계정으로 로그인돼 있으면 먼저 로그아웃해야 합니다. 위 버튼이 로그아웃까지 함께 처리합니다.</p>
     <div class="mt-7 pt-6" style="border-top:1px solid #ECEEF1;text-align:left">
       <p class="text-[12.5px] font-bold mb-2">왜 막혔는지 확인</p>
       <dl class="kv" id="denyKv"></dl>
-      <p class="text-[11.5px] mt-3" style="color:#6B7290; word-break:keep-all">Firebase 로그인이 "확인 중"에서 안 넘어가면 인증 스크립트가 로드되지 않은 것입니다. 이메일이 허용 목록과 다르면 다른 계정으로 로그인된 상태입니다.</p>
+      <p class="text-[11.5px] mt-3" style="color:#6B7290; word-break:keep-all"><b>"이메일 없음"</b>으로 나오면 카카오·네이버 계정입니다. 이 계정을 관리자로 쓰려면 위 <b>Firebase UID</b>를 복사해 <code>common.js</code>의 <code>ADMIN_UIDS</code> 배열에 넣으세요. 구글 계정으로 쓰실 거면 "다른 계정으로 로그인"을 누르시면 됩니다.</p>
+      <button class="abtn mt-3" id="copyUidBtn" style="padding:8px 14px">UID 복사</button>
     </div>
   </div>
 
@@ -139,11 +141,16 @@
       localEmail = (st && st.user && st.user.email) || "";
     } catch(e){}
     var allow = (window.PremiseAdmin && PremiseAdmin.emails) ? PremiseAdmin.emails.join(", ") : "-";
+    var allowUid = (window.PremiseAdmin && PremiseAdmin.uids && PremiseAdmin.uids.length)
+      ? PremiseAdmin.uids.join(", ") : "(비어 있음)";
     var rows = [
       ["인증 스크립트", fbReady ? "로드됨" : "로드 안 됨"],
-      ["Firebase 로그인", fb ? (fb.email || "(이메일 없음)") : (_authSettled ? "로그인 안 됨" : "확인 중…")],
+      ["Firebase 로그인", fb ? (fb.email || "(이메일 없음 · 카카오/네이버 계정)") : (_authSettled ? "로그인 안 됨" : "확인 중…")],
+      ["Firebase UID", fb ? fb.uid : "-"],
+      ["로그인 수단", fb && fb.providerData && fb.providerData[0] ? fb.providerData[0].providerId : (fb ? "custom token" : "-")],
       ["로컬 저장 이메일", localEmail || "(없음)"],
-      ["허용 목록", allow],
+      ["허용 이메일", allow],
+      ["허용 UID", allowUid],
       ["현재 주소", location.hostname]
     ];
     var el = $("denyKv");
@@ -289,6 +296,26 @@
       if (confirm("학습 데이터를 '" + b.textContent.split("<")[0].trim() + "' 시나리오로 덮어씁니다. 계속할까요?")) setData(b.dataset.d);
     });
   });
+  /* 다른 계정으로 로그인 — Firebase·로컬 로그아웃 후 로그인 화면으로.
+     login.html은 이미 로그인 상태면 즉시 next로 튕기므로, 반드시 먼저 로그아웃해야 한다. */
+  var switchBtn = $("switchBtn");
+  if (switchBtn) switchBtn.addEventListener("click", function(){
+    try { if (window.PremiseAuth && PremiseAuth.signOutFirebase) PremiseAuth.signOutFirebase(); } catch(e){}
+    try { PremiseStore.logout(); } catch(e){}
+    setTimeout(function(){ location.href = "login.html?next=admin.html"; }, 350);
+  });
+
+  var copyBtn = $("copyUidBtn");
+  if (copyBtn) copyBtn.addEventListener("click", function(){
+    var u = null;
+    try { u = PremiseAdmin.currentUser(); } catch(e){}
+    if (!u) { alert("로그인된 계정이 없습니다."); return; }
+    try {
+      navigator.clipboard.writeText(u.uid);
+      copyBtn.textContent = "복사됨 · " + u.uid;
+    } catch(e){ prompt("아래 UID를 복사하세요", u.uid); }
+  });
+
   $("refreshBtn").addEventListener("click", render);
   $("resetBtn").addEventListener("click", function(){
     if (confirm("이 브라우저의 로컬 학습 상태를 모두 지웁니다. 계속할까요?")) { PremiseStore.reset(); location.reload(); }

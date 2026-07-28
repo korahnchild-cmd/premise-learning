@@ -15,6 +15,9 @@
      주의: 클라이언트 판정이므로 '기능 노출 제어'일 뿐 보안 경계가 아니다.
      실제 보안 경계는 Firestore 규칙(subscription write 전면 차단)이 담당한다. */
   const ADMIN_EMAILS = ["korahnchild@gmail.com"];
+  /* 카카오·네이버는 Custom Token 로그인이라 Firebase 계정에 이메일이 없다.
+     그런 계정을 관리자로 쓰려면 UID를 여기에 넣는다. (admin.html 잠금화면에서 UID 확인 가능) */
+  const ADMIN_UIDS = [];
   function isLocalhost() {
     try {
       const h = location.hostname;
@@ -23,13 +26,23 @@
   }
   window.PremiseAdmin = {
     emails: ADMIN_EMAILS,
-    /* Firebase 로그인 이메일이 화이트리스트에 있거나, 로컬 개발 환경이면 true */
+    uids: ADMIN_UIDS,
+    /* 현재 Firebase 로그인 사용자 (없으면 null) */
+    currentUser: function () {
+      try { return (window.PremiseAuth && PremiseAuth.auth && PremiseAuth.auth.currentUser) || null; }
+      catch (e) { return null; }
+    },
+    /* Firebase 계정의 이메일 또는 UID가 화이트리스트에 있거나, 로컬 개발 환경이면 true */
     is: function () {
       if (isLocalhost()) return true;
-      try {
-        const u = window.PremiseAuth && PremiseAuth.auth && PremiseAuth.auth.currentUser;
-        if (u && u.email && ADMIN_EMAILS.indexOf(String(u.email).toLowerCase()) >= 0) return true;
-      } catch (e) {}
+      const u = this.currentUser();
+      if (u) {
+        if (u.email && ADMIN_EMAILS.indexOf(String(u.email).toLowerCase()) >= 0) return true;
+        if (u.uid && ADMIN_UIDS.indexOf(String(u.uid)) >= 0) return true;
+        // Firebase에 로그인돼 있는데 허용 대상이 아니면, 로컬 값으로 통과시키지 않는다.
+        return false;
+      }
+      // Firebase 미로그인 상태에서만 로컬 저장값을 참고 (오프라인·스크립트 실패 대비)
       try {
         const st = JSON.parse(localStorage.getItem(KEY) || "null");
         const em = st && st.user && st.user.email;
