@@ -65,6 +65,13 @@
     .card{ break-inside:avoid; }
     main{ padding:0 !important; max-width:none !important; }
   }
+  .ex-wrap{ position:relative; }
+  .ex-dim{ opacity:.5; filter:saturate(.55); pointer-events:none; }
+  .ex-badge{ position:absolute; top:8px; left:8px; z-index:2; display:inline-flex; align-items:center;
+    background:#FFF6E0; border:1px solid #FFE6A6; color:#8A6400; font-size:11px; font-weight:800;
+    border-radius:9999px; padding:4px 10px; }
+  .ex-note{ font-size:12px; color:#6B7290; line-height:1.6; word-break:keep-all; }
+  .ex-note b{ color:#0A0E17; }
 </style>
 </head>
 <body>
@@ -203,7 +210,8 @@
       <h2 class="text-[1.35rem] md:text-[1.6rem] font-extrabold">질문이 이렇게 달라졌어요</h2>
       <p class="text-[13.5px] text-body mt-2 leading-relaxed">같은 아이가, 몇 주 사이에 문제를 대하는 <b class="text-ink">첫 마디</b>가 달라졌습니다. 점수보다 이 변화가 먼저 옵니다.</p>
 
-      <div class="space-y-4 mt-6" id="baList"></div>
+      <div id="baWrap"><div class="space-y-4 mt-6" id="baList"></div></div>
+      <p id="baNote" class="ex-note mt-3 rounded-2xl bg-soft border border-line px-4 py-3"></p>
 
       <div class="mt-5 flex items-start gap-3 rounded-2xl bg-soft border border-line px-4 py-3.5">
         <div class="kozy shrink-0" style="width:40px;height:40px">
@@ -227,7 +235,8 @@
     <div class="px-6 md:px-9 pb-8">
       <h3 class="text-[15px] font-bold text-ink mb-1">태도 지표 · 6주 흐름</h3>
       <p class="text-[12.5px] text-body mb-4">점수가 아니라 <b class="text-ink">생각의 습관</b>이 자라는 과정을 봅니다.</p>
-      <div class="grid sm:grid-cols-3 gap-3.5" id="metrics"></div>
+      <div id="metricWrap"><div class="grid sm:grid-cols-3 gap-3.5" id="metrics"></div></div>
+      <p id="metricNote" class="ex-note mt-3 rounded-2xl bg-soft border border-line px-4 py-3"></p>
     </div>
 
     <!-- ★ 전제 함정 지도 (사고 지도) -->
@@ -238,7 +247,7 @@
       <h3 class="text-[1.35rem] md:text-[1.6rem] font-extrabold">지금 <span id="mapName">우리 아이</span>가 보는 것, 아직 못 보는 것</h3>
       <p class="text-[13.5px] text-body mt-2 leading-relaxed">전제 함정 유형별로, <b class="text-ink">스스로 잡아내는 정도</b>예요. 이 지도는 PBS 학습법을 쓸수록 또렷해지고, <b class="text-ink">학년이 바뀌어도 이어집니다</b>.</p>
 
-      <div class="mt-5 rounded-2xl border border-line bg-soft px-4 py-5 md:px-6 flex flex-col md:flex-row items-center gap-5">
+      <div class="mt-5 rounded-2xl border border-line bg-soft px-4 py-5 md:px-6 flex flex-col md:flex-row items-center gap-5" id="mapWrap">
         <div class="w-full max-w-[330px] mx-auto shrink-0">
           <svg id="trapRadar" viewBox="0 0 320 250" class="w-full" aria-label="전제 함정 지도"></svg>
         </div>
@@ -251,6 +260,7 @@
         </div>
       </div>
 
+      <p id="mapNote" class="ex-note mt-3 rounded-2xl bg-white border border-line px-4 py-3"></p>
       <div class="mt-4 flex items-start gap-3 rounded-2xl bg-point/[.05] border border-point/15 px-4 py-3.5">
         <div class="kozy shrink-0" style="width:40px;height:40px">
           <svg viewBox="0 0 100 100" aria-label="루카"><g class="kw">
@@ -346,17 +356,21 @@ try {
   } catch (e) {}
   const NAME = name || "우리 아이";
 
-  /* 7일치가 모이기 전에는 리포트를 만들지 않는다 */
-  if (!ST.canShowWeeklyReport) {
-    const sheet = $("reportSheet"), pend = $("reportPending");
-    if (sheet) sheet.style.display = "none";
+  /* 7일치가 모이기 전에도 리포트를 보여준다. 단, 예시임을 최상단에 명시한다. */
+  const IS_EX = !ST.canShowWeeklyReport;          // 리포트 전체가 예시인가
+  const EX_BA = (S.questionLog || []).length < 2; // 질문 before/after가 예시인가
+  const EX_METRIC = !ST.canCompareWeeks;          // 태도 지표가 예시인가
+  const EX_MAP = !ST.canShowGrowthCurve;          // 함정 지도가 예시인가
+
+  if (IS_EX) {
+    const pend = $("reportPending");
     if (pend) {
       pend.style.display = "";
       const left = Math.max(0, 7 - ST.daysSinceStart);
       $("pendTitle").textContent = ST.hasAnyActivity ? "첫 리포트까지 " + left + "일 남았어요" : "아직 기록이 없어요";
       $("pendMsg").innerHTML = ST.hasAnyActivity
-        ? NAME + " 파트너의 7일치 기록이 모이면 <b>질문이 어떻게 달라졌는지</b>를 한 장으로 정리해 보내드립니다."
-        : "오늘의 사건을 하나 풀면 기록이 시작됩니다. 7일이 모이면 첫 리포트가 만들어져요.";
+        ? NAME + " 파트너의 7일치가 모이면 아래 리포트가 <b>실제 기록</b>으로 채워집니다. 지금 보시는 건 예시예요."
+        : "오늘의 사건을 하나 풀면 기록이 시작됩니다. 아래는 7일 뒤 받게 될 리포트의 예시예요.";
       $("pendStats").innerHTML = [
         ["발견한 전제", ST.totalPremise + "개"],
         ["남긴 질문", ST.questionCount + "개"],
@@ -365,8 +379,6 @@ try {
         return '<div><p class="text-[18px] font-extrabold text-ink">' + r[1] + '</p><p class="text-[11px] text-body mt-0.5">' + r[0] + '</p></div>';
       }).join("");
     }
-    try { PremiseNav && PremiseNav.render && PremiseNav.render("note"); } catch(e){}
-    throw new Error("__report_pending__"); // 이하 렌더 중단
   }
 
   const streak = ST.streak;
@@ -374,17 +386,18 @@ try {
   if ($("totalPremise")) $("totalPremise").textContent = ST.totalPremise;
   if ($("mapPremiseCount")) $("mapPremiseCount").textContent = ST.totalPremise;
   if ($("mapName")) $("mapName").textContent = NAME;
-  $("detName").textContent = NAME; $("detName2").textContent = NAME; $("streak").textContent = streak;
+  if ($("detName")) $("detName").textContent = NAME;
+  if ($("streak")) $("streak").textContent = streak;
 
   /* ---- 기간: 최근 7일 ---- */
   (function(){
     const fmt = d => `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,"0")}.${String(d.getDate()).padStart(2,"0")}`;
     const fmtShort = d => `${String(d.getMonth()+1).padStart(2,"0")}.${String(d.getDate()).padStart(2,"0")}`;
     const end = new Date(); const start = new Date(); start.setDate(end.getDate()-6);
-    $("dateRange").textContent = `${fmt(start)} – ${fmtShort(end)}`;
+    if ($("dateRange")) $("dateRange").textContent = `${fmt(start)} – ${fmtShort(end)}`;
   })();
 
-  /* ---- ★ 질문 before / after ---- */
+  /* ---- ★ 질문 before / after — 실기록 2개 미만이면 예시 ---- */
   const ba = [
     { subject:"수학", weeksAgo:"6주 전", before:"“답이 몇이에요?”", after:"“이 식은 왜 ‘=’를 정답으로 봐요? 균형으로 보면 다르지 않아요?”" },
     { subject:"국어", weeksAgo:"5주 전", before:"“무슨 말인지 모르겠어요.”", after:"“글쓴이가 ‘조차’로 뭘 당연하게 깔아둔 거죠?”" },
@@ -407,7 +420,7 @@ try {
       baData = pairs.slice(0,3);
     }
   } catch(e){}
-  $("baList").innerHTML = baData.map(x => `
+  if ($("baList")) $("baList").innerHTML = baData.map(x => `
     <div class="rounded-2xl border border-line overflow-hidden">
       <div class="flex flex-col md:flex-row">
         <div class="ba-arrow flex-1 bg-soft px-5 py-4">
@@ -427,16 +440,16 @@ try {
     </div>`).join("");
 
   /* ---- 태도 지표 — 2주 이상일 때만 비교, 아니면 이번 주 수치만 ---- */
-  const metrics = ST.canCompareWeeks
+  const metrics = !EX_METRIC
     ? [
         { key:"발견한 전제", now: ST.thisWeekPremise + "개", sub: ST.lastWeekPremise > 0 ? ("지난주 " + ST.lastWeekPremise + "개") : "지난주 기록 없음" },
         { key:"남긴 질문",   now: ST.thisWeekQuestion + "개", sub: ST.lastWeekQuestion > 0 ? ("지난주 " + ST.lastWeekQuestion + "개") : "지난주 기록 없음" },
         { key:"활동한 날",   now: ST.activeDates.filter(function(d){var t=Date.parse(d);return !isNaN(t)&&(Date.now()-t)<7*864e5;}).length + "일", sub: "최근 7일" }
       ]
     : [
-        { key:"발견한 전제", now: ST.thisWeekPremise + "개", sub: "이번 주" },
-        { key:"남긴 질문",   now: ST.thisWeekQuestion + "개", sub: "이번 주" },
-        { key:"활동한 날",   now: ST.activeDayCount + "일", sub: "누적" }
+        { key:"발견한 전제", now: "12개", sub: "지난주 8개" },
+        { key:"남긴 질문",   now: "9개",  sub: "지난주 5개" },
+        { key:"활동한 날",   now: "6일",  sub: "지난주 4일" }
       ];
   function spark(series){
     const w=120,h=34,max=Math.max(...series),min=Math.min(...series);
@@ -444,7 +457,12 @@ try {
     const last=pts.split(" ").pop().split(",");
     return `<svg viewBox="0 0 ${w} ${h}" class="w-full h-9"><polyline points="${pts}" fill="none" stroke="#0A66FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${last[0]}" cy="${last[1]}" r="3" fill="#0A66FF"/></svg>`;
   }
-  $("metrics").innerHTML = metrics.map(m => `
+  if (EX_METRIC){
+    const w=$("metricWrap"); if(w){ w.classList.add("ex-wrap"); const b=document.createElement("span"); b.className="ex-badge"; b.textContent="예시"; w.appendChild(b); }
+    if ($("metrics")) $("metrics").classList.add("ex-dim");
+    const n=$("metricNote"); if(n) n.innerHTML='<b>2주치가 모이면</b> 위 자리가 우리 아이의 실제 지표로 바뀝니다. 지금은 예시예요.';
+  } else { const n=$("metricNote"); if(n) n.textContent=""; }
+  if ($("metrics")) $("metrics").innerHTML = metrics.map(m => `
     <div class="card p-4">
       <p class="text-[12px] text-body">${m.key}</p>
       <div class="flex items-end justify-between mt-1 mb-2">
@@ -465,22 +483,29 @@ try {
 
   /* ---- ★ 전제 함정 지도 (레이더) ---- */
   $("mapName") && ($("mapName").textContent = NAME);
-  const traps = (function(){
+  const EXAMPLE_TRAPS = [
+    { key:"상관→인과", now:78, prev:40 }, { key:"숨은 전제", now:66, prev:28 },
+    { key:"단일 기준", now:58, prev:35 }, { key:"과잉 일반화", now:47, prev:30 },
+    { key:"권위 전제", now:38, prev:15 }, { key:"이분법", now:52, prev:33 },
+    { key:"순환 논리", now:44, prev:24 }, { key:"감정 전제", now:61, prev:36 },
+    { key:"표본 편향", now:35, prev:18 }
+  ];
+  const traps = EX_MAP ? EXAMPLE_TRAPS : (function(){
     const by = {};
     (S.premises||[]).forEach(function(p){ const k=(p&&p.subject)||"기타"; by[k]=(by[k]||0)+1; });
     const keys=Object.keys(by);
-    if(!keys.length) return [];
+    if(!keys.length) return EXAMPLE_TRAPS;
     const max=Math.max.apply(null, keys.map(function(k){return by[k];}));
     return keys.map(function(k){ return { key:k, now: Math.round(by[k]/max*100), prev: 0 }; });
   })();
   (function renderRadar(){
     const svg = $("trapRadar"); if(!svg) return;
-    if (!traps.length || ST.weeksTracked < 8){
-      svg.innerHTML = `<text x="160" y="112" text-anchor="middle" font-size="13" font-weight="700" fill="#9AA4B2">함정 지도 준비 중</text>
-        <text x="160" y="136" text-anchor="middle" font-size="11.5" fill="#9AA4B2">현재 ${ST.weeksTracked}주차 · 8주차부터 그려집니다</text>`;
-      const lst=$("trapList");
-      if (lst) lst.innerHTML = `<p class="text-[12.5px] text-faint" style="word-break:keep-all">반복해서 걸리는 전제 유형은 기록이 충분히 쌓여야 드러납니다.</p>`;
-      return;
+    if (EX_MAP){
+      const w=$("mapWrap"); if(w){ w.classList.add("ex-wrap"); const b=document.createElement("span"); b.className="ex-badge"; b.textContent="예시"; w.appendChild(b); }
+      svg.classList.add("ex-dim"); const l=$("trapList"); if(l) l.classList.add("ex-dim");
+      const n2=$("mapNote"); if(n2) n2.innerHTML = `이 지도는 <b>매일 사건을 풀고 8주쯤</b> 지나면 실제 기록으로 그려집니다. 현재 <b>${ST.weeksTracked}주차</b> — 위는 예시예요.`;
+    } else {
+      const n2=$("mapNote"); if(n2) n2.innerHTML = `우리 아이가 실제로 발견한 전제 <b>${ST.totalPremise}개</b>로 그려진 지도입니다.`;
     }
     const cx=160, cy=120, R=86, n=traps.length;
     const ang = i => (-90 + i*(360/n)) * Math.PI/180;
@@ -533,7 +558,7 @@ try {
   ];
   let notes = demoNotes;
   try { const S = PremiseStore.get(); if (S && S.premises && S.premises.length) notes = S.premises.slice(0,6); } catch(e){}
-  $("timeline").innerHTML = notes.map(n => `
+  if ($("timeline")) $("timeline").innerHTML = notes.map(n => `
     <div class="rounded-2xl bg-white border border-line px-4 py-3">
       <div class="flex items-center justify-between gap-3 mb-1.5">
         <span class="text-[11px] font-bold text-point bg-point/10 rounded-full px-2.5 py-1 shrink-0">${n.subject}</span>

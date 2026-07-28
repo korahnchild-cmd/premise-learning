@@ -36,6 +36,13 @@
   .eta-fill::after{ content:""; position:absolute; top:0; right:0; bottom:0; width:22px; background:linear-gradient(90deg,transparent,rgba(255,255,255,.75)); animation:etaShine 2s infinite; }
   @keyframes etaShine{ 0%{ transform:translateX(-40px) } 100%{ transform:translateX(26px) } }
   @media (prefers-reduced-motion:reduce){ .kw, .eta-fill::after{ animation:none!important } .eta-fill{ transition:none!important } }
+  .ex-wrap{ position:relative; }
+  .ex-dim{ opacity:.5; filter:saturate(.55); pointer-events:none; }
+  .ex-badge{ position:absolute; top:8px; left:8px; z-index:2; display:inline-flex; align-items:center;
+    background:#FFF6E0; border:1px solid #FFE6A6; color:#8A6400; font-size:11px; font-weight:800;
+    border-radius:9999px; padding:4px 10px; }
+  .ex-note{ font-size:12px; color:#6B7290; line-height:1.6; word-break:keep-all; }
+  .ex-note b{ color:#0A0E17; }
 </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -264,19 +271,25 @@
   /* ---- 전제 함정 지도 (report.html과 동일 로직) ---- */
   /* 실제 기록(과목별 전제 발견 분포)에서 만든다. 임의 수치를 쓰지 않는다.
      8주 미만이면 지도를 그리지 않고 안내로 대체한다(아래 renderTrapMap 참조). */
-  const traps = IS_PREVIEW ? [
+  const EXAMPLE_TRAPS = [
     { key:"상관→인과", now:78, prev:40 }, { key:"숨은 전제", now:66, prev:28 },
     { key:"단일 기준", now:58, prev:35 }, { key:"과잉 일반화", now:47, prev:30 },
-    { key:"권위 전제", now:38, prev:15 }, { key:"이분법", now:52, prev:33 }
-  ] : (function(){
+    { key:"권위 전제", now:38, prev:15 }, { key:"이분법", now:52, prev:33 },
+    { key:"순환 논리", now:44, prev:24 }, { key:"감정 전제", now:61, prev:36 },
+    { key:"표본 편향", now:35, prev:18 }
+  ];
+  /* 근거가 충분할 때만 실기록으로, 아니면 예시로 그린다(빈 화면 대신). */
+  const REAL_TRAPS = (function(){
     const S = PremiseStore.get();
     const by = {};
     (S.premises||[]).forEach(p => { const k = (p && p.subject) || "기타"; by[k] = (by[k]||0)+1; });
     const keys = Object.keys(by);
-    if (!keys.length) return [];
+    if (keys.length < 3) return [];
     const max = Math.max.apply(null, keys.map(k=>by[k]));
     return keys.map(k => ({ key:k, now: Math.round(by[k]/max*100), prev: 0 }));
   })();
+  const EX_MAP = IS_PREVIEW ? false : (!ST.canShowGrowthCurve || !REAL_TRAPS.length);
+  const traps = (IS_PREVIEW || EX_MAP) ? EXAMPLE_TRAPS : REAL_TRAPS;
   const BENCH_TOP = 95; // 최상위권 기준선(고정 벤치마크)
   const scoreNow  = traps.length ? Math.round(traps.reduce((s,t)=>s+t.now,0)/traps.length) : 0;
   const scorePrev = traps.length ? Math.round(traps.reduce((s,t)=>s+t.prev,0)/traps.length) : 0;
@@ -284,12 +297,11 @@
   (function renderRadar(){
     const svg = $("trapRadar"); if(!svg) return;
     /* 근거 없는 지도를 그리지 않는다 — 기록이 없거나 8주 미만이면 안내로 대체 */
-    if (!traps.length || ST.weeksTracked < 8){
-      svg.innerHTML = `<text x="160" y="112" text-anchor="middle" font-size="13" font-weight="700" fill="#9AA4B2">함정 지도 준비 중</text>
-        <text x="160" y="136" text-anchor="middle" font-size="11.5" fill="#9AA4B2">현재 ${ST.weeksTracked}주차 · 8주차부터 그려집니다</text>`;
-      const lst = $("trapList");
-      if (lst) lst.innerHTML = `<p class="text-[12.5px] text-faint" style="word-break:keep-all">아이가 어떤 전제에 반복해서 걸리는지는 기록이 충분히 쌓여야 패턴으로 드러납니다. 지금은 매일 한 사건씩 쌓는 구간이에요.</p>`;
-      return;
+    if (EX_MAP){
+      const w = svg.closest(".card") || svg.parentNode;
+      if (w){ w.classList.add("ex-wrap"); const b=document.createElement("span"); b.className="ex-badge"; b.textContent="예시"; w.appendChild(b); }
+      svg.classList.add("ex-dim");
+      const lst=$("trapList"); if(lst) lst.classList.add("ex-dim");
     }
     const cx=160, cy=120, R=86, n=traps.length;
     const ang = i => (-90 + i*(360/n)) * Math.PI/180;
@@ -315,7 +327,6 @@
   })();
   (function renderTrapList(){
     const el = $("trapList"); if(!el) return;
-    if (!traps.length || ST.weeksTracked < 8) return; // 위에서 안내를 이미 넣었다
     el.innerHTML = [...traps].sort((a,b)=>b.now-a.now).map(t=>{
       const caught = t.now>=55, delta = t.now - t.prev;
       return `<div class="flex items-center gap-2.5">

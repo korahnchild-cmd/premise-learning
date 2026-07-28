@@ -265,10 +265,13 @@
       if (days <= 0){ S.streak = 0; S.lastActive = ""; S.firstActiveAt = ""; return; }
       for (var d = days - 1; d >= 0; d--){
         var day = daysAgo(d);
+        var dow = new Date(Date.now() - d * 864e5).getDay();
+        if (days > 14 && (dow === 0 || (d % 9 === 3))) continue; // 쉬는 날 — 실제 사용처럼 빈 날을 만든다
         S.activeDates.push(day);
-        for (var i = 0; i < perDay; i++){
+        var todayCount = perDay + (d % 3 === 0 ? 1 : 0);
+        for (var i = 0; i < todayCount; i++){
           S.premises.unshift({
-            subject: subs[(d + i) % subs.length],
+            subject: subs[(d * 2 + i * 3) % subs.length],
             note: "전제 기록",
             badge: badgeSet[(d + i) % badges],
             badgeName: "구조파트너",
@@ -280,9 +283,9 @@
         S.completed.push("m-" + d);
       }
       S.badges = badgeSet.slice(0, badges);
-      S.firstActiveAt = S.activeDates[0];
+      S.firstActiveAt = S.activeDates[0] || daysAgo(days - 1);
       S.lastActive = daysAgo(0);
-      S.streak = days;
+      S.streak = Math.min(days, 7 + (days > 14 ? 5 : 0));
     }
 
     if (kind === "day0")  build(0, 0, 0);
