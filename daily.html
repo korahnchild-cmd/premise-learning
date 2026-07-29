@@ -900,6 +900,9 @@
 
   function renderStep(){
     const L = LESSONS[li], S = L.steps[si];
+    /* 마지막 insight 단계에서 완료 처리 후에도 si++ → renderStep()이 한 번 더 불린다.
+       그때 S가 undefined라 매 사건 완료마다 콘솔 예외가 하나씩 났다(화면은 정상). 방어. */
+    if (!S) return;
     renderDots();
     $("kozyLine").textContent = S.kozy || "";
     const area = $("step"); area.classList.remove("in");
@@ -1004,7 +1007,14 @@
     }
     // wire blast
     if(S.t === "blast"){
-      $("blastBtn").addEventListener("click", ()=>{
+      /* 연타 방지. 폭파 애니메이션이 750ms라 그동안 반응이 없어 보여서 아이들이 두세 번 누른다.
+         누른 횟수만큼 si++가 예약돼 wrap 단계를 건너뛰고, 그 뒤 '오늘의 사건 마치기'가
+         영구히 먹통이 되던 버그가 있었다(2026-07-28 발견·수정). */
+      const bb = $("blastBtn");
+      let blasted = false;
+      bb.addEventListener("click", ()=>{
+        if (blasted) return;
+        blasted = true; bb.disabled = true;
         const trig = $("material").querySelector("[data-t]");
         $("materialCard").classList.add("shake"); setKozy("st-blast");
         if(trig){ spawnSparks(trig); trig.classList.remove("glow"); trig.classList.add("blast"); }
@@ -1015,6 +1025,7 @@
 
   $("cont").addEventListener("click", ()=>{
     const L = LESSONS[li];
+    if(!L || !L.steps[si]) return;   // si가 범위를 벗어난 상태에서 눌려도 죽지 않게
     if(L.steps[si].t === "wrap"){
       if(li < LESSONS.length-1){ li++; window.scrollTo({top:0,behavior:"smooth"}); loadLesson(); }
       else {

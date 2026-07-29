@@ -80,7 +80,8 @@ ul.no li:before{background:#E05A5A}
 ul.yes li:before{background:#1DAA6B}
 
 .phase{display:flex;gap:10px;margin:16px 0 0;flex-wrap:wrap}
-.phase div{flex:1 1 calc(50% - 5px);background:var(--soft);border:1px solid var(--line);
+/* 자손 전체(.e/.n/.x)에 걸리면 3중 박스가 되므로 반드시 직계 자식만 */
+.phase > div{flex:1 1 calc(50% - 5px);background:var(--soft);border:1px solid var(--line);
   border-radius:14px;padding:12px 12px 13px}
 .phase .e{font-size:18px;line-height:1}
 .phase .n{font-size:14.5px;font-weight:800;color:var(--ink);margin:6px 0 3px}
@@ -95,7 +96,7 @@ ul.yes li:before{background:#1DAA6B}
 .foot b{color:var(--body)}
 @media (max-width:400px){
   .hero h1{font-size:23px}
-  .phase div{flex:1 1 100%}
+  .phase > div{flex:1 1 100%}
 }
 </style>
 </head>
@@ -287,7 +288,7 @@ ul.yes li:before{background:#1DAA6B}
 
   <p class="foot">
     <b>PBS 학습법</b> · 1차 베타 안내<br>
-    문의: __CONTACT__<br>
+    문의: <a href="mailto:korahnchild@gmail.com" style="color:var(--point)">korahnchild@gmail.com</a><br>
     시간 내주셔서 정말 감사합니다. 솔직한 반응이 가장 큰 도움이 됩니다.
   </p>
 
