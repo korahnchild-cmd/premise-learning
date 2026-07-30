@@ -394,42 +394,7 @@
   </aside>
 </div>
 
-<script>
-/* 모바일 전체 메뉴 — 열기/닫기, ESC, 스크림 클릭, 링크 클릭 시 닫기 */
-(function(){
-  var burger=document.getElementById("ixBurger"), drawer=document.getElementById("ixDrawer");
-  if(!burger||!drawer) return;
-  function close(){
-    drawer.classList.remove("open"); drawer.setAttribute("aria-hidden","true");
-    burger.setAttribute("aria-expanded","false"); burger.classList.remove("on");
-    document.documentElement.classList.remove("ix-lock");
-  }
-  function open(){
-    drawer.classList.add("open"); drawer.setAttribute("aria-hidden","false");
-    burger.setAttribute("aria-expanded","true"); burger.classList.add("on");
-    document.documentElement.classList.add("ix-lock");
-    var f=drawer.querySelector(".ix-ditem"); if(f) setTimeout(function(){ try{f.focus();}catch(e){} },60);
-  }
-  burger.addEventListener("click", function(){ drawer.classList.contains("open") ? close() : open(); });
-  drawer.addEventListener("click", function(e){
-    if(e.target.hasAttribute && e.target.hasAttribute("data-ix-close")) { close(); return; }
-    if(e.target.closest && e.target.closest("a")) close();
-  });
-  document.addEventListener("keydown", function(e){ if(e.key==="Escape") close(); });
-  /* 로그인 상태면 드로어 하단도 대시보드로 바꾼다 */
-  function syncCta(){
-    var st="guest"; try{ st=PremiseStore.userState(); }catch(e){}
-    var member=(st==="trial"||st==="basic"||st==="premium");
-    var cta=document.getElementById("ixDrawerCta"), sub=document.getElementById("ixDrawerSub");
-    if(cta){ cta.href = member ? "dashboard.html" : "onboarding.html";
-             cta.textContent = member ? "내 대시보드 →" : "7일 무료로 시작하기"; }
-    if(sub){ sub.style.display = (st==="guest") ? "" : "none"; }
-  }
-  if(window.PremiseStore) syncCta();
-  document.addEventListener("premise:subscription", syncCta);
-  document.addEventListener("premise:auth", syncCta);
-})();
-</script>
+
 
 <!-- ============ HERO — 3초 안에 꽂히는 한 방 ============ -->
 <section id="hero" class="relative flex items-center justify-center overflow-hidden pt-28 pb-16 md:pt-32 md:pb-20">
@@ -1971,6 +1936,57 @@
     upd();
     document.addEventListener("premise:subscription", upd); // 서버 동기화 후 재적용
   })();
+</script>
+<script>
+/* 모바일 전체 메뉴 — 열기/닫기, ESC, 스크림 클릭, 링크 클릭 시 닫기.
+   ★ 이 블록은 반드시 common.js 로드 뒤에 있어야 한다.
+   2026-07-30: 원래 문서 상단(header 직후)에 있었는데 common.js는 문서 끝에서 로드된다.
+   그래서 실행 시점에 window.PremiseStore가 없어 syncCta()가 한 번도 돌지 않았고,
+   QA로 베이직·프리미엄을 켜도 드로어 하단이 '이미 계정이 있어요 · 로그인'에 머물렀다.
+   (QA 전환은 로컬 상태만 바꾸므로 premise:subscription / premise:auth 이벤트가 오지 않는다) */
+(function(){
+  var burger=document.getElementById("ixBurger"), drawer=document.getElementById("ixDrawer");
+  if(!burger||!drawer) return;
+  function close(){
+    drawer.classList.remove("open"); drawer.setAttribute("aria-hidden","true");
+    burger.setAttribute("aria-expanded","false"); burger.classList.remove("on");
+    document.documentElement.classList.remove("ix-lock");
+  }
+  function open(){
+    drawer.classList.add("open"); drawer.setAttribute("aria-hidden","false");
+    burger.setAttribute("aria-expanded","true"); burger.classList.add("on");
+    document.documentElement.classList.add("ix-lock");
+    var f=drawer.querySelector(".ix-ditem"); if(f) setTimeout(function(){ try{f.focus();}catch(e){} },60);
+  }
+  function logout(){
+    try{ if(window.PremiseStore) PremiseStore.logout(); }catch(e){}
+    try{ if(window.PremiseAuth && PremiseAuth.signOutFirebase) PremiseAuth.signOutFirebase(); }catch(e){}
+    location.href="index.html";
+  }
+  burger.addEventListener("click", function(){ drawer.classList.contains("open") ? close() : open(); });
+  drawer.addEventListener("click", function(e){
+    if(e.target.closest && e.target.closest("[data-ix-logout]")){ e.preventDefault(); logout(); return; }
+    if(e.target.hasAttribute && e.target.hasAttribute("data-ix-close")){ close(); return; }
+    if(e.target.closest && e.target.closest("a")) close();
+  });
+  document.addEventListener("keydown", function(e){ if(e.key==="Escape") close(); });
+
+  /* 상태별 하단 버튼 — 회원이면 대시보드, 로그인 상태면 로그아웃 */
+  function syncCta(){
+    var st="guest"; try{ st=PremiseStore.userState(); }catch(e){}
+    var member=(st==="trial"||st==="basic"||st==="premium");
+    var cta=document.getElementById("ixDrawerCta"), sub=document.getElementById("ixDrawerSub");
+    if(cta){ cta.href = member ? "dashboard.html" : "onboarding.html";
+             cta.textContent = member ? "내 대시보드 →" : "7일 무료로 시작하기"; }
+    if(sub){
+      if(st==="guest"){ sub.textContent="이미 계정이 있어요 · 로그인"; sub.href="login.html"; sub.removeAttribute("data-ix-logout"); }
+      else { sub.textContent="로그아웃"; sub.removeAttribute("href"); sub.setAttribute("data-ix-logout",""); sub.style.cursor="pointer"; }
+    }
+  }
+  syncCta();
+  document.addEventListener("premise:subscription", syncCta);
+  document.addEventListener("premise:auth", syncCta);
+})();
 </script>
 </body>
 </html>

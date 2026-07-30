@@ -498,7 +498,7 @@
     ["cal", "calendar.html", "PBS 캘린더"],
     ["lab", "application-lab.html", "실전 적용 랩"],
     ["note", "notebook.html", "파트너 노트"],
-    ["dash", "dashboard.html", "내 대시보드"]
+    ["dash", "dashboard.html", "내 기록"]
   ];
   const NAV_INFO = [
     ["what", "index.html#what-pbs", "PBS 원리"],
@@ -526,6 +526,11 @@
       'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + path + '</svg>';
   }
   function _navDrop(id) { const n = document.getElementById(id); if (n && n.parentNode) n.parentNode.removeChild(n); }
+  function _navLogout() {
+    try { if (window.PremiseStore) PremiseStore.logout(); } catch (e) {}
+    try { if (window.PremiseAuth && PremiseAuth.signOutFirebase) PremiseAuth.signOutFirebase(); } catch (e) {}
+    location.href = "index.html";
+  }
   function _navCloseDrawer() {
     const d = document.getElementById("pnDrawer"), b = document.getElementById("pnBurger");
     if (d) { d.classList.remove("open"); d.setAttribute("aria-hidden", "true"); }
@@ -545,8 +550,13 @@
       try { logged = !!(window.PremiseStore && PremiseStore.isLoggedIn()); } catch (e) {}
 
       /* 넓은 화면 상단 링크 — 로그인 여부로 갈린다. 4~5개를 넘기지 않는다. */
+      /* 상단은 5개까지만. 6개를 넘기면 좁은 데스크톱(700~800px)에서 계정 아이콘이 삐져나온다.
+         '내 기록'은 반드시 포함 — 빼면 넓은 화면에서 대시보드로 갈 길이
+         파트너 노트 안의 링크뿐이 된다(드로어는 데스크톱에서 숨겨진다).
+         대신 '실전 적용 랩'을 뺀다. 입문·기본·심화를 마친 뒤 열리는 마지막 단계라
+         초기 사용자에게는 거의 쓰이지 않고, 드로어에는 그대로 있다. */
       const top = logged
-        ? [NAV_LEARN[0], NAV_LEARN[1], NAV_LEARN[2], NAV_LEARN[3], NAV_LEARN[4]]
+        ? [NAV_LEARN[0], NAV_LEARN[1], NAV_LEARN[2], NAV_LEARN[4], NAV_LEARN[5]]
         : [NAV_INFO[0], NAV_INFO[1], NAV_INFO[2], NAV_INFO[3]];
       const link = ([k, href, label]) =>
         `<a href="${href}" class="pn-link${active === k ? " pn-active" : ""}">${label}</a>`;
@@ -604,13 +614,17 @@
           .pn-dhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
           .pn-dtitle{font-size:14px;font-weight:800;color:#0A0E17}
           .pn-dclose{width:34px;height:34px;border-radius:10px;border:1px solid #E4E8F0;background:#fff;color:#525A69;font-size:17px;line-height:1;cursor:pointer}
-          .pn-dsec{font-size:11px;font-weight:800;letter-spacing:.08em;color:#9AA4B2;margin:16px 0 6px;padding:0 4px}
+          .pn-dsec{font-size:11px;font-weight:800;letter-spacing:.08em;color:#9AA4B2;margin:12px 0 4px;padding:0 4px}
           .pn-dsec:first-of-type{margin-top:4px}
-          .pn-ditem{display:block;padding:12px 14px;border-radius:12px;font-size:15px;font-weight:600;color:#2A3151;text-decoration:none}
+          .pn-ditem{display:block;padding:10px 14px;border-radius:11px;font-size:14.5px;font-weight:600;color:#2A3151;text-decoration:none}
           .pn-ditem:hover{background:#F4F6FC}
           .pn-ditem.on{background:#0A0E17;color:#fff}
           .pn-dcta{display:block;text-align:center;margin-top:18px;padding:14px;border-radius:13px;background:#0A66FF;color:#fff;font-size:15px;font-weight:800;text-decoration:none}
           .pn-dsub{display:block;text-align:center;margin-top:10px;font-size:13px;font-weight:600;color:#7A879E;text-decoration:none}
+          .pn-dout{display:block;width:100%;margin-top:6px;padding:11px 14px;border-radius:12px;
+            border:1px solid #E4E8F0;background:#fff;color:#7A879E;font-size:14px;font-weight:700;cursor:pointer;
+            font-family:inherit}
+          .pn-dout:hover{color:#0A0E17;border-color:#CBD3E0}
           html.pn-lock,html.pn-lock body{overflow:hidden}
 
           /* 하단 탭바 — 로그인 + 좁은 화면에서만 */
@@ -623,6 +637,9 @@
           .pn-tab svg{width:22px;height:22px}
           .pn-tab.on{color:#0A66FF}
 
+          /* 좁은 데스크톱(701~820px) 안전 마진. Pretendard 로드 여부로 글자 폭이 달라져도
+             계정 아이콘이 밀려 나가지 않게 링크 패딩을 줄인다. */
+          @media (min-width:701px) and (max-width:860px){ .pn-link{padding:8px 9px;font-size:12.5px} }
           @media (max-width:700px){
             .pn-nav{display:none}
             .pn-login{display:none}
@@ -664,7 +681,8 @@
            ${drawerSection("서비스 안내", logged ? NAV_INFO.filter(function(x){return x[0] !== "coz";}) : NAV_INFO)}
            ${isAdmin ? drawerSection("관리", [["admin", "admin.html", "관리자 콘솔"]]) : ""}
            ${logged
-             ? `<a class="pn-dsub" href="mypage.html">마이페이지 · 구독 관리</a>`
+             ? `<a class="pn-ditem" style="margin-top:14px" href="mypage.html">마이페이지 · 구독 관리</a>
+                <button class="pn-dout" type="button" data-pn-logout>로그아웃</button>`
              : `<a class="pn-dcta" href="onboarding.html">7일 무료로 시작하기</a>
                 <a class="pn-dsub" href="login.html">이미 계정이 있어요 · 로그인</a>`}
          </aside>`;
@@ -683,6 +701,7 @@
         if (first) setTimeout(function () { try { first.focus(); } catch (e) {} }, 60);
       });
       drawer.addEventListener("click", function (e) {
+        if (e.target.closest && e.target.closest("[data-pn-logout]")) { e.preventDefault(); _navLogout(); return; }
         if (e.target.hasAttribute && e.target.hasAttribute("data-pn-close")) { _navCloseDrawer(); return; }
         if (e.target.closest && e.target.closest("a")) _navCloseDrawer(); // 링크 이동 시 잠금 해제
       });
