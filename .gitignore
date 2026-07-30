@@ -9,3 +9,5 @@ functions/.env.*
 
 # 운영 내부 문서(공개 배포 금지)
 PBS_베타_운영킷.md
+_to_delete/
+_sync/

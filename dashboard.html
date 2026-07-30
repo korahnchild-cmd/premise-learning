@@ -338,6 +338,11 @@
   })();
 
   /* ---- 최상위권 비교 ---- */
+  /* 축별 최상위권 기준. 축(key)은 아이의 실기록에서 동적으로 생기므로 고정 맵을 두지 않고,
+     값이 없는 축은 아래 rows에서 88로 폴백한다.
+     2026-07-30: BENCH가 정의된 적이 없어 renderTopCompare 전체가 예외로 죽었고,
+     '최상위권까지 지금 어디쯤' 카드가 통째로 렌더링되지 않았다. */
+  const BENCH = {};
   (function renderTopCompare(){
     const bench = BENCH, now = scoreNow, top = scoreTop;
     const gap = Math.max(0, top-now);

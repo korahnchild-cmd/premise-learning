@@ -195,22 +195,6 @@
     if (activeDays >= 1 && activeDays <= 14) PBSGA("pbs_active_d" + activeDays);
   }
 
-  /* analytics.js를 전 페이지에 자동 주입.
-     index/diagnosis는 직접 <script>로 넣고 있어 중복이 되는데, analytics.js 자체의
-     __pbsGA 가드가 두 번 실행을 막는다. 경로는 common.js 자신의 src에서 유도해
-     magazine/ 같은 하위 폴더에서도 깨지지 않게 한다. */
-  (function injectAnalytics() {
-    try {
-      if (window.__pbsGA) return;
-      if (document.querySelector('script[src$="analytics.js"]')) return;
-      const me = document.currentScript && document.currentScript.src;
-      const url = me ? me.replace(/common\.js(\?.*)?$/, "analytics.js") : "analytics.js";
-      const el = document.createElement("script");
-      el.src = url; el.async = true;
-      (document.head || document.documentElement).appendChild(el);
-    } catch (e) {}
-  })();
-
   window.PremiseStore = {
     get: () => s,
     reset: () => { try { localStorage.removeItem(KEY); } catch (e) {} s = seed(); save(s); return s; },
@@ -498,55 +482,231 @@
     }
   };
 
-  /* ===== 공통 네비게이션 ===== */
+  /* ===== 공통 네비게이션 =====
+     2026-07-28 전면 개편. 이전 구조의 문제:
+       1) 링크가 학습 5종으로 고정이라, 비로그인 방문자가 faq/pricing에 들어가도
+          상단에 학습 메뉴만 떴다. 요금·FAQ로 갈 길이 없었다.
+       2) 모바일에서 접히지 않아 390px 화면에서 474px로 삐져나왔다(가로 스크롤).
+     해결:
+       - 로그인 여부에 따라 상단 링크를 학습/안내로 교체
+       - 좁은 화면(≤700px)에서는 상단 링크를 접고 햄버거 드로어로. 드로어에는 학습·안내 전부
+       - 로그인 사용자에게만 하단 탭바 4종(매일 쓰는 동선은 1탭 유지)
+     이 파일 한 곳이 21개 페이지의 네비를 만든다. 수정 시 전 페이지 영향. */
+  const NAV_LEARN = [
+    ["daily", "daily.html", "오늘의 사건"],
+    ["coz", "course.html", "코스"],
+    ["cal", "calendar.html", "PBS 캘린더"],
+    ["lab", "application-lab.html", "실전 적용 랩"],
+    ["note", "notebook.html", "파트너 노트"],
+    ["dash", "dashboard.html", "내 대시보드"]
+  ];
+  const NAV_INFO = [
+    ["what", "index.html#what-pbs", "PBS 원리"],
+    ["coz", "course.html", "코스"],
+    ["price", "pricing.html", "요금 안내"],
+    ["faq", "faq.html", "자주 묻는 질문"],
+    ["about", "about.html", "회사 소개"],
+    ["mission", "mission.html", "우리의 미션"],
+    ["mag", "magazine/index.html", "PBS 매거진"]
+  ];
+  /* 하단 탭바 — 매일 쓰는 4개만. 캘린더·실전 랩은 드로어에서 간다. */
+  const NAV_TABS = [
+    ["daily", "daily.html", "오늘의 사건",
+      '<path d="M12 3l2.4 5.3L20 9l-4 4 1 6-5-2.8L7 19l1-6-4-4 5.6-.7z"/>'],
+    ["coz", "course.html", "코스",
+      '<path d="M4 5.5A2.5 2.5 0 016.5 3H19v15H6.5A2.5 2.5 0 004 20.5z"/><path d="M9 7h6"/>'],
+    ["note", "notebook.html", "파트너 노트",
+      '<path d="M5 4h11l3 3v13H5z"/><path d="M8.5 10h7M8.5 14h5"/>'],
+    ["dash", "dashboard.html", "내 기록",
+      '<path d="M4 19V11M10 19V5M16 19v-6M21 19H3"/>']
+  ];
+
+  function _navIcon(path) {
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" ' +
+      'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + path + '</svg>';
+  }
+  function _navDrop(id) { const n = document.getElementById(id); if (n && n.parentNode) n.parentNode.removeChild(n); }
+  function _navCloseDrawer() {
+    const d = document.getElementById("pnDrawer"), b = document.getElementById("pnBurger");
+    if (d) { d.classList.remove("open"); d.setAttribute("aria-hidden", "true"); }
+    if (b) { b.setAttribute("aria-expanded", "false"); b.classList.remove("on"); }
+    document.documentElement.classList.remove("pn-lock");
+  }
+
   window.PremiseNav = {
+    close: _navCloseDrawer,
     render: function (active) {
       const el = document.getElementById("topnav");
       if (!el) return;
       try { el.dataset.active = active || ""; } catch (e) {}
-      const items = [
-        ["coz", "course.html", "코스"],
-        ["daily", "daily.html", "오늘의 사건"],
-        ["cal", "calendar.html", "PBS 캘린더"],
-        ["lab", "application-lab.html", "실전 적용 랩"],
-        ["note", "notebook.html", "파트너 노트"]
-      ];
-      const links = items.map(([k, href, label]) =>
-        `<a href="${href}" class="pn-link${active === k ? " pn-active" : ""}">${label}</a>`
-      ).join("");
+
       const isAdmin = !!(window.PremiseAdmin && PremiseAdmin.is());
-      const logged = window.PremiseStore && PremiseStore.isLoggedIn();
+      let logged = false;
+      try { logged = !!(window.PremiseStore && PremiseStore.isLoggedIn()); } catch (e) {}
+
+      /* 넓은 화면 상단 링크 — 로그인 여부로 갈린다. 4~5개를 넘기지 않는다. */
+      const top = logged
+        ? [NAV_LEARN[0], NAV_LEARN[1], NAV_LEARN[2], NAV_LEARN[3], NAV_LEARN[4]]
+        : [NAV_INFO[0], NAV_INFO[1], NAV_INFO[2], NAV_INFO[3]];
+      const link = ([k, href, label]) =>
+        `<a href="${href}" class="pn-link${active === k ? " pn-active" : ""}">${label}</a>`;
+      const links = top.map(link).join("");
+
       const accountLink = logged
-        ? `<a href="mypage.html" class="pn-account${active === "mypage" ? " pn-active" : ""}" title="마이페이지">
+        ? `<a href="mypage.html" class="pn-account${active === "mypage" ? " pn-active" : ""}" aria-label="마이페이지" title="마이페이지">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 10-16 0"/><circle cx="12" cy="8" r="4.5"/></svg>
           </a>`
-        : `<a href="login.html" class="pn-link" title="로그인">로그인</a>`;
+        : `<a href="login.html" class="pn-login">로그인</a>`;
+      const ctaLink = logged ? "" : `<a href="onboarding.html" class="pn-cta">무료 체험</a>`;
+
+      const drawerSection = (title, items) =>
+        `<p class="pn-dsec">${title}</p>` + items.map(([k, href, label]) =>
+          `<a href="${href}" class="pn-ditem${active === k ? " on" : ""}">${label}</a>`).join("");
+
       el.innerHTML =
         `<style>
-          .pn-bar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.82);backdrop-filter:blur(14px);border-bottom:1px solid #ECEEF1}
-          .pn-in{max-width:56rem;margin:0 auto;padding:0 1.25rem;height:64px;display:flex;align-items:center;justify-content:space-between}
-          .pn-logo{display:flex;align-items:center;gap:.6rem;font-weight:700;font-size:15px;color:#0A0E17;text-decoration:none;white-space:nowrap;flex-shrink:0}
-          .pn-mark{width:32px;height:32px;border-radius:11px;background:#0A66FF;transform:rotate(45deg);display:inline-flex;align-items:center;justify-content:center}
+          .pn-bar{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.9);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid #ECEEF1}
+          .pn-in{max-width:56rem;margin:0 auto;padding:0 1rem;height:60px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+          .pn-logo{display:flex;align-items:center;gap:.55rem;font-weight:700;font-size:15px;color:#0A0E17;text-decoration:none;white-space:nowrap;flex-shrink:0}
+          .pn-mark{width:30px;height:30px;border-radius:10px;background:#0A66FF;transform:rotate(45deg);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+          .pn-right{display:flex;align-items:center;gap:6px;min-width:0}
           .pn-nav{display:flex;align-items:center;gap:2px}
-          .pn-link{padding:8px 14px;border-radius:9999px;font-size:13px;font-weight:600;color:#525A69;text-decoration:none;transition:background .2s,color .2s;white-space:nowrap}
+          .pn-link{padding:8px 12px;border-radius:9999px;font-size:13px;font-weight:600;color:#525A69;text-decoration:none;transition:background .2s,color .2s;white-space:nowrap}
           .pn-link:hover{color:#0A0E17;background:#F2F4F1}
           .pn-active{background:#0A0E17;color:#fff}
           .pn-active:hover{background:#0A0E17;color:#fff}
-          .pn-account{margin-left:6px;width:34px;height:34px;border-radius:9999px;display:inline-flex;align-items:center;justify-content:center;color:#525A69;background:#F2F4F1;text-decoration:none;transition:background .2s,color .2s}
+          .pn-login{padding:8px 10px;font-size:13px;font-weight:600;color:#525A69;text-decoration:none;white-space:nowrap}
+          .pn-login:hover{color:#0A0E17}
+          .pn-cta{padding:9px 16px;border-radius:9999px;background:#0A66FF;color:#fff;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 4px 12px rgba(10,102,255,.24)}
+          .pn-cta:hover{background:#0B3ACC}
+          .pn-account{width:34px;height:34px;border-radius:9999px;display:inline-flex;align-items:center;justify-content:center;color:#525A69;background:#F2F4F1;text-decoration:none;flex-shrink:0}
           .pn-account:hover{color:#0A0E17;background:#E4E8EC}
-          .pn-reset{margin-left:2px;padding:8px 10px;border-radius:9999px;font-size:13px;color:#9AA4B2;background:none;border:none;cursor:pointer}
-          .pn-reset:hover{color:#0A0E17}
-          @media (max-width:520px){ .pn-link{padding:7px 10px;font-size:12px} }
+          .pn-account.pn-active{background:#0A0E17;color:#fff}
+
+          /* 햄버거 — 좁은 화면에서만 */
+          .pn-burger{display:none;width:38px;height:38px;border-radius:11px;border:1px solid #E4E8F0;background:#fff;cursor:pointer;align-items:center;justify-content:center;flex-shrink:0;padding:0}
+          .pn-burger span{display:block;width:17px;height:2px;background:#0A0E17;border-radius:2px;position:relative;transition:transform .22s,opacity .22s}
+          .pn-burger span::before,.pn-burger span::after{content:"";position:absolute;left:0;width:17px;height:2px;background:#0A0E17;border-radius:2px;transition:transform .22s,top .22s}
+          .pn-burger span::before{top:-5.5px}.pn-burger span::after{top:5.5px}
+          .pn-burger.on span{background:transparent}
+          .pn-burger.on span::before{top:0;transform:rotate(45deg)}
+          .pn-burger.on span::after{top:0;transform:rotate(-45deg)}
+
+          /* 드로어 */
+          .pn-drawer{position:fixed;inset:0;z-index:80;visibility:hidden;pointer-events:none}
+          .pn-drawer.open{visibility:visible;pointer-events:auto}
+          .pn-scrim{position:absolute;inset:0;background:rgba(10,14,23,.42);opacity:0;transition:opacity .24s}
+          .pn-drawer.open .pn-scrim{opacity:1}
+          .pn-panel{position:absolute;top:0;right:0;height:100%;width:min(86vw,330px);background:#fff;
+            box-shadow:-14px 0 40px rgba(10,14,23,.18);transform:translateX(100%);transition:transform .26s cubic-bezier(.22,1,.36,1);
+            display:flex;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:18px 18px calc(28px + env(safe-area-inset-bottom))}
+          .pn-drawer.open .pn-panel{transform:translateX(0)}
+          .pn-dhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+          .pn-dtitle{font-size:14px;font-weight:800;color:#0A0E17}
+          .pn-dclose{width:34px;height:34px;border-radius:10px;border:1px solid #E4E8F0;background:#fff;color:#525A69;font-size:17px;line-height:1;cursor:pointer}
+          .pn-dsec{font-size:11px;font-weight:800;letter-spacing:.08em;color:#9AA4B2;margin:16px 0 6px;padding:0 4px}
+          .pn-dsec:first-of-type{margin-top:4px}
+          .pn-ditem{display:block;padding:12px 14px;border-radius:12px;font-size:15px;font-weight:600;color:#2A3151;text-decoration:none}
+          .pn-ditem:hover{background:#F4F6FC}
+          .pn-ditem.on{background:#0A0E17;color:#fff}
+          .pn-dcta{display:block;text-align:center;margin-top:18px;padding:14px;border-radius:13px;background:#0A66FF;color:#fff;font-size:15px;font-weight:800;text-decoration:none}
+          .pn-dsub{display:block;text-align:center;margin-top:10px;font-size:13px;font-weight:600;color:#7A879E;text-decoration:none}
+          html.pn-lock,html.pn-lock body{overflow:hidden}
+
+          /* 하단 탭바 — 로그인 + 좁은 화면에서만 */
+          .pn-tabbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:70;
+            background:rgba(255,255,255,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+            border-top:1px solid #ECEEF1;padding-bottom:env(safe-area-inset-bottom)}
+          .pn-tabs{display:flex;max-width:560px;margin:0 auto}
+          .pn-tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+            padding:8px 2px 7px;text-decoration:none;color:#8B95A7;font-size:10.5px;font-weight:700;line-height:1.2}
+          .pn-tab svg{width:22px;height:22px}
+          .pn-tab.on{color:#0A66FF}
+
+          @media (max-width:700px){
+            .pn-nav{display:none}
+            .pn-login{display:none}
+            .pn-burger{display:inline-flex}
+            .pn-in{height:56px}
+            .pn-cta{padding:8px 13px;font-size:12.5px}
+            .pn-logo{font-size:14px}
+            body.pn-has-tabbar .pn-tabbar{display:block}
+            body.pn-has-tabbar{padding-bottom:64px}   /* 데스크톱에선 탭바가 없으니 여백도 없어야 한다 */
+          }
+          @media (max-width:340px){ .pn-cta{display:none} }
         </style>
         <header class="pn-bar"><div class="pn-in">
           <a class="pn-logo" href="index.html">
-            <span class="pn-mark"><svg style="transform:rotate(-45deg)" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.5 15.5L20 20"/></svg></span>
+            <span class="pn-mark"><svg style="transform:rotate(-45deg)" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.2"/><path d="M15.5 15.5L20 20"/></svg></span>
             PBS 학습법
           </a>
-          <nav class="pn-nav">${links}${accountLink}${isAdmin ? `<a class="pn-link" href="admin.html" title="관리자">⚙</a>` : ""}</nav>
+          <div class="pn-right">
+            <nav class="pn-nav" aria-label="주요 메뉴">${links}${isAdmin ? `<a class="pn-link" href="admin.html" title="관리자">⚙</a>` : ""}</nav>
+            ${ctaLink}${accountLink}
+            <button class="pn-burger" id="pnBurger" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="pnDrawer"><span></span></button>
+          </div>
         </div></header>`;
+
+      /* --- 드로어 (body 직속. 재렌더 시 기존 것을 지우고 다시 만든다) --- */
+      _navDrop("pnDrawer");
+      const drawer = document.createElement("div");
+      drawer.id = "pnDrawer";
+      drawer.className = "pn-drawer";
+      drawer.setAttribute("aria-hidden", "true");
+      drawer.innerHTML =
+        `<div class="pn-scrim" data-pn-close></div>
+         <aside class="pn-panel" role="dialog" aria-modal="true" aria-label="전체 메뉴">
+           <div class="pn-dhead">
+             <span class="pn-dtitle">전체 메뉴</span>
+             <button class="pn-dclose" type="button" aria-label="메뉴 닫기" data-pn-close>✕</button>
+           </div>
+           ${logged ? drawerSection("학습", NAV_LEARN) : ""}
+           ${drawerSection("서비스 안내", logged ? NAV_INFO.filter(function(x){return x[0] !== "coz";}) : NAV_INFO)}
+           ${isAdmin ? drawerSection("관리", [["admin", "admin.html", "관리자 콘솔"]]) : ""}
+           ${logged
+             ? `<a class="pn-dsub" href="mypage.html">마이페이지 · 구독 관리</a>`
+             : `<a class="pn-dcta" href="onboarding.html">7일 무료로 시작하기</a>
+                <a class="pn-dsub" href="login.html">이미 계정이 있어요 · 로그인</a>`}
+         </aside>`;
+      document.body.appendChild(drawer);
+
+      const burger = document.getElementById("pnBurger");
+      if (burger) burger.addEventListener("click", function () {
+        const open = drawer.classList.contains("open");
+        if (open) { _navCloseDrawer(); return; }
+        drawer.classList.add("open");
+        drawer.setAttribute("aria-hidden", "false");
+        burger.setAttribute("aria-expanded", "true");
+        burger.classList.add("on");
+        document.documentElement.classList.add("pn-lock");
+        const first = drawer.querySelector(".pn-ditem, .pn-dcta");
+        if (first) setTimeout(function () { try { first.focus(); } catch (e) {} }, 60);
+      });
+      drawer.addEventListener("click", function (e) {
+        if (e.target.hasAttribute && e.target.hasAttribute("data-pn-close")) { _navCloseDrawer(); return; }
+        if (e.target.closest && e.target.closest("a")) _navCloseDrawer(); // 링크 이동 시 잠금 해제
+      });
+
+      /* --- 하단 탭바 --- */
+      _navDrop("pnTabbar");
+      document.body.classList.remove("pn-has-tabbar");
+      if (logged) {
+        const bar = document.createElement("nav");
+        bar.id = "pnTabbar";
+        bar.className = "pn-tabbar";
+        bar.setAttribute("aria-label", "빠른 이동");
+        bar.innerHTML = `<div class="pn-tabs">` + NAV_TABS.map(([k, href, label, path]) =>
+          `<a class="pn-tab${active === k ? " on" : ""}" href="${href}"${active === k ? ' aria-current="page"' : ""}>${_navIcon(path)}<span>${label}</span></a>`
+        ).join("") + `</div>`;
+        document.body.appendChild(bar);
+        document.body.classList.add("pn-has-tabbar");
+      }
     }
   };
+  /* ESC로 드로어 닫기 — 리스너는 한 번만 건다 */
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") _navCloseDrawer();
+  });
 
   /* ===== 상태별 표시 자동화 (선언식) =====
      요소에 data-show-state="guest,free" → 해당 상태에서만 표시
@@ -597,7 +757,7 @@
     var items = [["guest","비로그인"],["free","무료회원"],["basic","베이직"],["premium","프리미엄"]];
     var bar = document.createElement("div");
     bar.id = "qaBar";
-    bar.style.cssText = "position:fixed;top:74px;right:10px;z-index:99999;display:flex;gap:3px;align-items:center;background:rgba(10,14,23,.92);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.16);border-radius:9999px;padding:4px 6px;box-shadow:0 6px 18px rgba(0,0,0,.28);font-family:Pretendard,Inter,sans-serif";
+    bar.style.cssText = "position:fixed;top:74px;right:10px;z-index:75;display:flex;gap:3px;align-items:center;background:rgba(10,14,23,.92);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.16);border-radius:9999px;padding:4px 6px;box-shadow:0 6px 18px rgba(0,0,0,.28);font-family:Pretendard,Inter,sans-serif";
     bar.innerHTML = '<span style="color:#9AA4B2;font-size:10px;font-weight:800;letter-spacing:.06em;padding:0 5px">QA</span>' +
       items.map(function(b){
         var on = b[0] === cur;

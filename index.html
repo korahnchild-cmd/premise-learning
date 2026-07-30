@@ -333,9 +333,103 @@
       <a id="navLogin" href="login.html" class="hidden sm:inline-flex items-center text-[13px] text-body font-medium hover:text-ink transition px-1.5">로그인</a>
       <a id="navTrial" href="onboarding.html" class="btn btn-primary text-[13px] font-semibold px-5 py-2.5">무료 체험</a>
       <a id="navDash" href="dashboard.html" class="btn btn-primary text-[13px] font-semibold px-5 py-2.5" style="display:none">내 대시보드 →</a>
+      <!-- 모바일 전체 메뉴. 상단 링크(문제·원리·마인드맵·요금·FAQ)가 md 미만에서 숨겨져
+           폰에서는 랜딩을 훑을 방법이 스크롤뿐이었다. 2026-07-28 추가. -->
+      <button class="ix-burger" id="ixBurger" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="ixDrawer"><span></span></button>
     </div>
   </div>
 </header>
+
+<style>
+  .ix-burger{display:none;width:38px;height:38px;border-radius:11px;border:1px solid #E4E8F0;background:#fff;cursor:pointer;align-items:center;justify-content:center;flex-shrink:0;padding:0;margin-left:2px}
+  .ix-burger span{display:block;width:17px;height:2px;background:#0A0E17;border-radius:2px;position:relative;transition:transform .22s}
+  .ix-burger span::before,.ix-burger span::after{content:"";position:absolute;left:0;width:17px;height:2px;background:#0A0E17;border-radius:2px;transition:transform .22s,top .22s}
+  .ix-burger span::before{top:-5.5px}.ix-burger span::after{top:5.5px}
+  .ix-burger.on span{background:transparent}
+  .ix-burger.on span::before{top:0;transform:rotate(45deg)}
+  .ix-burger.on span::after{top:0;transform:rotate(-45deg)}
+  .ix-drawer{position:fixed;inset:0;z-index:80;visibility:hidden;pointer-events:none}
+  .ix-drawer.open{visibility:visible;pointer-events:auto}
+  .ix-scrim{position:absolute;inset:0;background:rgba(10,14,23,.42);opacity:0;transition:opacity .24s}
+  .ix-drawer.open .ix-scrim{opacity:1}
+  .ix-panel{position:absolute;top:0;right:0;height:100%;width:min(86vw,330px);background:#fff;
+    box-shadow:-14px 0 40px rgba(10,14,23,.18);transform:translateX(100%);
+    transition:transform .26s cubic-bezier(.22,1,.36,1);display:flex;flex-direction:column;
+    overflow-y:auto;-webkit-overflow-scrolling:touch;padding:18px 18px calc(28px + env(safe-area-inset-bottom))}
+  .ix-drawer.open .ix-panel{transform:translateX(0)}
+  .ix-dhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .ix-dtitle{font-size:14px;font-weight:800;color:#0A0E17}
+  .ix-dclose{width:34px;height:34px;border-radius:10px;border:1px solid #E4E8F0;background:#fff;color:#525A69;font-size:17px;line-height:1;cursor:pointer}
+  .ix-dsec{font-size:11px;font-weight:800;letter-spacing:.08em;color:#9AA4B2;margin:16px 0 6px;padding:0 4px}
+  .ix-dsec:first-of-type{margin-top:4px}
+  .ix-ditem{display:block;padding:12px 14px;border-radius:12px;font-size:15px;font-weight:600;color:#2A3151;text-decoration:none}
+  .ix-ditem:hover{background:#F4F6FC}
+  .ix-dcta{display:block;text-align:center;margin-top:18px;padding:14px;border-radius:13px;background:#0A66FF;color:#fff;font-size:15px;font-weight:800;text-decoration:none}
+  .ix-dsub{display:block;text-align:center;margin-top:10px;font-size:13px;font-weight:600;color:#7A879E;text-decoration:none}
+  html.ix-lock,html.ix-lock body{overflow:hidden}
+  @media (max-width:767px){ .ix-burger{display:inline-flex} }
+</style>
+
+<div class="ix-drawer" id="ixDrawer" aria-hidden="true">
+  <div class="ix-scrim" data-ix-close></div>
+  <aside class="ix-panel" role="dialog" aria-modal="true" aria-label="전체 메뉴">
+    <div class="ix-dhead">
+      <span class="ix-dtitle">전체 메뉴</span>
+      <button class="ix-dclose" type="button" aria-label="메뉴 닫기" data-ix-close>✕</button>
+    </div>
+    <p class="ix-dsec">둘러보기</p>
+    <a class="ix-ditem" href="#problem">문제</a>
+    <a class="ix-ditem" href="#what-pbs">PBS 원리</a>
+    <a class="ix-ditem" href="#mindmap">마인드맵</a>
+    <a class="ix-ditem" href="#pricing">요금</a>
+    <p class="ix-dsec">더 알아보기</p>
+    <a class="ix-ditem" href="course.html">코스 소개</a>
+    <a class="ix-ditem" href="demo.html">무료로 풀어보기</a>
+    <a class="ix-ditem" href="diagnosis.html">사고력 무료 진단</a>
+    <a class="ix-ditem" href="faq.html">자주 묻는 질문</a>
+    <a class="ix-ditem" href="about.html">회사 소개</a>
+    <a class="ix-ditem" href="magazine/index.html">PBS 매거진</a>
+    <a class="ix-dcta" id="ixDrawerCta" href="onboarding.html">7일 무료로 시작하기</a>
+    <a class="ix-dsub" id="ixDrawerSub" href="login.html">이미 계정이 있어요 · 로그인</a>
+  </aside>
+</div>
+
+<script>
+/* 모바일 전체 메뉴 — 열기/닫기, ESC, 스크림 클릭, 링크 클릭 시 닫기 */
+(function(){
+  var burger=document.getElementById("ixBurger"), drawer=document.getElementById("ixDrawer");
+  if(!burger||!drawer) return;
+  function close(){
+    drawer.classList.remove("open"); drawer.setAttribute("aria-hidden","true");
+    burger.setAttribute("aria-expanded","false"); burger.classList.remove("on");
+    document.documentElement.classList.remove("ix-lock");
+  }
+  function open(){
+    drawer.classList.add("open"); drawer.setAttribute("aria-hidden","false");
+    burger.setAttribute("aria-expanded","true"); burger.classList.add("on");
+    document.documentElement.classList.add("ix-lock");
+    var f=drawer.querySelector(".ix-ditem"); if(f) setTimeout(function(){ try{f.focus();}catch(e){} },60);
+  }
+  burger.addEventListener("click", function(){ drawer.classList.contains("open") ? close() : open(); });
+  drawer.addEventListener("click", function(e){
+    if(e.target.hasAttribute && e.target.hasAttribute("data-ix-close")) { close(); return; }
+    if(e.target.closest && e.target.closest("a")) close();
+  });
+  document.addEventListener("keydown", function(e){ if(e.key==="Escape") close(); });
+  /* 로그인 상태면 드로어 하단도 대시보드로 바꾼다 */
+  function syncCta(){
+    var st="guest"; try{ st=PremiseStore.userState(); }catch(e){}
+    var member=(st==="trial"||st==="basic"||st==="premium");
+    var cta=document.getElementById("ixDrawerCta"), sub=document.getElementById("ixDrawerSub");
+    if(cta){ cta.href = member ? "dashboard.html" : "onboarding.html";
+             cta.textContent = member ? "내 대시보드 →" : "7일 무료로 시작하기"; }
+    if(sub){ sub.style.display = (st==="guest") ? "" : "none"; }
+  }
+  if(window.PremiseStore) syncCta();
+  document.addEventListener("premise:subscription", syncCta);
+  document.addEventListener("premise:auth", syncCta);
+})();
+</script>
 
 <!-- ============ HERO — 3초 안에 꽂히는 한 방 ============ -->
 <section id="hero" class="relative flex items-center justify-center overflow-hidden pt-28 pb-16 md:pt-32 md:pb-20">
