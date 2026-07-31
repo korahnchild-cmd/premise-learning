@@ -8,7 +8,10 @@
   if (!document.querySelector('script[data-ga]')) { var _ga = document.createElement('script'); _ga.src = 'analytics.js'; _ga.setAttribute('data-ga', '1'); document.head.appendChild(_ga); }
 
   const KEY = "premise_state_v2";
-  const today = () => new Date().toISOString().slice(0, 10);
+  /* 로컬 날짜(KST) 기준. 구버전은 toISOString()이라 UTC였고, 한국 오전 0~9시가 '어제'로 기록됐다.
+     같은 한국 날짜의 오전 8시와 10시가 서로 다른 날로 잡혀 streak·활동일수·pbs_since_dN이
+     부풀던 문제. 베타 숫자를 오염시키므로 2026-07-31 수정. */
+  const today = () => { const d = new Date(); return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
 
   /* ===== 관리자 판정 =====
      운영자 본인 계정에서만 QA 스위처/관리자 페이지가 열린다.
@@ -84,7 +87,10 @@
       questionLog: [],
       // 실제 활동한 날짜(YYYY-MM-DD) 집합. 히트맵·주차 계산의 유일한 근거.
       activeDates: [],
-      firstActiveAt: ""
+      firstActiveAt: "",
+      // 오늘 푼 사건 — daily.html이 '하루 1사건'을 유지하는 근거
+      lastCaseId: "",
+      lastCaseAt: ""
     };
   }
 
@@ -211,6 +217,9 @@
       if (!Array.isArray(s.activeDates)) s.activeDates = [];
       if (s.activeDates.indexOf(today()) < 0) { s.activeDates.push(today()); s.activeDates.sort(); }
       if (!s.firstActiveAt) s.firstActiveAt = today();
+      /* 오늘 어떤 사건을 풀었는지 남긴다. daily.html의 pickDailySet이 이걸 보고
+         '완료 직후 새로고침하면 다음 사건이 바로 열리는' 상태를 막는다. */
+      if (c && c.missionId) { s.lastCaseId = c.missionId; s.lastCaseAt = today(); }
       save(s);
       try { _gaCaseComplete(s, c, isFirstToday); } catch (e) {}
       return s;
