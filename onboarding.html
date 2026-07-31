@@ -167,6 +167,9 @@
           이 계정에 <b>7일 프리미엄</b>을 열어드립니다. 열리면 알려드릴 테니 그때 새로고침만 해주세요.
           <b>결제는 진행되지 않습니다.</b>
         </p>
+        <p style="margin:8px 0 0;font-size:13.5px;line-height:1.65;color:#92400E">
+          기다리시는 동안 아래 <b>“첫 사건 시작하기”</b>는 지금 바로 눌러보셔도 됩니다.
+        </p>
         <p style="margin:8px 0 0;font-size:13px;color:#92400E">문의: <a href="mailto:korahnchild@gmail.com" style="color:#92400E;font-weight:700;text-decoration:underline">korahnchild@gmail.com</a></p>
       </div>
       <div class="mt-9 flex flex-col items-center gap-3">
@@ -206,12 +209,22 @@
   const $ = id => document.getElementById(id);
 
   /* ===== 베타 기간 스위치 =====
-     true인 동안 '체험 소진 + 접근 없음' 계정을 checkout.html로 보내지 않는다.
-     이유: 베타 안내문에 "결제창은 뜨지 않습니다"라고 약속했는데, 예전에 체험을 써본
-     계정(사전 시연 계정 등)이 온보딩을 다시 돌리면 결제 페이지로 튕겼다.
-     또한 dashboard.html은 접근 없는 로그인 사용자를 onboarding.html로 되돌리므로,
-     여기서 dashboard로 보내면 무한 리다이렉트가 된다 → 리다이렉트 없이 안내만 띄운다.
-     1차 베타 종료 후 false로 되돌릴 것. */
+     true인 동안 '접근 권한 없는 로그인 계정'을 결제 흐름에 태우지 않는다. 두 가지를 막는다.
+
+     (1) checkout.html 리다이렉트 금지
+         베타 안내문에 "결제창은 뜨지 않습니다"라고 약속했다. 또 dashboard.html은
+         접근 없는 로그인 사용자를 onboarding.html로 되돌리므로, 대안으로 dashboard에
+         보내면 무한 리다이렉트가 된다 → 어디로도 보내지 않고 안내만 띄운다.
+
+     (2) startTrial 호출 금지
+         서버 startTrial은 trialUsed:true를 찍는다. 그대로 두면 베타 테스터 전원이
+         정식 7일 무료체험을 베타에서 소진하고, 베타 종료 후 접속하면 곧장 결제
+         화면으로 밀린다. 베타 접근은 관리자 부여(adminGrantBulk)로만 연다.
+
+     ── 베타 종료 시 순서 ──
+       1) admin.html에서 부여 회수(adminRevokePlan) → status "none", trialUsed false
+       2) 이 값을 false로 되돌리고 배포
+       → 그때부터 테스터는 정식 7일 무료체험을 정상적으로 받는다. */
   const BETA_MODE = true;
 
   // 로그인 게이팅 — 7일 무료체험은 로그인이 온보딩 1단계 (프론트 데모)
@@ -306,14 +319,17 @@
         const used = !!(PremiseStore.trialUsed && PremiseStore.trialUsed());
         if (member) {
           // 이미 구독/체험 이용 중 → 트라이얼 재시작 안 함(완료화면 그대로)
+        } else if (BETA_MODE) {
+          /* 베타 기간: startTrial을 호출하지 않는다.
+             서버 startTrial은 trialUsed:true를 찍는데, 그러면 베타가 끝난 뒤
+             이 계정은 정식 7일 무료체험을 못 받고 곧장 checkout으로 밀린다.
+             베타 접근은 관리자 부여(adminGrantBulk)로만 열고, 여기서는 안내만 띄운다.
+             → 결제 페이지로 보내지 않는다. daily.html은 게이팅이 없어 부여 전에도
+               '오늘의 사건'은 바로 해볼 수 있다. */
+          const bp = $("betaPending"); if (bp) bp.classList.remove("hidden");
         } else if (used) {
-          if (BETA_MODE) {
-            // 베타: 결제 유도 대신 '부여 대기' 안내만. 완료화면에 그대로 머문다.
-            const bp = $("betaPending"); if (bp) bp.classList.remove("hidden");
-          } else {
-            // 체험을 이미 소진 → 무료체험 불가, 결제로 유도
-            location.replace("checkout.html?plan=" + wantPlan + "&cycle=m6"); return;
-          }
+          // 체험을 이미 소진 → 무료체험 불가, 결제로 유도
+          location.replace("checkout.html?plan=" + wantPlan + "&cycle=m6"); return;
         } else if (sub.status === "none") {
           PremiseStore.startTrial(wantPlan, "m6");
         }

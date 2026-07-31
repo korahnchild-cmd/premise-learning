@@ -612,7 +612,10 @@ exports.adminGrantPlan = onCall({ region: REGION }, async (request) => {
     accessUntil: until,       // 게이팅 기준일
     currentPeriodEnd: until,
     amount: 0,
-    trialUsed: !!(target.subscription && target.subscription.trialUsed),
+    /* 관리자 부여는 '선물'이지 무료체험 소진이 아니다. 베타 테스터가 부여 종료 후
+       정식 7일 무료체험을 그대로 받을 수 있게 매번 false로 되돌린다.
+       (관리자만 호출 가능하므로 체험 무한반복 악용 경로는 없다) */
+    trialUsed: false,
     grantedByAdmin: true,
     grantedBy: adminUid,
     grantedAt: kstDate(0),
@@ -637,6 +640,11 @@ exports.adminRevokePlan = onCall({ region: REGION }, async (request) => {
     accessUntil: "",
     currentPeriodEnd: "",
     nextBillingAt: "",
+    /* 회수 후에는 정식 무료체험을 받을 수 있는 깨끗한 상태로 되돌린다.
+       베타 종료 시 이 함수로 일괄 회수하면 테스터가 checkout으로 밀리지 않고
+       onboarding에서 정상적으로 7일 무료체험을 시작하게 된다. */
+    trialUsed: false,
+    trialEndsAt: "",
     grantedByAdmin: false,
     revokedAt: kstDate(0),
     updatedAt: admin.firestore.FieldValue.serverTimestamp()
@@ -661,7 +669,8 @@ exports.adminGrantBulk = onCall({ region: REGION }, async (request) => {
       await subDocRef(t.uid).set({
         status: "active", plan, cycle: "m6", method: "admin_grant",
         hasBillingKey: false, nextBillingAt: "", accessUntil: until, currentPeriodEnd: until,
-        amount: 0, grantedByAdmin: true, grantedBy: adminUid, grantedAt: kstDate(0),
+        amount: 0, trialUsed: false, // 부여는 무료체험 소진이 아니다(adminGrantPlan과 동일 정책)
+        grantedByAdmin: true, grantedBy: adminUid, grantedAt: kstDate(0),
         grantNote: String(d.note || "").slice(0, 200),
         updatedAt: admin.firestore.FieldValue.serverTimestamp()
       }, { merge: true });
