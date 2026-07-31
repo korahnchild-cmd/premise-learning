@@ -357,9 +357,11 @@
      login.html은 이미 로그인 상태면 즉시 next로 튕기므로, 반드시 먼저 로그아웃해야 한다. */
   var switchBtn = $("switchBtn");
   if (switchBtn) switchBtn.addEventListener("click", function(){
+    /* 350ms 추측 대기 대신 signOut 완료를 실제로 기다린다(common.js PremiseLogout). */
+    if (window.PremiseLogout) { window.PremiseLogout("login.html?next=admin.html"); return; }
     try { if (window.PremiseAuth && PremiseAuth.signOutFirebase) PremiseAuth.signOutFirebase(); } catch(e){}
     try { PremiseStore.logout(); } catch(e){}
-    setTimeout(function(){ location.href = "login.html?next=admin.html"; }, 350);
+    setTimeout(function(){ location.replace("login.html?next=admin.html"); }, 350);
   });
 
   var copyBtn = $("copyUidBtn");

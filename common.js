@@ -535,11 +535,33 @@
       'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + path + '</svg>';
   }
   function _navDrop(id) { const n = document.getElementById(id); if (n && n.parentNode) n.parentNode.removeChild(n); }
-  function _navLogout() {
+  /* ===== 공통 로그아웃 =====
+     signOut()은 비동기다(Firebase가 IndexedDB에 저장된 세션을 지운다). 예전에는 이걸
+     기다리지 않고 곧바로 location.href로 페이지를 갈아치웠는데, 모바일 인앱 브라우저
+     (특히 카카오톡 WebView)는 이동 시점에 진행 중이던 IndexedDB 쓰기를 끊어버린다.
+     그러면 Firebase 세션이 살아남고, 다음 페이지에서 onAuthStateChanged가 그 계정을
+     복원해 '로그아웃했는데 다시 로그인되는' 증상이 된다.
+     → 반드시 signOut 완료를 기다린 뒤 이동한다. 응답이 없을 때를 대비해 워치독을 둔다.
+     또한 뒤로가기로 로그인된 것처럼 보이는 화면에 돌아가지 않도록 replace를 쓴다. */
+  function _doLogout(dest) {
+    var target = dest || "index.html";
+    var fired = false;
+    function go() { if (fired) return; fired = true; try { location.replace(target); } catch (e) { location.href = target; } }
     try { if (window.PremiseStore) PremiseStore.logout(); } catch (e) {}
-    try { if (window.PremiseAuth && PremiseAuth.signOutFirebase) PremiseAuth.signOutFirebase(); } catch (e) {}
-    location.href = "index.html";
+    try {
+      if (window.PremiseAuth && PremiseAuth.signOutFirebase) {
+        var p = PremiseAuth.signOutFirebase();
+        if (p && typeof p.then === "function") {
+          p.then(go, go);
+          setTimeout(go, 2500); // signOut이 응답 없이 매달리면 사용자를 가두지 않는다
+          return;
+        }
+      }
+    } catch (e) {}
+    go();
   }
+  window.PremiseLogout = _doLogout;
+  function _navLogout() { _doLogout("index.html"); }
   function _navCloseDrawer() {
     const d = document.getElementById("pnDrawer"), b = document.getElementById("pnBurger");
     if (d) { d.classList.remove("open"); d.setAttribute("aria-hidden", "true"); }

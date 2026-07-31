@@ -235,9 +235,11 @@
   }
 
   function doLogout(){
+    // signOut 완료를 기다린 뒤 이동(common.js). 안 기다리면 인앱 브라우저에서 세션이 남는다.
+    if (window.PremiseLogout) { window.PremiseLogout("index.html"); return; }
     PremiseStore.logout();
     if (window.PremiseAuth) PremiseAuth.signOutFirebase();
-    location.href = "index.html";
+    location.replace("index.html");
   }
 
   if (window.PremiseStore && PremiseStore.isLoggedIn()) render();

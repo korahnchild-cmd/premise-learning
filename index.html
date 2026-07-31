@@ -1958,10 +1958,13 @@
     document.documentElement.classList.add("ix-lock");
     var f=drawer.querySelector(".ix-ditem"); if(f) setTimeout(function(){ try{f.focus();}catch(e){} },60);
   }
+  /* common.js의 PremiseLogout — signOut 완료를 기다린 뒤 이동한다.
+     기다리지 않으면 카톡 인앱 브라우저에서 Firebase 세션이 살아남아 다시 로그인된다. */
   function logout(){
+    if (window.PremiseLogout) { window.PremiseLogout("index.html"); return; }
     try{ if(window.PremiseStore) PremiseStore.logout(); }catch(e){}
     try{ if(window.PremiseAuth && PremiseAuth.signOutFirebase) PremiseAuth.signOutFirebase(); }catch(e){}
-    location.href="index.html";
+    location.replace("index.html");
   }
   burger.addEventListener("click", function(){ drawer.classList.contains("open") ? close() : open(); });
   drawer.addEventListener("click", function(e){

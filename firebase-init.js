@@ -109,6 +109,18 @@ onAuthStateChanged(auth, (user) => {
   try {
     if (user && window.PremiseStore && typeof PremiseStore.syncAuthUser === "function") {
       PremiseStore.syncAuthUser({ uid: user.uid, email: user.email || "", name: user.displayName || "" });
+    } else if (!user && window.PremiseStore && typeof PremiseStore.logout === "function") {
+      /* Firebase 세션이 없다 = 로그아웃 상태다. 로컬 user.loggedIn도 반드시 같이 내린다.
+         예전에는 여기서 그냥 넘어가서, 로컬 플래그가 true로 남으면 아무도 내려주지
+         않았다(syncAuthUser는 true로 올리기만 한다). 그 결과 로그아웃 뒤에도 로컬이
+         '로그인됨'으로 남아, '무료 체험'을 누르면 로그인 화면을 건너뛰고 그대로
+         들어가지는 증상이 생겼다. 서버 세션을 진실원천으로 삼아 동기화한다.
+         단, 관리자 QA 스위처는 Firebase 로그인 없이 회원 상태를 흉내 내므로 예외. */
+      var _isAdminQA = false;
+      try { _isAdminQA = !!(window.PremiseAdmin && PremiseAdmin.is()); } catch (e2) {}
+      if (!_isAdminQA && PremiseStore.isLoggedIn && PremiseStore.isLoggedIn()) {
+        PremiseStore.logout();
+      }
     }
   } catch (e) { console.warn("[auth] syncAuthUser:", e && e.message); }
   /* 인증 상태 확정 알림 — common.js가 관리자 판정/네비게이션을 다시 그린다. */

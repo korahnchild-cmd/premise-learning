@@ -189,9 +189,20 @@
 
   if (oauthCode || oauthError) {
     handleOAuthCallback();
-  } else if (window.PremiseStore && PremiseStore.isLoggedIn()) {
-    // 이미 로그인 상태면 바로 next로
-    location.replace(next);
+  } else {
+    /* 이미 로그인 상태면 바로 next로 — 단 '로컬 플래그'만 보고 튕기지 않는다.
+       로컬이 stale하게 true로 남아 있으면(로그아웃 직후 인앱 브라우저 등) 로그인
+       화면에 머무를 수가 없어 계정을 바꿀 방법이 사라진다. Firebase 인증이 확정되고
+       실제 세션이 있을 때만 이동한다. Firebase가 안 뜨면 로그인 버튼을 그대로 둔다. */
+    var _autoGoDone = false;
+    var _autoGo = function(){
+      if (_autoGoDone) return;
+      var u = null;
+      try { u = (window.PremiseAuth && PremiseAuth.auth && PremiseAuth.auth.currentUser) || null; } catch(e){}
+      if (u && window.PremiseStore && PremiseStore.isLoggedIn()) { _autoGoDone = true; location.replace(next); }
+    };
+    document.addEventListener("premise:auth", _autoGo);
+    setTimeout(_autoGo, 1500);
   }
 
   async function loginWith(provider){
