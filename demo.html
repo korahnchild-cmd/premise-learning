@@ -102,11 +102,24 @@
 <main class="flex-1 flex items-center justify-center px-5 pb-10">
   <div class="w-full max-w-xl">
 
-    <!-- SUBJECT PICK · 증명에 쓸 과목 선택 -->
-    <section class="step show text-center" id="s-subject">
+    <!-- SUBJECT PICK · 증명에 쓸 과목 선택
+         2026-08-02: 이 섹션이 원래 첫 화면이었다. 학년을 묻기도 전에 고등 수능형
+         5지선다(PROOF_BANK)를 들이대서, 초5 학부모로부터 "아이가 이해 못 하는 문제"
+         피드백을 받았다. 이제는 학년 선택(s-intro) 뒤에 오고, 초등은 아예 건너뛴다. -->
+    <section class="step text-center" id="s-subject">
       <p class="text-[11px] font-semibold tracking-widest uppercase text-point mb-3">실전 적용 랩 · 심화 문항</p>
       <h1 class="text-[1.7rem] md:text-[2.1rem] font-extrabold leading-tight" style="word-break:keep-all">6개월 이상 훈련하면,<br>문제가 <span class="text-point">이렇게</span> 보입니다</h1>
       <p class="mt-4 text-[14px] text-body leading-relaxed max-w-md mx-auto">과목을 골라봐. 실제 심화 문항 3개로, 전제를 깨는 순간 문제가 얼마나 빨리 풀리는지 직접 보여줄게.</p>
+      <div id="proofLevelNote" class="hidden mx-auto mt-5 max-w-sm" style="border:1px solid #FCD34D;background:#FFFBEB;border-radius:14px;padding:12px 16px;text-align:left">
+        <p style="margin:0;font-size:12.5px;line-height:1.6;color:#92400E">
+          여기 문항은 <b>고등 심화(실전 적용 랩) 기준</b>입니다. 지금 바로 풀 수준이 아니라,
+          <b>훈련 뒤 도달하는 지점</b>을 보여드리는 화면이에요. 어렵게 느껴지는 게 정상입니다.
+        </p>
+        <button id="skipProofBtn" type="button"
+                style="margin-top:10px;cursor:pointer;border:none;background:none;padding:0;font-size:12.5px;font-weight:800;color:#0A66FF;text-decoration:underline">
+          건너뛰고 우리 아이 학년 사건부터 볼게요 →
+        </button>
+      </div>
       <div class="grid gap-3 mt-8 max-w-sm mx-auto text-left" id="subjectPick"></div>
     </section>
 
@@ -125,8 +138,8 @@
       <button id="proofBtn" class="btn btn-primary w-full py-3.5 text-[15px] font-semibold mt-6" style="display:none">계속</button>
     </section>
 
-    <!-- INTRO -->
-    <section class="step text-center" id="s-intro">
+    <!-- INTRO · 학년 선택 (첫 화면) -->
+    <section class="step show text-center" id="s-intro">
       <div class="kozy st-idle mx-auto mb-8" style="width:120px;height:120px" id="k-intro"></div>
       <h1 class="text-[1.9rem] md:text-[2.4rem] font-extrabold leading-tight">전제 3개, <span class="text-point">가입 없이</span> 풀어볼래?</h1>
       <p class="mt-5 text-[16px] text-body leading-relaxed max-w-md mx-auto">난 사고분석관 루카야. 당연해 보이는 문장 속에 숨은 전제를 찾아 깨는 게 우리가 할 일이야. 딱 3개만 같이 해보자.</p>
@@ -480,11 +493,13 @@
 
   function nextProof(){ proofIdx += 1; renderProof(); }
 
+  /* 심화 문항 3개를 마친 뒤. 학년은 이미 첫 화면에서 골랐으므로 곧장 학년 맞춤 사건으로 간다.
+     (예전엔 여기서 s-intro로 가서 그제서야 학년을 물었다 — 순서가 뒤집혀 있었다) */
   function goIntro(){
     $("s-proof").classList.remove("show");
-    $("subBtn").style.display = "none";
-    $("s-intro").classList.add("show");
-    $("prog").style.width = "32%";
+    const sb = $("subBtn"); if (sb) sb.style.display = "none";
+    if (!CASES || !CASES.length) { CASES = CASES_BY_GRADE[tier] || CASES_BY_GRADE["중등"]; }
+    startCase(0);
   }
 
   // 학년군 선택 → 학년에 맞는 교과 소재 3개(입문→기본→심화), 톤도 학년별로 분화
@@ -626,25 +641,52 @@
   let answered = false;
   const SUBS = ["choice","reveal","blast","insight"];
 
+  /* 학년 선택이 이제 데모의 첫 관문이다.
+       · 초등  → 심화 문항(PROOF)을 건너뛰고 바로 학년 맞춤 사건으로. 초5가 수능형
+                 5지선다를 먼저 만나 이탈하던 경로를 끊는다.
+       · 중·고 → 과목 선택 → 심화 문항 → 학년 맞춤 사건. 다만 중등에게는 '고등 기준'
+                 이라는 라벨과 건너뛰기 버튼을 같이 준다. */
   function renderGradePick(){
     const w = $("gradePick"); w.innerHTML = "";
     GRADES.forEach(g=>{
       const b = document.createElement("button");
       b.className = "w-full text-left border border-line bg-white rounded-2xl px-5 py-4 hover:border-point transition";
       b.innerHTML = `<span class="block text-[15px] font-bold text-ink">${g.label}</span><span class="block text-[13px] text-body mt-0.5">${g.d}</span>`;
-      b.onclick = () => { tier = g.key; CASES = CASES_BY_GRADE[tier]; startCase(0); };
+      b.onclick = () => {
+        tier = g.key;
+        CASES = CASES_BY_GRADE[tier];
+        if (tier === "초등") { startCase(0); return; }   // 심화 문항 건너뜀
+        goSubjectPick(tier === "중등");
+      };
       w.appendChild(b);
     });
   }
   renderGradePick();
+
+  /* 학년 선택 → 과목 선택 화면. showLevelNote=true면 '고등 기준' 안내와 건너뛰기를 노출한다. */
+  function goSubjectPick(showLevelNote){
+    $("s-intro").classList.remove("show");
+    $("s-subject").classList.add("show");
+    const note = $("proofLevelNote");
+    if (note) note.classList.toggle("hidden", !showLevelNote);
+    $("prog").style.width = "18%";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  (function bindSkipProof(){
+    const b = $("skipProofBtn");
+    if (b) b.onclick = () => { $("s-subject").classList.remove("show"); startCase(0); };
+  })();
 
   function setK(state){ $("k-case").className = "kozy mx-auto mb-6 "+state; $("k-case").style.width="96px"; $("k-case").style.height="96px"; }
 
   function startCase(idx){
     ci = idx; sub = 0; answered = false;
     $("s-intro").classList.remove("show");
+    $("s-subject").classList.remove("show");   // 초등은 이 둘을 거치지 않고 바로 온다
+    $("s-proof").classList.remove("show");
     $("s-done").classList.remove("show");
     $("s-case").classList.add("show");
+    window.scrollTo({ top: 0, behavior: "smooth" });
     renderCase();
   }
 
@@ -705,7 +747,14 @@
       });
     }
     if(st === "blast"){
-      $("cblast").addEventListener("click", ()=>{
+      /* 연타 방지 — daily.html blastBtn과 동일한 가드(2026-07-28 발견 버그의 재발 차단).
+         두 번 누르면 setTimeout이 2회 예약돼 sub가 SUBS 범위를 벗어나고,
+         빈 카드 + '계속' 무한 루프 막다른 곳이 된다. */
+      const cb = $("cblast");
+      let blasted = false;
+      cb.addEventListener("click", ()=>{
+        if (blasted) return;
+        blasted = true; cb.disabled = true;
         if(trig){ trig.classList.remove("glow"); trig.classList.add("blast"); }
         setK("st-discover");
         setTimeout(()=>{ sub++; renderCase(); }, 700);

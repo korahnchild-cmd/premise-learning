@@ -2813,7 +2813,22 @@
     const start = doy % pool.length;
     return [0, 1, 2].map(i => pool[(start + i) % pool.length]);
   }
-  const LESSONS = pickDailySet(LESSON_SETS[pickTrack()] || LESSON_SETS["중등"]);
+  const CURRENT_TRACK = pickTrack();
+  const LESSONS = pickDailySet(LESSON_SETS[CURRENT_TRACK] || LESSON_SETS["중등"]);
+
+  /* 기기가 바뀌면 localStorage의 premise_profile이 없어 pickTrack()이 기본값 "중등"으로
+     떨어진다 — 초5가 중등 사건을 받던 경로다. firebase-init이 로그인 확정 후 서버
+     프로필로 로컬을 복구하며 premise:profile 이벤트를 보내는데, 그 시점엔 이미 오늘의
+     사건을 골라 그린 뒤다. 트랙이 실제로 달라졌을 때만 한 번 새로고침해 맞춘다.
+     (세션 플래그로 1회 제한 — 무한 새로고침 방지) */
+  document.addEventListener("premise:profile", function(){
+    try{
+      if (pickTrack() === CURRENT_TRACK) return;
+      if (sessionStorage.getItem("pbs_track_fixed") === "1") return;
+      sessionStorage.setItem("pbs_track_fixed", "1");
+      location.reload();
+    }catch(e){}
+  });
 
   // 비구독자에게는 '무료 체험판' 라벨로 기대치를 관리 (daily는 의도적 쇼케이스)
   (function(){
@@ -2873,7 +2888,7 @@
       html = `<div class="bg-soft border border-line rounded-2xl p-5">
           <p class="text-[11px] font-semibold tracking-widest uppercase text-faint mb-1.5">숨은 전제</p>
           <p class="text-[16px] font-semibold text-ink leading-relaxed">${S.premise}</p>
-          ${S.why ? `<div class="mt-3.5 pt-3.5 border-t border-line"><p class="text-[11px] font-semibold text-point mb-1">쉽게 말하면</p><p class="text-[13.5px] text-body leading-relaxed">${S.why}</p></div>` : ``}
+          ${S.why ? `<div class="mt-3 pt-3 border-t border-line"><p class="text-[11px] font-semibold text-point mb-1">쉽게 말하면</p><p class="text-[13.5px] text-body leading-relaxed">${S.why}</p></div>` : ``}
         </div>
         ${S.example ? `<div class="mt-3 rounded-2xl border border-line bg-white p-4">
           <p class="text-[11px] font-semibold text-point mb-1">비슷한 예를 하나 더</p>
