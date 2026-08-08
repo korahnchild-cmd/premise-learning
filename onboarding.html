@@ -105,17 +105,19 @@
       <h2 class="text-[1.6rem] md:text-[2rem] font-extrabold">몇 학년 파트너야?</h2>
       <p class="mt-3 text-[15px] text-body">네 수준에 딱 맞는 사건을 골라줄게.</p>
       <div class="grid grid-cols-2 gap-3 mt-8 text-left" id="grades"></div>
-      <div class="flex gap-3 mt-8"><button class="btn btn-ghost flex-1 py-3.5 text-[14px] font-semibold" onclick="go(0)">← 뒤로</button><button id="n1" class="btn btn-primary flex-1 py-3.5 text-[14px] font-semibold" onclick="go(2)" disabled>다음</button></div>
+      <!-- (c) 실제 동작 표기 — 학년을 7단계로 묻지만 코스는 초등·중등·고등 3갈래다.
+           묻는 만큼 갈라준다고 기대하게 만들면 "학년별 변별력이 없다"는 실망으로 돌아온다. -->
+      <p class="mt-5 text-[12.5px] text-faint leading-relaxed" style="word-break:keep-all">
+        코스는 <b class="text-body">초등(5·6학년)</b> · <b class="text-body">중등(1~3학년)</b> · <b class="text-body">고등(1·2학년)</b> 세 갈래로 나뉩니다.<br class="hidden sm:block" />
+        같은 갈래 안에서는 같은 사건을 순서대로 만나고, 루카의 말투와 설명 깊이가 학년에 맞춰 달라집니다.
+      </p>
+      <div class="flex gap-3 mt-8"><button class="btn btn-ghost flex-1 py-3.5 text-[14px] font-semibold" onclick="go(0)">← 뒤로</button><button id="n1" class="btn btn-primary flex-1 py-3.5 text-[14px] font-semibold" onclick="go(3)" disabled>다음</button></div>
     </section>
 
-    <!-- STEP 2 · SCORE BAND (성적대) -->
-    <section class="step text-center" id="s2">
-      <div class="kozy st-idle mx-auto mb-6" style="width:84px;height:84px" id="k2b"></div>
-      <h2 class="text-[1.6rem] md:text-[2rem] font-extrabold">요즘 시험 문제, 어느 정도로 느껴져?</h2>
-      <p class="mt-3 text-[15px] text-body">난이도를 딱 맞게 골라줄게. 정답을 잘 맞히고 못 맞히고는 상관없어.</p>
-      <div class="grid gap-3 mt-8 text-left" id="scoreBands"></div>
-      <div class="flex gap-3 mt-8"><button class="btn btn-ghost flex-1 py-3.5 text-[14px] font-semibold" onclick="go(1)">← 뒤로</button><button id="n2" class="btn btn-primary flex-1 py-3.5 text-[14px] font-semibold" onclick="go(3)" disabled>다음</button></div>
-    </section>
+    <!-- STEP 2 · SCORE BAND — 2026-08-02 삭제.
+         "요즘 시험 문제 어느 정도로 느껴져?"로 기초/보통/상위를 받아놓고, daily.html은
+         scoreBand를 단 한 번도 읽지 않았다. 답을 바꿔도 나오는 사건이 똑같았다.
+         묻고 안 쓰는 질문은 온보딩 이탈만 늘리므로 제거. 데모 난이도는 '보통' 고정. -->
 
     <!-- STEP 3 · NAME -->
     <section class="step text-center" id="s3">
@@ -123,7 +125,7 @@
       <h2 class="text-[1.6rem] md:text-[2rem] font-extrabold">파트너 이름을 정해줘</h2>
       <p class="mt-3 text-[15px] text-body" id="nameSub">파트너 노트에 이 이름으로 기록될 거야.</p>
       <input id="nameInput" type="text" maxlength="12" placeholder="예: 지호" class="w-full mt-8 rounded-2xl border border-line bg-white px-5 py-4 text-[16px] text-center outline-none focus:border-point transition" />
-      <div class="flex gap-3 mt-8"><button class="btn btn-ghost flex-1 py-3.5 text-[14px] font-semibold" onclick="go(2)">← 뒤로</button><button class="btn btn-primary flex-1 py-3.5 text-[14px] font-semibold" onclick="go(4)">다음</button></div>
+      <div class="flex gap-3 mt-8"><button class="btn btn-ghost flex-1 py-3.5 text-[14px] font-semibold" onclick="go(1)">← 뒤로</button><button class="btn btn-primary flex-1 py-3.5 text-[14px] font-semibold" onclick="go(4)">다음</button></div>
     </section>
 
     <!-- STEP 4 · INTEREST (소재 취향) -->
@@ -201,11 +203,16 @@
     </g>
     <circle class="ring" cx="50" cy="50" r="30"/><circle class="k-core" cx="50" cy="50" r="4.5"/>
   </g></g></svg>`; }
-  ["k0","k1","k2b","k2","k3","k4","k5"].forEach(id=>{ document.getElementById(id).innerHTML = kozySVG(); });
+  // k2b는 삭제된 STEP 2(성적대)의 아이콘이었다. 목록에 남겨두면 getElementById가 null이라
+  // 스크립트 전체가 여기서 죽는다.
+  ["k0","k1","k2","k3","k4","k5"].forEach(id=>{ const el = document.getElementById(id); if (el) el.innerHTML = kozySVG(); });
 
-  const profile = { grade:null, tier:null, name:"", subject:null, scoreBand:null };
+  // scoreBand는 더 이상 묻지 않는다(질문 삭제). 온보딩 데모 난이도는 '보통' 고정.
+  const profile = { grade:null, tier:null, name:"", subject:null, scoreBand:"보통" };
   let step = 0;
-  const total = 7;
+  // 실제로 지나가는 단계만 나열한다. STEP 2 제거 후에도 진행바가 튀지 않도록 이 배열로 계산한다.
+  const STEP_ORDER = [0, 1, 3, 4, 5, 6];
+  const total = STEP_ORDER.length;
   const $ = id => document.getElementById(id);
 
   /* ===== 베타 기간 스위치 =====
@@ -223,9 +230,13 @@
 
      ── 베타 종료 시 순서 ──
        1) admin.html에서 부여 회수(adminRevokePlan) → status "none", trialUsed false
-       2) 이 값을 false로 되돌리고 배포
-       → 그때부터 테스터는 정식 7일 무료체험을 정상적으로 받는다. */
-  const BETA_MODE = true;
+       2) common.js의 PBS_BETA_MODE를 false로 되돌리고 배포
+       → 그때부터 테스터는 정식 7일 무료체험을 정상적으로 받는다.
+
+     ★ 2026-08-06: 이 값은 더 이상 여기서 정하지 않는다. common.js의 window.PBS_BETA_MODE가
+       진실원천이다. 예전엔 이 파일의 지역 상수여서 온보딩만 막혔고, course.html은 이 값을
+       몰라서 결제창으로 보냈다. 스위치는 반드시 한 곳에만 둔다. */
+  const BETA_MODE = (window.PBS_BETA_MODE !== false);
 
   // 로그인 게이팅 — 7일 무료체험은 로그인이 온보딩 1단계 (프론트 데모)
   function refreshLoginHint(){
@@ -302,10 +313,11 @@
   }
 
   function go(n){
-    $("s"+step).classList.remove("show");
+    const cur = $("s"+step); if (cur) cur.classList.remove("show");
     step = n;
-    $("s"+step).classList.add("show");
-    $("prog").style.width = Math.round((step+1)/total*100)+"%";
+    const nx = $("s"+step); if (nx) nx.classList.add("show");
+    const pi = STEP_ORDER.indexOf(step);
+    $("prog").style.width = Math.round(((pi < 0 ? 0 : pi) + 1) / total * 100) + "%";
     window.scrollTo({top:0,behavior:"smooth"});
     if(step===5){ resetDemo(); }
     if(step===6){
@@ -351,19 +363,11 @@
     $("grades").appendChild(el);
   });
 
-  // 성적대(체감 난이도) — 데일리 미션 사건 난이도를 이 값으로 조정
-  const scoreBands = [
-    { k:"기초", g:"어렵게 느껴져요", d:"기초부터 탄탄히 다져줄게" },
-    { k:"보통", g:"적당해요", d:"개념은 아는데 실전에서 헷갈리는 정도로 맞출게" },
-    { k:"상위", g:"쉽게 느껴져요", d:"응용문제 수준으로 바로 시작할게" },
-  ];
-  scoreBands.forEach(x=>{
-    const el=document.createElement("div");
-    el.className="choice bg-white border border-line rounded-2xl px-5 py-4 flex items-center justify-between";
-    el.innerHTML=`<div><p class="text-[15px] font-bold text-ink">${x.g}</p><p class="text-[13px] text-body mt-0.5">${x.d}</p></div>`;
-    el.onclick=()=>{ document.querySelectorAll("#scoreBands .choice").forEach(c=>c.classList.remove("sel")); el.classList.add("sel"); profile.scoreBand=x.k; $("n2").disabled=false; };
-    $("scoreBands").appendChild(el);
-  });
+  /* 성적대(scoreBand) 질문은 2026-08-02에 제거했다.
+     "데일리 미션 사건 난이도를 이 값으로 조정"이라고 적어뒀지만 daily.html은 이 값을
+     한 번도 읽지 않았다 — 무엇을 고르든 나오는 사건이 같았다. 온보딩 단계만 하나 늘리고
+     기대만 만들던 질문이라 삭제한다. 실제로 난이도를 조절하게 되는 날 다시 살릴 것.
+     profile.scoreBand는 "보통"으로 고정되며, 아래 DEMO_MATRIX 조회에만 쓰인다. */
 
   // 관심 소재 (과목 아님 · 예시 소재 취향)
   const subs = [
@@ -648,6 +652,12 @@
   });
 
   function saveProfile(){
+    // 서버(users/{uid}.profile)에도 올려 기기가 바뀌어도 학년이 유지되게 한다.
+    // PremiseProfile은 firebase-init.js(module)라 늦게 뜰 수 있으므로 없으면 로컬만 쓴다.
+    if (window.PremiseProfile && typeof PremiseProfile.save === "function") {
+      PremiseProfile.save(profile);
+      return;
+    }
     try{ localStorage.setItem("premise_profile", JSON.stringify(profile)); }catch(e){}
   }
 

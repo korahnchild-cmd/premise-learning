@@ -51,7 +51,24 @@
 <script src="common.js"></script>
 
 <main class="flex-1">
-  <div class="max-w-3xl mx-auto px-4 md:px-6 py-8 md:py-10">
+  <!-- 접근 권한이 없을 때 보여주는 안내 카드.
+       2026-08-06 이전에는 여기서 onboarding.html로 튕겨냈다. 그런데 '내 기록'은 상단 링크와
+       하단 탭바에 항상 떠 있어서, 베타 부여 대기 테스터가 한 번 누르면 이미 끝낸 온보딩을
+       처음부터(약 10탭) 다시 해야 안내 문구를 볼 수 있었다. 대부분 그 전에 이탈한다.
+       실전 적용 랩·파이널 스파크·캘린더가 쓰는 '그 자리에서 안내' 패턴으로 통일한다. -->
+  <div id="accessGate" class="hidden max-w-md mx-auto px-4 py-12">
+    <div class="bg-white border border-line rounded-3xl p-7 text-center">
+      <div class="mx-auto mb-4 w-12 h-12 rounded-2xl bg-point/10 flex items-center justify-center">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V11M10 19V5M16 19v-6M21 19H3"/></svg>
+      </div>
+      <p id="gateEyebrow" class="text-[11px] font-semibold tracking-widest uppercase text-point mb-2"></p>
+      <h1 id="gateTitle" class="text-[1.35rem] font-extrabold leading-snug" style="word-break:keep-all"></h1>
+      <p id="gateBody" class="mt-3 text-[13.5px] text-body leading-relaxed" style="word-break:keep-all"></p>
+      <div id="gateActions" class="mt-6 flex flex-col gap-2.5"></div>
+    </div>
+  </div>
+
+  <div id="dashBody" class="max-w-3xl mx-auto px-4 md:px-6 py-8 md:py-10">
 
     <!-- 1. 상단 요약 -->
     <div class="mb-6">
@@ -217,12 +234,57 @@
   (function guard(){
     if (new URLSearchParams(location.search).has("preview")) return; // 런칭 전 UI 검토용 우회
     try{
+      // 비로그인은 로그인으로 보낸다(돌아올 곳을 next로 넘기므로 헤매지 않는다).
       if(!(window.PremiseStore && PremiseStore.isLoggedIn && PremiseStore.isLoggedIn())){ location.replace("login.html?next=" + encodeURIComponent("dashboard.html")); return; }
       // Phase 2: 만료 반영. 유효 구독(체험/유료, accessUntil 유효) 또는 잔여기간 내 해지·일시정지(동결 지도 열람)만 허용.
       var ok = (PremiseStore.hasAccess && PremiseStore.hasAccess()) || (PremiseStore.canViewFrozen && PremiseStore.canViewFrozen());
-      if(!ok){ location.replace("onboarding.html"); return; } // 구독 없음·체험 만료 → 결제 유도
+      if(!ok){ showAccessGate(); return; }   // 튕기지 않고 이 자리에서 설명한다
     }catch(e){}
   })();
+
+  /* 접근 권한이 없을 때: 대시보드 본문을 감추고 안내 카드를 띄운다.
+     베타 기간이면 '권한 대기 중'으로, 평시면 체험 만료/미구독 안내로 문구가 갈린다.
+     결제 링크는 넣지 않는다 — 베타 약속(결제창 없음) 때문이고, common.js의 클릭 가드가
+     한 번 더 막지만 애초에 보여주지 않는 게 맞다. */
+  function showAccessGate(){
+    var beta = !(window.PremiseBeta) || PremiseBeta.on();
+    var used = false;
+    try { used = !!(PremiseStore.trialUsed && PremiseStore.trialUsed()); } catch(e){}
+    var body = document.getElementById("dashBody");
+    var gate = document.getElementById("accessGate");
+    if (body) body.style.display = "none";
+    if (!gate) return;
+    gate.classList.remove("hidden");
+
+    var eyebrow, title, desc, actions;
+    if (beta){
+      eyebrow = "베타 참여 중";
+      title = "베타 계정 확인 중입니다";
+      desc = '가입은 정상 처리됐습니다. 운영자에게 <b class="text-ink">“가입했어요”</b> 한 마디만 남겨주시면 이 계정에 <b class="text-ink">7일 프리미엄</b>을 열어드립니다. 열리면 알려드릴 테니 그때 새로고침만 해주세요. <b class="text-ink">결제는 진행되지 않습니다.</b>';
+      actions =
+        '<a href="daily.html" class="btn btn-primary py-3.5 text-[14px] font-semibold">오늘의 사건 하러 가기 →</a>' +
+        '<a href="notebook.html" class="btn btn-ghost py-3.5 text-[14px] font-semibold">파트너 노트 보기</a>';
+    } else if (used){
+      eyebrow = "체험이 끝났어요";
+      title = "이 지도는 계정에 그대로 남아 있어요";
+      desc = '기록은 사라지지 않습니다. 구독을 시작하면 멈춘 지점부터 지도가 다시 자랍니다.';
+      actions =
+        '<a href="pricing.html" class="btn btn-primary py-3.5 text-[14px] font-semibold">요금 안내 보기 →</a>' +
+        '<a href="daily.html" class="btn btn-ghost py-3.5 text-[14px] font-semibold">오늘의 사건 하러 가기</a>';
+    } else {
+      eyebrow = "아직 기록이 열리지 않았어요";
+      title = "7일 무료 체험을 시작하면 열립니다";
+      desc = '카드 등록 없이 시작할 수 있어요. 아이가 사건을 풀기 시작하면 이 자리에 사고 지도가 그려집니다.';
+      actions =
+        '<a href="onboarding.html" class="btn btn-primary py-3.5 text-[14px] font-semibold">7일 무료 체험 시작하기 →</a>' +
+        '<a href="daily.html" class="btn btn-ghost py-3.5 text-[14px] font-semibold">먼저 오늘의 사건 해보기</a>';
+    }
+    document.getElementById("gateEyebrow").textContent = eyebrow;
+    document.getElementById("gateTitle").textContent = title;
+    document.getElementById("gateBody").innerHTML = desc;
+    document.getElementById("gateActions").innerHTML = actions;
+    if (window.PremiseNav) PremiseNav.render("dash");
+  }
 
   if (window.PremiseNav) PremiseNav.render("dash");
 

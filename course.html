@@ -507,7 +507,13 @@
           </div>`;
 
         row.querySelector(".mcard").addEventListener("click", () => {
-          if (gated){ location.href = "checkout.html"; return; }
+          /* 베타 기간에는 결제로 보내지 않는다 — 링크가 아니라 JS 이동이라
+             common.js의 클릭 가드에 안 걸리므로 여기서 직접 확인한다.
+             (2026-08-06: 이 줄 때문에 부여 대기 테스터가 잠긴 사건을 누르면 결제창으로 갔다) */
+          if (gated){
+            if (window.PremiseBeta && PremiseBeta.blockCheckout()) return;
+            location.href = "checkout.html"; return;
+          }
           if (isLocked){
             const node = row.querySelector(".node");
             node.classList.add("shake");

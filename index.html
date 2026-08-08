@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="상위권 아이들의 공통 습관을 훈련으로 바꾸는 초5~고2 하루 10분 사고력 훈련. 카드 없이 7일 무료 체험." />
 <meta name="twitter:image" content="https://pbslearning.co.kr/assets/og-pbs-main.png" />
 <title>PBS 학습법 (Premise-Break Schema) — 전제를 깨고 사고의 틀을 다시 짜다</title>
-<meta name="description" content="같은 문제를 풀어도, 어떤 아이는 문제의 전제부터 의심합니다. 상위권 아이들의 공통 습관을 훈련으로 바꾸는 초5~고2 하루 10분 사고력 훈련, PBS 학습법. 카드 없이 7일 무료 체험." />
+<meta name="description" content="문제가 무엇을 묻는지 보이면 아이는 스스로 풉니다. 국어·수학·과학, 과목이 달라도 막히는 자리는 같습니다. 문제가 말하지 않고 깔아둔 조건을 찾아내는 초5~고2 하루 10분 사고력 훈련, PBS 학습법. 카드 없이 7일 무료 체험." />
 <link rel="stylesheet" href="assets/tailwind-a.css" />
 <script src="analytics.js" data-ga="1"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -406,21 +406,30 @@
   <div class="max-w-3xl mx-auto px-5 md:px-8 text-center relative">
     <p class="reveal en eyebrow uppercase text-[11px] font-semibold text-point mb-5" data-d="1">PBS 학습법 · Premise-Break Schema</p>
     <h1 class="reveal display text-[1.65rem] sm:text-[2.2rem] md:text-[2.9rem] font-extrabold leading-[1.34] md:leading-[1.25]" data-d="1" style="word-break:keep-all">
-      같은 문제를 풀어도,<br />
-      어떤 아이는 <span class="kw" id="kw"><span id="splitPremise">전제</span><svg viewBox="0 0 200 24" preserveAspectRatio="none"><path d="M4 15 C 55 6, 145 6, 196 13"/></svg></span>부터 의심합니다.
+      문제가 <span class="kw" id="kw"><span id="splitPremise">무엇을 묻는지</span><svg viewBox="0 0 200 24" preserveAspectRatio="none"><path d="M4 15 C 55 6, 145 6, 196 13"/></svg></span> 보이면<br />
+      아이는 스스로 풉니다.
     </h1>
 
     <div class="reveal mt-7 flex flex-col items-center" data-d="2">
       <span style="display:block;width:46px;height:3px;border-radius:9999px;background:var(--brand-accent)"></span>
-      <p class="mt-4 text-[16px] md:text-[19px] font-extrabold text-ink" style="word-break:keep-all">상위권 아이들의 공통 습관을, <span class="text-point">훈련</span>으로 바꿉니다.</p>
+      <p class="mt-4 text-[16px] md:text-[19px] font-extrabold text-ink" style="word-break:keep-all">국어·수학·과학 — <span class="text-point">과목이 달라도</span>, 막히는 자리는 같습니다.</p>
     </div>
 
     <p class="reveal lede mt-5 text-[16px] md:text-[18px] text-body max-w-xl mx-auto" data-d="2" style="word-break:keep-all">
-      <b class="text-ink">지금 다니는 학원은 그대로.</b> 하루 <b class="text-ink">10분</b>으로,<br class="hidden sm:block" /> 처음 보는 문제도 스스로 풀어내는 <b class="text-point whitespace-nowrap">사고력</b>을 <b class="text-point whitespace-nowrap">6개월간</b> 키웁니다.
+      문제를 더 푸는 훈련이 아니라, <b class="text-ink">문제가 말하지 않고 깔아둔 조건</b>을 찾아내는 훈련입니다.<br class="hidden sm:block" />
+      <b class="text-ink">지금 다니는 학원은 그대로</b>, 하루 <b class="text-point whitespace-nowrap">10분</b>씩 <b class="text-point whitespace-nowrap">6개월</b>.
+    </p>
+
+    <!-- 용어 브리지 — 히어로에서 '전제'를 처음 쓰는 자리.
+         예전에는 H1 첫 문장이 곧바로 "전제부터 의심합니다"였는데, 학부모 피드백으로
+         '전제'가 정의 없이 나와 이해가 막힌다는 게 확인됐다(2026-08-02).
+         이득을 먼저 말하고, 이름은 여기서 붙인다. 순서를 되돌리지 말 것. -->
+    <p class="reveal mt-8 text-[13.5px] md:text-[14.5px] text-faint max-w-xl mx-auto" data-d="2" style="word-break:keep-all">
+      이 <b class="text-body">'말하지 않고 깔아둔 조건'</b>을 저희는 <b class="text-body">전제</b>라고 부릅니다. 아래에서 직접 무너뜨려 보세요.
     </p>
 
     <!-- 히어로 핵심 비주얼: 전제 붕괴 맵 (기둥 3개가 무너지고 새 전제로 재구성) -->
-    <div class="reveal mt-9 flex flex-col items-center" data-d="2">
+    <div class="reveal mt-5 flex flex-col items-center" data-d="2">
       <div class="card relative w-full max-w-md mx-auto h-[196px] sm:h-[224px]" id="collapseStage">
         <canvas id="collapseCv" style="position:absolute;inset:0;width:100%;height:100%;"></canvas>
         <div id="collapseBlock" class="absolute left-1/2 -translate-x-1/2 top-[16px] sm:top-[18px] px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-[11px] sm:text-[13px] font-bold text-center leading-snug max-w-[84%]" style="background:#0A0E17;color:#fff;">"수학은 공식을 많이 외우는 과목이다"</div>
@@ -433,16 +442,21 @@
     </div>
 
     <div class="reveal mt-8" data-d="3">
-      <a href="demo.html" id="heroCta" class="btn btn-primary btn-magnetic text-[15px] font-semibold px-9 py-4">6개월 이상 훈련하면 이렇게 보입니다 →</a>
+      <a href="demo.html" id="heroCta" class="btn btn-primary btn-magnetic text-[15px] font-semibold px-9 py-4">우리 아이 학년으로 3문제 풀어보기 →</a>
     </div>
-    <p class="reveal mt-3.5 text-[12.5px] text-faint" data-d="3">가입 없이, 실제 심화 문항으로 30초 안에 확인</p>
+    <p class="reveal mt-3.5 text-[12.5px] text-faint" data-d="3">가입 없이, 학년에 맞는 사건 3개로 3분 안에 확인</p>
 
     <!-- ================= 특허 신뢰 카드 (웰핏식) =================
-         증명서 발급 시 교체 방법:
-         1) 아래 각 카드의 회색 문서아이콘 span(주석 CERT 표시) 안의 SVG를
-            img 태그로 교체 (예: src=images/patent-cert-1.png, class=w-full h-full object-cover)
-         2) 출원번호 '제2026-XXXXXXX호'의 X 부분을 실제 출원번호로 교체
-         3) (선택) 출원인 표기 필요 시 출원번호 줄 끝에 ' 출원인: 홍길동' 추가
+         2026-08-06 출원사실증명원 발급 → 출원번호 노출 완료.
+           · 출원번호 제10-2026-0137489호 / 출원일 2026-07-25
+           · 명칭: 적응형 전제 탐지 및 사고 프레임 재구성 시스템 및 방법
+
+         ⚠ 증명서 스캔 이미지는 그대로 게재하지 말 것.
+           원본 PDF에 주민등록번호 앞자리·자택 주소·휴대폰번호가 인쇄돼 있다.
+           아래 CERT 슬롯에 넣으려면 그 세 항목을 지운 마스킹본을 따로 만들어야 한다.
+
+         ⚠ 표기는 '출원 중'까지만. 심사 전이므로 '특허 등록·취득·획득'은 쓰지 않는다.
+           등록 결정이 날 때까지 이 원칙 유지.
          ========================================================== -->
     <div class="reveal mt-9 max-w-xl mx-auto" data-d="4">
       <p class="text-[12.5px] text-faint leading-relaxed mb-3.5 text-center" style="word-break:keep-all">
@@ -458,7 +472,7 @@
           <div class="min-w-0 flex-1">
             <p class="text-[10.5px] font-bold text-point tracking-wide">대한민국 특허 출원 중</p>
             <p class="text-[12.5px] sm:text-[13.5px] font-bold text-ink leading-snug mt-0.5" style="word-break:keep-all">적응형 전제 탐지 및 사고 프레임 재구성 시스템 및 방법</p>
-            <!-- 출원번호는 실제 번호 확보 후 노출: <p class="text-[10.5px] text-faint mt-1">출원번호 제2026-XXXXXXX호</p> -->
+            <p class="text-[10.5px] text-faint mt-1" style="word-break:keep-all"><span class="whitespace-nowrap">출원번호 제10-2026-0137489호</span> <span class="whitespace-nowrap">· 2026.07.25 출원</span></p>
           </div>
           <div class="shrink-0 flex items-center gap-2">
             <span class="hidden sm:flex w-11 h-14 rounded-md border border-line bg-soft items-center justify-center overflow-hidden"><!--CERT-->
@@ -489,8 +503,8 @@
       <a href="demo.html" class="group block bg-white border-2 border-point rounded-3xl p-6 relative flex flex-col" style="box-shadow:0 8px 24px rgba(10,102,255,.12)">
         <span class="absolute -top-2.5 right-5 bg-point text-white text-[10px] font-bold px-2.5 py-1 rounded-full">가장 먼저 보세요</span>
         <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-point text-white text-[12px] font-bold mb-4">1</span>
-        <p class="text-[15px] font-extrabold text-ink mb-1.5" style="word-break:keep-all">6개월 이상 훈련하면 이렇게 보입니다</p>
-        <p class="text-[12.5px] text-body leading-relaxed mb-4 flex-1">실제 심화 문항으로, 훈련한 학생이 어떻게 푸는지 먼저 확인해요.</p>
+        <p class="text-[15px] font-extrabold text-ink mb-1.5" style="word-break:keep-all">우리 아이 학년으로 3문제 풀어보기</p>
+        <p class="text-[12.5px] text-body leading-relaxed mb-4 flex-1">학년을 고르면 그 학년에 맞는 사건 3개가 나옵니다. 아이가 어떻게 읽는지 먼저 확인해요.</p>
         <span class="text-[12.5px] font-semibold text-point group-hover:underline">가입 없이 확인하기 →</span>
       </a>
       <a href="report.html" class="group block bg-white border-2 border-point rounded-3xl p-6 relative flex flex-col" style="box-shadow:0 8px 24px rgba(10,102,255,.12)">
@@ -1124,7 +1138,7 @@
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A66FF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
         </div>
         <p class="text-[13.5px] font-bold text-ink">특허 출원 중</p>
-        <p class="text-[11.5px] text-body mt-1 leading-relaxed">적응형 전제탐지 시스템·방법 + 상표 (특허청 출원)</p>
+        <p class="text-[11.5px] text-body mt-1 leading-relaxed" style="word-break:keep-all">적응형 전제탐지 시스템·방법 + 상표<br /><span style="white-space:nowrap;font-size:10px">제10-2026-0137489호</span></p>
       </div>
       <div class="reveal rounded-2xl border border-line p-6 text-center" data-d="3">
         <div class="mx-auto mb-3 w-12 h-12 rounded-2xl bg-point/10 flex items-center justify-center">
@@ -1325,10 +1339,10 @@
 <section id="final-cta" class="spotlight py-16 md:py-24 bg-night text-white text-center relative overflow-hidden">
   <div class="orb absolute pointer-events-none" style="width:420px;height:420px;background:#132038;top:-10%;left:10%;opacity:.9"></div>
   <div class="max-w-2xl mx-auto px-5 md:px-8 relative reveal">
-    <h2 class="display text-[1.9rem] md:text-[2.7rem] font-extrabold text-white">6개월 이상 훈련하면, 어떻게 보이는지 확인해보세요</h2>
-    <p class="lede mt-6 text-[15px] text-white/75">가입 없이 실제 심화 문항으로 먼저 확인하거나, 7일 무료 체험으로 바로 시작할 수 있습니다.</p>
+    <h2 class="display text-[1.9rem] md:text-[2.7rem] font-extrabold text-white">아이가 문제를 어떻게 읽는지, 3분이면 보입니다</h2>
+    <p class="lede mt-6 text-[15px] text-white/75">가입 없이 우리 아이 학년에 맞는 사건 3개를 먼저 풀어보거나, 7일 무료 체험으로 바로 시작할 수 있습니다.</p>
     <div class="mt-10 flex flex-col sm:flex-row justify-center gap-3">
-      <a href="demo.html" class="btn btn-white btn-magnetic text-[15px] font-semibold px-9 py-4">6개월 이상 훈련하면 이렇게 보입니다 →</a>
+      <a href="demo.html" class="btn btn-white btn-magnetic text-[15px] font-semibold px-9 py-4">우리 아이 학년으로 3문제 풀어보기 →</a>
       <a href="onboarding.html" class="btn btn-magnetic text-[15px] font-semibold px-9 py-4 border border-white/25 text-white hover:bg-white/10">7일 무료 체험 시작하기</a>
     </div>
   </div>

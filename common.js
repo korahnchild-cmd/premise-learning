@@ -7,6 +7,22 @@
   /* GA4 로더(analytics.js) 주입 — common.js 로드하는 모든 페이지 커버 */
   if (!document.querySelector('script[data-ga]')) { var _ga = document.createElement('script'); _ga.src = 'analytics.js'; _ga.setAttribute('data-ga', '1'); document.head.appendChild(_ga); }
 
+  /* ===== 베타 기간 전역 스위치 =====
+     ★ 베타를 끝낼 때 이 파일의 이 한 줄만 false로 바꾸면 전 페이지가 동시에 정상 모드가 된다.
+
+     왜 전역이어야 하나 — 2026-08-06 실측 사고:
+       BETA_MODE가 onboarding.html 안의 지역 상수였다. 온보딩 퍼널만 막았고, course.html은
+       이 값의 존재조차 몰라서 '부여 대기' 테스터가 잠긴 사건을 누르면 곧장 checkout.html로
+       갔다(잠긴 사건 9행 + '구독하기' 2개 + mypage 1 + pricing 3). beta.html에는
+       "결제창도 뜨지 않습니다"라고 적어놨으므로 신뢰 문제로 직결된다.
+       페이지마다 플래그를 심으면 종료할 때 또 빠뜨리므로, 진실원천을 여기 한 곳으로 모은다.
+
+     ── 베타 종료 순서(순서 지킬 것) ──
+       1) admin.html에서 명단 전체 회수(adminRevokePlan)
+       2) 이 값을 false로 바꾸고 배포
+       뒤집으면 회수 전 만료 계정이 결제 화면으로 밀린다. */
+  window.PBS_BETA_MODE = true;
+
   const KEY = "premise_state_v2";
   /* 로컬 날짜(KST) 기준. 구버전은 toISOString()이라 UTC였고, 한국 오전 0~9시가 '어제'로 기록됐다.
      같은 한국 날짜의 오전 8시와 10시가 서로 다른 날로 잡혀 streak·활동일수·pbs_since_dN이
@@ -568,6 +584,89 @@
     if (b) { b.setAttribute("aria-expanded", "false"); b.classList.remove("on"); }
     document.documentElement.classList.remove("pn-lock");
   }
+
+  /* ===== 베타 기간 결제 진입 차단 (전 페이지 공통) =====
+     beta.html이 "카드번호는 묻지 않고, 결제창도 뜨지 않습니다"라고 약속했다.
+     그 약속을 페이지마다 지키게 하는 대신, 여기서 한 번에 지킨다.
+
+     방식: document 캡처 단계에서 클릭을 가로챈다. 캡처 단계라 course.html처럼
+     JS로 나중에 그려지는 링크도 자동으로 커버된다(각 페이지 수정 불필요).
+     프로그램 이동(location.href="checkout.html")만 각 페이지에서 blockCheckout()을 부른다.
+
+     예외가 필요하면 링크에 data-beta-allow 속성을 달면 통과한다.
+
+     운영자가 결제 흐름을 점검할 때: 주소 끝에 ?beta=off 를 붙인다. 단 관리자 계정에서만 먹는다.
+     (콘솔에서 PBS_BETA_MODE=false 를 넣는 방법은 안 통한다 — 새로고침하면 이 파일이 다시
+      true로 덮어쓴다. 2026-08-06 실측으로 확인하고 이 우회로를 만들었다) */
+  window.PremiseBeta = {
+    on: function () {
+      if (window.PBS_BETA_MODE === false) return false;
+      try {
+        if (/[?&]beta=off(&|$)/.test(location.search) &&
+            window.PremiseAdmin && PremiseAdmin.is()) return false;   // 관리자 점검용
+      } catch (e) {}
+      return true;
+    },
+
+    /* 결제 시도를 막는다. 막았으면 true를 반환하므로 호출측은 즉시 return 할 것. */
+    blockCheckout: function (msg) {
+      if (!this.on()) return false;
+      this.notice(msg);
+      return true;
+    },
+
+    notice: function (msg) {
+      var id = "pbsBetaNotice";
+      if (document.getElementById(id)) return;           // 연타로 여러 장 쌓이지 않게
+      var wrap = document.createElement("div");
+      wrap.id = id;
+      wrap.setAttribute("role", "dialog");
+      wrap.setAttribute("aria-modal", "true");
+      wrap.style.cssText =
+        "position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;" +
+        "padding:20px;background:rgba(10,14,23,.45);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)";
+      wrap.innerHTML =
+        '<div style="max-width:23rem;width:100%;background:#fff;border-radius:20px;padding:24px 22px;box-shadow:0 18px 50px rgba(10,14,23,.28)">' +
+          '<p style="margin:0;font-size:15px;font-weight:800;color:#0A0E17">베타 기간에는 결제를 받지 않습니다</p>' +
+          '<p style="margin:10px 0 0;font-size:13.5px;line-height:1.7;color:#525A69;word-break:keep-all">' +
+            (msg || '카드 등록도, 결제창도 없습니다. 운영자에게 <b style="color:#0A0E17">“가입했어요”</b> 한 마디만 남겨주시면 이 계정에 <b style="color:#0A0E17">7일 프리미엄</b>을 열어드립니다.') +
+          '</p>' +
+          '<p style="margin:10px 0 0;font-size:13px;line-height:1.7;color:#525A69">기다리시는 동안 <b style="color:#0A0E17">오늘의 사건</b>은 지금 바로 하실 수 있어요.</p>' +
+          '<div style="margin-top:18px;display:flex;gap:8px;flex-wrap:wrap">' +
+            '<a href="daily.html" style="flex:1;min-width:9rem;text-align:center;text-decoration:none;background:#0A66FF;color:#fff;border-radius:9999px;padding:12px 16px;font-size:13.5px;font-weight:700">오늘의 사건 하러 가기</a>' +
+            '<button type="button" data-close style="flex:0 0 auto;cursor:pointer;background:#F2F4F1;color:#0A0E17;border:none;border-radius:9999px;padding:12px 18px;font-size:13.5px;font-weight:700">닫기</button>' +
+          '</div>' +
+          '<p style="margin:12px 0 0;font-size:12px;color:#7A8499">문의: <a href="mailto:korahnchild@gmail.com" style="color:#7A8499;font-weight:700">korahnchild@gmail.com</a></p>' +
+        '</div>';
+      function close() { if (wrap.parentNode) wrap.parentNode.removeChild(wrap); document.removeEventListener("keydown", onKey); }
+      function onKey(e) { if (e.key === "Escape") close(); }
+      wrap.addEventListener("click", function (e) {
+        if (e.target === wrap || (e.target.getAttribute && e.target.hasAttribute("data-close"))) close();
+      });
+      document.addEventListener("keydown", onKey);
+      document.body.appendChild(wrap);
+      var btn = wrap.querySelector("[data-close]");
+      if (btn) { try { btn.focus(); } catch (e) {} }
+    }
+  };
+
+  /* checkout으로 향하는 모든 클릭을 캡처 단계에서 가로챈다. */
+  document.addEventListener("click", function (e) {
+    if (!window.PremiseBeta || !PremiseBeta.on()) return;
+    var n = e.target;
+    while (n && n !== document) {
+      if (n.tagName === "A" && n.getAttribute) {
+        var href = n.getAttribute("href") || "";
+        if (href.indexOf("checkout") !== -1 && !n.hasAttribute("data-beta-allow")) {
+          e.preventDefault();
+          e.stopPropagation();
+          PremiseBeta.notice();
+        }
+        return;                                   // 가장 가까운 a 하나만 판정
+      }
+      n = n.parentNode;
+    }
+  }, true);
 
   window.PremiseNav = {
     close: _navCloseDrawer,

@@ -183,7 +183,33 @@
   function doneTitle(t){ const h=document.querySelector("#doneView h2"); if(h) h.textContent=t; }
   function showDone(msg){ $("doneSummary").textContent = msg || ""; $("formView").style.display="none"; $("doneView").classList.add("show"); }
 
+  /* 베타 기간 최종 방어선 — 주소를 직접 치거나 예전 링크·북마크로 들어온 경우.
+     common.js의 클릭 가드는 '링크를 눌러 오는 길'만 막는다. 이 페이지에 이미 도착한
+     사람에게 결제 폼을 그대로 두면 beta.html의 "결제창도 뜨지 않습니다"가 깨진다. */
+  (function betaGuard(){
+    if (!(window.PremiseBeta && PremiseBeta.on())) return;
+    document.addEventListener("DOMContentLoaded", function(){
+      var form = document.getElementById("formView");
+      if (form) form.style.display = "none";
+      var host = document.querySelector("main .max-w-lg");
+      if (!host) return;
+      var box = document.createElement("div");
+      box.className = "bg-white border border-line rounded-3xl p-7 text-center";
+      box.innerHTML =
+        '<p class="text-[11px] font-semibold tracking-[.2em] uppercase text-point mb-2">Beta</p>' +
+        '<h1 class="text-[1.5rem] font-extrabold leading-snug" style="word-break:keep-all">베타 기간에는 결제를 받지 않습니다</h1>' +
+        '<p class="mt-3 text-[13.5px] text-body leading-relaxed" style="word-break:keep-all">카드 등록도, 결제창도 없습니다. 운영자에게 <b class="text-ink">“가입했어요”</b> 한 마디만 남겨주시면 이 계정에 <b class="text-ink">7일 프리미엄</b>을 열어드립니다.</p>' +
+        '<div class="mt-6 flex flex-col gap-2.5">' +
+          '<a href="daily.html" class="btn btn-primary py-3.5 text-[14px] font-semibold">오늘의 사건 하러 가기 →</a>' +
+          '<a href="pricing.html" class="btn btn-ghost py-3.5 text-[14px] font-semibold">요금이 어떻게 되는지만 볼게요</a>' +
+        '</div>' +
+        '<p class="mt-4 text-[12px] text-faint">문의: <a href="mailto:korahnchild@gmail.com" class="font-bold">korahnchild@gmail.com</a></p>';
+      host.appendChild(box);
+    });
+  })();
+
   async function pay(){
+    if (window.PremiseBeta && PremiseBeta.blockCheckout()) return;   // 이중 방어
     if (!window.PremiseStore || !PremiseStore.isLoggedIn()){
       const q = new URLSearchParams({ plan: state.plan, cycle: state.cycle }).toString();
       location.href = "login.html?next=" + encodeURIComponent("checkout.html?" + q) + "&mode=checkout";
