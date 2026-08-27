@@ -61,6 +61,24 @@
       <p class="mt-3 text-[14px] text-body leading-relaxed" id="subline">7일 무료체험은 신용카드 없이, 로그인만 하면 바로 시작할 수 있어.</p>
     </div>
 
+    <!-- 카카오톡·인스타 등 인앱 브라우저 경고. 감지되면 JS가 hidden을 걷어낸다.
+         인앱 WebView는 OAuth 왕복 중 저장소가 끊기거나 별도 컨텍스트로 돌아와서
+         로그인이 산발적으로 실패한다. 베타 테스터는 카톡으로 링크를 받으므로
+         대부분 이 안에서 열게 된다 — 안내문만으로는 못 막는다. -->
+    <div id="inappWarn" class="hidden" style="margin-bottom:16px;border:1px solid #FCD34D;background:#FFFBEB;border-radius:16px;padding:16px 18px;text-align:left">
+      <p style="margin:0;font-size:14px;font-weight:800;color:#78350F">카카오톡 안에서 열려 있어요</p>
+      <p style="margin:6px 0 0;font-size:13px;line-height:1.65;color:#92400E">
+        이 화면에서는 <b>로그인이 실패할 수 있습니다.</b> 아래 버튼으로 크롬·사파리에서 열면 정상 동작합니다.
+      </p>
+      <button id="openExternalBtn" type="button"
+              style="margin-top:12px;width:100%;cursor:pointer;border:none;border-radius:9999px;padding:12px 16px;font-size:14px;font-weight:800;color:#0A0E17;background:#FFB800">
+        다른 브라우저에서 열기
+      </button>
+      <p id="inappManual" style="margin:10px 0 0;font-size:12.5px;line-height:1.6;color:#92400E">
+        버튼이 안 되면 오른쪽 아래 <b>⋮</b> 또는 <b>···</b> → <b>다른 브라우저로 열기</b>를 눌러주세요.
+      </p>
+    </div>
+
     <div class="card p-7 md:p-8">
       <div class="flex flex-col gap-3">
         <button class="btn btn-google w-full py-3.5 text-[14.5px] font-semibold" onclick="loginWith('google')">
@@ -110,10 +128,77 @@
   const oauthState = params.get("state");
   const oauthError = params.get("error");
 
+  /* ===== OAuth 왕복 보관소 =====
+     예전엔 sessionStorage만 썼다. sessionStorage는 '탭 단위'라, 카카오톡·인스타 같은
+     인앱 WebView가 인증을 마치고 새 컨텍스트로 돌아오면 통째로 비어 있다. 그러면
+     state 검증이 실패해 "로그인 확인에 실패했어"가 뜬다 — 2026-08-02에 실제로 발생.
+     localStorage는 오리진 단위라 이 왕복을 견딘다. state는 CSRF 방지용 1회성 난수이므로
+     10분 TTL + 사용 즉시 폐기로 관리하면 localStorage에 둬도 안전하다.
+     구버전 세션과의 호환을 위해 sessionStorage에도 같이 쓰고, 읽을 때 둘 다 본다. */
+  const OA_TTL = 30 * 60 * 1000;   /* 2026-08-20: 10분 → 30분. 카카오·네이버 동의 화면에서
+     계정 가입이나 2단계 인증을 거치면 10분을 넘길 수 있고, 넘기면 !fresh로 로그인이 통째로
+     실패한다. state는 1회성 CSRF 논스라 10분과 30분의 보안 차이는 미미하고, 실패 비용이 훨씬 크다. */
+  function oaSet(k, v){
+    try { localStorage.setItem("pbs_oauth_" + k, v); } catch(e){}
+    try { sessionStorage.setItem("pbs_oauth_" + k, v); } catch(e){}
+  }
+  function oaGet(k){
+    var v = null;
+    try { v = localStorage.getItem("pbs_oauth_" + k); } catch(e){}
+    if (v === null) { try { v = sessionStorage.getItem("pbs_oauth_" + k); } catch(e){} }
+    return v;
+  }
+  function oaClear(){
+    ["provider","state","next","mode","at"].forEach(function(k){
+      try { localStorage.removeItem("pbs_oauth_" + k); } catch(e){}
+      try { sessionStorage.removeItem("pbs_oauth_" + k); } catch(e){}
+    });
+  }
+  function oaFresh(){
+    var at = Number(oaGet("at") || 0);
+    return at > 0 && (Date.now() - at) < OA_TTL;
+  }
+
   // next: 로그인 후 이동할 페이지, mode: trial(무료체험) | checkout(바로결제) | plain
-  // 카카오/네이버는 리다이렉트 왕복 중 쿼리가 code/state로 덮이므로 sessionStorage로 들고 다님
-  const next = params.get("next") || sessionStorage.getItem("pbs_oauth_next") || "onboarding.html";
-  const mode = params.get("mode") || sessionStorage.getItem("pbs_oauth_mode") || "";
+  // 카카오/네이버는 리다이렉트 왕복 중 쿼리가 code/state로 덮이므로 위 보관소로 들고 다닌다
+  const next = params.get("next") || oaGet("next") || "onboarding.html";
+  const mode = params.get("mode") || oaGet("mode") || "";
+
+  /* ===== 인앱 브라우저 감지 ===== */
+  function inAppBrowser(){
+    var ua = navigator.userAgent || "";
+    return /KAKAOTALK|NAVER\(inapp|Instagram|FBAN|FBAV|Line\//i.test(ua);
+  }
+  (function mountInappWarn(){
+    if (!inAppBrowser()) return;
+    var box = document.getElementById("inappWarn");
+    if (box) box.classList.remove("hidden");
+    var btn = document.getElementById("openExternalBtn");
+    if (!btn) return;
+    var ua = navigator.userAgent || "";
+    var isAndroid = /Android/i.test(ua);
+    var isKakao = /KAKAOTALK/i.test(ua);
+    /* 2026-08-20: iOS이면서 카카오톡이 아닌 인앱(네이버·인스타·페북·라인)에서는
+       kakaotalk:// 스킴이 먹지 않아 버튼이 눌러도 아무 일도 하지 않는다.
+       죽은 버튼을 보여주느니 감추고 수동 안내만 남긴다. */
+    if (!isAndroid && !isKakao) {
+      btn.style.display = "none";
+      var man = document.getElementById("inappManual");
+      if (man) man.innerHTML = "화면 오른쪽 위 또는 아래의 <b>\u22ef</b> 메뉴에서 <b>다른 브라우저로 열기</b>(또는 <b>Safari로 열기</b>)를 눌러 주세요.";
+      return;
+    }
+    btn.addEventListener("click", function(){
+      var url = location.href;
+      if (isAndroid) {
+        // 안드로이드: 크롬으로 강제 오픈 (인텐트 스킴)
+        location.href = "intent://" + url.replace(/^https?:\/\//, "")
+          + "#Intent;scheme=https;package=com.android.chrome;end";
+      } else {
+        // iOS 카카오톡: 외부 브라우저 오픈 스킴
+        location.href = "kakaotalk://web/openExternal?url=" + encodeURIComponent(url);
+      }
+    });
+  })();
 
   if (mode === "checkout") {
     document.getElementById("headline").innerHTML = "로그인하고<br>결제를 계속하자";
@@ -135,10 +220,11 @@
 
   function startRedirectLogin(provider){
     const state = randomState();
-    sessionStorage.setItem("pbs_oauth_provider", provider);
-    sessionStorage.setItem("pbs_oauth_state", state);
-    sessionStorage.setItem("pbs_oauth_next", next);
-    sessionStorage.setItem("pbs_oauth_mode", mode);
+    oaSet("provider", provider);
+    oaSet("state", state);
+    oaSet("next", next);
+    oaSet("mode", mode);
+    oaSet("at", String(Date.now()));
 
     const url = provider === "kakao"
       ? "https://kauth.kakao.com/oauth/authorize"
@@ -153,17 +239,21 @@
   }
 
   async function handleOAuthCallback(){
-    const provider = sessionStorage.getItem("pbs_oauth_provider");
-    const savedState = sessionStorage.getItem("pbs_oauth_state");
-    sessionStorage.removeItem("pbs_oauth_provider");
-    sessionStorage.removeItem("pbs_oauth_state");
-    sessionStorage.removeItem("pbs_oauth_next");
-    sessionStorage.removeItem("pbs_oauth_mode");
+    const provider = oaGet("provider");
+    const savedState = oaGet("state");
+    const fresh = oaFresh();
+    oaClear();
     history.replaceState(null, "", location.pathname); // code/state를 주소창에서 지움
 
     if (oauthError) { showToast("로그인이 취소됐어"); return; }
-    if (!provider || !savedState || savedState !== oauthState) {
-      showToast("로그인 확인에 실패했어. 다시 시도해줘.");
+    if (!provider || !savedState || savedState !== oauthState || !fresh) {
+      /* 여기까지 왔다는 건 카카오·네이버 인증 자체는 통과했는데 우리 쪽 대조에 실패한 것이다.
+         인앱 브라우저에서 저장소가 끊겼을 때가 대부분이라, 원인과 탈출구를 같이 알려준다. */
+      showToast(inAppBrowser()
+        ? "카카오톡 안에서는 로그인이 끊길 수 있어. 위 '다른 브라우저에서 열기'를 눌러줘."
+        : "로그인 확인에 실패했어. 다시 시도해줘.");
+      var w = document.getElementById("inappWarn");
+      if (w) w.classList.remove("hidden");
       return;
     }
 

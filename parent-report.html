@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="canonical" href="https://pbslearning.co.kr/parent-report.html" />
+<meta name="robots" content="noindex, follow" />
+<title>학부모용 상세 분석 리포트 | PBS 학습법</title>
+<meta name="description" content="자녀의 PBS 사고력 진단 결과를 바탕으로, 어디에서 왜 막히는지와 가정에서 할 수 있는 것을 정리한 학부모용 분석 리포트입니다." />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style>
+  /* 이 페이지는 Tailwind 정적 빌드에 의존하지 않는다.
+     tailwind-a/b/c.css는 사용된 클래스만 담아 미리 빌드해 둔 파일이라,
+     새 페이지에서 새 클래스를 쓰면 조용히 스타일이 빠진다(반복 사고).
+     신규 페이지는 자체 CSS로 닫아 두는 편이 안전하다. */
+  :root{
+    --ink:#0A0E17; --body:#525A69; --faint:#7A8499; --line:#ECEEF1;
+    --soft:#F5F6F4; --point:#0A66FF; --gold:#8a6200; --warn:#FCD34D;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:"Pretendard",-apple-system,BlinkMacSystemFont,sans-serif;
+        background:var(--soft); color:var(--ink); -webkit-font-smoothing:antialiased;
+        letter-spacing:-.012em; line-height:1.6; }
+  a{ color:inherit; }
+  .wrap{ max-width:44rem; margin:0 auto; padding:0 20px 72px; }
+  header.top{ padding:18px 20px; }
+  header.top .in{ max-width:44rem; margin:0 auto; }
+  .logo{ display:inline-flex; align-items:center; gap:10px; font-weight:700; font-size:15px; text-decoration:none; }
+  .logo b{ font-weight:800; }
+
+  .eyebrow{ font-size:11px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); margin:0 0 8px; }
+  h1{ font-size:1.75rem; font-weight:800; line-height:1.32; letter-spacing:-.03em; margin:0; word-break:keep-all; }
+  .lede{ margin:14px 0 0; font-size:14.5px; color:var(--body); word-break:keep-all; }
+
+  .card{ background:#fff; border:1px solid var(--line); border-radius:20px; padding:22px; margin-top:16px; }
+  .card h2{ font-size:15.5px; font-weight:800; margin:0 0 6px; word-break:keep-all; }
+  .card p{ margin:0; font-size:13.5px; color:var(--body); word-break:keep-all; }
+
+  .qnum{ display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px;
+         border-radius:9999px; background:rgba(10,102,255,.1); color:var(--point);
+         font-size:11.5px; font-weight:800; margin-right:8px; flex:0 0 auto; }
+  .qhead{ display:flex; align-items:flex-start; font-size:15px; font-weight:700; line-height:1.5; word-break:keep-all; }
+  .opts{ margin-top:14px; display:flex; flex-direction:column; gap:8px; }
+  .opt{ display:flex; align-items:center; gap:10px; width:100%; text-align:left; cursor:pointer;
+        border:1px solid var(--line); background:#fff; border-radius:14px; padding:13px 15px;
+        font-size:14px; font-weight:600; color:var(--ink); font-family:inherit;
+        transition:border-color .2s, background .2s; }
+  .opt:hover{ border-color:#C9D3E0; }
+  .opt.sel{ border-color:var(--point); background:rgba(10,102,255,.05); }
+  .dot{ flex:0 0 auto; width:18px; height:18px; border-radius:9999px; border:2px solid #CBD5E1;
+        display:inline-flex; align-items:center; justify-content:center; }
+  .opt.sel .dot{ border-color:var(--point); }
+  .opt.sel .dot::after{ content:""; width:9px; height:9px; border-radius:9999px; background:var(--point); }
+  .opt.multi .dot{ border-radius:6px; }
+  .opt.multi.sel .dot::after{ border-radius:2px; }
+
+  textarea{ width:100%; margin-top:12px; border:1px solid var(--line); border-radius:14px;
+            padding:13px 15px; font-size:14.5px; font-family:inherit; color:var(--ink);
+            background:#fff; resize:vertical; min-height:96px; line-height:1.65; }
+  textarea:focus{ outline:none; border-color:var(--point); }
+  .count{ margin-top:6px; font-size:11.5px; color:var(--faint); text-align:right; }
+  .count.over{ color:#C2410C; font-weight:700; }
+
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%;
+        border:none; border-radius:9999px; padding:15px 20px; font-size:15px; font-weight:700;
+        font-family:inherit; cursor:pointer; text-decoration:none; transition:transform .2s, background .2s; }
+  .btn-primary{ background:var(--point); color:#fff; box-shadow:0 4px 14px rgba(10,102,255,.26); }
+  .btn-primary:hover{ background:#0857db; }
+  .btn-primary:disabled{ opacity:.4; cursor:not-allowed; box-shadow:none; }
+  .btn-ghost{ background:#fff; color:var(--ink); border:1px solid #DFE3E8; }
+  .btn-ghost:hover{ border-color:var(--point); color:var(--point); }
+
+  .note{ border:1px solid var(--warn); background:#FFFBEB; border-radius:16px; padding:16px 18px; margin-top:16px; }
+  .note p{ margin:0; font-size:13px; line-height:1.7; color:#92400E; word-break:keep-all; }
+  .note p + p{ margin-top:8px; }
+  .note b{ color:#78350F; }
+
+  .foot{ margin-top:22px; font-size:11.5px; color:var(--faint); line-height:1.75; word-break:keep-all; }
+  .hidden{ display:none !important; }
+  .err{ margin-top:10px; font-size:12.5px; font-weight:700; color:#C2410C; }
+  @media (max-width:480px){ h1{ font-size:1.5rem; } .card{ padding:18px; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="in">
+    <a class="logo" href="index.html">
+      <svg width="26" height="26" viewBox="0 0 40 40" aria-label="PBS 학습법 로고">
+        <defs><clipPath id="lc"><circle cx="20" cy="20" r="18"/></clipPath></defs>
+        <circle cx="20" cy="20" r="18" fill="#0A66FF"/>
+        <rect x="-8" y="17" width="56" height="6.5" fill="#0A0E17" transform="rotate(-34 20 20)" clip-path="url(#lc)"/>
+      </svg>
+      <b>PBS 학습법</b>
+    </a>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- A. 진단 기록이 없을 때 -->
+  <section id="sNoDiag" class="hidden">
+    <p class="eyebrow">학부모용 분석 리포트</p>
+    <h1>먼저 자녀의 사고력 진단이 필요합니다</h1>
+    <p class="lede">이 리포트는 진단 결과를 근거로 작성됩니다. 진단은 12문항·약 2분이며 가입 없이 무료로 하실 수 있습니다.</p>
+    <div class="card">
+      <p>이 기기에서 완료한 진단 기록을 찾지 못했습니다. 진단을 다른 기기나 브라우저에서 하셨다면, 같은 기기에서 다시 진단해 주세요.</p>
+    </div>
+    <a href="diagnosis.html" class="btn btn-primary" style="margin-top:20px">무료 진단 시작하기 →</a>
+  </section>
+
+  <!-- B. 학부모 문항 -->
+  <section id="sForm" class="hidden">
+    <p class="eyebrow">학부모용 분석 리포트</p>
+    <h1>몇 가지만 더 여쭙겠습니다</h1>
+    <p class="lede">진단 결과만으로는 자녀의 상황을 다 알기 어렵습니다. 아래 <b>7개 문항</b>에 답해 주시면 그 내용을 근거로 리포트를 작성합니다. 약 3분이면 충분하고, 지금은 <b>결제 없이</b> 진행됩니다.</p>
+    <p class="lede" style="margin-top:10px;font-size:13.5px">특히 <b>직접 적으시는 두 문항</b>이 리포트의 내용을 크게 좌우합니다. 자세히 적어주실수록 자녀에게 맞는 이야기가 나옵니다.</p>
+
+    <div id="diagSummary" class="card" style="background:linear-gradient(160deg,#F7FAFF,#fff);border-color:rgba(10,102,255,.2)">
+      <h2>확인된 진단 결과</h2>
+      <p id="diagLine"></p>
+    </div>
+
+    <div id="qHost"></div>
+
+    <!-- 고지는 제출 버튼 '위'에 둔다 — 아래 두면 제출하는 사람은 읽지 않는다(검수 지적). -->
+    <p class="foot" style="margin-top:18px">
+      자녀의 이름·생년월일은 받지 않습니다. 리포트에서는 <b>‘자녀분’</b>으로만 지칭합니다.<br />
+      입력하신 답변 자체는 이 기기에 저장되며, 리포트를 신청하시기 전까지 서버로 전송되지 않습니다. 다만 방문 통계를 위해 구글 애널리틱스를 사용합니다.<br />
+      본 리포트는 학습 성향 참고 자료이며 의학적·심리학적 진단이 아닙니다.<br />
+      <a href="privacy.html" style="color:var(--faint);text-decoration:underline">개인정보처리방침</a>
+    </p>
+
+    <p id="formErr" class="err hidden"></p>
+    <button id="submitBtn" class="btn btn-primary" style="margin-top:14px">답변 저장하고 다음으로 →</button>
+
+    <button id="wipeBtn" class="btn btn-ghost" style="margin-top:10px;font-size:13px;font-weight:600">이 기기에서 진단·답변 기록 지우기</button>
+  </section>
+
+  <!-- C. 저장 완료 (Phase 1 종료 지점 — 결제 연결은 다음 단계) -->
+  <section id="sSaved" class="hidden">
+    <p class="eyebrow">저장했습니다</p>
+    <h1>답변이 저장되었습니다</h1>
+    <p class="lede">진단 결과와 함께 이 기기에 보관했습니다. 리포트 발행이 열리면 다시 입력하지 않으셔도 됩니다.</p>
+
+    <div class="note">
+      <p><b>리포트 발행은 베타 종료 후 시작합니다.</b> 지금은 베타 기간이라 결제를 받지 않고 있습니다.</p>
+      <p>준비가 되면 안내드리겠습니다. 문의는 <a href="mailto:korahnchild@gmail.com" style="color:#92400E;font-weight:700">korahnchild@gmail.com</a>으로 주세요.</p>
+    </div>
+
+    <a href="daily.html" class="btn btn-primary" style="margin-top:20px">자녀와 오늘의 사건 해보기 →</a>
+    <a href="diagnosis.html" class="btn btn-ghost" style="margin-top:10px">진단 결과 다시 보기</a>
+    <button id="editBtn" class="btn btn-ghost" style="margin-top:10px">답변 수정하기</button>
+  </section>
+
+</main>
+
+<script src="common.js"></script>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var DIAG_KEY = "pbs_diagnosis";
+  var ANS_KEY  = "pbs_parent_answers";
+  /* 200 → 500 (2026-08-06 교차검증 결정).
+     서술형은 카디널리티가 무한한 유일한 축이다. 선택형만으로 갈리는 리포트는 59종뿐이라
+     10명이 맘카페에 공유하면 53% 확률로 "거의 같은 리포트"가 발각된다. 서술형 글자수를
+     늘리는 게 분량·개인화 양쪽에서 ROI 1위(상수 하나로 +1.3쪽).
+     상한을 더 올리지 않는 이유: 모바일 입력 부담과 프롬프트 인젝션 표면이 같이 커진다. */
+  var TEXT_MAX = 500;
+
+  /* ===== 학부모 문항 7개 (개수를 바꾸면 위 안내문의 "7개 문항"도 같이 고칠 것) =====
+     선택형만으로는 같은 진단 유형끼리 리포트가 거의 같아진다. 서술형 2개(q3·q6)가
+     리포트를 서로 다르게 만들고, "진단 응답의 구체 내용을 인용한다"는 규칙의 실제
+     인용원이 된다. 문항을 늘리거나 줄일 때 이 둘은 반드시 남길 것.
+     ※ 서술형 답변은 나중에 AI 프롬프트로 들어간다. 길이 제한·구분자 격리는
+        생성 단계에서 한 번 더 처리한다(프롬프트 인젝션 방지). */
+  var QUESTIONS = [
+    /* 학년·과목은 2026-08-06 추가. 없으면 초5와 중3에게 같은 조언이 나간다 —
+       밋밋한 게 아니라 '틀린 리포트'다. 진단→리포트 경로는 가입 전이라
+       온보딩의 학년 값을 쓸 수 없어 여기서 직접 받는다. */
+    { id:"grade", type:"one", q:"자녀는 몇 학년인가요?",
+      opts:["초등 5학년","초등 6학년","중학교 1학년","중학교 2학년","중학교 3학년","고등학교 1학년","고등학교 2학년"] },
+    { id:"subject", type:"one", q:"요즘 가장 막혀 보이는 과목은 무엇인가요?",
+      opts:["국어","수학","영어","과학","사회·역사","특정 과목보다 전반적으로"] },
+    { id:"stuck", type:"one", q:"자녀가 문제를 풀다 막혔을 때, 가장 흔한 모습은 무엇인가요?",
+      opts:["일단 답을 찍고 넘어갑니다","한참 멍하니 있습니다","바로 물어봅니다","비슷한 문제를 찾아봅니다","짜증을 내거나 그만둡니다"] },
+    { id:"wrong", type:"one", q:"채점해서 틀린 것을 확인했을 때, 자녀의 반응은 어떤가요?",
+      opts:["왜 틀렸는지 보지 않고 넘어갑니다","답만 고쳐 적습니다","왜 틀렸는지 스스로 찾아봅니다","설명해 달라고 요구합니다"] },
+    /* 서술형 문항 표현 수정: '가장 답답했던 장면'은 자녀를 부정 프레임으로 회상시킨다는
+       카피 검수 지적을 반영해 중립 서술로 바꾸고, 대신 '그때 아이가 어떻게 했는지'를
+       물어 행동 묘사를 확보한다(리포트 근거로 훨씬 쓸모 있다). */
+    { id:"scene", type:"text", q:"최근 자녀가 공부하다 막히는 것을 보신 장면을 하나만 적어주세요. 그때 아이가 어떻게 했는지까지 적어주시면 좋습니다.",
+      ph:"예: 아는 문제인데 문제를 끝까지 안 읽고 틀렸습니다. 다시 읽어보라니까 그제야 아, 하더니 바로 풀었습니다. 그런데 다음 문제에서 또 똑같이 했습니다." },
+    /* 삭제: 'ask'(왜 이렇게 돼? 물어본 시점) — 진단 A차원 3문항이 같은 것을 이미 재고 있어
+       중복이었다. 문항 수를 늘리지 않고 학년·과목을 넣기 위해 뺐다. */
+    { id:"with", type:"many", q:"현재 병행 중인 학습이 있다면 모두 골라주세요.",
+      opts:["학원","과외","인터넷 강의","학습지","없습니다"] },
+    { id:"want", type:"text", q:"이 리포트에서 가장 알고 싶은 것 한 가지는 무엇인가요?",
+      ph:"예: 학원을 다니는데도 성적이 그대로입니다. 집에서 뭘 도와줘야 할지 모르겠습니다." }
+  ];
+
+  var state = {};
+
+  /* ===== 진단 기록 확인 ===== */
+  var diag = null;
+  try { diag = JSON.parse(localStorage.getItem(DIAG_KEY) || "null"); } catch(e){}
+  if (!diag || !diag.answers || !diag.answers.length) {
+    $("sNoDiag").classList.remove("hidden");
+    return;
+  }
+
+  $("diagLine").textContent =
+    (diag.typeName ? ("‘" + diag.typeName + "’ 유형") : "진단 완료") +
+    " · 추천 트랙 " + (diag.track || "-") +
+    " · 진단일 " + (diag.at || "-");
+
+  /* ===== 저장된 답변 복원 ===== */
+  try {
+    var prev = JSON.parse(localStorage.getItem(ANS_KEY) || "null");
+    if (prev && prev.a) state = prev.a;
+  } catch(e){}
+
+  /* ===== 렌더 ===== */
+  function render(){
+    var host = $("qHost"); host.innerHTML = "";
+    QUESTIONS.forEach(function(Q, idx){
+      var card = document.createElement("div");
+      card.className = "card";
+
+      var head = document.createElement("div");
+      head.className = "qhead";
+      head.innerHTML = '<span class="qnum">' + (idx+1) + '</span><span>' + Q.q + '</span>';
+      card.appendChild(head);
+
+      if (Q.type === "text"){
+        /* 민감정보 사전 차단 — 개인정보 검수 지적 반영.
+           200자든 500자든 "○○초 5학년 김○○, 작년에 상담 받았습니다"는 충분히 들어간다.
+           건강 관련 정보는 별도 동의 없이 받으면 안 되는 범주라, 안 받는 게 아니라
+           '들어오지 못하게' 막는 게 맞다. 입력란 바로 위에 둔다(제출 버튼 아래면 안 읽는다). */
+        var warn = document.createElement("p");
+        warn.style.cssText = "margin:12px 0 0;font-size:12px;line-height:1.6;color:#92400E;background:#FFFBEB;border:1px solid #FDE68A;border-radius:10px;padding:9px 12px;word-break:keep-all";
+        warn.textContent = "이름·학교명·병원 진료 이력처럼 자녀를 알아볼 수 있거나 건강에 관한 내용은 적지 말아 주세요.";
+        card.appendChild(warn);
+
+        var ta = document.createElement("textarea");
+        ta.maxLength = TEXT_MAX;
+        ta.placeholder = Q.ph || "";
+        ta.value = state[Q.id] || "";
+        ta.style.minHeight = "140px";   // 500자를 받으므로 입력창을 키운다
+        var cnt = document.createElement("p");
+        cnt.className = "count";
+        function upd(){
+          var n = ta.value.length;
+          cnt.textContent = n + " / " + TEXT_MAX + "자";
+          cnt.classList.toggle("over", n >= TEXT_MAX);
+        }
+        /* maxLength는 '사람이 타이핑할 때'만 막는다. 개발자도구·확장프로그램·일부 IME는
+           그냥 통과한다. 이 값은 나중에 AI 프롬프트로 들어가므로(토큰 비용 + 프롬프트
+           인젝션 표면) 데이터 층에서 한 번 더 자른다. 2026-08-06 실측으로 확인. */
+        ta.addEventListener("input", function(){
+          if (ta.value.length > TEXT_MAX) ta.value = ta.value.slice(0, TEXT_MAX);
+          state[Q.id] = ta.value; upd();
+        });
+        upd();
+        card.appendChild(ta); card.appendChild(cnt);
+      } else {
+        var wrap = document.createElement("div");
+        wrap.className = "opts";
+        Q.opts.forEach(function(label){
+          var b = document.createElement("button");
+          b.type = "button";
+          var multi = (Q.type === "many");
+          var picked = multi
+            ? (Array.isArray(state[Q.id]) && state[Q.id].indexOf(label) >= 0)
+            : (state[Q.id] === label);
+          b.className = "opt" + (multi ? " multi" : "") + (picked ? " sel" : "");
+          b.innerHTML = '<span class="dot"></span><span>' + label + '</span>';
+          b.addEventListener("click", function(){
+            if (multi){
+              var arr = Array.isArray(state[Q.id]) ? state[Q.id].slice() : [];
+              var i = arr.indexOf(label);
+              /* '없습니다'는 다른 항목과 함께 고를 수 없다 — 서로 모순되는 답이
+                 리포트 근거로 들어가면 학부모가 바로 신뢰를 잃는다. */
+              if (label === "없습니다") arr = (i >= 0) ? [] : ["없습니다"];
+              else {
+                arr = arr.filter(function(x){ return x !== "없습니다"; });
+                if (i >= 0) arr.splice(arr.indexOf(label), 1); else arr.push(label);
+              }
+              state[Q.id] = arr;
+            } else {
+              state[Q.id] = label;
+            }
+            render();
+          });
+          wrap.appendChild(b);
+        });
+        card.appendChild(wrap);
+      }
+      host.appendChild(card);
+    });
+  }
+
+  function firstMissing(){
+    for (var i = 0; i < QUESTIONS.length; i++){
+      var Q = QUESTIONS[i], v = state[Q.id];
+      if (Q.type === "many"){ if (!Array.isArray(v) || !v.length) return i; }
+      else if (Q.type === "text"){ if (!v || !String(v).trim()) return i; }
+      else if (!v) return i;
+    }
+    return -1;
+  }
+
+  $("submitBtn").addEventListener("click", function(){
+    var miss = firstMissing();
+    var err = $("formErr");
+    if (miss >= 0){
+      err.textContent = (miss+1) + "번 문항에 답해 주세요. " + QUESTIONS.length + "개 문항 모두 리포트의 근거로 쓰입니다.";
+      err.classList.remove("hidden");
+      var cards = document.querySelectorAll("#qHost .card");
+      if (cards[miss]) cards[miss].scrollIntoView({ behavior:"smooth", block:"center" });
+      return;
+    }
+    err.classList.add("hidden");
+    // 저장 직전 최종 절단 — 화면을 거치지 않고 들어온 값까지 여기서 막힌다.
+    QUESTIONS.forEach(function(Q){
+      if (Q.type === "text" && typeof state[Q.id] === "string") {
+        state[Q.id] = state[Q.id].slice(0, TEXT_MAX).trim();
+      }
+    });
+    try {
+      localStorage.setItem(ANS_KEY, JSON.stringify({
+        v: 1,
+        at: new Date(Date.now() - new Date().getTimezoneOffset()*60000).toISOString().slice(0,10),
+        diagAt: diag.at || "",
+        diagType: diag.type || "",
+        a: state
+      }));
+    } catch(e){}
+    $("sForm").classList.add("hidden");
+    $("sSaved").classList.remove("hidden");
+    window.scrollTo(0,0);
+  });
+
+  $("editBtn").addEventListener("click", function(){
+    $("sSaved").classList.add("hidden");
+    $("sForm").classList.remove("hidden");
+    window.scrollTo(0,0);
+  });
+
+  /* 삭제 수단 — 서버에 없더라도 정정·삭제 요구권의 실현 수단이다.
+     지금 붙이는 비용이 거의 0이라 미룰 이유가 없다(개인정보 검수 지적). */
+  $("wipeBtn").addEventListener("click", function(){
+    if (!window.confirm("이 기기에 저장된 진단 응답과 학부모 답변을 모두 지웁니다. 되돌릴 수 없습니다.")) return;
+    try { localStorage.removeItem(DIAG_KEY); localStorage.removeItem(ANS_KEY); } catch(e){}
+    location.href = "diagnosis.html";
+  });
+
+  render();
+  $("sForm").classList.remove("hidden");
+})();
+</script>
+</body>
+</html>

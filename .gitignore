@@ -12,3 +12,12 @@ PBS_베타_운영킷.md
 _to_delete/
 _sync/
 _qa/
+
+# 개인정보 — 절대 커밋 금지.
+# 이 저장소는 public이고 GitHub Pages로 그대로 서빙된다. 커밋하는 순간
+# raw.githubusercontent.com 과 pbslearning.co.kr/<파일명> 두 곳에서 누구나 받을 수 있다.
+# 베타 명단에는 지인 실명·아이 학년이 들어가므로 확장자 단위로 통째로 막는다.
+PBS_베타_명단추적.xlsx
+*.xlsx
+*.xls
+*.csv

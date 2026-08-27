@@ -25,6 +25,7 @@ import {
   getFirestore,
   doc,
   getDoc,
+  setDoc,
   onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
@@ -100,6 +101,59 @@ window.PremiseBilling = {
     )
 };
 
+/* ===== 학습 프로필(학년·이름·소재) 서버 동기화 =====
+   원래 프로필은 localStorage("premise_profile")에만 있었다. 그래서
+     · 폰에서 온보딩하고 태블릿으로 들어가면 학년이 사라지고
+     · daily.html의 pickTrack()이 학년을 못 찾으면 기본값 "중등"으로 떨어져
+       초5가 중등 사건을 받았다.
+   Firestore users/{uid}.profile 에 같이 저장해 기기를 넘어가도 유지되게 한다.
+   보안규칙상 users/{uid}는 본인이 쓸 수 있고 plan 필드만 막혀 있으므로 규칙 변경은 필요 없다. */
+const PROFILE_KEY = "premise_profile";
+function readLocalProfile() {
+  try { return JSON.parse(localStorage.getItem(PROFILE_KEY) || "null"); } catch (e) { return null; }
+}
+function writeLocalProfile(p) {
+  try { localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); } catch (e) {}
+}
+async function pushProfile(uid, p) {
+  try {
+    await setDoc(doc(db, "users", uid), { profile: p, profileUpdatedAt: new Date().toISOString() }, { merge: true });
+  } catch (e) { console.warn("[profile] 서버 저장 실패:", e && e.message); }
+}
+window.PremiseProfile = {
+  read: readLocalProfile,
+  /* 로컬에 쓰고, 로그인 상태면 서버에도 올린다. 로그인 전이면 로컬만 — 로그인 직후
+     onAuthStateChanged에서 서버로 밀어 올린다. */
+  save: function (p) {
+    writeLocalProfile(p);
+    const u = auth.currentUser;
+    if (u) pushProfile(u.uid, p);
+  }
+};
+async function syncProfile(uid) {
+  let server = null;
+  try {
+    const snap = await getDoc(doc(db, "users", uid));
+    server = snap.exists() ? (snap.data().profile || null) : null;
+  } catch (e) { console.warn("[profile] 서버 조회 실패:", e && e.message); return; }
+
+  const local = readLocalProfile();
+  if (server && server.grade) {
+    // 서버가 진실원천 — 기기가 바뀌어 로컬이 비었거나 다르면 서버 값으로 맞춘다.
+    if (!local || local.grade !== server.grade) {
+      writeLocalProfile(Object.assign({}, local || {}, server));
+      try {
+        document.dispatchEvent(new CustomEvent("premise:profile", {
+          detail: { grade: server.grade, source: "server" }
+        }));
+      } catch (e) {}
+    }
+  } else if (local && local.grade) {
+    // 서버에 아직 없다 — 이 기기의 온보딩 결과를 올려둔다.
+    pushProfile(uid, local);
+  }
+}
+
 /* 로그인/로그아웃에 따라 구독문서 감시를 붙였다 뗀다. 값이 오면 PremiseStore에 반영. */
 let _subUnsub = null;
 onAuthStateChanged(auth, (user) => {
@@ -126,6 +180,7 @@ onAuthStateChanged(auth, (user) => {
   /* 인증 상태 확정 알림 — common.js가 관리자 판정/네비게이션을 다시 그린다. */
   try { document.dispatchEvent(new CustomEvent("premise:auth", { detail: { uid: user ? user.uid : null } })); } catch (e) {}
   if (!user) return;
+  syncProfile(user.uid); // 학년 등 프로필을 기기 간에 맞춘다
   _subUnsub = window.PremiseBilling.watch(user.uid, (sub) => {
     try {
       if (window.PremiseStore && typeof PremiseStore.applyServerSubscription === "function") {
