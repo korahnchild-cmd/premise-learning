@@ -169,6 +169,14 @@
           }
         });
       }
+      /* 자가치유: 구버전이 카카오·네이버 로그인에서 이름으로 지어낸 placeholder 이메일
+         ("김성훈@example.com")을 제거한다. 2026-08-27.
+         login()에서만 씻으면 재로그인하지 않는 기존 사용자에게 영원히 남으므로 로드 시점에 지운다.
+         example.com은 IANA 예약 도메인이라 실제 주소일 수 없어 오검출 위험이 없다. */
+      if (parsed.user && typeof parsed.user.email === "string"
+          && /@example\.com$/i.test(parsed.user.email)) {
+        parsed.user.email = "";
+      }
       return parsed;
     } catch (e) { return seed(); }
   }
