@@ -169,10 +169,22 @@
     var ua = navigator.userAgent || "";
     return /KAKAOTALK|NAVER\(inapp|Instagram|FBAN|FBAV|Line\//i.test(ua);
   }
-  (function mountInappWarn(){
-    if (!inAppBrowser()) return;
+  /* ===== 인앱 브라우저 탈출구 =====
+     2026-08-27: 기본 노출을 없앴다. 카카오·구글 로그인 모두 카카오톡 인앱에서 정상
+     동작하는 것을 안드로이드 실기기로 확인했으므로 "로그인이 실패할 수 있습니다"는 더 이상
+     사실이 아니고, 잘 되는 경로의 전환을 깎는다. 게다가 이 블록은 인증 확정 전에 실행돼
+     이미 로그인된 사용자에게도 경고가 한 번 번쩍이고 사라졌다(실기기 관찰).
+     버튼 배선은 미리 해두고, 박스는 showInappWarn()으로 실제 실패했을 때만 띄운다. */
+  function showInappWarn(){
+    if (!inAppBrowser()) return false;
     var box = document.getElementById("inappWarn");
-    if (box) box.classList.remove("hidden");
+    if (!box) return false;
+    box.classList.remove("hidden");
+    try { box.scrollIntoView({ behavior:"smooth", block:"center" }); } catch(e){}
+    return true;
+  }
+  (function wireInappBtn(){
+    if (!inAppBrowser()) return;
     var btn = document.getElementById("openExternalBtn");
     if (!btn) return;
     var ua = navigator.userAgent || "";
@@ -252,8 +264,7 @@
       showToast(inAppBrowser()
         ? "카카오톡 안에서는 로그인이 끊길 수 있어. 위 '다른 브라우저에서 열기'를 눌러줘."
         : "로그인 확인에 실패했어. 다시 시도해줘.");
-      var w = document.getElementById("inappWarn");
-      if (w) w.classList.remove("hidden");
+      showInappWarn();   // 인앱이면 탈출구를 이때 띄운다
       return;
     }
 
@@ -306,6 +317,7 @@
       if (e && (e.code === "auth/popup-closed-by-user" || e.code === "auth/cancelled-popup-request")) return;
       console.error(e);
       showToast("구글 로그인에 실패했어. 다시 시도해줘.");
+      showInappWarn();   // 팝업이 막히는 인앱이면 탈출구를 같이 띄운다
       return;
     }
     showToast("구글 계정으로 로그인했어");

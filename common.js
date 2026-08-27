@@ -309,7 +309,16 @@
       s.user.loggedIn = true;
       s.user.provider = provider || "google";
       s.user.name = name || (provider === "kakao" ? "카카오 파트너" : provider === "naver" ? "네이버 파트너" : "구글 파트너");
-      s.user.email = email || s.user.email || (s.user.name.replace(/\s/g, "").toLowerCase() + "@example.com");
+      /* 2026-08-27: placeholder 이메일 생성 제거.
+         카카오는 이메일 제공 동의가 없으면 값을 주지 않는데, 이름으로 "김성훈@example.com"을
+         지어내 마이페이지에 그대로 노출됐다(실기기 확인). 한글은 toLowerCase()가 무시한다.
+         아래 syncAuthUser의 자가 복구는 if (u.email) 조건인데, Cloud Function이 카카오
+         사용자의 Firebase 이메일을 null로 두므로 — 복구가 필요한 계정에서만 조건이 영원히
+         거짓이었다. 없는 값은 없는 채로 두고 화면에서 provider로 설명한다.
+         이미 저장된 @example.com 값도 여기서 씻어낸다(기존 사용자 자가 복구). */
+      var _prevEmail = s.user.email || "";
+      if (/@example\.com$/i.test(_prevEmail)) _prevEmail = "";
+      s.user.email = email || _prevEmail || "";
       save(s);
       return s.user;
     },

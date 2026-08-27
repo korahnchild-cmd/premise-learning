@@ -133,7 +133,12 @@
     const u = PremiseStore.getUser();
     const sub = PremiseStore.getSubscription();
     $("uName").textContent = u.name || "-";
-    $("uEmail").textContent = u.email || "-";
+    /* 카카오·네이버는 이메일 제공 동의가 없으면 값을 주지 않는다.
+       가짜 주소를 지어내지 않으므로 빈 값은 빈 값이라고 정직하게 쓴다. */
+    $("uEmail").textContent = u.email
+      || (u.provider === "kakao" ? "카카오 계정 · 이메일 미제공"
+        : u.provider === "naver" ? "네이버 계정 · 이메일 미제공"
+        : "이메일 미제공");
     $("uProvider").textContent = providerLabel(u.provider);
 
     const badge = $("subBadge");
