@@ -135,7 +135,7 @@
      localStorage는 오리진 단위라 이 왕복을 견딘다. state는 CSRF 방지용 1회성 난수이므로
      10분 TTL + 사용 즉시 폐기로 관리하면 localStorage에 둬도 안전하다.
      구버전 세션과의 호환을 위해 sessionStorage에도 같이 쓰고, 읽을 때 둘 다 본다. */
-  const OA_TTL = 30 * 60 * 1000;   /* 2026-08-20: 10분 → 30분. 카카오·네이버 동의 화면에서
+  const OA_TTL = 30 * 60 * 1000;   /* 2026-08-27: 10분 → 30분. 카카오·네이버 동의 화면에서
      계정 가입이나 2단계 인증을 거치면 10분을 넘길 수 있고, 넘기면 !fresh로 로그인이 통째로
      실패한다. state는 1회성 CSRF 논스라 10분과 30분의 보안 차이는 미미하고, 실패 비용이 훨씬 크다. */
   function oaSet(k, v){
@@ -178,7 +178,7 @@
     var ua = navigator.userAgent || "";
     var isAndroid = /Android/i.test(ua);
     var isKakao = /KAKAOTALK/i.test(ua);
-    /* 2026-08-20: iOS이면서 카카오톡이 아닌 인앱(네이버·인스타·페북·라인)에서는
+    /* 2026-08-27: iOS이면서 카카오톡이 아닌 인앱(네이버·인스타·페북·라인)에서는
        kakaotalk:// 스킴이 먹지 않아 버튼이 눌러도 아무 일도 하지 않는다.
        죽은 버튼을 보여주느니 감추고 수동 안내만 남긴다. */
     if (!isAndroid && !isKakao) {
